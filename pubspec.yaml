@@ -1,5 +1,5 @@
 name: jada_fit
-description: "A new Flutter project."
+description: "The perfect fit-pal."
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -10,13 +10,14 @@ dependencies:
   flutter:
     sdk: flutter
   # HTTP para las llamadas a tu API
-  http: ^1.2.0
+  http: ^1.2.2
   # Secure Storage para guardar el JWT sin riesgos
-  flutter_secure_storage: ^9.0.0
+  flutter_secure_storage: ^9.2.2
   # Provider para gestionar el estado del login
   provider: ^6.1.1
   # Iconos de iOS
   cupertino_icons: ^1.0.8
+  font_awesome_flutter: ^10.7.0
 
 dev_dependencies:
   flutter_test:
@@ -25,9 +26,3 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-  fonts:
-    - family: JadaFont
-      fonts:
-        - asset: assets/fonts/SpaceGrotesk-Regular.ttf
-        - asset: assets/fonts/SpaceGrotesk-Bold.ttf
-          weight: 700
