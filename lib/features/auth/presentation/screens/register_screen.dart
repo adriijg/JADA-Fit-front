@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/app_strings.dart';
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../data/services/auth_service.dart';
+import 'package:jada_fit/features/home/presentation/screens/home_screen.dart';
 import '../widgets/auth_text_field.dart';
 import 'login_screen.dart';
 
@@ -20,6 +23,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController repeatPasswordController = TextEditingController();
 
+  String? errorMessage;
+  String? nameError;
+  String? emailError;
+  String? passwordError;
+  String? repeatPasswordError;
   bool isLoading = false;
 
   @override
@@ -31,24 +39,54 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
+  bool _validateEmail(String email) {
+    final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+');
+    return emailRegex.hasMatch(email);
+  }
+
   Future<void> _register() async {
     final name = nameController.text.trim();
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
     final repeatPassword = repeatPasswordController.text.trim();
 
-    if (name.isEmpty || email.isEmpty || password.isEmpty || repeatPassword.isEmpty) {
-      _showMessage('Rellena todos los campos');
-      return;
+    setState(() {
+      errorMessage = null;
+      nameError = null;
+      emailError = null;
+      passwordError = null;
+      repeatPasswordError = null;
+    });
+
+    if (name.isEmpty) {
+      nameError = AppStrings.errorEnterName;
     }
 
-    if (password != repeatPassword) {
-      _showMessage('Las contraseñas no coinciden');
-      return;
+    if (email.isEmpty) {
+      emailError = AppStrings.errorEnterRegisterEmail;
+    } else if (!_validateEmail(email)) {
+      emailError = AppStrings.errorInvalidEmail;
     }
 
-    if (password.length < 6) {
-      _showMessage('La contraseña debe tener al menos 6 caracteres');
+    if (password.isEmpty) {
+      passwordError = AppStrings.errorEnterPassword;
+    } else if (password.length < 8) {
+      passwordError = AppStrings.errorPasswordMinLength;
+    }
+
+    if (repeatPassword.isEmpty) {
+      repeatPasswordError = AppStrings.errorRepeatPassword;
+    } else if (password != repeatPassword) {
+      repeatPasswordError = AppStrings.errorPasswordsDontMatch;
+    }
+
+    if (nameError != null ||
+        emailError != null ||
+        passwordError != null ||
+        repeatPasswordError != null) {
+      setState(() {
+        errorMessage = AppStrings.errorFixForm;
+      });
       return;
     }
 
@@ -56,23 +94,43 @@ class _RegisterScreenState extends State<RegisterScreen> {
       setState(() => isLoading = true);
 
       await _authService.register(
-        name: name,
+        username: name,
+        email: email,
+        password: password,
+      );
+
+      await _authService.login(
         email: email,
         password: password,
       );
 
       if (!mounted) return;
 
-      _showMessage('Cuenta creada correctamente');
+      _showMessage(AppStrings.accountCreated);
 
-      Navigator.pushReplacement(
+      Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (_) => const LoginScreen(),
+          builder: (_) => const HomeScreen(),
         ),
+        (route) => false,
       );
-    } catch (error) {
-      _showMessage('No se pudo crear la cuenta');
+    } on ApiException catch (error) {
+      if (!mounted) return;
+
+      setState(() {
+        errorMessage = error.message;
+      });
+
+      _showMessage(error.message);
+    } catch (_) {
+      if (!mounted) return;
+
+      setState(() {
+        errorMessage = AppStrings.errorRegisterFailed;
+      });
+
+      _showMessage(AppStrings.errorRegisterFailed);
     } finally {
       if (mounted) {
         setState(() => isLoading = false);
@@ -141,7 +199,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         const SizedBox(height: 16),
                         const Text(
-                          'JADA FIT',
+                          AppStrings.appName,
                           style: TextStyle(
                             color: AppColors.primary,
                             fontFamily: 'Orbitron',
@@ -165,6 +223,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           isLoading: isLoading,
                           onRegister: _register,
                           onGoToLogin: _goToLogin,
+                          nameError: nameError,
+                          emailError: emailError,
+                          passwordError: passwordError,
+                          repeatPasswordError: repeatPasswordError,
+                          errorMessage: errorMessage,
                         ),
                         const SizedBox(height: 30),
                       ],
@@ -189,6 +252,11 @@ class _RegisterCard extends StatelessWidget {
     required this.isLoading,
     required this.onRegister,
     required this.onGoToLogin,
+    this.nameError,
+    this.emailError,
+    this.passwordError,
+    this.repeatPasswordError,
+    this.errorMessage,
   });
 
   final TextEditingController nameController;
@@ -198,6 +266,11 @@ class _RegisterCard extends StatelessWidget {
   final bool isLoading;
   final VoidCallback onRegister;
   final VoidCallback onGoToLogin;
+  final String? nameError;
+  final String? emailError;
+  final String? passwordError;
+  final String? repeatPasswordError;
+  final String? errorMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -208,12 +281,12 @@ class _RegisterCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
-          color: AppColors.divider.withOpacity(0.4),
+          color: AppColors.divider.withValues(alpha: 0.4),
           width: 0.7,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.28),
+            color: Colors.black.withValues(alpha: 0.28),
             blurRadius: 24,
             offset: const Offset(0, 14),
           ),
@@ -224,7 +297,7 @@ class _RegisterCard extends StatelessWidget {
         children: [
           const Center(
             child: Text(
-              'CREAR CUENTA',
+              AppStrings.registerTitle,
               style: TextStyle(
                 color: AppColors.textMain,
                 fontSize: 18,
@@ -234,9 +307,8 @@ class _RegisterCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 32),
-
           const Text(
-            'NOMBRE',
+            AppStrings.registerNameLabel,
             style: TextStyle(
               color: AppColors.secondary,
               fontSize: 14,
@@ -246,14 +318,25 @@ class _RegisterCard extends StatelessWidget {
           const SizedBox(height: 8),
           AuthTextField(
             controller: nameController,
-            hintText: 'TU NOMBRE',
+            hintText: AppStrings.registerNameHint,
             icon: Icons.person_outline,
+            errorText: nameError,
           ),
-
+          if (nameError != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Text(
+                nameError!,
+                style: const TextStyle(
+                  color: AppColors.error,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
           const SizedBox(height: 22),
-
           const Text(
-            'EMAIL',
+            AppStrings.registerEmailLabel,
             style: TextStyle(
               color: AppColors.secondary,
               fontSize: 14,
@@ -263,15 +346,26 @@ class _RegisterCard extends StatelessWidget {
           const SizedBox(height: 8),
           AuthTextField(
             controller: emailController,
-            hintText: 'EMAIL ADDRESS',
+            hintText: AppStrings.registerEmailHint,
             icon: Icons.alternate_email,
             keyboardType: TextInputType.emailAddress,
+            errorText: emailError,
           ),
-
+          if (emailError != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Text(
+                emailError!,
+                style: const TextStyle(
+                  color: AppColors.error,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
           const SizedBox(height: 22),
-
           const Text(
-            'CONTRASEÑA',
+            AppStrings.registerPasswordLabel,
             style: TextStyle(
               color: AppColors.secondary,
               fontSize: 14,
@@ -281,15 +375,26 @@ class _RegisterCard extends StatelessWidget {
           const SizedBox(height: 8),
           AuthTextField(
             controller: passwordController,
-            hintText: 'PASSWORD',
+            hintText: AppStrings.registerPasswordHint,
             icon: Icons.lock_outline,
             obscureText: true,
+            errorText: passwordError,
           ),
-
+          if (passwordError != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Text(
+                passwordError!,
+                style: const TextStyle(
+                  color: AppColors.error,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
           const SizedBox(height: 22),
-
           const Text(
-            'REPETIR CONTRASEÑA',
+            AppStrings.registerRepeatPasswordLabel,
             style: TextStyle(
               color: AppColors.secondary,
               fontSize: 14,
@@ -299,13 +404,37 @@ class _RegisterCard extends StatelessWidget {
           const SizedBox(height: 8),
           AuthTextField(
             controller: repeatPasswordController,
-            hintText: 'REPEAT PASSWORD',
+            hintText: AppStrings.registerRepeatPasswordHint,
             icon: Icons.lock_reset,
             obscureText: true,
+            errorText: repeatPasswordError,
           ),
-
+          if (repeatPasswordError != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Text(
+                repeatPasswordError!,
+                style: const TextStyle(
+                  color: AppColors.error,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
           const SizedBox(height: 28),
-
+          if (errorMessage != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: Text(
+                errorMessage!,
+                style: const TextStyle(
+                  color: AppColors.error,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
           SizedBox(
             width: double.infinity,
             height: 58,
@@ -315,7 +444,7 @@ class _RegisterCard extends StatelessWidget {
                 backgroundColor: AppColors.primary,
                 foregroundColor: AppColors.background,
                 elevation: 12,
-                shadowColor: AppColors.primary.withOpacity(0.32),
+                shadowColor: AppColors.primary.withValues(alpha: 0.32),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(24),
                 ),
@@ -333,7 +462,7 @@ class _RegisterCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'REGISTRARME',
+                          AppStrings.registerButton,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 15,
@@ -346,16 +475,14 @@ class _RegisterCard extends StatelessWidget {
                     ),
             ),
           ),
-
           const SizedBox(height: 22),
-
           Center(
             child: TextButton(
               onPressed: onGoToLogin,
               style: TextButton.styleFrom(
                 foregroundColor: AppColors.secondary,
               ),
-              child: const Text('¿Ya tienes cuenta? Inicia sesión'),
+              child: const Text(AppStrings.alreadyHaveAccountPrompt),
             ),
           ),
         ],

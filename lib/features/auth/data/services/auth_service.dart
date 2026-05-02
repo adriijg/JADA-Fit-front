@@ -41,13 +41,13 @@ class AuthService {
     }
 
     throw ApiException(
-      'Login fallido',
+      _parseErrorMessage(response.body),
       statusCode: response.statusCode,
     );
   }
 
   Future<void> register({
-    required String name,
+    required String username,
     required String email,
     required String password,
   }) async {
@@ -57,7 +57,7 @@ class AuthService {
         'Content-Type': 'application/json',
       },
       body: jsonEncode({
-        'name': name,
+        'username': username,
         'email': email,
         'password': password,
       }),
@@ -68,9 +68,26 @@ class AuthService {
     }
 
     throw ApiException(
-      'Registro fallido',
+      _parseErrorMessage(response.body),
       statusCode: response.statusCode,
     );
+  }
+
+  String _parseErrorMessage(String body) {
+    try {
+      final decoded = jsonDecode(body);
+      if (decoded is Map<String, dynamic>) {
+        if (decoded['message'] is String) {
+          return decoded['message'] as String;
+        }
+        if (decoded['error'] is String) {
+          return decoded['error'] as String;
+        }
+      }
+    } catch (_) {
+      // Fall back to raw body
+    }
+    return body.isNotEmpty ? body : 'Ocurrió un error en el servidor';
   }
 
   Future<String?> getToken() {

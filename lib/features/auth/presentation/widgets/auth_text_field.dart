@@ -10,6 +10,7 @@ class AuthTextField extends StatelessWidget {
     required this.icon,
     this.obscureText = false,
     this.keyboardType = TextInputType.text,
+    this.errorText,
   });
 
   final TextEditingController controller;
@@ -17,6 +18,7 @@ class AuthTextField extends StatelessWidget {
   final IconData icon;
   final bool obscureText;
   final TextInputType keyboardType;
+  final String? errorText;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class AuthTextField extends StatelessWidget {
         color: AppColors.inputBackground,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: AppColors.inputBorder.withOpacity(0.38),
+          color: errorText != null ? AppColors.error : AppColors.inputBorder.withValues(alpha: 0.38),
           width: 1,
         ),
       ),
@@ -42,7 +44,7 @@ class AuthTextField extends StatelessWidget {
         decoration: InputDecoration(
           hintText: hintText,
           hintStyle: TextStyle(
-            color: AppColors.textMain.withOpacity(0.4),
+            color: AppColors.textMain.withValues(alpha: 0.4),
             fontSize: 13,
             letterSpacing: 1,
           ),

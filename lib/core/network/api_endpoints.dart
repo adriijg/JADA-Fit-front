@@ -5,4 +5,5 @@ class ApiEndpoints {
 
   static const String login = '$users/login';
   static const String register = '$users/register';
+  static const String me = '$users/me';
 }

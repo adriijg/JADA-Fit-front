@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../../../core/constants/app_strings.dart';
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../data/services/auth_service.dart';
 import '../widgets/auth_text_field.dart';
 import '../widgets/social_login_button.dart';
+import 'package:jada_fit/features/home/presentation/screens/home_screen.dart';
 import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -17,24 +20,47 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final AuthService _authService = AuthService();
 
-  final TextEditingController emailController = TextEditingController();
+  final TextEditingController identifierController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
+  String? errorMessage;
+  String? identifierError;
+  String? passwordError;
   bool isLoading = false;
 
   @override
   void dispose() {
-    emailController.dispose();
+    identifierController.dispose();
     passwordController.dispose();
     super.dispose();
   }
 
   Future<void> _login() async {
-    final email = emailController.text.trim();
+    final identifier = identifierController.text.trim();
     final password = passwordController.text.trim();
 
-    if (email.isEmpty || password.isEmpty) {
-      _showMessage('Introduce email y contraseña');
+    setState(() {
+      errorMessage = null;
+      identifierError = null;
+      passwordError = null;
+    });
+
+    if (identifier.isEmpty) {
+      setState(() {
+        identifierError = AppStrings.errorEnterIdentifier;
+      });
+    }
+
+    if (password.isEmpty) {
+      setState(() {
+        passwordError = AppStrings.errorEnterPassword;
+      });
+    }
+
+    if (identifierError != null || passwordError != null) {
+      setState(() {
+        errorMessage = AppStrings.errorFixErrors;
+      });
       return;
     }
 
@@ -42,21 +68,26 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() => isLoading = true);
 
       await _authService.login(
-        email: email,
+        email: identifier,
         password: password,
       );
 
       if (!mounted) return;
 
-      _showMessage('Login correcto');
-
-      // Aquí luego puedes navegar al HomeScreen.
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(builder: (_) => const HomeScreen()),
-      // );
-    } catch (error) {
-      _showMessage('No se pudo iniciar sesión');
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const HomeScreen()),
+      );
+    } on ApiException catch (error) {
+      setState(() {
+        errorMessage = error.message;
+      });
+      _showMessage(error.message);
+    } catch (_) {
+      setState(() {
+        errorMessage = AppStrings.errorLoginFailed;
+      });
+      _showMessage(AppStrings.errorLoginFailed);
     } finally {
       if (mounted) {
         setState(() => isLoading = false);
@@ -74,7 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _showComingSoon(String provider) {
-    _showMessage('Inicio con $provider próximamente');
+    _showMessage(AppStrings.comingSoonProvider(provider));
   }
 
   void _showMessage(String message) {
@@ -129,7 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         const SizedBox(height: 16),
                         const Text(
-                          'JADA FIT',
+                          AppStrings.appName,
                           style: TextStyle(
                             color: AppColors.primary,
                             fontFamily: 'Orbitron',
@@ -146,14 +177,17 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         const SizedBox(height: 48),
                         _LoginCard(
-                          emailController: emailController,
+                          identifierController: identifierController,
                           passwordController: passwordController,
                           isLoading: isLoading,
+                          errorMessage: errorMessage,
+                          identifierError: identifierError,
+                          passwordError: passwordError,
                           onLogin: _login,
                           onGoToRegister: _goToRegister,
-                          onGoogleLogin: () => _showComingSoon('Google'),
-                          onAppleLogin: () => _showComingSoon('Apple'),
-                          onFacebookLogin: () => _showComingSoon('Facebook'),
+                          onGoogleLogin: () => _showComingSoon(AppStrings.googleProvider),
+                          onAppleLogin: () => _showComingSoon(AppStrings.appleProvider),
+                          onFacebookLogin: () => _showComingSoon(AppStrings.facebookProvider),
                         ),
                         const SizedBox(height: 30),
                       ],
@@ -171,9 +205,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
 class _LoginCard extends StatelessWidget {
   const _LoginCard({
-    required this.emailController,
+    required this.identifierController,
     required this.passwordController,
     required this.isLoading,
+    required this.errorMessage,
+    required this.identifierError,
+    required this.passwordError,
     required this.onLogin,
     required this.onGoToRegister,
     required this.onGoogleLogin,
@@ -181,9 +218,12 @@ class _LoginCard extends StatelessWidget {
     required this.onFacebookLogin,
   });
 
-  final TextEditingController emailController;
+  final TextEditingController identifierController;
   final TextEditingController passwordController;
   final bool isLoading;
+  final String? errorMessage;
+  final String? identifierError;
+  final String? passwordError;
   final VoidCallback onLogin;
   final VoidCallback onGoToRegister;
   final VoidCallback onGoogleLogin;
@@ -199,12 +239,12 @@ class _LoginCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
-          color: AppColors.divider.withOpacity(0.4),
+          color: AppColors.divider.withValues(alpha: 0.4),
           width: 0.7,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.28),
+            color: Colors.black.withValues(alpha: 0.28),
             blurRadius: 24,
             offset: const Offset(0, 14),
           ),
@@ -215,7 +255,7 @@ class _LoginCard extends StatelessWidget {
         children: [
           const Center(
             child: Text(
-              'INICIAR SESIÓN',
+              AppStrings.loginTitle,
               style: TextStyle(
                 color: AppColors.textMain,
                 fontSize: 18,
@@ -228,7 +268,7 @@ class _LoginCard extends StatelessWidget {
           const SizedBox(height: 32),
 
           const Text(
-            'USUARIO',
+            AppStrings.loginUserLabel,
             style: TextStyle(
               color: AppColors.secondary,
               fontSize: 14,
@@ -239,16 +279,30 @@ class _LoginCard extends StatelessWidget {
           const SizedBox(height: 8),
 
           AuthTextField(
-            controller: emailController,
-            hintText: 'EMAIL ADDRESS',
+            controller: identifierController,
+            hintText: AppStrings.loginIdentifierHint,
             icon: Icons.alternate_email,
-            keyboardType: TextInputType.emailAddress,
+            keyboardType: TextInputType.text,
+            errorText: identifierError,
           ),
+
+          if (identifierError != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Text(
+                identifierError!,
+                style: const TextStyle(
+                  color: AppColors.error,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
 
           const SizedBox(height: 22),
 
           const Text(
-            'CONTRASEÑA',
+            AppStrings.loginPasswordLabel,
             style: TextStyle(
               color: AppColors.secondary,
               fontSize: 14,
@@ -260,10 +314,24 @@ class _LoginCard extends StatelessWidget {
 
           AuthTextField(
             controller: passwordController,
-            hintText: 'PASSWORD',
+            hintText: AppStrings.loginPasswordHint,
             icon: Icons.lock_outline,
             obscureText: true,
+            errorText: passwordError,
           ),
+
+          if (passwordError != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Text(
+                passwordError!,
+                style: const TextStyle(
+                  color: AppColors.error,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
 
           const SizedBox(height: 18),
 
@@ -272,8 +340,8 @@ class _LoginCard extends StatelessWidget {
             child: TextButton(
               onPressed: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Recuperar contraseña próximamente'),
+                  SnackBar(
+                    content: Text(AppStrings.recoverPasswordSoon),
                   ),
                 );
               },
@@ -287,11 +355,25 @@ class _LoginCard extends StatelessWidget {
                   letterSpacing: 0.9,
                 ),
               ),
-              child: const Text('¿Has olvidado la contraseña?'),
+              child: const Text(AppStrings.forgotPasswordPrompt),
             ),
           ),
 
           const SizedBox(height: 22),
+
+          if (errorMessage != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: Text(
+                errorMessage!,
+                style: const TextStyle(
+                  color: AppColors.error,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
 
           SizedBox(
             width: double.infinity,
@@ -302,7 +384,7 @@ class _LoginCard extends StatelessWidget {
                 backgroundColor: AppColors.primary,
                 foregroundColor: AppColors.background,
                 elevation: 12,
-                shadowColor: AppColors.primary.withOpacity(0.32),
+                shadowColor: AppColors.primary.withValues(alpha: 0.32),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(24),
                 ),
@@ -320,7 +402,7 @@ class _LoginCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'ENTRAR',
+                          AppStrings.loginButton,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 15,
@@ -346,7 +428,7 @@ class _LoginCard extends StatelessWidget {
                   letterSpacing: 0.4,
                 ),
               ),
-              child: const Text('¿No tienes cuenta? Regístrate'),
+              child: const Text(AppStrings.noAccountPrompt),
             ),
           ),
 
@@ -363,7 +445,7 @@ class _LoginCard extends StatelessWidget {
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 child: Text(
-                  'o continúa con',
+                  AppStrings.continueWith,
                   style: TextStyle(
                     color: AppColors.textMain,
                     fontSize: 12,
