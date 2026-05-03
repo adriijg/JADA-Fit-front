@@ -5,6 +5,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../data/models/fitness_profile_model.dart';
 import '../../data/services/fitness_profile_service.dart';
 import 'add_physical_log_screen.dart';
+import 'edit_fitness_profile_screen.dart';
 import 'fitness_progress_screen.dart';
 
 class FitnessProfileScreen extends StatefulWidget {
@@ -62,6 +63,25 @@ class _FitnessProfileScreenState extends State<FitnessProfileScreen> {
     }
   }
 
+  Future<void> _openEditFitnessProfile() async {
+    final currentProfile = fitnessProfile;
+
+    if (currentProfile == null) return;
+
+    final updated = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => EditFitnessProfileScreen(
+          currentProfile: currentProfile,
+        ),
+      ),
+    );
+
+    if (updated == true) {
+      await _loadFitnessProfile();
+    }
+  }
+
   Future<void> _openAddPhysicalLog() async {
     final currentProfile = fitnessProfile;
 
@@ -81,22 +101,17 @@ class _FitnessProfileScreenState extends State<FitnessProfileScreen> {
     }
   }
 
-  void _openFitnessProgress() {
-    Navigator.push(
+  Future<void> _openFitnessProgress() async {
+    await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (_) => const FitnessProgressScreen(),
       ),
     );
-  }
 
-  void _showComingSoonMessage(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: AppColors.surface,
-      ),
-    );
+    if (mounted) {
+      await _loadFitnessProfile();
+    }
   }
 
   String _formatDouble(double? value, String unit) {
@@ -250,9 +265,7 @@ class _FitnessProfileScreenState extends State<FitnessProfileScreen> {
         ),
         const SizedBox(height: 24),
         _FitnessActionsCard(
-          onEditPhysicalData: () {
-            _showComingSoonMessage('Editar datos físicos próximamente');
-          },
+          onEditPhysicalData: _openEditFitnessProfile,
           onAddPhysicalLog: _openAddPhysicalLog,
           onViewProgress: _openFitnessProgress,
         ),
@@ -661,7 +674,7 @@ class _FitnessActionsCard extends StatelessWidget {
           const SizedBox(height: 10),
           _ActionTile(
             icon: Icons.add_chart,
-            title: 'Añadir nuevos datos físicos',
+            title: 'Añadir registro físico',
             subtitle: 'Registra peso, grasa corporal y masa muscular',
             onTap: onAddPhysicalLog,
           ),

@@ -1,0 +1,749 @@
+import 'package:flutter/material.dart';
+
+import '../../../../core/network/api_exception.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../data/models/catalog_food_model.dart';
+import '../../data/models/meal_type.dart';
+import '../../data/services/nutrition_meal_service.dart';
+
+class RegisterMealScreen extends StatefulWidget {
+  const RegisterMealScreen({
+    super.key,
+    required this.food,
+    required this.initialMealType,
+    required this.initialDate,
+  });
+
+  final CatalogFoodModel food;
+  final MealType initialMealType;
+  final DateTime initialDate;
+
+  @override
+  State<RegisterMealScreen> createState() => _RegisterMealScreenState();
+}
+
+class _RegisterMealScreenState extends State<RegisterMealScreen> {
+  final NutritionMealService _nutritionMealService = NutritionMealService();
+  final TextEditingController quantityController = TextEditingController();
+
+  late MealType selectedMealType;
+  late DateTime selectedDate;
+
+  bool isLoading = false;
+  String? errorMessage;
+
+  @override
+  void initState() {
+    super.initState();
+
+    quantityController.text = '100';
+    selectedMealType = widget.initialMealType;
+    selectedDate = DateTime(
+      widget.initialDate.year,
+      widget.initialDate.month,
+      widget.initialDate.day,
+    );
+  }
+
+  @override
+  void dispose() {
+    quantityController.dispose();
+    super.dispose();
+  }
+
+  double? _parseDouble(String value) {
+    final trimmed = value.trim().replaceAll(',', '.');
+
+    if (trimmed.isEmpty) return null;
+
+    return double.tryParse(trimmed);
+  }
+
+  DateTime _selectedDateTime() {
+    final now = DateTime.now();
+
+    return DateTime(
+      selectedDate.year,
+      selectedDate.month,
+      selectedDate.day,
+      now.hour,
+      now.minute,
+      now.second,
+    );
+  }
+
+  String _formatSelectedDate() {
+    final day = selectedDate.day.toString().padLeft(2, '0');
+    final month = selectedDate.month.toString().padLeft(2, '0');
+    final year = selectedDate.year.toString();
+
+    return '$day/$month/$year';
+  }
+
+  String _formatDouble(double value, String unit) {
+    if (value % 1 == 0) {
+      return '${value.toInt()} $unit';
+    }
+
+    return '${value.toStringAsFixed(1)} $unit';
+  }
+
+  double _calculateForQuantity(double per100g, double quantity) {
+    return per100g * quantity / 100;
+  }
+
+  Future<void> _pickDate() async {
+    final now = DateTime.now();
+
+    final pickedDate = await showDatePicker(
+      context: context,
+      initialDate: selectedDate.isAfter(now) ? now : selectedDate,
+      firstDate: DateTime(now.year - 5),
+      lastDate: now,
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.dark(
+              primary: AppColors.primary,
+              surface: AppColors.surface,
+              onSurface: AppColors.textMain,
+            ),
+            dialogTheme: const DialogThemeData(
+              backgroundColor: AppColors.surface,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (pickedDate == null) return;
+
+    setState(() {
+      selectedDate = DateTime(
+        pickedDate.year,
+        pickedDate.month,
+        pickedDate.day,
+      );
+    });
+  }
+
+  Future<void> _saveMeal() async {
+    final quantity = _parseDouble(quantityController.text);
+    final loggedAt = _selectedDateTime();
+
+    setState(() {
+      errorMessage = null;
+    });
+
+    if (quantity == null) {
+      setState(() {
+        errorMessage = 'Introduce la cantidad en gramos';
+      });
+      return;
+    }
+
+    if (quantity <= 0) {
+      setState(() {
+        errorMessage = 'La cantidad debe ser mayor que 0';
+      });
+      return;
+    }
+
+    if (loggedAt.isAfter(DateTime.now())) {
+      setState(() {
+        errorMessage = 'No puedes registrar una comida en una fecha futura';
+      });
+      return;
+    }
+
+    try {
+      setState(() {
+        isLoading = true;
+      });
+
+      await _nutritionMealService.createMeal(
+        externalFoodId: widget.food.externalFoodId ?? widget.food.barcode,
+        foodName: widget.food.name,
+        mealType: selectedMealType,
+        quantityGrams: quantity,
+        caloriesPer100g: widget.food.caloriesPer100g,
+        proteinPer100g: widget.food.proteinPer100g,
+        carbsPer100g: widget.food.carbsPer100g,
+        fatsPer100g: widget.food.fatsPer100g,
+        loggedAt: loggedAt,
+      );
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Comida registrada correctamente'),
+          backgroundColor: AppColors.surface,
+        ),
+      );
+
+      Navigator.pop(context, true);
+    } on ApiException catch (error) {
+      if (!mounted) return;
+
+      setState(() {
+        errorMessage = error.message;
+      });
+    } catch (_) {
+      if (!mounted) return;
+
+      setState(() {
+        errorMessage = 'No se pudo registrar la comida';
+      });
+    } finally {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final quantity = _parseDouble(quantityController.text) ?? 0;
+
+    final calories = _calculateForQuantity(
+      widget.food.caloriesPer100g,
+      quantity,
+    );
+    final protein = _calculateForQuantity(
+      widget.food.proteinPer100g,
+      quantity,
+    );
+    final carbs = _calculateForQuantity(
+      widget.food.carbsPer100g,
+      quantity,
+    );
+    final fats = _calculateForQuantity(
+      widget.food.fatsPer100g,
+      quantity,
+    );
+
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      appBar: AppBar(
+        backgroundColor: AppColors.surface,
+        elevation: 0,
+        iconTheme: const IconThemeData(
+          color: AppColors.textMain,
+        ),
+        title: const Text(
+          'Registrar comida',
+          style: TextStyle(
+            color: AppColors.textMain,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 1,
+          ),
+        ),
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 24,
+            vertical: 20,
+          ),
+          child: Column(
+            children: [
+              _FoodHeaderCard(food: widget.food),
+              const SizedBox(height: 20),
+              _QuantityCard(
+                controller: quantityController,
+                onChanged: (_) => setState(() {}),
+              ),
+              const SizedBox(height: 16),
+              _MealTypeCard(
+                selectedMealType: selectedMealType,
+                onSelected: (mealType) {
+                  setState(() {
+                    selectedMealType = mealType;
+                  });
+                },
+              ),
+              const SizedBox(height: 16),
+              _DateCard(
+                selectedDate: _formatSelectedDate(),
+                onPickDate: _pickDate,
+              ),
+              const SizedBox(height: 16),
+              _MacroPreviewCard(
+                calories: _formatDouble(calories, 'kcal'),
+                protein: _formatDouble(protein, 'g'),
+                carbs: _formatDouble(carbs, 'g'),
+                fats: _formatDouble(fats, 'g'),
+              ),
+              const SizedBox(height: 18),
+              if (errorMessage != null)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: Text(
+                    errorMessage!,
+                    style: const TextStyle(
+                      color: AppColors.error,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              SizedBox(
+                width: double.infinity,
+                height: 58,
+                child: ElevatedButton(
+                  onPressed: isLoading ? null : _saveMeal,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: AppColors.background,
+                    elevation: 12,
+                    shadowColor: AppColors.primary.withValues(alpha: 0.32),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                  ),
+                  child: isLoading
+                      ? const SizedBox(
+                          width: 22,
+                          height: 22,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2.4,
+                            color: AppColors.background,
+                          ),
+                        )
+                      : const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'REGISTRAR COMIDA',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                                letterSpacing: 1.2,
+                              ),
+                            ),
+                            SizedBox(width: 12),
+                            Icon(Icons.restaurant_menu, size: 20),
+                          ],
+                        ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _FoodHeaderCard extends StatelessWidget {
+  const _FoodHeaderCard({
+    required this.food,
+  });
+
+  final CatalogFoodModel food;
+
+  String _sourceLabel(String source) {
+    switch (source) {
+      case 'USER':
+        return 'Alimento personalizado';
+      case 'OPEN_FOOD_FACTS':
+        return 'Open Food Facts';
+      default:
+        return source;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final brand = food.brand == null || food.brand!.trim().isEmpty
+        ? 'Sin marca'
+        : food.brand!;
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(28),
+        border: Border.all(
+          color: AppColors.primary.withValues(alpha: 0.28),
+          width: 0.8,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Icon(
+            Icons.restaurant_menu,
+            color: AppColors.primary,
+            size: 42,
+          ),
+          const SizedBox(height: 18),
+          Text(
+            food.name,
+            style: const TextStyle(
+              color: AppColors.textMain,
+              fontSize: 23,
+              fontWeight: FontWeight.w900,
+              height: 1.18,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            '$brand · ${_sourceLabel(food.source)}',
+            style: const TextStyle(
+              color: AppColors.secondary,
+              fontSize: 13,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _QuantityCard extends StatelessWidget {
+  const _QuantityCard({
+    required this.controller,
+    required this.onChanged,
+  });
+
+  final TextEditingController controller;
+  final ValueChanged<String> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return _Card(
+      child: TextField(
+        controller: controller,
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        onChanged: onChanged,
+        style: const TextStyle(
+          color: AppColors.textMain,
+          fontSize: 15,
+        ),
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: AppColors.inputBackground,
+          labelText: 'Cantidad',
+          labelStyle: const TextStyle(
+            color: AppColors.secondary,
+            fontWeight: FontWeight.w600,
+          ),
+          hintText: 'Ej: 150',
+          prefixIcon: const Icon(
+            Icons.scale_outlined,
+            color: AppColors.primary,
+          ),
+          suffixText: 'g',
+          suffixStyle: const TextStyle(
+            color: AppColors.secondary,
+            fontWeight: FontWeight.w700,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(18),
+            borderSide: const BorderSide(
+              color: AppColors.inputBorder,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(18),
+            borderSide: const BorderSide(
+              color: AppColors.primary,
+              width: 1.4,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _MealTypeCard extends StatelessWidget {
+  const _MealTypeCard({
+    required this.selectedMealType,
+    required this.onSelected,
+  });
+
+  final MealType selectedMealType;
+  final ValueChanged<MealType> onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return _Card(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'TIPO DE COMIDA',
+            style: TextStyle(
+              color: AppColors.secondary,
+              fontSize: 11,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 1,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            children: MealType.values.map((mealType) {
+              final isSelected = mealType == selectedMealType;
+
+              return InkWell(
+                onTap: () => onSelected(mealType),
+                borderRadius: BorderRadius.circular(18),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 180),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? AppColors.primary
+                        : AppColors.inputBackground,
+                    borderRadius: BorderRadius.circular(18),
+                    border: Border.all(
+                      color: isSelected
+                          ? AppColors.primary
+                          : AppColors.inputBorder,
+                      width: 0.8,
+                    ),
+                  ),
+                  child: Text(
+                    mealType.label,
+                    style: TextStyle(
+                      color: isSelected
+                          ? AppColors.background
+                          : AppColors.textMain,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DateCard extends StatelessWidget {
+  const _DateCard({
+    required this.selectedDate,
+    required this.onPickDate,
+  });
+
+  final String selectedDate;
+  final VoidCallback onPickDate;
+
+  @override
+  Widget build(BuildContext context) {
+    return _Card(
+      child: InkWell(
+        onTap: onPickDate,
+        borderRadius: BorderRadius.circular(18),
+        child: Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: AppColors.inputBackground,
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(
+              color: AppColors.inputBorder,
+              width: 0.7,
+            ),
+          ),
+          child: Row(
+            children: [
+              const Icon(
+                Icons.calendar_month_outlined,
+                color: AppColors.primary,
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Text(
+                  selectedDate,
+                  style: const TextStyle(
+                    color: AppColors.textMain,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              const Icon(
+                Icons.edit_calendar,
+                color: AppColors.secondary,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _MacroPreviewCard extends StatelessWidget {
+  const _MacroPreviewCard({
+    required this.calories,
+    required this.protein,
+    required this.carbs,
+    required this.fats,
+  });
+
+  final String calories;
+  final String protein;
+  final String carbs;
+  final String fats;
+
+  @override
+  Widget build(BuildContext context) {
+    return _Card(
+      borderColor: AppColors.primary.withValues(alpha: 0.28),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'RESUMEN CALCULADO',
+            style: TextStyle(
+              color: AppColors.secondary,
+              fontSize: 11,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 1,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: _MacroBox(
+                  label: 'Calorías',
+                  value: calories,
+                  icon: Icons.local_fire_department,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: _MacroBox(
+                  label: 'Proteína',
+                  value: protein,
+                  icon: Icons.fitness_center,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Expanded(
+                child: _MacroBox(
+                  label: 'Hidratos',
+                  value: carbs,
+                  icon: Icons.grain,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: _MacroBox(
+                  label: 'Grasas',
+                  value: fats,
+                  icon: Icons.water_drop_outlined,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _MacroBox extends StatelessWidget {
+  const _MacroBox({
+    required this.icon,
+    required this.label,
+    required this.value,
+  });
+
+  final IconData icon;
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: AppColors.inputBackground,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: AppColors.inputBorder,
+          width: 0.7,
+        ),
+      ),
+      child: Column(
+        children: [
+          Icon(
+            icon,
+            color: AppColors.primary,
+            size: 23,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            value,
+            style: const TextStyle(
+              color: AppColors.textMain,
+              fontSize: 16,
+              fontWeight: FontWeight.w900,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 5),
+          Text(
+            label.toUpperCase(),
+            style: const TextStyle(
+              color: AppColors.secondary,
+              fontSize: 10,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 0.8,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _Card extends StatelessWidget {
+  const _Card({
+    required this.child,
+    this.borderColor,
+  });
+
+  final Widget child;
+  final Color? borderColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(22),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(28),
+        border: Border.all(
+          color: borderColor ?? AppColors.divider.withValues(alpha: 0.4),
+          width: 0.7,
+        ),
+      ),
+      child: child,
+    );
+  }
+}

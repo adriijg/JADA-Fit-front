@@ -17,6 +17,12 @@ class ApiEndpoints {
   static const String myFitnessProgress = '$fitnessProgress/me';
 
   static const String foods = '${ApiConfig.baseUrl}/foods';
+  static const String foodsSearch = '$foods/search';
+  static const String foodsBarcode = '$foods/barcode';
+
+  static const String nutrition = '${ApiConfig.baseUrl}/nutrition';
+  static const String nutritionMeals = '$nutrition/meals';
+  static const String nutritionDay = '$nutrition/day';
 
   static String foodByBarcode(String barcode) {
     return '$foods/barcode/$barcode';
