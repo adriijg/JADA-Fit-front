@@ -18,6 +18,10 @@ dependencies:
   # Iconos de iOS
   cupertino_icons: ^1.0.8
   font_awesome_flutter: ^10.7.0
+  # Escaneo de QR y códigos de barras
+  mobile_scanner: ^7.1.3
+  # Gráficos
+  fl_chart: ^0.69.0
 
 dev_dependencies:
   flutter_test:

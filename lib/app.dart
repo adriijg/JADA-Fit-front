@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:jada_fit/features/auth/presentation/screens/auth_gate.dart';
 
 import 'core/theme/app_theme.dart';
-import 'features/auth/presentation/screens/login_screen.dart';
 
 class JadaFitApp extends StatelessWidget {
   const JadaFitApp({super.key});
@@ -12,7 +12,7 @@ class JadaFitApp extends StatelessWidget {
       title: 'Jada Fit',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.darkTheme,
-      home: const LoginScreen(),
+      home: const AuthGate(),
     );
   }
 }

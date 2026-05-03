@@ -7,7 +7,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../data/services/auth_service.dart';
 import '../widgets/auth_text_field.dart';
 import '../widgets/social_login_button.dart';
-import 'package:jada_fit/features/home/presentation/screens/home_screen.dart';
+import 'auth_gate.dart';
 import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -46,15 +46,11 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     if (identifier.isEmpty) {
-      setState(() {
-        identifierError = AppStrings.errorEnterIdentifier;
-      });
+      identifierError = AppStrings.errorEnterIdentifier;
     }
 
     if (password.isEmpty) {
-      setState(() {
-        passwordError = AppStrings.errorEnterPassword;
-      });
+      passwordError = AppStrings.errorEnterPassword;
     }
 
     if (identifierError != null || passwordError != null) {
@@ -74,19 +70,28 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (!mounted) return;
 
-      Navigator.pushReplacement(
+      Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (_) => const HomeScreen()),
+        MaterialPageRoute(
+          builder: (_) => const AuthGate(),
+        ),
+        (route) => false,
       );
     } on ApiException catch (error) {
+      if (!mounted) return;
+
       setState(() {
         errorMessage = error.message;
       });
+
       _showMessage(error.message);
     } catch (_) {
+      if (!mounted) return;
+
       setState(() {
         errorMessage = AppStrings.errorLoginFailed;
       });
+
       _showMessage(AppStrings.errorLoginFailed);
     } finally {
       if (mounted) {
@@ -185,9 +190,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           passwordError: passwordError,
                           onLogin: _login,
                           onGoToRegister: _goToRegister,
-                          onGoogleLogin: () => _showComingSoon(AppStrings.googleProvider),
-                          onAppleLogin: () => _showComingSoon(AppStrings.appleProvider),
-                          onFacebookLogin: () => _showComingSoon(AppStrings.facebookProvider),
+                          onGoogleLogin: () =>
+                              _showComingSoon(AppStrings.googleProvider),
+                          onAppleLogin: () =>
+                              _showComingSoon(AppStrings.appleProvider),
+                          onFacebookLogin: () =>
+                              _showComingSoon(AppStrings.facebookProvider),
                         ),
                         const SizedBox(height: 30),
                       ],
@@ -264,9 +272,7 @@ class _LoginCard extends StatelessWidget {
               ),
             ),
           ),
-
           const SizedBox(height: 32),
-
           const Text(
             AppStrings.loginUserLabel,
             style: TextStyle(
@@ -275,9 +281,7 @@ class _LoginCard extends StatelessWidget {
               letterSpacing: 1,
             ),
           ),
-
           const SizedBox(height: 8),
-
           AuthTextField(
             controller: identifierController,
             hintText: AppStrings.loginIdentifierHint,
@@ -285,7 +289,6 @@ class _LoginCard extends StatelessWidget {
             keyboardType: TextInputType.text,
             errorText: identifierError,
           ),
-
           if (identifierError != null)
             Padding(
               padding: const EdgeInsets.only(top: 8),
@@ -298,9 +301,7 @@ class _LoginCard extends StatelessWidget {
                 ),
               ),
             ),
-
           const SizedBox(height: 22),
-
           const Text(
             AppStrings.loginPasswordLabel,
             style: TextStyle(
@@ -309,9 +310,7 @@ class _LoginCard extends StatelessWidget {
               letterSpacing: 1,
             ),
           ),
-
           const SizedBox(height: 8),
-
           AuthTextField(
             controller: passwordController,
             hintText: AppStrings.loginPasswordHint,
@@ -319,7 +318,6 @@ class _LoginCard extends StatelessWidget {
             obscureText: true,
             errorText: passwordError,
           ),
-
           if (passwordError != null)
             Padding(
               padding: const EdgeInsets.only(top: 8),
@@ -332,16 +330,15 @@ class _LoginCard extends StatelessWidget {
                 ),
               ),
             ),
-
           const SizedBox(height: 18),
-
           Align(
             alignment: Alignment.centerRight,
             child: TextButton(
               onPressed: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
+                  const SnackBar(
                     content: Text(AppStrings.recoverPasswordSoon),
+                    backgroundColor: AppColors.surface,
                   ),
                 );
               },
@@ -358,23 +355,22 @@ class _LoginCard extends StatelessWidget {
               child: const Text(AppStrings.forgotPasswordPrompt),
             ),
           ),
-
           const SizedBox(height: 22),
-
           if (errorMessage != null)
             Padding(
               padding: const EdgeInsets.only(bottom: 16),
-              child: Text(
-                errorMessage!,
-                style: const TextStyle(
-                  color: AppColors.error,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
+              child: Center(
+                child: Text(
+                  errorMessage!,
+                  style: const TextStyle(
+                    color: AppColors.error,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
               ),
             ),
-
           SizedBox(
             width: double.infinity,
             height: 58,
@@ -415,9 +411,7 @@ class _LoginCard extends StatelessWidget {
                     ),
             ),
           ),
-
           const SizedBox(height: 22),
-
           Center(
             child: TextButton(
               onPressed: onGoToRegister,
@@ -431,9 +425,7 @@ class _LoginCard extends StatelessWidget {
               child: const Text(AppStrings.noAccountPrompt),
             ),
           ),
-
           const SizedBox(height: 18),
-
           Row(
             children: [
               Expanded(
@@ -460,9 +452,7 @@ class _LoginCard extends StatelessWidget {
               ),
             ],
           ),
-
           const SizedBox(height: 20),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [

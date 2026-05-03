@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../auth/data/models/user_account_model.dart';
 import '../../../auth/data/services/auth_service.dart';
 import '../../../auth/presentation/screens/login_screen.dart';
-import '../../data/models/profile_model.dart';
-import '../../data/services/profile_service.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -15,36 +14,37 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final ProfileService _profileService = ProfileService();
+  final AuthService _authService = AuthService();
+
   bool isLoading = true;
   String? errorMessage;
-  ProfileModel? profile;
+  UserAccountModel? user;
 
   @override
   void initState() {
     super.initState();
-    _loadProfile();
+    _loadUserAccount();
   }
 
-  Future<void> _loadProfile() async {
+  Future<void> _loadUserAccount() async {
     try {
       setState(() {
         isLoading = true;
         errorMessage = null;
       });
 
-      final loadedProfile = await _profileService.getMyProfile();
+      final currentUser = await _authService.getCurrentUser();
 
       if (!mounted) return;
 
       setState(() {
-        profile = loadedProfile;
+        user = currentUser;
       });
     } catch (_) {
       if (!mounted) return;
 
       setState(() {
-        errorMessage = AppStrings.profileError;
+        errorMessage = 'No se pudo cargar tu cuenta.';
       });
     } finally {
       if (mounted) {
@@ -56,21 +56,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _logout() async {
-    await AuthService().logout();
+    await _authService.logout();
 
     if (!mounted) return;
 
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (_) => const LoginScreen()),
+      MaterialPageRoute(
+        builder: (_) => const LoginScreen(),
+      ),
       (route) => false,
     );
   }
 
   void _showComingSoonMessage(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message), backgroundColor: AppColors.surface),
+      SnackBar(
+        content: Text(message),
+        backgroundColor: AppColors.surface,
+      ),
     );
+  }
+
+  String _formatCreatedAt(DateTime? date) {
+    if (date == null) return 'No disponible';
+
+    final day = date.day.toString().padLeft(2, '0');
+    final month = date.month.toString().padLeft(2, '0');
+    final year = date.year.toString();
+
+    return '$day/$month/$year';
   }
 
   @override
@@ -80,7 +95,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.surface,
         elevation: 0,
-        iconTheme: const IconThemeData(color: AppColors.textMain),
+        iconTheme: const IconThemeData(
+          color: AppColors.textMain,
+        ),
         title: const Text(
           AppStrings.profileTitle,
           style: TextStyle(
@@ -92,7 +109,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 24,
+            vertical: 20,
+          ),
           child: _buildBody(),
         ),
       ),
@@ -105,11 +125,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CircularProgressIndicator(color: AppColors.primary),
+            CircularProgressIndicator(
+              color: AppColors.primary,
+            ),
             SizedBox(height: 16),
             Text(
-              AppStrings.profileLoading,
-              style: TextStyle(color: AppColors.textMain, fontSize: 14),
+              'Cargando cuenta...',
+              style: TextStyle(
+                color: AppColors.textMain,
+                fontSize: 14,
+              ),
             ),
           ],
         ),
@@ -118,59 +143,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     if (errorMessage != null) {
       return Center(
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(24),
-          decoration: BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(
-              color: AppColors.divider.withValues(alpha: 0.4),
-              width: 0.7,
-            ),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.error_outline, color: AppColors.error, size: 42),
-              const SizedBox(height: 16),
-              Text(
-                errorMessage!,
-                style: const TextStyle(
-                  color: AppColors.textMain,
-                  fontSize: 15,
-                  height: 1.5,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _loadProfile,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: AppColors.background,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18),
-                  ),
-                ),
-                child: const Text(
-                  'Reintentar',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-            ],
-          ),
+        child: _ErrorCard(
+          message: errorMessage!,
+          onRetry: _loadUserAccount,
         ),
       );
     }
 
-    final currentProfile = profile;
+    final currentUser = user;
 
-    if (currentProfile == null) {
-      return const Center(
-        child: Text(
-          AppStrings.profileError,
-          style: TextStyle(color: AppColors.textMain, fontSize: 14),
+    if (currentUser == null) {
+      return Center(
+        child: _ErrorCard(
+          message: 'No se pudo cargar tu cuenta.',
+          onRetry: _loadUserAccount,
         ),
       );
     }
@@ -178,16 +164,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          _ProfileHeader(profile: currentProfile),
+          _AccountHeaderCard(user: currentUser),
           const SizedBox(height: 24),
-          _ProfileInfoCard(profile: currentProfile),
+          _AccountInfoCard(
+            username: currentUser.username,
+            email: currentUser.email,
+            createdAt: _formatCreatedAt(currentUser.createdAt),
+          ),
           const SizedBox(height: 24),
-          _ProfileOptionsCard(
-            onEditProfile: () {
-              _showComingSoonMessage('Editar perfil próximamente');
-            },
+          _AccountOptionsCard(
             onSettings: () {
               _showComingSoonMessage('Configuración próximamente');
+            },
+            onPrivacy: () {
+              _showComingSoonMessage('Privacidad próximamente');
+            },
+            onIntegrations: () {
+              _showComingSoonMessage('Integraciones próximamente');
             },
             onLogout: _logout,
           ),
@@ -197,10 +190,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 }
 
-class _ProfileHeader extends StatelessWidget {
-  const _ProfileHeader({required this.profile});
+class _AccountHeaderCard extends StatelessWidget {
+  const _AccountHeaderCard({
+    required this.user,
+  });
 
-  final ProfileModel profile;
+  final UserAccountModel user;
 
   @override
   Widget build(BuildContext context) {
@@ -230,16 +225,23 @@ class _ProfileHeader extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: AppColors.inputBackground,
-              border: Border.all(color: AppColors.primary, width: 2),
+              border: Border.all(
+                color: AppColors.primary,
+                width: 2,
+              ),
             ),
-            child: const Icon(Icons.person, color: AppColors.primary, size: 48),
+            child: const Icon(
+              Icons.person,
+              color: AppColors.primary,
+              size: 48,
+            ),
           ),
           const SizedBox(height: 18),
           Text(
-            profile.name,
+            user.username,
             style: const TextStyle(
               color: AppColors.textMain,
-              fontSize: 22,
+              fontSize: 23,
               fontWeight: FontWeight.w800,
               letterSpacing: 0.8,
             ),
@@ -247,7 +249,7 @@ class _ProfileHeader extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            profile.email,
+            user.email,
             style: const TextStyle(
               color: AppColors.secondary,
               fontSize: 14,
@@ -261,10 +263,16 @@ class _ProfileHeader extends StatelessWidget {
   }
 }
 
-class _ProfileInfoCard extends StatelessWidget {
-  const _ProfileInfoCard({required this.profile});
+class _AccountInfoCard extends StatelessWidget {
+  const _AccountInfoCard({
+    required this.username,
+    required this.email,
+    required this.createdAt,
+  });
 
-  final ProfileModel profile;
+  final String username;
+  final String email;
+  final String createdAt;
 
   @override
   Widget build(BuildContext context) {
@@ -281,18 +289,22 @@ class _ProfileInfoCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          _ProfileInfoRow(
+          _AccountInfoRow(
             icon: Icons.badge_outlined,
-            label: AppStrings.profileNameLabel,
-            value: profile.name,
+            label: 'Usuario',
+            value: username,
           ),
-          const SizedBox(height: 18),
-          const Divider(color: AppColors.divider, height: 1),
-          const SizedBox(height: 18),
-          _ProfileInfoRow(
+          const _AccountDivider(),
+          _AccountInfoRow(
             icon: Icons.email_outlined,
-            label: AppStrings.profileEmailLabel,
-            value: profile.email,
+            label: 'Email',
+            value: email,
+          ),
+          const _AccountDivider(),
+          _AccountInfoRow(
+            icon: Icons.calendar_month_outlined,
+            label: 'Cuenta creada',
+            value: createdAt,
           ),
         ],
       ),
@@ -300,8 +312,23 @@ class _ProfileInfoCard extends StatelessWidget {
   }
 }
 
-class _ProfileInfoRow extends StatelessWidget {
-  const _ProfileInfoRow({
+class _AccountDivider extends StatelessWidget {
+  const _AccountDivider();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.symmetric(vertical: 18),
+      child: Divider(
+        color: AppColors.divider,
+        height: 1,
+      ),
+    );
+  }
+}
+
+class _AccountInfoRow extends StatelessWidget {
+  const _AccountInfoRow({
     required this.icon,
     required this.label,
     required this.value,
@@ -322,7 +349,11 @@ class _ProfileInfoRow extends StatelessWidget {
             color: AppColors.inputBackground,
             borderRadius: BorderRadius.circular(16),
           ),
-          child: Icon(icon, color: AppColors.primary, size: 22),
+          child: Icon(
+            icon,
+            color: AppColors.primary,
+            size: 22,
+          ),
         ),
         const SizedBox(width: 16),
         Expanded(
@@ -355,15 +386,17 @@ class _ProfileInfoRow extends StatelessWidget {
   }
 }
 
-class _ProfileOptionsCard extends StatelessWidget {
-  const _ProfileOptionsCard({
-    required this.onEditProfile,
+class _AccountOptionsCard extends StatelessWidget {
+  const _AccountOptionsCard({
     required this.onSettings,
+    required this.onPrivacy,
+    required this.onIntegrations,
     required this.onLogout,
   });
 
-  final VoidCallback onEditProfile;
   final VoidCallback onSettings;
+  final VoidCallback onPrivacy;
+  final VoidCallback onIntegrations;
   final VoidCallback onLogout;
 
   @override
@@ -381,21 +414,28 @@ class _ProfileOptionsCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          _ProfileOptionTile(
-            icon: Icons.edit_outlined,
-            title: 'Editar perfil',
-            subtitle: 'Actualiza tus datos personales',
-            onTap: onEditProfile,
-          ),
-          const SizedBox(height: 10),
-          _ProfileOptionTile(
+          _AccountOptionTile(
             icon: Icons.settings_outlined,
             title: 'Configuración',
             subtitle: 'Preferencias de la aplicación',
             onTap: onSettings,
           ),
           const SizedBox(height: 10),
-          _ProfileOptionTile(
+          _AccountOptionTile(
+            icon: Icons.lock_outline,
+            title: 'Privacidad',
+            subtitle: 'Gestiona qué datos quieres compartir',
+            onTap: onPrivacy,
+          ),
+          const SizedBox(height: 10),
+          _AccountOptionTile(
+            icon: Icons.favorite_border,
+            title: 'Integraciones',
+            subtitle: 'Apple Health, Google Fit y wearables',
+            onTap: onIntegrations,
+          ),
+          const SizedBox(height: 10),
+          _AccountOptionTile(
             icon: Icons.logout,
             title: 'Cerrar sesión',
             subtitle: 'Salir de tu cuenta',
@@ -408,8 +448,8 @@ class _ProfileOptionsCard extends StatelessWidget {
   }
 }
 
-class _ProfileOptionTile extends StatelessWidget {
-  const _ProfileOptionTile({
+class _AccountOptionTile extends StatelessWidget {
+  const _AccountOptionTile({
     required this.icon,
     required this.title,
     required this.subtitle,
@@ -432,15 +472,25 @@ class _ProfileOptionTile extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(18),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 14,
+          vertical: 14,
+        ),
         decoration: BoxDecoration(
           color: AppColors.inputBackground,
           borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: AppColors.inputBorder, width: 0.7),
+          border: Border.all(
+            color: AppColors.inputBorder,
+            width: 0.7,
+          ),
         ),
         child: Row(
           children: [
-            Icon(icon, color: iconColor, size: 24),
+            Icon(
+              icon,
+              color: iconColor,
+              size: 24,
+            ),
             const SizedBox(width: 14),
             Expanded(
               child: Column(
@@ -472,6 +522,69 @@ class _ProfileOptionTile extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _ErrorCard extends StatelessWidget {
+  const _ErrorCard({
+    required this.message,
+    required this.onRetry,
+  });
+
+  final String message;
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: AppColors.divider.withValues(alpha: 0.4),
+          width: 0.7,
+        ),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(
+            Icons.error_outline,
+            color: AppColors.error,
+            size: 42,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            message,
+            style: const TextStyle(
+              color: AppColors.textMain,
+              fontSize: 15,
+              height: 1.5,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: onRetry,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              foregroundColor: AppColors.background,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18),
+              ),
+            ),
+            child: const Text(
+              'Reintentar',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

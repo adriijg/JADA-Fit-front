@@ -5,10 +5,10 @@ import 'package:http/http.dart' as http;
 import '../../../../core/network/api_endpoints.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/storage/secure_storage_service.dart';
-import '../models/profile_model.dart';
+import '../models/fitness_profile_model.dart';
 
-class ProfileService {
-  ProfileService({
+class FitnessProfileService {
+  FitnessProfileService({
     http.Client? client,
     SecureStorageService? storageService,
   })  : _client = client ?? http.Client(),
@@ -17,7 +17,7 @@ class ProfileService {
   final http.Client _client;
   final SecureStorageService _storageService;
 
-  Future<ProfileModel> getMyProfile() async {
+  Future<FitnessProfileModel> getMyFitnessProfile() async {
     final token = await _getTokenOrThrow();
 
     final response = await _client.get(
@@ -30,7 +30,7 @@ class ProfileService {
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
-      return ProfileModel.fromJson(data);
+      return FitnessProfileModel.fromJson(data);
     }
 
     throw ApiException(
@@ -39,7 +39,7 @@ class ProfileService {
     );
   }
 
-  Future<ProfileModel> updateMyProfile({
+  Future<FitnessProfileModel> updateMyFitnessProfile({
     double? weight,
     int? height,
     int? age,
@@ -61,7 +61,7 @@ class ProfileService {
         'height': height,
         'age': age,
         'gender': gender,
-        'goal': _emptyToNull(goal),
+        'goal': goal,
         'bodyFat': bodyFat,
         'muscleMass': muscleMass,
       }),
@@ -69,7 +69,7 @@ class ProfileService {
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
-      return ProfileModel.fromJson(data);
+      return FitnessProfileModel.fromJson(data);
     }
 
     throw ApiException(
@@ -86,14 +86,6 @@ class ProfileService {
     }
 
     return token;
-  }
-
-  String? _emptyToNull(String? value) {
-    if (value == null) return null;
-
-    final trimmed = value.trim();
-
-    return trimmed.isEmpty ? null : trimmed;
   }
 
   String _parseErrorMessage(String body) {
@@ -113,6 +105,6 @@ class ProfileService {
       // Fall back to raw body
     }
 
-    return body.isNotEmpty ? body : 'No se pudo cargar el perfil';
+    return body.isNotEmpty ? body : 'No se pudo cargar el perfil físico';
   }
 }
