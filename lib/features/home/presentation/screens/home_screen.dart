@@ -26,18 +26,14 @@ class _HomeScreenState extends State<HomeScreen> {
   void _openProfile() {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (_) => const ProfileScreen(),
-      ),
+      MaterialPageRoute(builder: (_) => const ProfileScreen()),
     );
   }
 
   void _openFitnessProfile() {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (_) => const FitnessProfileScreen(),
-      ),
+      MaterialPageRoute(builder: (_) => const FitnessProfileScreen()),
     );
   }
 
@@ -86,15 +82,10 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: AppColors.background,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(72),
-        child: AppHeader(
-          onProfileTap: _openProfile,
-        ),
+        child: AppHeader(onProfileTap: _openProfile),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 24,
-          vertical: 16,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         child: _buildSection(),
       ),
       bottomNavigationBar: AppBottomNavigationBar(
@@ -147,9 +138,7 @@ class _HomeDashboardSection extends StatelessWidget {
           children: [
             const _GreetingCard(),
             const SizedBox(height: 18),
-            _AiCoachCard(
-              onTap: onOpenAi,
-            ),
+            _AiCoachCard(onTap: onOpenAi),
             const SizedBox(height: 18),
             _NutritionOverviewCard(
               caloriesConsumed: caloriesConsumed,
@@ -166,23 +155,15 @@ class _HomeDashboardSection extends StatelessWidget {
             const SizedBox(height: 18),
             Row(
               children: [
-                Expanded(
-                  child: _WorkoutSummaryCard(
-                    onTap: onOpenWorkout,
-                  ),
-                ),
+                Expanded(child: _WorkoutSummaryCard(onTap: onOpenWorkout)),
                 const SizedBox(width: 14),
                 Expanded(
-                  child: _PhysicalProgressCard(
-                    onTap: onOpenFitnessProfile,
-                  ),
+                  child: _PhysicalProgressCard(onTap: onOpenFitnessProfile),
                 ),
               ],
             ),
             const SizedBox(height: 18),
-            _SocialSummaryCard(
-              onTap: onOpenSocial,
-            ),
+            _SocialSummaryCard(onTap: onOpenSocial),
             const SizedBox(height: 18),
             _SmartQuickActionsCard(
               onScanFood: onOpenNutrition,
@@ -250,9 +231,7 @@ class _GreetingCard extends StatelessWidget {
 }
 
 class _AiCoachCard extends StatelessWidget {
-  const _AiCoachCard({
-    required this.onTap,
-  });
+  const _AiCoachCard({required this.onTap});
 
   final VoidCallback onTap;
 
@@ -316,10 +295,7 @@ class _AiCoachCard extends StatelessWidget {
                 ],
               ),
             ),
-            const Icon(
-              Icons.chevron_right,
-              color: AppColors.secondary,
-            ),
+            const Icon(Icons.chevron_right, color: AppColors.secondary),
           ],
         ),
       ),
@@ -409,10 +385,7 @@ class _NutritionOverviewCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                const Icon(
-                  Icons.chevron_right,
-                  color: AppColors.secondary,
-                ),
+                const Icon(Icons.chevron_right, color: AppColors.secondary),
               ],
             ),
             const SizedBox(height: 22),
@@ -442,7 +415,8 @@ class _NutritionOverviewCard extends StatelessWidget {
                       const SizedBox(height: 12),
                       _NutritionMetric(
                         label: 'Restantes',
-                        value: '${remainingCalories.clamp(0, caloriesGoal)} kcal',
+                        value:
+                            '${remainingCalories.clamp(0, caloriesGoal)} kcal',
                         icon: Icons.bolt_outlined,
                       ),
                     ],
@@ -501,9 +475,7 @@ class _CalorieRingChart extends StatelessWidget {
         children: [
           CustomPaint(
             size: const Size(116, 116),
-            painter: _RingProgressPainter(
-              progress: safeProgress,
-            ),
+            painter: _RingProgressPainter(progress: safeProgress),
           ),
           Column(
             mainAxisSize: MainAxisSize.min,
@@ -541,9 +513,7 @@ class _CalorieRingChart extends StatelessWidget {
 }
 
 class _RingProgressPainter extends CustomPainter {
-  const _RingProgressPainter({
-    required this.progress,
-  });
+  const _RingProgressPainter({required this.progress});
 
   final double progress;
 
@@ -567,10 +537,7 @@ class _RingProgressPainter extends CustomPainter {
 
     canvas.drawCircle(center, radius, backgroundPaint);
 
-    final rect = Rect.fromCircle(
-      center: center,
-      radius: radius,
-    );
+    final rect = Rect.fromCircle(center: center, radius: radius);
 
     canvas.drawArc(
       rect,
@@ -602,11 +569,7 @@ class _NutritionMetric extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(
-          icon,
-          color: AppColors.primary,
-          size: 19,
-        ),
+        Icon(icon, color: AppColors.primary, size: 19),
         const SizedBox(width: 8),
         Expanded(
           child: Text(
@@ -678,9 +641,7 @@ class _MacroProgressBar extends StatelessWidget {
             value: progress,
             minHeight: 10,
             backgroundColor: AppColors.inputBorder,
-            valueColor: const AlwaysStoppedAnimation<Color>(
-              AppColors.primary,
-            ),
+            valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
           ),
         ),
       ],
@@ -689,9 +650,7 @@ class _MacroProgressBar extends StatelessWidget {
 }
 
 class _WorkoutSummaryCard extends StatelessWidget {
-  const _WorkoutSummaryCard({
-    required this.onTap,
-  });
+  const _WorkoutSummaryCard({required this.onTap});
 
   final VoidCallback onTap;
 
@@ -708,9 +667,7 @@ class _WorkoutSummaryCard extends StatelessWidget {
 }
 
 class _PhysicalProgressCard extends StatelessWidget {
-  const _PhysicalProgressCard({
-    required this.onTap,
-  });
+  const _PhysicalProgressCard({required this.onTap});
 
   final VoidCallback onTap;
 
@@ -767,11 +724,7 @@ class _SmallDashboardCard extends StatelessWidget {
                 color: AppColors.inputBackground,
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: Icon(
-                icon,
-                color: AppColors.primary,
-                size: 24,
-              ),
+              child: Icon(icon, color: AppColors.primary, size: 24),
             ),
             const Spacer(),
             Text(
@@ -809,9 +762,7 @@ class _SmallDashboardCard extends StatelessWidget {
 }
 
 class _SocialSummaryCard extends StatelessWidget {
-  const _SocialSummaryCard({
-    required this.onTap,
-  });
+  const _SocialSummaryCard({required this.onTap});
 
   final VoidCallback onTap;
 
@@ -871,10 +822,7 @@ class _SocialSummaryCard extends StatelessWidget {
                 ],
               ),
             ),
-            const Icon(
-              Icons.chevron_right,
-              color: AppColors.secondary,
-            ),
+            const Icon(Icons.chevron_right, color: AppColors.secondary),
           ],
         ),
       ),
@@ -914,10 +862,7 @@ class _SmartQuickActionsCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Padding(
-            padding: EdgeInsets.only(
-              left: 4,
-              bottom: 14,
-            ),
+            padding: EdgeInsets.only(left: 4, bottom: 14),
             child: Text(
               'Accesos rápidos',
               style: TextStyle(
@@ -986,25 +931,15 @@ class _QuickActionTile extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(18),
       child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 14,
-          vertical: 14,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
         decoration: BoxDecoration(
           color: AppColors.inputBackground,
           borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: AppColors.inputBorder,
-            width: 0.7,
-          ),
+          border: Border.all(color: AppColors.inputBorder, width: 0.7),
         ),
         child: Row(
           children: [
-            Icon(
-              icon,
-              color: AppColors.primary,
-              size: 24,
-            ),
+            Icon(icon, color: AppColors.primary, size: 24),
             const SizedBox(width: 14),
             Expanded(
               child: Column(
@@ -1030,10 +965,7 @@ class _QuickActionTile extends StatelessWidget {
                 ],
               ),
             ),
-            const Icon(
-              Icons.chevron_right,
-              color: AppColors.secondary,
-            ),
+            const Icon(Icons.chevron_right, color: AppColors.secondary),
           ],
         ),
       ),
