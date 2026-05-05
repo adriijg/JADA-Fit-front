@@ -7,6 +7,8 @@ class ApiEndpoints {
   static const String register = '$users/register';
   static const String me = '$users/me';
 
+  static const String mePrivacy = '$me/privacy';
+
   static const String onboarding = '${ApiConfig.baseUrl}/onboarding';
   static const String completeOnboarding = '$onboarding/complete';
 
@@ -23,6 +25,10 @@ class ApiEndpoints {
   static const String nutrition = '${ApiConfig.baseUrl}/nutrition';
   static const String nutritionMeals = '$nutrition/meals';
   static const String nutritionDay = '$nutrition/day';
+
+  static const String social = '${ApiConfig.baseUrl}/social';
+  static const String follow = '$social/follow';
+  static const String unfollow = '$social/unfollow';
 
   static String foodByBarcode(String barcode) {
     return '$foods/barcode/$barcode';

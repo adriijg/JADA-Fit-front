@@ -5,6 +5,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../auth/data/models/user_account_model.dart';
 import '../../../auth/data/services/auth_service.dart';
 import '../../../auth/presentation/screens/login_screen.dart';
+import '../../../social/data/services/social_service.dart' as es_jadafit_social_service;
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -173,12 +174,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           const SizedBox(height: 24),
           _AccountOptionsCard(
+            user: currentUser,
             onSettings: () {
               _showComingSoonMessage('Configuración próximamente');
             },
-            onPrivacy: () {
-              _showComingSoonMessage('Privacidad próximamente');
-            },
+            onPrivacyChanged: _loadUserAccount,
             onIntegrations: () {
               _showComingSoonMessage('Integraciones próximamente');
             },
@@ -386,18 +386,69 @@ class _AccountInfoRow extends StatelessWidget {
   }
 }
 
-class _AccountOptionsCard extends StatelessWidget {
+class _AccountOptionsCard extends StatefulWidget {
   const _AccountOptionsCard({
+    required this.user,
     required this.onSettings,
-    required this.onPrivacy,
     required this.onIntegrations,
     required this.onLogout,
+    required this.onPrivacyChanged,
   });
 
+  final UserAccountModel user;
   final VoidCallback onSettings;
-  final VoidCallback onPrivacy;
   final VoidCallback onIntegrations;
   final VoidCallback onLogout;
+  final VoidCallback onPrivacyChanged;
+
+  @override
+  State<_AccountOptionsCard> createState() => _AccountOptionsCardState();
+}
+
+class _AccountOptionsCardState extends State<_AccountOptionsCard> {
+  late bool _shareProgress;
+  bool _isUpdatingPrivacy = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _shareProgress = widget.user.shareProgress;
+  }
+
+  @override
+  void didUpdateWidget(covariant _AccountOptionsCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.user.shareProgress != widget.user.shareProgress) {
+      _shareProgress = widget.user.shareProgress;
+    }
+  }
+
+  Future<void> _togglePrivacy(bool value) async {
+    setState(() {
+      _isUpdatingPrivacy = true;
+    });
+
+    try {
+      final socialService = es_jadafit_social_service.SocialService();
+      await socialService.updatePrivacy(value);
+      setState(() {
+        _shareProgress = value;
+      });
+      widget.onPrivacyChanged();
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error al actualizar privacidad: $e')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isUpdatingPrivacy = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -418,21 +469,23 @@ class _AccountOptionsCard extends StatelessWidget {
             icon: Icons.settings_outlined,
             title: 'Configuración',
             subtitle: 'Preferencias de la aplicación',
-            onTap: onSettings,
+            onTap: widget.onSettings,
           ),
           const SizedBox(height: 10),
-          _AccountOptionTile(
+          _PrivacyToggleTile(
             icon: Icons.lock_outline,
-            title: 'Privacidad',
-            subtitle: 'Gestiona qué datos quieres compartir',
-            onTap: onPrivacy,
+            title: 'Compartir progreso',
+            subtitle: 'Permitir a otros ver tu actividad',
+            value: _shareProgress,
+            isLoading: _isUpdatingPrivacy,
+            onChanged: _togglePrivacy,
           ),
           const SizedBox(height: 10),
           _AccountOptionTile(
             icon: Icons.favorite_border,
             title: 'Integraciones',
             subtitle: 'Apple Health, Google Fit y wearables',
-            onTap: onIntegrations,
+            onTap: widget.onIntegrations,
           ),
           const SizedBox(height: 10),
           _AccountOptionTile(
@@ -440,8 +493,92 @@ class _AccountOptionsCard extends StatelessWidget {
             title: 'Cerrar sesión',
             subtitle: 'Salir de tu cuenta',
             isDestructive: true,
-            onTap: onLogout,
+            onTap: widget.onLogout,
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PrivacyToggleTile extends StatelessWidget {
+  const _PrivacyToggleTile({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.value,
+    required this.isLoading,
+    required this.onChanged,
+  });
+
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final bool value;
+  final bool isLoading;
+  final ValueChanged<bool> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 14,
+        vertical: 8,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.inputBackground,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: AppColors.inputBorder,
+          width: 0.7,
+        ),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            icon,
+            color: AppColors.primary,
+            size: 24,
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    color: AppColors.textMain,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  style: const TextStyle(
+                    color: AppColors.secondary,
+                    fontSize: 12,
+                    height: 1.3,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (isLoading)
+            const Padding(
+              padding: EdgeInsets.all(12.0),
+              child: SizedBox(
+                width: 24, height: 24,
+                child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primary),
+              ),
+            )
+          else
+            Switch(
+              value: value,
+              onChanged: onChanged,
+              activeColor: AppColors.primary,
+            ),
         ],
       ),
     );

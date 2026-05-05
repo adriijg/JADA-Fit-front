@@ -5,6 +5,7 @@ class UserAccountModel {
     required this.email,
     required this.onboardingCompleted,
     this.createdAt,
+    this.shareProgress = true,
   });
 
   final String id;
@@ -12,6 +13,7 @@ class UserAccountModel {
   final String email;
   final bool onboardingCompleted;
   final DateTime? createdAt;
+  final bool shareProgress;
 
   factory UserAccountModel.fromJson(Map<String, dynamic> json) {
     return UserAccountModel(
@@ -20,6 +22,7 @@ class UserAccountModel {
       email: json['email'] as String,
       onboardingCompleted: json['onboardingCompleted'] as bool? ?? false,
       createdAt: _toDateTimeOrNull(json['createdAt']),
+      shareProgress: json['shareProgress'] as bool? ?? true,
     );
   }
 
