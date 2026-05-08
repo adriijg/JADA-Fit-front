@@ -30,6 +30,10 @@ class ApiEndpoints {
   static const String follow = '$social/follow';
   static const String unfollow = '$social/unfollow';
 
+  static const String routines = '${ApiConfig.baseUrl}/routines';
+
+  static String routineById(int id) => '$routines/$id';
+
   static String foodByBarcode(String barcode) {
     return '$foods/barcode/$barcode';
   }
