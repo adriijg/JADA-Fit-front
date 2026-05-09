@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:jada_fit/models/routine.dart';
-import 'package:jada_fit/services/routine_service.dart';
+import 'package:jada_fit/features/workout/data/models/routine.dart';
+import 'package:jada_fit/features/workout/data/services/routine_service.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/theme/app_colors.dart';
 
