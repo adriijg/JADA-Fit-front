@@ -301,7 +301,7 @@ class _RegisterMealScreenState extends State<RegisterMealScreen> {
                     backgroundColor: AppColors.primary,
                     foregroundColor: AppColors.background,
                     elevation: 12,
-                    shadowColor: AppColors.primary.withValues(alpha: 0.32),
+                    shadowColor: AppColors.primary.withOpacity(0.32),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24),
                     ),
@@ -371,7 +371,7 @@ class _FoodHeaderCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
-          color: AppColors.primary.withValues(alpha: 0.28),
+          color: AppColors.primary.withOpacity(0.28),
           width: 0.8,
         ),
       ),
@@ -605,7 +605,7 @@ class _MacroPreviewCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _Card(
-      borderColor: AppColors.primary.withValues(alpha: 0.28),
+      borderColor: AppColors.primary.withOpacity(0.28),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -739,7 +739,7 @@ class _Card extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
-          color: borderColor ?? AppColors.divider.withValues(alpha: 0.4),
+          color: borderColor ?? AppColors.divider.withOpacity(0.4),
           width: 0.7,
         ),
       ),

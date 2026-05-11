@@ -528,12 +528,12 @@ class _ProgressHeroCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
-          color: AppColors.primary.withValues(alpha: 0.35),
+          color: AppColors.primary.withOpacity(0.35),
           width: 0.9,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.25),
+            color: Colors.black.withOpacity(0.25),
             blurRadius: 24,
             offset: const Offset(0, 14),
           ),
@@ -595,7 +595,7 @@ class _ProgressHeroCard extends StatelessWidget {
                     Text(
                       '$totalRecords registros guardados',
                       style: TextStyle(
-                        color: AppColors.textMain.withValues(alpha: 0.55),
+                        color: AppColors.textMain.withOpacity(0.55),
                         fontSize: 12,
                       ),
                     ),
@@ -659,7 +659,7 @@ class _MonthSelectorCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: AppColors.divider.withValues(alpha: 0.4),
+          color: AppColors.divider.withOpacity(0.4),
           width: 0.7,
         ),
       ),
@@ -703,7 +703,7 @@ class _MonthSelectorCard extends StatelessWidget {
               Icons.chevron_right,
               color: canGoNext
                   ? AppColors.secondary
-                  : AppColors.divider.withValues(alpha: 0.55),
+                  : AppColors.divider.withOpacity(0.55),
             ),
           ),
         ],
@@ -730,7 +730,7 @@ class _MetricSelectorCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: AppColors.divider.withValues(alpha: 0.4),
+          color: AppColors.divider.withOpacity(0.4),
           width: 0.7,
         ),
       ),
@@ -864,7 +864,7 @@ class _SingleProgressChartCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(26),
         border: Border.all(
-          color: AppColors.divider.withValues(alpha: 0.4),
+          color: AppColors.divider.withOpacity(0.4),
           width: 0.7,
         ),
       ),
@@ -1029,7 +1029,7 @@ class _SingleProgressChartCard extends StatelessWidget {
                 child: Text(
                   date.day.toString(),
                   style: TextStyle(
-                    color: AppColors.textMain.withValues(alpha: 0.55),
+                    color: AppColors.textMain.withOpacity(0.55),
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
                   ),
@@ -1046,7 +1046,7 @@ class _SingleProgressChartCard extends StatelessWidget {
               return Text(
                 value.toStringAsFixed(0),
                 style: TextStyle(
-                  color: AppColors.textMain.withValues(alpha: 0.55),
+                  color: AppColors.textMain.withOpacity(0.55),
                   fontSize: 10,
                   fontWeight: FontWeight.w600,
                 ),
@@ -1101,7 +1101,7 @@ class _SingleProgressChartCard extends StatelessWidget {
           ),
           belowBarData: BarAreaData(
             show: true,
-            color: AppColors.primary.withValues(alpha: 0.12),
+            color: AppColors.primary.withOpacity(0.12),
           ),
         ),
       ],
@@ -1139,7 +1139,7 @@ class _ChartMiniValue extends StatelessWidget {
               value,
               style: TextStyle(
                 color: isEmpty
-                    ? AppColors.textMain.withValues(alpha: 0.45)
+                    ? AppColors.textMain.withOpacity(0.45)
                     : AppColors.textMain,
                 fontSize: 17,
                 fontWeight: FontWeight.w900,
@@ -1247,7 +1247,7 @@ class _WeeklyCalendarCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(26),
         border: Border.all(
-          color: AppColors.divider.withValues(alpha: 0.4),
+          color: AppColors.divider.withOpacity(0.4),
           width: 0.7,
         ),
       ),
@@ -1554,7 +1554,7 @@ class _EmptyProgressCard extends StatelessWidget {
             color: AppColors.surface,
             borderRadius: BorderRadius.circular(26),
             border: Border.all(
-              color: AppColors.divider.withValues(alpha: 0.4),
+              color: AppColors.divider.withOpacity(0.4),
               width: 0.7,
             ),
           ),
@@ -1636,7 +1636,7 @@ class _ErrorCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: AppColors.divider.withValues(alpha: 0.4),
+          color: AppColors.divider.withOpacity(0.4),
           width: 0.7,
         ),
       ),

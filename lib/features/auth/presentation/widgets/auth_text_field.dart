@@ -27,7 +27,7 @@ class AuthTextField extends StatelessWidget {
         color: AppColors.inputBackground,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: errorText != null ? AppColors.error : AppColors.inputBorder.withValues(alpha: 0.38),
+          color: errorText != null ? AppColors.error : AppColors.inputBorder.withOpacity(0.38),
           width: 1,
         ),
       ),
@@ -44,7 +44,7 @@ class AuthTextField extends StatelessWidget {
         decoration: InputDecoration(
           hintText: hintText,
           hintStyle: TextStyle(
-            color: AppColors.textMain.withValues(alpha: 0.4),
+            color: AppColors.textMain.withOpacity(0.4),
             fontSize: 13,
             letterSpacing: 1,
           ),

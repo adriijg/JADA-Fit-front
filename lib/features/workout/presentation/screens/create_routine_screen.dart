@@ -68,6 +68,14 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
 
       final created = await _service.createRoutine(routine);
       if (!mounted) return;
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('¡Rutina creada con éxito!'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      
       Navigator.pop(context, created);
     } on ApiException catch (e) {
       if (!mounted) return;
@@ -84,7 +92,9 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: AppColors.error.withValues(alpha: 0.9),
+        backgroundColor: AppColors.error,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     );
   }
@@ -96,202 +106,167 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.background,
         elevation: 0,
+        centerTitle: true,
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.close_rounded, color: AppColors.textMain, size: 28),
+          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.textMain, size: 22),
         ),
         title: const Text(
-          'Creador de Rutinas',
+          'Nueva Rutina',
           style: TextStyle(
             color: AppColors.textMain,
-            fontSize: 18,
+            fontSize: 20,
             fontWeight: FontWeight.w900,
           ),
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16, top: 8, bottom: 8),
-            child: _saving
-                ? const Center(
-                    child: SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: CircularProgressIndicator(
-                        color: AppColors.primary,
-                        strokeWidth: 3,
-                      ),
-                    ),
-                  )
-                : ElevatedButton(
-                    onPressed: _save,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: AppColors.background,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                    ),
-                    child: const Text(
-                      'Guardar',
-                      style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13),
-                    ),
-                  ),
-          ),
-        ],
       ),
       body: Form(
         key: _formKey,
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Routine info section
-              const _SectionHeader(
-                title: 'Información general',
-                icon: Icons.info_outline_rounded,
-              ),
-              const SizedBox(height: 20),
-              _PremiumTextField(
-                controller: _nameController,
-                label: 'Nombre de la rutina',
-                hint: 'Ej. Push Day / Pierna Fuerte',
-                validator: (v) =>
-                    (v == null || v.trim().isEmpty) ? 'Requerido' : null,
-              ),
-              const SizedBox(height: 16),
-              _PremiumTextField(
-                controller: _descriptionController,
-                label: 'Descripción o notas',
-                hint: 'Añade detalles, enfoques o consejos...',
-                maxLines: 3,
-              ),
-              const SizedBox(height: 16),
-              _PremiumTextField(
-                controller: _targetGoalController,
-                label: 'Objetivo principal',
-                hint: 'Ej. Hipertrofia, Fuerza, Resistencia',
-                validator: (v) =>
-                    (v == null || v.trim().isEmpty) ? 'Requerido' : null,
-              ),
-
-              const SizedBox(height: 40),
-
-              // Exercises section
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const _SectionHeader(
-                    title: 'Ejercicios',
-                    icon: Icons.fitness_center_rounded,
-                  ),
-                  InkWell(
-                    onTap: _addExercise,
-                    borderRadius: BorderRadius.circular(12),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary.withValues(alpha: 0.15),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: AppColors.primary.withValues(alpha: 0.3),
-                          width: 1,
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const _SectionHeader(
+                      title: 'Detalles',
+                      icon: Icons.auto_awesome_rounded,
+                    ),
+                    const SizedBox(height: 20),
+                    _PremiumTextField(
+                      controller: _nameController,
+                      label: 'Nombre',
+                      hint: 'Ej. Push Day / Pierna',
+                      validator: (v) => (v == null || v.trim().isEmpty) ? 'Requerido' : null,
+                    ),
+                    const SizedBox(height: 16),
+                    _PremiumTextField(
+                      controller: _targetGoalController,
+                      label: 'Objetivo',
+                      hint: 'Ej. Hipertrofia, Fuerza...',
+                      validator: (v) => (v == null || v.trim().isEmpty) ? 'Requerido' : null,
+                    ),
+                    const SizedBox(height: 16),
+                    _PremiumTextField(
+                      controller: _descriptionController,
+                      label: 'Descripción',
+                      hint: 'Notas adicionales...',
+                      maxLines: 2,
+                    ),
+                    const SizedBox(height: 32),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const _SectionHeader(
+                          title: 'Ejercicios',
+                          icon: Icons.fitness_center_rounded,
                         ),
-                      ),
-                      child: const Row(
-                        children: [
-                          Icon(Icons.add_rounded, color: AppColors.primary, size: 18),
-                          SizedBox(width: 4),
-                          Text(
-                            'AÑADIR',
-                            style: TextStyle(
-                              color: AppColors.primary,
-                              fontWeight: FontWeight.w900,
-                              fontSize: 12,
-                              letterSpacing: 0.5,
-                            ),
+                        TextButton.icon(
+                          onPressed: _addExercise,
+                          icon: const Icon(Icons.add_circle_outline_rounded, size: 20),
+                          label: const Text('AÑADIR', style: TextStyle(fontWeight: FontWeight.w900)),
+                          style: TextButton.styleFrom(
+                            foregroundColor: AppColors.primary,
+                            backgroundColor: AppColors.primary.withOpacity(0.1),
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 16),
+                    if (_exercises.isEmpty)
+                      _buildEmptyState()
+                    else
+                      ...List.generate(_exercises.length, (i) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: _PremiumExerciseForm(
+                            index: i + 1,
+                            entry: _exercises[i],
+                            onRemove: () => _removeExercise(i),
+                          ),
+                        );
+                      }),
+                    const SizedBox(height: 20),
+                  ],
+                ),
               ),
-              const SizedBox(height: 20),
+            ),
+            _buildBottomBar(),
+          ],
+        ),
+      ),
+    );
+  }
 
-              if (_exercises.isEmpty)
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(32),
-                  decoration: BoxDecoration(
-                    color: AppColors.surface,
-                    borderRadius: BorderRadius.circular(24),
-                    border: Border.all(
-                      color: AppColors.divider.withValues(alpha: 0.2),
-                      style: BorderStyle.solid,
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: AppColors.background,
-                          shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.divider.withValues(alpha: 0.2)),
-                        ),
-                        child: const Icon(
-                          Icons.sports_gymnastics_rounded,
-                          color: AppColors.secondary,
-                          size: 32,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        'Sin ejercicios',
-                        style: TextStyle(
-                          color: AppColors.textMain.withValues(alpha: 0.8),
-                          fontSize: 18,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Pulsa "Añadir" para construir tu rutina paso a paso.',
-                        style: TextStyle(
-                          color: AppColors.textMain.withValues(alpha: 0.4),
-                          fontSize: 14,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                )
-              else
-                ...List.generate(_exercises.length, (i) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: _PremiumExerciseForm(
-                      index: i + 1,
-                      entry: _exercises[i],
-                      onRemove: () => _removeExercise(i),
-                    ),
-                  );
-                }),
-
-              const SizedBox(height: 40),
-            ],
+  Widget _buildEmptyState() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(40),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(32),
+        border: Border.all(color: AppColors.divider.withOpacity(0.1)),
+      ),
+      child: Column(
+        children: [
+          Icon(Icons.add_task_rounded, color: AppColors.textMain.withOpacity(0.2), size: 48),
+          const SizedBox(height: 16),
+          Text(
+            '¡Empieza a añadir ejercicios!',
+            style: TextStyle(
+              color: AppColors.textMain.withOpacity(0.4),
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBottomBar() {
+    return Container(
+      padding: EdgeInsets.fromLTRB(24, 16, 24, 16 + MediaQuery.of(context).padding.bottom),
+      decoration: BoxDecoration(
+        color: AppColors.background,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, -5),
+          ),
+        ],
+      ),
+      child: SizedBox(
+        width: double.infinity,
+        height: 56,
+        child: ElevatedButton(
+          onPressed: _saving ? null : _save,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.primary,
+            foregroundColor: Colors.white,
+            elevation: 0,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          ),
+          child: _saving
+              ? const SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: CircularProgressIndicator(color: Colors.white, strokeWidth: 3),
+                )
+              : const Text(
+                  'GUARDAR RUTINA',
+                  style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 1.0),
+                ),
         ),
       ),
     );
   }
 }
-
-// ─── Helper classes ──────────────────────────────────────────────────────────
 
 class _ExerciseEntry {
   final nameController = TextEditingController();
@@ -319,13 +294,13 @@ class _SectionHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, color: AppColors.secondary, size: 20),
+        Icon(icon, color: AppColors.primary, size: 22),
         const SizedBox(width: 8),
         Text(
           title,
           style: const TextStyle(
             color: AppColors.textMain,
-            fontSize: 20,
+            fontSize: 22,
             fontWeight: FontWeight.w900,
             letterSpacing: -0.5,
           ),
@@ -356,47 +331,56 @@ class _PremiumTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      maxLines: maxLines,
-      keyboardType: keyboardType,
-      inputFormatters: inputFormatters,
-      validator: validator,
-      style: const TextStyle(color: AppColors.textMain, fontSize: 15, fontWeight: FontWeight.w600),
-      decoration: InputDecoration(
-        labelText: label,
-        hintText: hint,
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-        labelStyle: TextStyle(
-          color: AppColors.textMain.withValues(alpha: 0.6),
-          fontSize: 14,
-          fontWeight: FontWeight.w800,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 4, bottom: 8),
+          child: Text(
+            label,
+            style: TextStyle(
+              color: AppColors.textMain.withOpacity(0.5),
+              fontSize: 13,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
         ),
-        hintStyle: TextStyle(
-          color: AppColors.textMain.withValues(alpha: 0.2),
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
+        TextFormField(
+          controller: controller,
+          maxLines: maxLines,
+          keyboardType: keyboardType,
+          inputFormatters: inputFormatters,
+          validator: validator,
+          style: const TextStyle(color: AppColors.textMain, fontSize: 16, fontWeight: FontWeight.w600),
+          decoration: InputDecoration(
+            hintText: hint,
+            hintStyle: TextStyle(
+              color: AppColors.textMain.withOpacity(0.2),
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+            ),
+            filled: true,
+            fillColor: AppColors.surface,
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16),
+              borderSide: BorderSide(color: AppColors.divider.withOpacity(0.1)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16),
+              borderSide: const BorderSide(color: AppColors.primary, width: 2),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16),
+              borderSide: const BorderSide(color: AppColors.error, width: 1),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16),
+              borderSide: const BorderSide(color: AppColors.error, width: 2),
+            ),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          ),
         ),
-        filled: true,
-        fillColor: AppColors.surface.withValues(alpha: 0.6),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(color: AppColors.divider.withValues(alpha: 0.2), width: 1),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: AppColors.primary, width: 2),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(color: AppColors.error.withValues(alpha: 0.5), width: 1),
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: AppColors.error, width: 2),
-        ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-      ),
+      ],
     );
   }
 }
@@ -417,90 +401,64 @@ class _PremiumExerciseForm extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.divider.withValues(alpha: 0.2)),
+        borderRadius: BorderRadius.circular(28),
+        border: Border.all(color: AppColors.divider.withOpacity(0.1)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 15,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Banner superior del ejercicio
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
             decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.05),
+              color: AppColors.primary.withOpacity(0.05),
               borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(24),
-                topRight: Radius.circular(24),
-              ),
-              border: Border(
-                bottom: BorderSide(color: AppColors.divider.withValues(alpha: 0.2)),
+                topLeft: Radius.circular(28),
+                topRight: Radius.circular(28),
               ),
             ),
             child: Row(
               children: [
-                Container(
-                  width: 28,
-                  height: 28,
-                  decoration: BoxDecoration(
-                    color: AppColors.primary,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Center(
-                    child: Text(
-                      '$index',
-                      style: const TextStyle(
-                        color: AppColors.background,
-                        fontWeight: FontWeight.w900,
-                        fontSize: 14,
-                      ),
-                    ),
+                CircleAvatar(
+                  radius: 12,
+                  backgroundColor: AppColors.primary,
+                  child: Text(
+                    '$index',
+                    style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w900),
                   ),
                 ),
                 const SizedBox(width: 12),
-                Text(
-                  'Ejercicio $index',
-                  style: const TextStyle(
+                const Text(
+                  'Ejercicio',
+                  style: TextStyle(
                     color: AppColors.primary,
                     fontWeight: FontWeight.w900,
-                    fontSize: 14,
+                    fontSize: 15,
                   ),
                 ),
                 const Spacer(),
-                IconButton(
-                  onPressed: onRemove,
-                  icon: const Icon(Icons.delete_sweep_rounded, color: AppColors.error),
-                  tooltip: 'Eliminar ejercicio',
-                  constraints: const BoxConstraints(),
-                  padding: EdgeInsets.zero,
+                GestureDetector(
+                  onTap: onRemove,
+                  child: const Icon(Icons.remove_circle_outline_rounded, color: AppColors.error, size: 24),
                 ),
               ],
             ),
           ),
-          
-          // Formulario del ejercicio
           Padding(
             padding: const EdgeInsets.all(20),
             child: Column(
               children: [
                 _PremiumTextField(
                   controller: entry.nameController,
-                  label: 'Nombre del ejercicio',
-                  hint: 'Ej. Press de Banca Plano',
+                  label: 'Nombre',
+                  hint: 'Ej. Press de Banca',
                   validator: (v) => (v == null || v.trim().isEmpty) ? 'Requerido' : null,
-                ),
-                const SizedBox(height: 16),
-                _PremiumTextField(
-                  controller: entry.descriptionController,
-                  label: 'Notas de técnica (opcional)',
-                  hint: 'Controlar fase excéntrica...',
-                  maxLines: 2,
                 ),
                 const SizedBox(height: 16),
                 Row(

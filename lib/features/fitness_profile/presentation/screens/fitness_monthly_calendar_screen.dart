@@ -254,12 +254,12 @@ class _MonthlyCalendarCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(26),
         border: Border.all(
-          color: AppColors.divider.withValues(alpha: 0.4),
+          color: AppColors.divider.withOpacity(0.4),
           width: 0.7,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.2),
+            color: Colors.black.withOpacity(0.2),
             blurRadius: 22,
             offset: const Offset(0, 12),
           ),
@@ -293,7 +293,7 @@ class _MonthlyCalendarCard extends StatelessWidget {
                   Icons.chevron_right,
                   color: canGoNext
                       ? AppColors.secondary
-                      : AppColors.divider.withValues(alpha: 0.55),
+                      : AppColors.divider.withOpacity(0.55),
                 ),
               ),
             ],
@@ -345,8 +345,8 @@ class _MonthlyCalendarCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(14),
                     border: Border.all(
                       color: hasRecords
-                          ? AppColors.primary.withValues(alpha: 0.7)
-                          : AppColors.divider.withValues(alpha: 0.4),
+                          ? AppColors.primary.withOpacity(0.7)
+                          : AppColors.divider.withOpacity(0.4),
                       width: 0.8,
                     ),
                   ),
@@ -452,12 +452,12 @@ class _MonthlySelectedDayCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
-          color: AppColors.divider.withValues(alpha: 0.4),
+          color: AppColors.divider.withOpacity(0.4),
           width: 0.7,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.18),
+            color: Colors.black.withOpacity(0.18),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -475,7 +475,7 @@ class _MonthlySelectedDayCard extends StatelessWidget {
                   color: AppColors.inputBackground,
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color: AppColors.primary.withValues(alpha: 0.35),
+                    color: AppColors.primary.withOpacity(0.35),
                     width: 0.8,
                   ),
                 ),
@@ -578,7 +578,7 @@ class _MonthlyRecordCard extends StatelessWidget {
         color: AppColors.inputBackground,
         borderRadius: BorderRadius.circular(22),
         border: Border.all(
-          color: AppColors.primary.withValues(alpha: 0.22),
+          color: AppColors.primary.withOpacity(0.22),
           width: 0.8,
         ),
       ),
@@ -723,7 +723,7 @@ class _MonthlyMetricBox extends StatelessWidget {
                   value,
                   style: TextStyle(
                     color: isEmpty
-                        ? AppColors.textMain.withValues(alpha: 0.45)
+                        ? AppColors.textMain.withOpacity(0.45)
                         : AppColors.textMain,
                     fontSize: 14,
                     fontWeight: FontWeight.w900,
@@ -755,7 +755,7 @@ class _NoDaySelectedCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: AppColors.divider.withValues(alpha: 0.4),
+          color: AppColors.divider.withOpacity(0.4),
           width: 0.7,
         ),
       ),

@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_strings.dart';
@@ -80,21 +81,24 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: _loadRoutines,
-      color: AppColors.background,
-      backgroundColor: AppColors.primary,
-      child: CustomScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        slivers: [
-          SliverToBoxAdapter(
-            child: _buildHeader(),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.only(top: 24, bottom: 32),
-            sliver: _buildBody(),
-          ),
-        ],
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      body: RefreshIndicator(
+        onRefresh: _loadRoutines,
+        color: AppColors.background,
+        backgroundColor: AppColors.primary,
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            SliverToBoxAdapter(
+              child: _buildHeader(),
+            ),
+            SliverPadding(
+              padding: const EdgeInsets.only(top: 24, bottom: 32),
+              sliver: _buildBody(),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -102,103 +106,112 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
   Widget _buildHeader() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(28),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(32),
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(40),
+          bottomRight: Radius.circular(40),
+        ),
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            AppColors.primary.withValues(alpha: 0.15),
-            AppColors.surface,
+            AppColors.primary,
+            AppColors.primary.withOpacity(0.8),
+            AppColors.secondary.withOpacity(0.9),
           ],
-        ),
-        border: Border.all(
-          color: AppColors.primary.withValues(alpha: 0.3),
-          width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary.withValues(alpha: 0.05),
-            blurRadius: 30,
+            color: AppColors.primary.withOpacity(0.3),
+            blurRadius: 20,
             offset: const Offset(0, 10),
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: const Icon(
-                  Icons.fitness_center_rounded,
-                  color: AppColors.primary,
-                  size: 28,
-                ),
-              ),
-              InkWell(
-                onTap: _openCreateRoutine,
-                borderRadius: BorderRadius.circular(16),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.primary.withValues(alpha: 0.3),
-                        blurRadius: 12,
-                        offset: const Offset(0, 4),
+      child: SafeArea(
+        bottom: false,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(20),
                       ),
-                    ],
+                      child: const Icon(
+                        Icons.fitness_center_rounded,
+                        color: Colors.white,
+                        size: 30,
+                      ),
+                    ),
                   ),
-                  child: const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.add, color: AppColors.background, size: 20),
-                      SizedBox(width: 6),
-                      Text(
-                        'NUEVA',
-                        style: TextStyle(
-                          color: AppColors.background,
-                          fontWeight: FontWeight.w900,
-                          fontSize: 13,
-                          letterSpacing: 0.5,
+                ),
+                GestureDetector(
+                  onTap: _openCreateRoutine,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.add_rounded, color: AppColors.primary, size: 22),
+                        SizedBox(width: 8),
+                        Text(
+                          'NUEVA',
+                          style: TextStyle(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.w900,
+                            fontSize: 14,
+                            letterSpacing: 1.0,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
+              ],
+            ),
+            const SizedBox(height: 32),
+            const Text(
+              'Mis Rutinas',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 34,
+                fontWeight: FontWeight.w900,
+                letterSpacing: -1.0,
               ),
-            ],
-          ),
-          const SizedBox(height: 24),
-          const Text(
-            AppStrings.routinesTitle,
-            style: TextStyle(
-              color: AppColors.textMain,
-              fontSize: 28,
-              fontWeight: FontWeight.w900,
-              letterSpacing: -0.5,
             ),
-          ),
-          const SizedBox(height: 8),
-          const Text(
-            AppStrings.routinesSubtitle,
-            style: TextStyle(
-              color: AppColors.secondary,
-              fontSize: 14,
-              height: 1.5,
+            const SizedBox(height: 8),
+            Text(
+              'Gestiona tus entrenamientos y alcanza tus objetivos',
+              style: TextStyle(
+                color: Colors.white.withOpacity(0.8),
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
-        ],
+            const SizedBox(height: 10),
+          ],
+        ),
       ),
     );
   }
@@ -226,7 +239,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: AppColors.error.withValues(alpha: 0.1),
+                    color: AppColors.error.withOpacity(0.1),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(Icons.error_outline, color: AppColors.error, size: 48),
@@ -243,7 +256,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.surface,
                     foregroundColor: AppColors.textMain,
-                    side: BorderSide(color: AppColors.divider.withValues(alpha: 0.5)),
+                    side: BorderSide(color: AppColors.divider.withOpacity(0.5)),
                     padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   ),
@@ -259,14 +272,13 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
     if (_routines.isEmpty) {
       return SliverToBoxAdapter(
         child: Container(
-          margin: const EdgeInsets.only(top: 20),
+          margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
           padding: const EdgeInsets.all(40),
           decoration: BoxDecoration(
-            color: AppColors.surface.withValues(alpha: 0.5),
+            color: AppColors.surface,
             borderRadius: BorderRadius.circular(32),
             border: Border.all(
-              color: AppColors.divider.withValues(alpha: 0.2),
-              style: BorderStyle.solid,
+              color: AppColors.divider.withOpacity(0.1),
             ),
           ),
           child: Column(
@@ -278,14 +290,13 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      AppColors.primary.withValues(alpha: 0.2),
-                      AppColors.primary.withValues(alpha: 0.05),
+                      AppColors.primary.withOpacity(0.2),
+                      AppColors.primary.withOpacity(0.05),
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                   shape: BoxShape.circle,
-                  border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
                 ),
                 child: const Icon(
                   Icons.sports_gymnastics,
@@ -306,7 +317,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
               Text(
                 'Diseña tu primera rutina de entrenamiento para empezar a registrar tus progresos.',
                 style: TextStyle(
-                  color: AppColors.textMain.withValues(alpha: 0.5),
+                  color: AppColors.textMain.withOpacity(0.5),
                   fontSize: 15,
                   height: 1.5,
                 ),
@@ -323,7 +334,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
         (context, index) {
           final routine = _routines[index];
           return Padding(
-            padding: const EdgeInsets.only(bottom: 16),
+            padding: const EdgeInsets.only(bottom: 20),
             child: _PremiumRoutineCard(
               routine: routine,
               onTap: () => _openDetail(routine),
@@ -344,83 +355,53 @@ class _PremiumRoutineCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(28),
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              AppColors.surface,
-              AppColors.inputBackground.withValues(alpha: 0.8),
-            ],
-          ),
-          border: Border.all(
-            color: AppColors.divider.withValues(alpha: 0.3),
-            width: 1,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.2),
-              blurRadius: 20,
-              offset: const Offset(0, 10),
-            ),
-          ],
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 24),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(32),
+        border: Border.all(
+          color: AppColors.divider.withOpacity(0.1),
+          width: 1.5,
         ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(28),
-          child: Stack(
-            children: [
-              // Elemento decorativo de fondo
-              Positioned(
-                right: -20,
-                top: -20,
-                child: Container(
-                  width: 100,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: RadialGradient(
-                      colors: [
-                        AppColors.tertiary.withValues(alpha: 0.15),
-                        Colors.transparent,
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(22),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(32),
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
                   children: [
                     Container(
                       width: 56,
                       height: 56,
                       decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            AppColors.tertiary.withValues(alpha: 0.2),
-                            AppColors.tertiary.withValues(alpha: 0.05),
-                          ],
+                        gradient: const LinearGradient(
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
+                          colors: [AppColors.tertiary, AppColors.secondary],
                         ),
                         borderRadius: BorderRadius.circular(18),
-                        border: Border.all(
-                          color: AppColors.tertiary.withValues(alpha: 0.3),
-                          width: 1,
-                        ),
                       ),
                       child: const Icon(
                         Icons.bolt_rounded,
-                        color: AppColors.tertiary,
-                        size: 30,
+                        color: Colors.white,
+                        size: 28,
                       ),
                     ),
-                    const SizedBox(width: 18),
+                    const SizedBox(width: 16),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -429,71 +410,87 @@ class _PremiumRoutineCard extends StatelessWidget {
                             routine.name,
                             style: const TextStyle(
                               color: AppColors.textMain,
-                              fontSize: 19,
+                              fontSize: 18,
                               fontWeight: FontWeight.w900,
-                              letterSpacing: -0.2,
                             ),
                           ),
-                          const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                                decoration: BoxDecoration(
-                                  color: AppColors.secondary.withValues(alpha: 0.15),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Text(
-                                  routine.targetGoal.toUpperCase(),
-                                  style: const TextStyle(
-                                    color: AppColors.secondary,
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w900,
-                                    letterSpacing: 0.5,
-                                  ),
-                                ),
+                          const SizedBox(height: 4),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: AppColors.primary.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              routine.targetGoal.toUpperCase(),
+                              style: const TextStyle(
+                                color: AppColors.primary,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w900,
                               ),
-                              const SizedBox(width: 12),
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.list_alt_rounded,
-                                    color: AppColors.textMain.withValues(alpha: 0.4),
-                                    size: 14,
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    '${routine.exercises.length} ejer.',
-                                    style: TextStyle(
-                                      color: AppColors.textMain.withValues(alpha: 0.6),
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                            ),
                           ),
                         ],
                       ),
                     ),
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: AppColors.background.withValues(alpha: 0.5),
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.arrow_forward_ios_rounded,
-                        color: AppColors.secondary,
-                        size: 16,
-                      ),
+                    const Icon(
+                      Icons.chevron_right_rounded,
+                      color: AppColors.divider,
+                      size: 24,
                     ),
                   ],
                 ),
-              ),
-            ],
+                if (routine.description.isNotEmpty) ...[
+                  const SizedBox(height: 16),
+                  Text(
+                    routine.description,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: AppColors.textMain.withOpacity(0.5),
+                      fontSize: 13,
+                      height: 1.4,
+                    ),
+                  ),
+                ],
+                const SizedBox(height: 16),
+                const Divider(height: 1, color: AppColors.divider),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.layers_outlined,
+                      color: AppColors.textMain.withOpacity(0.3),
+                      size: 14,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      '${routine.exercises.length} ejercicios',
+                      style: TextStyle(
+                        color: AppColors.textMain.withOpacity(0.5),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    if (routine.exercises.isNotEmpty) ...[
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Text(
+                          routine.exercises.map((e) => e.name).join(', '),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: AppColors.textMain.withOpacity(0.3),
+                            fontSize: 12,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

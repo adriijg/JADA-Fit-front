@@ -338,7 +338,7 @@ class _WeekCalendar extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: AppColors.divider.withValues(alpha: 0.4),
+          color: AppColors.divider.withOpacity(0.4),
           width: 0.7,
         ),
       ),
@@ -441,12 +441,12 @@ class _DailySummaryCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
-          color: AppColors.primary.withValues(alpha: 0.26),
+          color: AppColors.primary.withOpacity(0.26),
           width: 0.8,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.18),
+            color: Colors.black.withOpacity(0.18),
             blurRadius: 18,
             offset: const Offset(0, 10),
           ),
@@ -676,12 +676,12 @@ class _MealSectionCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
-          color: AppColors.divider.withValues(alpha: 0.38),
+          color: AppColors.divider.withOpacity(0.38),
           width: 0.7,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.16),
+            color: Colors.black.withOpacity(0.16),
             blurRadius: 16,
             offset: const Offset(0, 10),
           ),
@@ -698,7 +698,7 @@ class _MealSectionCard extends StatelessWidget {
                   color: AppColors.inputBackground,
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color: AppColors.primary.withValues(alpha: 0.22),
+                    color: AppColors.primary.withOpacity(0.22),
                     width: 0.8,
                   ),
                 ),
@@ -794,7 +794,7 @@ class _MealSectionCard extends StatelessWidget {
                 children: [
                   Icon(
                     Icons.info_outline,
-                    color: AppColors.textMain.withValues(alpha: 0.45),
+                    color: AppColors.textMain.withOpacity(0.45),
                     size: 20,
                   ),
                   const SizedBox(width: 10),
@@ -802,7 +802,7 @@ class _MealSectionCard extends StatelessWidget {
                     child: Text(
                       'Añade alimentos para calcular calorías y macros.',
                       style: TextStyle(
-                        color: AppColors.textMain.withValues(alpha: 0.55),
+                        color: AppColors.textMain.withOpacity(0.55),
                         fontSize: 13,
                         height: 1.35,
                       ),
@@ -1068,7 +1068,7 @@ class _MealInfoPill extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: highlighted
-            ? AppColors.primary.withValues(alpha: 0.14)
+            ? AppColors.primary.withOpacity(0.14)
             : AppColors.surface,
         borderRadius: BorderRadius.circular(999),
       ),
@@ -1096,7 +1096,7 @@ class _AiRecipesCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(26),
         border: Border.all(
-          color: AppColors.primary.withValues(alpha: 0.28),
+          color: AppColors.primary.withOpacity(0.28),
           width: 0.8,
         ),
       ),
@@ -1177,7 +1177,7 @@ class _ErrorCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: AppColors.error.withValues(alpha: 0.5),
+          color: AppColors.error.withOpacity(0.5),
           width: 1,
         ),
       ),

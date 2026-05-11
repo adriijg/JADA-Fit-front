@@ -25,7 +25,7 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
         backgroundColor: AppColors.surface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(28),
-          side: BorderSide(color: AppColors.error.withValues(alpha: 0.3), width: 1),
+          side: BorderSide(color: AppColors.error.withOpacity(0.3), width: 1),
         ),
         title: const Row(
           children: [
@@ -43,7 +43,7 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
         content: Text(
           'Se eliminará "${widget.routine.name}" y todos sus ejercicios. Esta acción no se puede deshacer.',
           style: TextStyle(
-            color: AppColors.textMain.withValues(alpha: 0.72),
+            color: AppColors.textMain.withOpacity(0.72),
             height: 1.5,
           ),
         ),
@@ -58,7 +58,7 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
           ElevatedButton(
             onPressed: () => Navigator.pop(ctx, true),
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.error.withValues(alpha: 0.2),
+              backgroundColor: AppColors.error.withOpacity(0.2),
               foregroundColor: AppColors.error,
               elevation: 0,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -95,7 +95,7 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: AppColors.error.withValues(alpha: 0.9),
+        backgroundColor: AppColors.error.withOpacity(0.9),
       ),
     );
   }
@@ -126,7 +126,7 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
               icon: Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: AppColors.background.withValues(alpha: 0.5),
+                  color: AppColors.background.withOpacity(0.5),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(Icons.arrow_back_ios_new, color: AppColors.textMain, size: 18),
@@ -153,7 +153,7 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
                   icon: Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: AppColors.error.withValues(alpha: 0.1),
+                      color: AppColors.error.withOpacity(0.1),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(Icons.delete_outline, color: AppColors.error, size: 20),
@@ -168,7 +168,7 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      AppColors.tertiary.withValues(alpha: 0.3),
+                      AppColors.tertiary.withOpacity(0.3),
                       AppColors.background,
                     ],
                   ),
@@ -183,9 +183,9 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                           decoration: BoxDecoration(
-                            color: AppColors.tertiary.withValues(alpha: 0.2),
+                            color: AppColors.tertiary.withOpacity(0.2),
                             borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: AppColors.tertiary.withValues(alpha: 0.3)),
+                            border: Border.all(color: AppColors.tertiary.withOpacity(0.3)),
                           ),
                           child: Text(
                             routine.targetGoal.toUpperCase(),
@@ -212,7 +212,7 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
                           Text(
                             routine.description,
                             style: TextStyle(
-                              color: AppColors.textMain.withValues(alpha: 0.7),
+                              color: AppColors.textMain.withOpacity(0.7),
                               fontSize: 15,
                               height: 1.5,
                             ),
@@ -254,20 +254,20 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
                       decoration: BoxDecoration(
                         color: AppColors.surface,
                         borderRadius: BorderRadius.circular(28),
-                        border: Border.all(color: AppColors.divider.withValues(alpha: 0.3)),
+                        border: Border.all(color: AppColors.divider.withOpacity(0.3)),
                       ),
                       child: Column(
                         children: [
                           Icon(
                             Icons.sports_gymnastics_rounded,
-                            color: AppColors.textMain.withValues(alpha: 0.2),
+                            color: AppColors.textMain.withOpacity(0.2),
                             size: 48,
                           ),
                           const SizedBox(height: 16),
                           Text(
                             'Esta rutina no tiene ejercicios',
                             style: TextStyle(
-                              color: AppColors.textMain.withValues(alpha: 0.5),
+                              color: AppColors.textMain.withOpacity(0.5),
                               fontSize: 15,
                             ),
                           ),
@@ -316,7 +316,7 @@ class _PremiumExerciseCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: AppColors.divider.withValues(alpha: 0.3),
+          color: AppColors.divider.withOpacity(0.3),
         ),
       ),
       child: IntrinsicHeight(
@@ -326,7 +326,7 @@ class _PremiumExerciseCard extends StatelessWidget {
             Container(
               width: 48,
               decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: 0.1),
+                color: AppColors.primary.withOpacity(0.1),
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(24),
                   bottomLeft: Radius.circular(24),
@@ -362,7 +362,7 @@ class _PremiumExerciseCard extends StatelessWidget {
                       Text(
                         exercise.description,
                         style: TextStyle(
-                          color: AppColors.textMain.withValues(alpha: 0.6),
+                          color: AppColors.textMain.withOpacity(0.6),
                           fontSize: 13,
                           height: 1.4,
                         ),
@@ -415,9 +415,9 @@ class _StatPill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
+        color: color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: color.withValues(alpha: 0.2)),
+        border: Border.all(color: color.withOpacity(0.2)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

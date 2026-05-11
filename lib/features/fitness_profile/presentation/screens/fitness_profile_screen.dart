@@ -296,12 +296,12 @@ class _FitnessHeaderCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
-          color: AppColors.divider.withValues(alpha: 0.4),
+          color: AppColors.divider.withOpacity(0.4),
           width: 0.7,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.28),
+            color: Colors.black.withOpacity(0.28),
             blurRadius: 24,
             offset: const Offset(0, 14),
           ),
@@ -358,8 +358,8 @@ class _FitnessHeaderCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(18),
               border: Border.all(
                 color: hasGoal
-                    ? AppColors.primary.withValues(alpha: 0.35)
-                    : AppColors.divider.withValues(alpha: 0.4),
+                    ? AppColors.primary.withOpacity(0.35)
+                    : AppColors.divider.withOpacity(0.4),
                 width: 0.8,
               ),
             ),
@@ -368,7 +368,7 @@ class _FitnessHeaderCard extends StatelessWidget {
               style: TextStyle(
                 color: hasGoal
                     ? AppColors.primary
-                    : AppColors.textMain.withValues(alpha: 0.5),
+                    : AppColors.textMain.withOpacity(0.5),
                 fontSize: 13,
                 fontWeight: FontWeight.w700,
                 fontStyle: hasGoal ? FontStyle.normal : FontStyle.italic,
@@ -380,7 +380,7 @@ class _FitnessHeaderCard extends StatelessWidget {
           Text(
             'Actualizado: $updatedAt',
             style: TextStyle(
-              color: AppColors.textMain.withValues(alpha: 0.55),
+              color: AppColors.textMain.withOpacity(0.55),
               fontSize: 12,
             ),
             textAlign: TextAlign.center,
@@ -411,7 +411,7 @@ class _MainStatsCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: AppColors.divider.withValues(alpha: 0.4),
+          color: AppColors.divider.withOpacity(0.4),
           width: 0.7,
         ),
       ),
@@ -473,7 +473,7 @@ class _StatItem extends StatelessWidget {
           value,
           style: TextStyle(
             color: isEmpty
-                ? AppColors.textMain.withValues(alpha: 0.45)
+                ? AppColors.textMain.withOpacity(0.45)
                 : AppColors.textMain,
             fontSize: 17,
             fontWeight: FontWeight.w800,
@@ -505,7 +505,7 @@ class _VerticalDivider extends StatelessWidget {
     return Container(
       width: 1,
       height: 72,
-      color: AppColors.divider.withValues(alpha: 0.7),
+      color: AppColors.divider.withOpacity(0.7),
       margin: const EdgeInsets.symmetric(horizontal: 10),
     );
   }
@@ -531,7 +531,7 @@ class _BodyCompositionCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: AppColors.divider.withValues(alpha: 0.4),
+          color: AppColors.divider.withOpacity(0.4),
           width: 0.7,
         ),
       ),
@@ -623,7 +623,7 @@ class _DetailBox extends StatelessWidget {
                   value,
                   style: TextStyle(
                     color: isEmpty
-                        ? AppColors.textMain.withValues(alpha: 0.45)
+                        ? AppColors.textMain.withOpacity(0.45)
                         : AppColors.textMain,
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
@@ -659,7 +659,7 @@ class _FitnessActionsCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: AppColors.divider.withValues(alpha: 0.4),
+          color: AppColors.divider.withOpacity(0.4),
           width: 0.7,
         ),
       ),
@@ -783,7 +783,7 @@ class _ErrorCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: AppColors.divider.withValues(alpha: 0.4),
+          color: AppColors.divider.withOpacity(0.4),
           width: 0.7,
         ),
       ),

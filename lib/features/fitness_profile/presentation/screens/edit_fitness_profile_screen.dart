@@ -286,7 +286,7 @@ class _EditFitnessProfileScreenState extends State<EditFitnessProfileScreen> {
                     backgroundColor: AppColors.primary,
                     foregroundColor: AppColors.background,
                     elevation: 12,
-                    shadowColor: AppColors.primary.withValues(alpha: 0.32),
+                    shadowColor: AppColors.primary.withOpacity(0.32),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24),
                     ),
@@ -338,12 +338,12 @@ class _IntroCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
-          color: AppColors.primary.withValues(alpha: 0.28),
+          color: AppColors.primary.withOpacity(0.28),
           width: 0.8,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.24),
+            color: Colors.black.withOpacity(0.24),
             blurRadius: 22,
             offset: const Offset(0, 12),
           ),
@@ -400,7 +400,7 @@ class _FormCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
-          color: AppColors.divider.withValues(alpha: 0.4),
+          color: AppColors.divider.withOpacity(0.4),
           width: 0.7,
         ),
       ),
@@ -465,7 +465,7 @@ class _FitnessTextField extends StatelessWidget {
         ),
         hintText: hintText,
         hintStyle: TextStyle(
-          color: AppColors.textMain.withValues(alpha: 0.45),
+          color: AppColors.textMain.withOpacity(0.45),
         ),
         prefixIcon: Icon(
           icon,
@@ -520,7 +520,7 @@ class _SelectorCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
-          color: AppColors.divider.withValues(alpha: 0.4),
+          color: AppColors.divider.withOpacity(0.4),
           width: 0.7,
         ),
       ),

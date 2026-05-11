@@ -112,8 +112,9 @@ class RoutineService {
     required String fallback,
     required int statusCode,
   }) {
+    // DEBUG: return 'DEBUG: $statusCode - $body';
     if (statusCode == 401 || statusCode == 403) {
-      return 'No autorizado. Vuelve a iniciar sesión.';
+      return 'No autorizado ($statusCode). Prueba a cerrar sesión y entrar de nuevo.';
     }
 
     try {
