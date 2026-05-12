@@ -133,7 +133,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         children: [
           CircleAvatar(
             radius: 50,
-            backgroundColor: AppColors.primary.withValues(alpha: 0.2),
+            backgroundColor: AppColors.primary.withOpacity(0.2),
             child: Text(
               _profile!.username[0].toUpperCase(),
               style: const TextStyle(color: AppColors.primary, fontSize: 36, fontWeight: FontWeight.bold),
@@ -164,7 +164,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                   side: _profile!.isFollowing 
-                      ? BorderSide(color: AppColors.divider.withValues(alpha: 0.4)) 
+                      ? BorderSide(color: AppColors.divider.withOpacity(0.4)) 
                       : BorderSide.none,
                 ),
               ),
@@ -186,7 +186,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               decoration: BoxDecoration(
                 color: AppColors.surface,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.divider.withValues(alpha: 0.2)),
+                border: Border.all(color: AppColors.divider.withOpacity(0.2)),
               ),
               child: const Row(
                 children: [
@@ -207,7 +207,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               decoration: BoxDecoration(
                 color: AppColors.surface,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.divider.withValues(alpha: 0.2)),
+                border: Border.all(color: AppColors.divider.withOpacity(0.2)),
               ),
               child: const Row(
                 children: [

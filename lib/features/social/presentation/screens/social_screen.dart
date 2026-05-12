@@ -186,7 +186,7 @@ class _SocialScreenState extends State<SocialScreen> with SingleTickerProviderSt
                 final user = _searchResults[index];
                 return ListTile(
                   leading: CircleAvatar(
-                    backgroundColor: AppColors.primary.withValues(alpha: 0.2),
+                    backgroundColor: AppColors.primary.withOpacity(0.2),
                     child: Text(
                       user.username[0].toUpperCase(),
                       style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold),

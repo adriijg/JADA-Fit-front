@@ -192,12 +192,12 @@ class _GreetingCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
-          color: AppColors.primary.withValues(alpha: 0.25),
+          color: AppColors.primary.withOpacity(0.25),
           width: 0.8,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.24),
+            color: Colors.black.withOpacity(0.24),
             blurRadius: 22,
             offset: const Offset(0, 12),
           ),
@@ -247,7 +247,7 @@ class _AiCoachCard extends StatelessWidget {
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(24),
           border: Border.all(
-            color: AppColors.tertiary.withValues(alpha: 0.45),
+            color: AppColors.tertiary.withOpacity(0.45),
             width: 0.8,
           ),
         ),
@@ -260,7 +260,7 @@ class _AiCoachCard extends StatelessWidget {
                 color: AppColors.inputBackground,
                 borderRadius: BorderRadius.circular(18),
                 border: Border.all(
-                  color: AppColors.tertiary.withValues(alpha: 0.5),
+                  color: AppColors.tertiary.withOpacity(0.5),
                   width: 0.8,
                 ),
               ),
@@ -346,12 +346,12 @@ class _NutritionOverviewCard extends StatelessWidget {
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(28),
           border: Border.all(
-            color: AppColors.primary.withValues(alpha: 0.22),
+            color: AppColors.primary.withOpacity(0.22),
             width: 0.8,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.20),
+              color: Colors.black.withOpacity(0.20),
               blurRadius: 22,
               offset: const Offset(0, 12),
             ),
@@ -492,7 +492,7 @@ class _CalorieRingChart extends StatelessWidget {
               Text(
                 '$consumed/$goal',
                 style: TextStyle(
-                  color: AppColors.textMain.withValues(alpha: 0.68),
+                  color: AppColors.textMain.withOpacity(0.68),
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
                 ),
@@ -500,7 +500,7 @@ class _CalorieRingChart extends StatelessWidget {
               Text(
                 'kcal',
                 style: TextStyle(
-                  color: AppColors.textMain.withValues(alpha: 0.5),
+                  color: AppColors.textMain.withOpacity(0.5),
                   fontSize: 10,
                 ),
               ),
@@ -710,7 +710,7 @@ class _SmallDashboardCard extends StatelessWidget {
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(24),
           border: Border.all(
-            color: AppColors.divider.withValues(alpha: 0.4),
+            color: AppColors.divider.withOpacity(0.4),
             width: 0.7,
           ),
         ),
@@ -749,7 +749,7 @@ class _SmallDashboardCard extends StatelessWidget {
             Text(
               subtitle,
               style: TextStyle(
-                color: AppColors.textMain.withValues(alpha: 0.62),
+                color: AppColors.textMain.withOpacity(0.62),
                 fontSize: 12,
                 height: 1.3,
               ),
@@ -778,7 +778,7 @@ class _SocialSummaryCard extends StatelessWidget {
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(24),
           border: Border.all(
-            color: AppColors.divider.withValues(alpha: 0.4),
+            color: AppColors.divider.withOpacity(0.4),
             width: 0.7,
           ),
         ),
@@ -854,7 +854,7 @@ class _SmartQuickActionsCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: AppColors.divider.withValues(alpha: 0.4),
+          color: AppColors.divider.withOpacity(0.4),
           width: 0.7,
         ),
       ),

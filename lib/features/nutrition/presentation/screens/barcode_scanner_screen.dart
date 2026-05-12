@@ -131,7 +131,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
               Icons.flash_on,
               color: _isScannerReady
                   ? AppColors.primary
-                  : AppColors.textMain.withValues(alpha: 0.35),
+                  : AppColors.textMain.withOpacity(0.35),
             ),
           ),
           IconButton(
@@ -140,7 +140,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
               Icons.cameraswitch,
               color: _isScannerReady
                   ? AppColors.secondary
-                  : AppColors.textMain.withValues(alpha: 0.35),
+                  : AppColors.textMain.withOpacity(0.35),
             ),
           ),
         ],
@@ -163,7 +163,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
                     color: AppColors.surface,
                     borderRadius: BorderRadius.circular(24),
                     border: Border.all(
-                      color: AppColors.error.withValues(alpha: 0.5),
+                      color: AppColors.error.withOpacity(0.5),
                       width: 1,
                     ),
                   ),
@@ -231,10 +231,10 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
               child: Container(
                 padding: const EdgeInsets.all(18),
                 decoration: BoxDecoration(
-                  color: AppColors.surface.withValues(alpha: 0.92),
+                  color: AppColors.surface.withOpacity(0.92),
                   borderRadius: BorderRadius.circular(22),
                   border: Border.all(
-                    color: AppColors.divider.withValues(alpha: 0.5),
+                    color: AppColors.divider.withOpacity(0.5),
                     width: 0.7,
                   ),
                 ),

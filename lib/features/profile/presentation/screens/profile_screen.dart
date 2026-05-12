@@ -206,12 +206,12 @@ class _AccountHeaderCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
-          color: AppColors.divider.withValues(alpha: 0.4),
+          color: AppColors.divider.withOpacity(0.4),
           width: 0.7,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.28),
+            color: Colors.black.withOpacity(0.28),
             blurRadius: 24,
             offset: const Offset(0, 14),
           ),
@@ -283,7 +283,7 @@ class _AccountInfoCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: AppColors.divider.withValues(alpha: 0.4),
+          color: AppColors.divider.withOpacity(0.4),
           width: 0.7,
         ),
       ),
@@ -459,7 +459,7 @@ class _AccountOptionsCardState extends State<_AccountOptionsCard> {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: AppColors.divider.withValues(alpha: 0.4),
+          color: AppColors.divider.withOpacity(0.4),
           width: 0.7,
         ),
       ),
@@ -682,7 +682,7 @@ class _ErrorCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: AppColors.divider.withValues(alpha: 0.4),
+          color: AppColors.divider.withOpacity(0.4),
           width: 0.7,
         ),
       ),

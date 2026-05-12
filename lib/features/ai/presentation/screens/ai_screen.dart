@@ -16,7 +16,7 @@ class AiScreen extends StatelessWidget {
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(24),
           border: Border.all(
-            color: AppColors.divider.withValues(alpha: 0.4),
+            color: AppColors.divider.withOpacity(0.4),
             width: 0.7,
           ),
         ),
