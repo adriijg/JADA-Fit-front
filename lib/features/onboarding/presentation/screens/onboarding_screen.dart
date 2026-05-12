@@ -409,7 +409,7 @@ class _GenderDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
-      value: value,
+      initialValue: value,
       dropdownColor: AppColors.surface,
       style: const TextStyle(
         color: AppColors.textMain,
@@ -447,7 +447,7 @@ class _GoalDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
-      value: value,
+      initialValue: value,
       dropdownColor: AppColors.surface,
       style: const TextStyle(
         color: AppColors.textMain,

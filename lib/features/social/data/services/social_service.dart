@@ -167,8 +167,8 @@ class SocialService {
         'Authorization': 'Bearer $token',
       },
       body: jsonEncode({
-        if (bio != null) 'bio': bio,
-        if (profilePictureUrl != null) 'profilePictureUrl': profilePictureUrl,
+        'bio': ?bio,
+        'profilePictureUrl': ?profilePictureUrl,
       }),
     );
 

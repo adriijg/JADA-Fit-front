@@ -29,7 +29,7 @@ class PostService {
       },
       body: jsonEncode({
         'imageUrl': imageUrl,
-        if (caption != null) 'caption': caption,
+        'caption': ?caption,
       }),
     );
 

@@ -46,6 +46,9 @@ class ApiEndpoints {
 
   static String routineById(int id) => '$routines/$id';
 
+  static const String ai = '${ApiConfig.baseUrl}/ai';
+  static const String aiChat = '$ai/chat';
+
   static String foodByBarcode(String barcode) {
     return '$foods/barcode/$barcode';
   }
