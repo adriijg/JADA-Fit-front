@@ -8,6 +8,7 @@ class ApiEndpoints {
   static const String me = '$users/me';
 
   static const String mePrivacy = '$me/privacy';
+  static const String meProfile = '$me/profile';
 
   static const String onboarding = '${ApiConfig.baseUrl}/onboarding';
   static const String completeOnboarding = '$onboarding/complete';
@@ -29,6 +30,17 @@ class ApiEndpoints {
   static const String social = '${ApiConfig.baseUrl}/social';
   static const String follow = '$social/follow';
   static const String unfollow = '$social/unfollow';
+
+  // Posts
+  static const String posts = '$social/posts';
+  static const String postsFeed = '$posts/feed';
+  static const String postsExplore = '$posts/explore';
+
+  static String postsByUser(String userId) => '$posts/user/$userId';
+
+  // Stories
+  static const String stories = '$social/stories';
+  static const String storiesFeed = '$stories/feed';
 
   static const String routines = '${ApiConfig.baseUrl}/routines';
 
