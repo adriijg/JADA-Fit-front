@@ -42,6 +42,10 @@ class ApiEndpoints {
   static const String stories = '$social/stories';
   static const String storiesFeed = '$stories/feed';
 
+  static const String routines = '${ApiConfig.baseUrl}/routines';
+
+  static String routineById(int id) => '$routines/$id';
+
   static String foodByBarcode(String barcode) {
     return '$foods/barcode/$barcode';
   }

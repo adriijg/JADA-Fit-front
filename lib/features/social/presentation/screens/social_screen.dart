@@ -607,6 +607,7 @@ class _ActionIcon extends StatelessWidget {
   }
 }
 
+
 // ─── Error View ──────────────────────────────────────────────────────────────
 
 class _ErrorView extends StatelessWidget {

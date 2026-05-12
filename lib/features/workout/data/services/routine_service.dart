@@ -5,12 +5,10 @@ import 'package:http/http.dart' as http;
 import '../../../../core/network/api_endpoints.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/storage/secure_storage_service.dart';
-import '../models/meal_type.dart';
-import '../models/nutrition_day_summary_model.dart';
-import '../models/nutrition_meal_model.dart';
+import '../models/routine_model.dart';
 
-class NutritionMealService {
-  NutritionMealService({
+class RoutineService {
+  RoutineService({
     http.Client? client,
     SecureStorageService? storageService,
   })  : _client = client ?? http.Client(),
@@ -19,66 +17,11 @@ class NutritionMealService {
   final http.Client _client;
   final SecureStorageService _storageService;
 
-  Future<NutritionMealModel> createMeal({
-    required String foodName,
-    required MealType mealType,
-    required double quantityGrams,
-    required double caloriesPer100g,
-    required double proteinPer100g,
-    required double carbsPer100g,
-    required double fatsPer100g,
-    required DateTime loggedAt,
-    String? externalFoodId,
-  }) async {
+  Future<List<RoutineModel>> getRoutines() async {
     final token = await _getTokenOrThrow();
-
-    final response = await _client.post(
-      Uri.parse(ApiEndpoints.nutritionMeals),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-      body: jsonEncode({
-        'externalFoodId': externalFoodId,
-        'foodName': foodName,
-        'mealType': mealType.apiValue,
-        'quantityGrams': quantityGrams,
-        'caloriesPer100g': caloriesPer100g,
-        'proteinPer100g': proteinPer100g,
-        'carbsPer100g': carbsPer100g,
-        'fatsPer100g': fatsPer100g,
-        'loggedAt': _formatDateTimeForApi(loggedAt),
-      }),
-    );
-
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      final Map<String, dynamic> data = jsonDecode(response.body);
-      return NutritionMealModel.fromJson(data);
-    }
-
-    throw ApiException(
-      _parseErrorMessage(
-        response.body,
-        fallback: 'No se pudo registrar la comida',
-        statusCode: response.statusCode,
-      ),
-      statusCode: response.statusCode,
-    );
-  }
-
-  Future<NutritionDaySummaryModel> getDaySummary({
-    required DateTime date,
-  }) async {
-    final token = await _getTokenOrThrow();
-
-    final uri = Uri.parse(ApiEndpoints.nutritionDay).replace(
-      queryParameters: {
-        'date': _formatDateForApi(date),
-      },
-    );
 
     final response = await _client.get(
-      uri,
+      Uri.parse(ApiEndpoints.routines),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -86,27 +29,54 @@ class NutritionMealService {
     );
 
     if (response.statusCode == 200) {
-      final Map<String, dynamic> data = jsonDecode(response.body);
-      return NutritionDaySummaryModel.fromJson(data);
+      final List<dynamic> data = jsonDecode(response.body);
+      return data
+          .map((e) => RoutineModel.fromJson(e as Map<String, dynamic>))
+          .toList();
     }
 
     throw ApiException(
       _parseErrorMessage(
         response.body,
-        fallback: 'No se pudo cargar el resumen nutricional',
+        fallback: 'No se pudieron cargar las rutinas',
         statusCode: response.statusCode,
       ),
       statusCode: response.statusCode,
     );
   }
 
-  Future<void> deleteMeal({
-    required String mealId,
-  }) async {
+  Future<RoutineModel> createRoutine(RoutineModel routine) async {
+    final token = await _getTokenOrThrow();
+
+    final response = await _client.post(
+      Uri.parse(ApiEndpoints.routines),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(routine.toJson()),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      return RoutineModel.fromJson(data);
+    }
+
+    throw ApiException(
+      _parseErrorMessage(
+        response.body,
+        fallback: 'No se pudo crear la rutina',
+        statusCode: response.statusCode,
+      ),
+      statusCode: response.statusCode,
+    );
+  }
+
+  Future<void> deleteRoutine(int id) async {
     final token = await _getTokenOrThrow();
 
     final response = await _client.delete(
-      Uri.parse('${ApiEndpoints.nutritionMeals}/$mealId'),
+      Uri.parse(ApiEndpoints.routineById(id)),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -120,7 +90,7 @@ class NutritionMealService {
     throw ApiException(
       _parseErrorMessage(
         response.body,
-        fallback: 'No se pudo eliminar la comida',
+        fallback: 'No se pudo eliminar la rutina',
         statusCode: response.statusCode,
       ),
       statusCode: response.statusCode,
@@ -137,25 +107,14 @@ class NutritionMealService {
     return token;
   }
 
-  String _formatDateForApi(DateTime date) {
-    final year = date.year.toString().padLeft(4, '0');
-    final month = date.month.toString().padLeft(2, '0');
-    final day = date.day.toString().padLeft(2, '0');
-
-    return '$year-$month-$day';
-  }
-
-  String _formatDateTimeForApi(DateTime dateTime) {
-    return dateTime.toIso8601String().split('.').first;
-  }
-
   String _parseErrorMessage(
     String body, {
     required String fallback,
     required int statusCode,
   }) {
+    // DEBUG: return 'DEBUG: $statusCode - $body';
     if (statusCode == 401 || statusCode == 403) {
-      return 'No autorizado. Vuelve a iniciar sesión.';
+      return 'No autorizado ($statusCode). Prueba a cerrar sesión y entrar de nuevo.';
     }
 
     try {
@@ -165,7 +124,6 @@ class NutritionMealService {
         if (decoded['message'] is String) {
           return decoded['message'] as String;
         }
-
         if (decoded['error'] is String) {
           return decoded['error'] as String;
         }
@@ -174,9 +132,7 @@ class NutritionMealService {
       // fallback
     }
 
-    if (body.trim().isNotEmpty) {
-      return body;
-    }
+    if (body.trim().isNotEmpty) return body;
 
     return fallback;
   }

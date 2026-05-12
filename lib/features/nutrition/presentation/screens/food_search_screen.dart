@@ -229,7 +229,7 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
                           color: AppColors.surface,
                           borderRadius: BorderRadius.circular(22),
                           border: Border.all(
-                            color: AppColors.divider.withValues(alpha: 0.4),
+                            color: AppColors.divider.withOpacity(0.4),
                             width: 0.7,
                           ),
                         ),
@@ -276,7 +276,7 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
                                     'G ${_formatDouble(food.fatsPer100g, 'g')}',
                                     style: TextStyle(
                                       color: AppColors.textMain
-                                          .withValues(alpha: 0.58),
+                                          .withOpacity(0.58),
                                       fontSize: 11,
                                       height: 1.35,
                                     ),
@@ -300,7 +300,7 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
                   child: Text(
                     'Busca un alimento por nombre o escanea su código de barras.',
                     style: TextStyle(
-                      color: AppColors.textMain.withValues(alpha: 0.55),
+                      color: AppColors.textMain.withOpacity(0.55),
                       fontSize: 14,
                       height: 1.5,
                     ),
@@ -337,7 +337,7 @@ class _SearchCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
-          color: AppColors.divider.withValues(alpha: 0.4),
+          color: AppColors.divider.withOpacity(0.4),
           width: 0.7,
         ),
       ),
@@ -356,7 +356,7 @@ class _SearchCard extends StatelessWidget {
               fillColor: AppColors.inputBackground,
               hintText: 'Buscar alimento, ej: Nutella',
               hintStyle: TextStyle(
-                color: AppColors.textMain.withValues(alpha: 0.45),
+                color: AppColors.textMain.withOpacity(0.45),
               ),
               prefixIcon: const Icon(
                 Icons.search,
@@ -445,7 +445,7 @@ class _ErrorCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: AppColors.error.withValues(alpha: 0.5),
+          color: AppColors.error.withOpacity(0.5),
         ),
       ),
       child: Text(
