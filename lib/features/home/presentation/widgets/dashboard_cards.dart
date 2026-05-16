@@ -1,36 +1,65 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_card.dart';
 
 class WorkoutSummaryCard extends StatelessWidget {
-  const WorkoutSummaryCard({super.key, required this.onTap});
+  const WorkoutSummaryCard({
+    super.key,
+    required this.onTap,
+    this.workoutName,
+    this.pendingExercises,
+  });
 
   final VoidCallback onTap;
+  final String? workoutName;
+  final int? pendingExercises;
 
   @override
   Widget build(BuildContext context) {
     return SmallDashboardCard(
       icon: Icons.fitness_center,
       title: 'Workout',
-      value: 'Push Day',
-      subtitle: '5 ejercicios pendientes',
+      value: workoutName ?? 'Sin rutina',
+      subtitle: pendingExercises != null
+          ? '$pendingExercises ejercicio${pendingExercises == 1 ? '' : 's'} pendiente${pendingExercises == 1 ? '' : 's'}'
+          : 'Sin ejercicios pendientes',
       onTap: onTap,
     );
   }
 }
 
 class PhysicalProgressCard extends StatelessWidget {
-  const PhysicalProgressCard({super.key, required this.onTap});
+  const PhysicalProgressCard({
+    super.key,
+    required this.onTap,
+    this.currentWeight,
+    this.weightDelta,
+  });
 
   final VoidCallback onTap;
+  final double? currentWeight;
+  final double? weightDelta;
 
   @override
   Widget build(BuildContext context) {
+    final weightStr = currentWeight != null
+        ? '${currentWeight!.toStringAsFixed(0)} kg'
+        : 'Sin datos';
+
+    String deltaStr;
+    if (weightDelta == null) {
+      deltaStr = 'Añade tu primer registro';
+    } else {
+      final sign = weightDelta! >= 0 ? '+' : '';
+      deltaStr = '$sign${weightDelta!.toStringAsFixed(1)} kg desde inicio';
+    }
+
     return SmallDashboardCard(
       icon: Icons.show_chart,
       title: 'Progreso',
-      value: '68 kg',
-      subtitle: '+8 kg desde inicio',
+      value: weightStr,
+      subtitle: deltaStr,
       onTap: onTap,
     );
   }
@@ -54,62 +83,43 @@ class SmallDashboardCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return AppCard.elevated(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(24),
-      child: Container(
-        height: 158,
-        padding: const EdgeInsets.all(18),
-        decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(
-            color: AppColors.divider.withOpacity(0.4),
-            width: 0.7,
+      padding: const EdgeInsets.all(18),
+      borderRadius: 24,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AppCardIcon(icon: icon, size: 46, borderRadius: 16, iconSize: 24),
+          const SizedBox(height: 16),
+          Text(
+            title.toUpperCase(),
+            style: const TextStyle(
+              color: AppColors.secondary,
+              fontSize: 10,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 1,
+            ),
           ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 46,
-              height: 46,
-              decoration: BoxDecoration(
-                color: AppColors.inputBackground,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Icon(icon, color: AppColors.primary, size: 24),
+          const SizedBox(height: 6),
+          Text(
+            value,
+            style: const TextStyle(
+              color: AppColors.textMain,
+              fontSize: 17,
+              fontWeight: FontWeight.w800,
             ),
-            const Spacer(),
-            Text(
-              title.toUpperCase(),
-              style: const TextStyle(
-                color: AppColors.secondary,
-                fontSize: 10,
-                fontWeight: FontWeight.w800,
-                letterSpacing: 1,
-              ),
+          ),
+          const SizedBox(height: 5),
+          Text(
+            subtitle,
+            style: TextStyle(
+              color: AppColors.textMain.withOpacity(0.62),
+              fontSize: 12,
+              height: 1.3,
             ),
-            const SizedBox(height: 6),
-            Text(
-              value,
-              style: const TextStyle(
-                color: AppColors.textMain,
-                fontSize: 17,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            const SizedBox(height: 5),
-            Text(
-              subtitle,
-              style: TextStyle(
-                color: AppColors.textMain.withOpacity(0.62),
-                fontSize: 12,
-                height: 1.3,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

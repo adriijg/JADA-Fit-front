@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_card.dart';
 import '../../data/models/post.dart';
 import '../../data/models/story.dart';
 import '../../data/services/post_service.dart';
@@ -430,16 +431,11 @@ class _PostCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppColors.divider.withValues(alpha: 0.3),
-          width: 0.5,
-        ),
-      ),
+    return AppCard(
+      borderRadius: 20,
+      borderColor: AppColors.divider.withValues(alpha: 0.3),
+      borderWidth: 0.5,
+      padding: EdgeInsets.zero,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

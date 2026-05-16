@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/widgets/app_card.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../data/models/fitness_profile_model.dart';
@@ -289,24 +290,9 @@ class _FitnessHeaderCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final hasGoal = goal != 'Sin configurar';
 
-    return Container(
-      width: double.infinity,
+    return AppCard.elevated(
+      borderRadius: 28,
       padding: const EdgeInsets.all(26),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(28),
-        border: Border.all(
-          color: AppColors.divider.withOpacity(0.4),
-          width: 0.7,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.28),
-            blurRadius: 24,
-            offset: const Offset(0, 14),
-          ),
-        ],
-      ),
       child: Column(
         children: [
           Container(
@@ -404,17 +390,9 @@ class _MainStatsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
+    return AppCard.elevated(
+      borderRadius: 24,
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: AppColors.divider.withOpacity(0.4),
-          width: 0.7,
-        ),
-      ),
       child: Row(
         children: [
           Expanded(
@@ -524,17 +502,9 @@ class _BodyCompositionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
+    return AppCard.elevated(
+      borderRadius: 24,
       padding: const EdgeInsets.all(22),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: AppColors.divider.withOpacity(0.4),
-          width: 0.7,
-        ),
-      ),
       child: Column(
         children: [
           Row(
@@ -652,17 +622,9 @@ class _FitnessActionsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
+    return AppCard.elevated(
+      borderRadius: 24,
       padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: AppColors.divider.withOpacity(0.4),
-          width: 0.7,
-        ),
-      ),
       child: Column(
         children: [
           _ActionTile(
@@ -706,24 +668,14 @@ class _ActionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return AppCard.input(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(18),
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 14,
-          vertical: 14,
-        ),
-        decoration: BoxDecoration(
-          color: AppColors.inputBackground,
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: AppColors.inputBorder,
-            width: 0.7,
-          ),
-        ),
-        child: Row(
-          children: [
+      padding: const EdgeInsets.symmetric(
+        horizontal: 14,
+        vertical: 14,
+      ),
+      child: Row(
+        children: [
             Icon(
               icon,
               color: AppColors.primary,
@@ -759,7 +711,6 @@ class _ActionTile extends StatelessWidget {
               color: AppColors.secondary,
             ),
           ],
-        ),
       ),
     );
   }

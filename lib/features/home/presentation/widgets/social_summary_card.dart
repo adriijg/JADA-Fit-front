@@ -1,71 +1,74 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_card.dart';
 
 class SocialSummaryCard extends StatelessWidget {
-  const SocialSummaryCard({super.key, required this.onTap});
+  const SocialSummaryCard({
+    super.key,
+    required this.onTap,
+    this.activeChallenges,
+    this.pendingRequests,
+  });
 
   final VoidCallback onTap;
+  final int? activeChallenges;
+  final int? pendingRequests;
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    String subtitle;
+    if (activeChallenges == null && pendingRequests == null) {
+      subtitle = 'Conéctate con otros usuarios';
+    } else {
+      final parts = <String>[];
+      if (activeChallenges != null) {
+        parts.add('$activeChallenges reto${activeChallenges == 1 ? '' : 's'} activo${activeChallenges == 1 ? '' : 's'}');
+      }
+      if (pendingRequests != null && pendingRequests! > 0) {
+        parts.add('$pendingRequests solicitud${pendingRequests == 1 ? '' : 'es'} pendiente${pendingRequests == 1 ? '' : 's'}');
+      }
+      subtitle = parts.isNotEmpty ? parts.join(' · ') : 'Sin actividad reciente';
+    }
+
+    return AppCard.elevated(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(24),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(22),
-        decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(
-            color: AppColors.divider.withOpacity(0.4),
-            width: 0.7,
+      borderRadius: 24,
+      child: Row(
+        children: [
+          AppCardIcon(
+            icon: Icons.people_outline,
+            size: 52,
+            borderRadius: 18,
+            iconSize: 27,
           ),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 52,
-              height: 52,
-              decoration: BoxDecoration(
-                color: AppColors.inputBackground,
-                borderRadius: BorderRadius.circular(18),
-              ),
-              child: const Icon(
-                Icons.people_outline,
-                color: AppColors.primary,
-                size: 27,
-              ),
-            ),
-            const SizedBox(width: 16),
-            const Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Actividad social',
-                    style: TextStyle(
-                      color: AppColors.textMain,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w800,
-                    ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Actividad social',
+                  style: TextStyle(
+                    color: AppColors.textMain,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
                   ),
-                  SizedBox(height: 5),
-                  Text(
-                    '2 retos activos · 1 solicitud pendiente',
-                    style: TextStyle(
-                      color: AppColors.secondary,
-                      fontSize: 12,
-                      height: 1.4,
-                    ),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  subtitle,
+                  style: const TextStyle(
+                    color: AppColors.secondary,
+                    fontSize: 12,
+                    height: 1.4,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            const Icon(Icons.chevron_right, color: AppColors.secondary),
-          ],
-        ),
+          ),
+          const Icon(Icons.chevron_right, color: AppColors.secondary),
+        ],
       ),
     );
   }

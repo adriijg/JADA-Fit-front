@@ -8,6 +8,7 @@ import '../../../auth/data/models/user_account_model.dart';
 import '../../../auth/data/services/auth_service.dart';
 import '../../../auth/presentation/screens/login_screen.dart';
 import '../../../social/data/services/social_service.dart' as es_jadafit_social_service;
+import '../../../../core/widgets/app_card.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -202,24 +203,9 @@ class _AccountHeaderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
+    return AppCard.elevated(
+      borderRadius: 28,
       padding: const EdgeInsets.all(26),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(28),
-        border: Border.all(
-          color: AppColors.divider.withOpacity(0.4),
-          width: 0.7,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.28),
-            blurRadius: 24,
-            offset: const Offset(0, 14),
-          ),
-        ],
-      ),
       child: Column(
         children: [
           Container(
@@ -279,17 +265,9 @@ class _AccountInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
+    return AppCard.elevated(
+      borderRadius: 24,
       padding: const EdgeInsets.all(22),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: AppColors.divider.withOpacity(0.4),
-          width: 0.7,
-        ),
-      ),
       child: Column(
         children: [
           _AccountInfoRow(
@@ -345,18 +323,10 @@ class _AccountInfoRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Container(
-          width: 44,
-          height: 44,
-          decoration: BoxDecoration(
-            color: AppColors.inputBackground,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Icon(
-            icon,
-            color: AppColors.primary,
-            size: 22,
-          ),
+        AppCardIcon(
+          icon: icon,
+          size: 44,
+          borderRadius: 16,
         ),
         const SizedBox(width: 16),
         Expanded(
@@ -455,17 +425,9 @@ class _AccountOptionsCardState extends State<_AccountOptionsCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
+    return AppCard.elevated(
+      borderRadius: 24,
       padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: AppColors.divider.withOpacity(0.4),
-          width: 0.7,
-        ),
-      ),
       child: Column(
         children: [
           _AccountOptionTile(
@@ -523,19 +485,8 @@ class _PrivacyToggleTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 14,
-        vertical: 8,
-      ),
-      decoration: BoxDecoration(
-        color: AppColors.inputBackground,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: AppColors.inputBorder,
-          width: 0.7,
-        ),
-      ),
+    return AppCard.input(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       child: Row(
         children: [
           Icon(
@@ -608,60 +559,46 @@ class _AccountOptionTile extends StatelessWidget {
     final iconColor = isDestructive ? AppColors.error : AppColors.primary;
     final titleColor = isDestructive ? AppColors.error : AppColors.textMain;
 
-    return InkWell(
+    return AppCard.input(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(18),
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 14,
-          vertical: 14,
-        ),
-        decoration: BoxDecoration(
-          color: AppColors.inputBackground,
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: AppColors.inputBorder,
-            width: 0.7,
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+      child: Row(
+        children: [
+          Icon(
+            icon,
+            color: iconColor,
+            size: 24,
           ),
-        ),
-        child: Row(
-          children: [
-            Icon(
-              icon,
-              color: iconColor,
-              size: 24,
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      color: titleColor,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                    ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    color: titleColor,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    subtitle,
-                    style: const TextStyle(
-                      color: AppColors.secondary,
-                      fontSize: 12,
-                      height: 1.3,
-                    ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  style: const TextStyle(
+                    color: AppColors.secondary,
+                    fontSize: 12,
+                    height: 1.3,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            Icon(
-              Icons.chevron_right,
-              color: isDestructive ? AppColors.error : AppColors.secondary,
-            ),
-          ],
-        ),
+          ),
+          Icon(
+            Icons.chevron_right,
+            color: isDestructive ? AppColors.error : AppColors.secondary,
+          ),
+        ],
       ),
     );
   }
@@ -678,17 +615,9 @@ class _ErrorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
+    return AppCard(
+      borderRadius: 24,
       padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: AppColors.divider.withOpacity(0.4),
-          width: 0.7,
-        ),
-      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

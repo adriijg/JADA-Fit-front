@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/network/api_exception.dart';
@@ -9,6 +9,14 @@ import '../../data/models/nutrition_meal_model.dart';
 import '../../data/services/nutrition_meal_service.dart';
 import 'food_search_screen.dart';
 
+import '../../data/models/water_log_model.dart';
+import '../../data/services/water_log_service.dart';
+import '../../data/models/recipe_model.dart';
+import '../../data/services/recipe_service.dart';
+import '../../../../fitness_profile/data/models/fitness_progress_model.dart';
+import '../../../../fitness_profile/data/services/fitness_progress_service.dart';
+import '../../../../fitness_profile/presentation/screens/add_physical_log_screen.dart';
+import 'my_recipes_screen.dart';
 class NutritionScreen extends StatefulWidget {
   const NutritionScreen({super.key});
 
@@ -18,12 +26,15 @@ class NutritionScreen extends StatefulWidget {
 
 class _NutritionScreenState extends State<NutritionScreen> {
   final NutritionMealService _nutritionMealService = NutritionMealService();
-
-  DateTime selectedDate = DateTime.now();
-
-  bool isLoading = true;
-  String? errorMessage;
-  NutritionDaySummaryModel? daySummary;
+  final WaterLogService _waterLogService = WaterLogService();
+  WaterDaySummaryModel? _waterSummary;
+  bool _isWaterLoading = false;
+  final FitnessProgressService _fitnessProgressService = FitnessProgressService();
+  List<FitnessProgressModel> _fitnessLogs = [];
+  bool _isFitnessLoading = false;
+  final RecipeService _recipeService = RecipeService();
+  List<RecipeModel> _userRecipes = [];
+  bool _isRecipesLoading = false;
 
   @override
   void initState() {
@@ -38,6 +49,9 @@ class _NutritionScreenState extends State<NutritionScreen> {
     );
 
     _loadDaySummary();
+    _loadWaterToday();
+    _loadFitnessProgress();
+    _loadUserRecipes();
   }
 
   Future<void> _loadDaySummary() async {
@@ -131,6 +145,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
     });
 
     _loadDaySummary();
+    _loadWaterToday();
   }
 
   List<NutritionMealModel> _mealsByType(MealType mealType) {
@@ -139,6 +154,81 @@ class _NutritionScreenState extends State<NutritionScreen> {
     if (summary == null) return const [];
 
     return summary.meals.where((meal) => meal.mealType == mealType).toList();
+  }
+
+  Future<void> _loadWaterToday() async {
+    setState(() => _isWaterLoading = true);
+    try {
+      final summary = await _waterLogService.getTodaySummary();
+      if (mounted) setState(() => _waterSummary = summary);
+    } catch (_) {
+      if (mounted) setState(() => _waterSummary = null);
+    } finally {
+      if (mounted) setState(() => _isWaterLoading = false);
+    }
+  }
+
+  Future<void> _addWater(int ml) async {
+    if (ml <= 0) return;
+    try {
+      await _waterLogService.addLog(ml.toDouble());
+      if (mounted) _loadWaterToday();
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error al registrar $ml ml de agua'),
+            backgroundColor: AppColors.surface,
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> _deleteWaterLog(String logId) async {
+    try {
+      await _waterLogService.deleteLog(logId);
+      if (mounted) _loadWaterToday();
+    } catch (_) {}
+  }
+
+  Future<void> _deleteWaterAmount(int ml) async {
+    if (ml <= 0) return;
+    try {
+      var toRemove = ml;
+      final logs = List<WaterLogModel>.from(_waterSummary?.logs ?? [])
+        ..sort((a, b) => b.loggedAt.compareTo(a.loggedAt));
+      for (final log in logs) {
+        if (toRemove <= 0) break;
+        await _waterLogService.deleteLog(log.id);
+        toRemove -= log.amountMl.toInt();
+      }
+      if (mounted) _loadWaterToday();
+    } catch (_) {}
+  }
+
+  Future<void> _loadFitnessProgress() async {
+    setState(() => _isFitnessLoading = true);
+    try {
+      final logs = await _fitnessProgressService.getMyFitnessProgress();
+      if (mounted) setState(() => _fitnessLogs = logs);
+    } catch (_) {
+      if (mounted) setState(() => _fitnessLogs = []);
+    } finally {
+      if (mounted) setState(() => _isFitnessLoading = false);
+    }
+  }
+
+  Future<void> _loadUserRecipes() async {
+    setState(() => _isRecipesLoading = true);
+    try {
+      final recipes = await _recipeService.getMyRecipes();
+      if (mounted) setState(() => _userRecipes = recipes);
+    } catch (_) {
+      if (mounted) setState(() => _userRecipes = []);
+    } finally {
+      if (mounted) setState(() => _isRecipesLoading = false);
+    }
   }
 
   String _formatDayTitle(DateTime date) {
@@ -168,7 +258,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
     }
 
     if (target == tomorrow) {
-      return 'Mañana';
+      return 'Ma├▒ana';
     }
 
     final day = date.day.toString().padLeft(2, '0');
@@ -263,7 +353,23 @@ class _NutritionScreenState extends State<NutritionScreen> {
                 onDeleteMeal: _deleteMeal,
               ),
               const SizedBox(height: 20),
-              const _AiRecipesCard(),
+              _WaterTrackerCard(
+                summary: _waterSummary,
+                isLoading: _isWaterLoading,
+                onAddWater: _addWater,
+                onDeleteWater: _deleteWaterAmount,
+                onDeleteLog: _deleteWaterLog,
+              ),
+              const SizedBox(height: 20),
+              _PhysicalTrackingCard(
+                logs: _fitnessLogs,
+                isLoading: _isFitnessLoading,
+              ),
+              const SizedBox(height: 20),
+              _RecipesCard(
+                recipes: _userRecipes,
+                isLoading: _isRecipesLoading,
+              ),
             ],
           ],
         ),
@@ -501,7 +607,7 @@ class _DailySummaryCard extends StatelessWidget {
             child: Column(
               children: [
                 _MacroProgressRow(
-                  label: 'Proteínas',
+                  label: 'Prote├¡nas',
                   current: summary.totalProtein,
                   target: summary.proteinTarget,
                   unit: 'g',
@@ -800,7 +906,7 @@ class _MealSectionCard extends StatelessWidget {
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(
-                      'Añade alimentos para calcular calorías y macros.',
+                      'A├▒ade alimentos para calcular calor├¡as y macros.',
                       style: TextStyle(
                         color: AppColors.textMain.withOpacity(0.55),
                         fontSize: 13,
@@ -831,7 +937,7 @@ class _MealSectionCard extends StatelessWidget {
                 size: 20,
               ),
               label: const Text(
-                'AÑADIR ALIMENTO',
+                'A├æADIR ALIMENTO',
                 style: TextStyle(
                   fontWeight: FontWeight.w900,
                   fontSize: 13,
@@ -863,7 +969,7 @@ class _MealMacroSummary extends StatelessWidget {
       children: [
         Expanded(
           child: _MealMacroChip(
-            label: 'Proteína',
+            label: 'Prote├¡na',
             value: protein,
           ),
         ),
@@ -1084,81 +1190,6 @@ class _MealInfoPill extends StatelessWidget {
   }
 }
 
-class _AiRecipesCard extends StatelessWidget {
-  const _AiRecipesCard();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(22),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(26),
-        border: Border.all(
-          color: AppColors.primary.withOpacity(0.28),
-          width: 0.8,
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Row(
-            children: [
-              Icon(
-                Icons.auto_awesome,
-                color: AppColors.primary,
-                size: 25,
-              ),
-              SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  'Recetas sugeridas por IA',
-                  style: TextStyle(
-                    color: AppColors.textMain,
-                    fontSize: 17,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          const Text(
-            'Cuando conectemos la IA con tus macros, aquí aparecerán recetas adaptadas a lo que te falta para completar el día.',
-            style: TextStyle(
-              color: AppColors.secondary,
-              fontSize: 13,
-              height: 1.5,
-            ),
-          ),
-          const SizedBox(height: 14),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(
-              color: AppColors.inputBackground,
-              borderRadius: BorderRadius.circular(18),
-              border: Border.all(
-                color: AppColors.inputBorder,
-                width: 0.7,
-              ),
-            ),
-            child: const Text(
-              'Ejemplo futuro: cena alta en proteína y baja en grasas.',
-              style: TextStyle(
-                color: AppColors.textMain,
-                fontSize: 13,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class _ErrorCard extends StatelessWidget {
   const _ErrorCard({
     required this.message,
@@ -1212,6 +1243,508 @@ class _ErrorCard extends StatelessWidget {
               'Reintentar',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _WaterTrackerCard extends StatefulWidget {
+  const _WaterTrackerCard({
+    required this.summary,
+    required this.isLoading,
+    required this.onAddWater,
+    required this.onDeleteWater,
+    required this.onDeleteLog,
+  });
+
+  final WaterDaySummaryModel? summary;
+  final bool isLoading;
+  final Future<void> Function(int ml) onAddWater;
+  final Future<void> Function(int ml) onDeleteWater;
+  final Future<void> Function(String logId) onDeleteLog;
+
+  @override
+  State<_WaterTrackerCard> createState() => _WaterTrackerCardState();
+}
+
+class _WaterTrackerCardState extends State<_WaterTrackerCard> {
+  static const int _glassCount = 10;
+  static const double _glassMl = 200;
+  int? _lastDragIndex;
+
+  double get _totalMl => widget.summary?.totalMl ?? 0;
+
+  int _getFilledGlasses(double total) => (total / _glassMl).floor();
+  double _getPartialFill(double total) => (total % _glassMl) / _glassMl;
+
+  void _setWaterLevel(int glassIndex) {
+    final targetMl = (glassIndex + 1) * _glassMl;
+    final current = _totalMl;
+    final diff = targetMl - current;
+    if (diff.abs() < _glassMl / 2) return;
+    if (diff > 0) {
+      widget.onAddWater(diff.ceil());
+    } else {
+      widget.onDeleteWater((-diff).ceil());
+    }
+  }
+
+  int _glassIndexFromDx(double dx) {
+    const step = 30.0;
+    return (dx / step).floor().clamp(0, _glassCount - 1);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final total = _totalMl;
+    final filledGlasses = _getFilledGlasses(total);
+    final partialFill = _getPartialFill(total);
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.water_drop, color: AppColors.primary, size: 20),
+              const SizedBox(width: 8),
+              Text(
+                'Agua',
+                style: TextStyle(
+                  color: AppColors.textMain,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const Spacer(),
+              if (widget.isLoading)
+                SizedBox(
+                  width: 14,
+                  height: 14,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: AppColors.primary,
+                  ),
+                )
+              else
+                Text(
+                  '${total.toInt()} / ${_glassCount * _glassMl} ml',
+                  style: TextStyle(
+                    color: AppColors.textMain.withValues(alpha: 0.55),
+                    fontSize: 13,
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          ClipRect(
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTapUp: (details) {
+                _setWaterLevel(
+                  _glassIndexFromDx(details.localPosition.dx),
+                );
+              },
+              onHorizontalDragStart: (details) {
+                _lastDragIndex = _glassIndexFromDx(
+                  details.localPosition.dx,
+                );
+                _setWaterLevel(_lastDragIndex!);
+              },
+              onHorizontalDragUpdate: (details) {
+                final i = _glassIndexFromDx(details.localPosition.dx);
+                if (i != _lastDragIndex) {
+                  _lastDragIndex = i;
+                  _setWaterLevel(i);
+                }
+              },
+              onHorizontalDragEnd: (_) => _lastDragIndex = null,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: List.generate(_glassCount, (i) {
+                  final fill = i < filledGlasses
+                      ? 1.0
+                      : i == filledGlasses
+                          ? partialFill
+                          : 0.0;
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 2),
+                    child: _WaterGlass(
+                      fillLevel: fill,
+                      isFilled: i < filledGlasses,
+                    ),
+                  );
+                }),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _WaterGlass extends StatelessWidget {
+  const _WaterGlass({
+    required this.fillLevel,
+    required this.isFilled,
+  });
+
+  final double fillLevel;
+  final bool isFilled;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 28,
+      height: 70,
+      child: CustomPaint(
+        painter: _WaterGlassPainter(
+          fillLevel: fillLevel,
+          isFilled: isFilled,
+        ),
+      ),
+    );
+  }
+}
+
+class _WaterGlassPainter extends CustomPainter {
+  _WaterGlassPainter({
+    required this.fillLevel,
+    required this.isFilled,
+  });
+
+  final double fillLevel;
+  final bool isFilled;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final w = size.width;
+    final h = size.height;
+    final glassTop = h * 0.06;
+    final glassHeight = h * 0.72;
+    final rimThickness = 2.5;
+    final topWidth = w * 0.8;
+    final bottomWidth = w * 0.56;
+
+    final glassPath = Path()
+      ..moveTo((w - topWidth) / 2, glassTop)
+      ..lineTo((w - topWidth) / 2 + topWidth, glassTop)
+      ..lineTo((w - bottomWidth) / 2 + bottomWidth, glassTop + glassHeight)
+      ..lineTo((w - bottomWidth) / 2, glassTop + glassHeight)
+      ..close();
+
+    if (fillLevel > 0) {
+      final waterBottom = glassTop + glassHeight;
+      final waterTop = glassTop + glassHeight * (1 - fillLevel);
+      final t = (waterTop - glassTop) / glassHeight;
+      final waterTopWidth = topWidth + (bottomWidth - topWidth) * t;
+      final waterPath = Path()
+        ..moveTo((w - waterTopWidth) / 2, waterTop)
+        ..lineTo((w - waterTopWidth) / 2 + waterTopWidth, waterTop)
+        ..lineTo((w - bottomWidth) / 2 + bottomWidth, waterBottom)
+        ..lineTo((w - bottomWidth) / 2, waterBottom)
+        ..close();
+      canvas.drawPath(
+        waterPath,
+        Paint()
+          ..color = isFilled
+              ? const Color(0xFF4FC3F7).withValues(alpha: 0.8)
+              : const Color(0xFF4FC3F7).withValues(alpha: 0.5)
+          ..style = PaintingStyle.fill,
+      );
+    }
+
+    canvas.drawPath(
+      glassPath,
+      Paint()
+        ..color = AppColors.textMain.withValues(alpha: 0.35)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1.5,
+    );
+
+    canvas.drawLine(
+      Offset((w - topWidth) / 2, glassTop),
+      Offset((w - topWidth) / 2 + topWidth, glassTop),
+      Paint()
+        ..color = AppColors.textMain.withValues(alpha: 0.5)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = rimThickness,
+    );
+  }
+
+  @override
+  bool shouldRepaint(_WaterGlassPainter oldDelegate) =>
+      oldDelegate.fillLevel != fillLevel || oldDelegate.isFilled != isFilled;
+}
+
+class _PhysicalTrackingCard extends StatelessWidget {
+  const _PhysicalTrackingCard({
+    required this.logs,
+    required this.isLoading,
+  });
+
+  final List<FitnessProgressModel> logs;
+  final bool isLoading;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.fitness_center, color: AppColors.primary, size: 20),
+              const SizedBox(width: 8),
+              Text(
+                'Seguimiento Físico',
+                style: TextStyle(
+                  color: AppColors.textMain,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const Spacer(),
+              if (isLoading)
+                SizedBox(
+                  width: 14,
+                  height: 14,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: AppColors.primary,
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          if (logs.isEmpty && !isLoading)
+            Text(
+              'Aún no hay registros',
+              style: TextStyle(
+                color: AppColors.textMain.withValues(alpha: 0.45),
+                fontSize: 13,
+              ),
+            )
+          else ...[
+            ...logs.take(3).map((log) {
+              final dateStr =
+                  '${log.loggedAt.day.toString().padLeft(2, '0')}/'
+                  '${log.loggedAt.month.toString().padLeft(2, '0')}';
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 6),
+                child: Row(
+                  children: [
+                    Text(
+                      dateStr,
+                      style: TextStyle(
+                        color: AppColors.textMain.withValues(alpha: 0.5),
+                        fontSize: 12,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    if (log.weight != null)
+                      _StatChip(label: '${log.weight!.toStringAsFixed(1)} kg'),
+                    if (log.bodyFat != null)
+                      _StatChip(
+                          label:
+                              '${log.bodyFat!.toStringAsFixed(1)}% grasa'),
+                    if (log.muscleMass != null)
+                      _StatChip(
+                          label:
+                              '${log.muscleMass!.toStringAsFixed(1)} kg músculo'),
+                  ],
+                ),
+              );
+            }),
+          ],
+          const SizedBox(height: 10),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const AddPhysicalLogScreen(),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.add, size: 18),
+              label: const Text('Añadir registro'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: AppColors.background,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 10),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _StatChip extends StatelessWidget {
+  const _StatChip({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 6),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+        decoration: BoxDecoration(
+          color: AppColors.inputBackground,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            color: AppColors.textMain.withValues(alpha: 0.8),
+            fontSize: 11,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _RecipesCard extends StatelessWidget {
+  const _RecipesCard({
+    required this.recipes,
+    required this.isLoading,
+  });
+
+  final List<RecipeModel> recipes;
+  final bool isLoading;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.menu_book, color: AppColors.primary, size: 20),
+              const SizedBox(width: 8),
+              Text(
+                'Mis Recetas',
+                style: TextStyle(
+                  color: AppColors.textMain,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const Spacer(),
+              if (isLoading)
+                SizedBox(
+                  width: 14,
+                  height: 14,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: AppColors.primary,
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          if (recipes.isEmpty && !isLoading)
+            Text(
+              'Aún no tienes recetas',
+              style: TextStyle(
+                color: AppColors.textMain.withValues(alpha: 0.45),
+                fontSize: 13,
+              ),
+            )
+          else ...[
+            ...recipes.take(3).map((recipe) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 32,
+                      height: 32,
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(
+                        Icons.restaurant,
+                        color: AppColors.primary,
+                        size: 16,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        recipe.name,
+                        style: TextStyle(
+                          color: AppColors.textMain,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    Text(
+                      '${recipe.totalCalories.toInt()} kcal',
+                      style: TextStyle(
+                        color: AppColors.textMain.withValues(alpha: 0.55),
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }),
+          ],
+          const SizedBox(height: 10),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const MyRecipesScreen(),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.arrow_forward, size: 18),
+              label: const Text('Ver todas'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: AppColors.background,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 10),
               ),
             ),
           ),

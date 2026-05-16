@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_card.dart';
 
 class NutritionErrorCard extends StatelessWidget {
   const NutritionErrorCard({
@@ -18,80 +19,59 @@ class NutritionErrorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return AppCard.error(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(28),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(22),
-        decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: BorderRadius.circular(28),
-          border: Border.all(
-            color: AppColors.error.withOpacity(0.35),
-            width: 0.8,
+      borderRadius: 28,
+      padding: const EdgeInsets.all(22),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              const Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Nutrición de hoy',
+                      style: TextStyle(
+                        color: AppColors.textMain,
+                        fontSize: 19,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                    SizedBox(height: 6),
+                    Text(
+                      'Resumen de calorías y macros',
+                      style: TextStyle(
+                        color: AppColors.secondary,
+                        fontSize: 12,
+                        height: 1.3,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Icon(Icons.chevron_right, color: AppColors.secondary),
+            ],
           ),
-        ),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                const Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Nutrición de hoy',
-                        style: TextStyle(
-                          color: AppColors.textMain,
-                          fontSize: 19,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                      SizedBox(height: 6),
-                      Text(
-                        'Resumen de calorías y macros',
-                        style: TextStyle(
-                          color: AppColors.secondary,
-                          fontSize: 12,
-                          height: 1.3,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const Icon(Icons.chevron_right, color: AppColors.secondary),
-              ],
+          const SizedBox(height: 18),
+          const Icon(Icons.error_outline, color: AppColors.error, size: 36),
+          const SizedBox(height: 12),
+          Text(
+            message,
+            style: const TextStyle(
+              color: AppColors.textMain,
+              fontSize: 13,
+              height: 1.4,
             ),
-            const SizedBox(height: 18),
-            const Icon(Icons.error_outline, color: AppColors.error, size: 36),
-            const SizedBox(height: 12),
-            Text(
-              message,
-              style: const TextStyle(
-                color: AppColors.textMain,
-                fontSize: 13,
-                height: 1.4,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 14),
-            ElevatedButton(
-              onPressed: onRetry,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.background,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18),
-                ),
-              ),
-              child: const Text(
-                'Reintentar',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-          ],
-        ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 14),
+          AppCardButton(
+            label: 'Reintentar',
+            onTap: onRetry,
+          ),
+        ],
       ),
     );
   }
@@ -131,117 +111,99 @@ class NutritionOverviewCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final remainingCalories = caloriesGoal - caloriesConsumed;
 
-    return InkWell(
+    return AppCard.primary(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(28),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(22),
-        decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: BorderRadius.circular(28),
-          border: Border.all(
-            color: AppColors.primary.withOpacity(0.22),
-            width: 0.8,
+      borderRadius: 28,
+      padding: const EdgeInsets.all(22),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              const Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Nutrición de hoy',
+                      style: TextStyle(
+                        color: AppColors.textMain,
+                        fontSize: 19,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                    SizedBox(height: 6),
+                    Text(
+                      'Resumen de calorías y macros',
+                      style: TextStyle(
+                        color: AppColors.secondary,
+                        fontSize: 12,
+                        height: 1.3,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Icon(Icons.chevron_right, color: AppColors.secondary),
+            ],
           ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.20),
-              blurRadius: 22,
-              offset: const Offset(0, 12),
-            ),
-          ],
-        ),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                const Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Nutrición de hoy',
-                        style: TextStyle(
-                          color: AppColors.textMain,
-                          fontSize: 19,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                      SizedBox(height: 6),
-                      Text(
-                        'Resumen de calorías y macros',
-                        style: TextStyle(
-                          color: AppColors.secondary,
-                          fontSize: 12,
-                          height: 1.3,
-                        ),
-                      ),
-                    ],
-                  ),
+          const SizedBox(height: 22),
+          Row(
+            children: [
+              CalorieRingChart(
+                progress: caloriesProgress,
+                consumed: caloriesConsumed,
+                goal: caloriesGoal,
+              ),
+              const SizedBox(width: 22),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    NutritionMetric(
+                      label: 'Consumidas',
+                      value: '$caloriesConsumed kcal',
+                      icon: Icons.local_fire_department,
+                    ),
+                    const SizedBox(height: 12),
+                    NutritionMetric(
+                      label: 'Objetivo',
+                      value: '$caloriesGoal kcal',
+                      icon: Icons.flag_outlined,
+                    ),
+                    const SizedBox(height: 12),
+                    NutritionMetric(
+                      label: 'Restantes',
+                      value:
+                          '${remainingCalories.clamp(0, caloriesGoal)} kcal',
+                      icon: Icons.bolt_outlined,
+                    ),
+                  ],
                 ),
-                const Icon(Icons.chevron_right, color: AppColors.secondary),
-              ],
-            ),
-            const SizedBox(height: 22),
-            Row(
-              children: [
-                CalorieRingChart(
-                  progress: caloriesProgress,
-                  consumed: caloriesConsumed,
-                  goal: caloriesGoal,
-                ),
-                const SizedBox(width: 22),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      NutritionMetric(
-                        label: 'Consumidas',
-                        value: '$caloriesConsumed kcal',
-                        icon: Icons.local_fire_department,
-                      ),
-                      const SizedBox(height: 12),
-                      NutritionMetric(
-                        label: 'Objetivo',
-                        value: '$caloriesGoal kcal',
-                        icon: Icons.flag_outlined,
-                      ),
-                      const SizedBox(height: 12),
-                      NutritionMetric(
-                        label: 'Restantes',
-                        value:
-                            '${remainingCalories.clamp(0, caloriesGoal)} kcal',
-                        icon: Icons.bolt_outlined,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 24),
-            MacroProgressBar(
-              label: 'Proteína',
-              consumed: proteinConsumed,
-              goal: proteinGoal,
-              unit: 'g',
-            ),
-            const SizedBox(height: 14),
-            MacroProgressBar(
-              label: 'Carbos',
-              consumed: carbsConsumed,
-              goal: carbsGoal,
-              unit: 'g',
-            ),
-            const SizedBox(height: 14),
-            MacroProgressBar(
-              label: 'Grasas',
-              consumed: fatsConsumed,
-              goal: fatsGoal,
-              unit: 'g',
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+          MacroProgressBar(
+            label: 'Proteína',
+            consumed: proteinConsumed,
+            goal: proteinGoal,
+            unit: 'g',
+          ),
+          const SizedBox(height: 14),
+          MacroProgressBar(
+            label: 'Carbos',
+            consumed: carbsConsumed,
+            goal: carbsGoal,
+            unit: 'g',
+          ),
+          const SizedBox(height: 14),
+          MacroProgressBar(
+            label: 'Grasas',
+            consumed: fatsConsumed,
+            goal: fatsGoal,
+            unit: 'g',
+          ),
+        ],
       ),
     );
   }

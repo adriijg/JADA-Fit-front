@@ -13,10 +13,12 @@ class FoodSearchScreen extends StatefulWidget {
     super.key,
     required this.initialMealType,
     required this.initialDate,
+    this.pickerMode = false,
   });
 
   final MealType initialMealType;
   final DateTime initialDate;
+  final bool pickerMode;
 
   @override
   State<FoodSearchScreen> createState() => _FoodSearchScreenState();
@@ -124,6 +126,11 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
   }
 
   Future<void> _openRegisterMeal(CatalogFoodModel food) async {
+    if (widget.pickerMode) {
+      Navigator.pop(context, food);
+      return;
+    }
+
     final registered = await Navigator.push<bool>(
       context,
       MaterialPageRoute(
@@ -172,7 +179,9 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
           color: AppColors.textMain,
         ),
         title: Text(
-          'Añadir a ${widget.initialMealType.label.toLowerCase()}',
+          widget.pickerMode
+              ? 'Seleccionar alimento'
+              : 'Añadir a ${widget.initialMealType.label.toLowerCase()}',
           style: const TextStyle(
             color: AppColors.textMain,
             fontWeight: FontWeight.w700,

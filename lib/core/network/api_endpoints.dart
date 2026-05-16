@@ -25,7 +25,13 @@ class ApiEndpoints {
 
   static const String nutrition = '${ApiConfig.baseUrl}/nutrition';
   static const String nutritionMeals = '$nutrition/meals';
+  static const String nutritionMealsFromRecipe = '$nutritionMeals/from-recipe';
   static const String nutritionDay = '$nutrition/day';
+  static const String nutritionGoals = '$nutrition/goals';
+  static const String nutritionGoalsRecalculate = '$nutritionGoals/me/recalculate';
+
+  static const String water = '$nutrition/water';
+  static const String waterToday = '$water/today';
 
   static const String social = '${ApiConfig.baseUrl}/social';
   static const String follow = '$social/follow';
@@ -45,6 +51,10 @@ class ApiEndpoints {
   static const String routines = '${ApiConfig.baseUrl}/routines';
 
   static String routineById(int id) => '$routines/$id';
+
+  static const String recipes = '${ApiConfig.baseUrl}/recipes';
+
+  static String recipeById(String id) => '$recipes/$id';
 
   static const String ai = '${ApiConfig.baseUrl}/ai';
   static const String aiChat = '$ai/chat';

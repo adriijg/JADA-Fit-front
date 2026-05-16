@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/constants/app_strings.dart';
+import '../../../../core/widgets/app_card.dart';
 import '../../data/models/routine_model.dart';
 import '../../data/services/routine_service.dart';
 import 'create_routine_screen.dart';
@@ -148,13 +149,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
                     decoration: BoxDecoration(
                       color: AppColors.primary,
                       borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.primary.withOpacity(0.2),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
+
                     ),
                     child: const Icon(Icons.add_rounded, color: Colors.black, size: 24),
                   ),
@@ -180,17 +175,8 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
         ? (_routines.map((e) => e.exercises.length).reduce((a, b) => a + b) / totalRoutines).toStringAsFixed(1)
         : '0';
 
-    return Container(
-      width: double.infinity,
+    return AppCard.elevated(
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: AppColors.divider.withOpacity(0.3),
-          width: 0.7,
-        ),
-      ),
       child: Row(
         children: [
           _buildStatItem('RUTINAS', totalRoutines.toString(), Icons.fitness_center_rounded),
@@ -205,14 +191,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
     return Expanded(
       child: Row(
         children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: AppColors.inputBackground,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(icon, color: AppColors.primary, size: 20),
-          ),
+          AppCardIcon(icon: icon, size: 40, borderRadius: 12, iconSize: 20),
           const SizedBox(width: 12),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -408,179 +387,146 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
 
     return Column(
       children: filtered.map((routine) {
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 20),
-          child: _PremiumRoutineCard(
-            routine: routine,
-            onTap: () => _openDetail(routine),
-          ),
+        return _PremiumRoutineCard(
+          routine: routine,
+          onTap: () => _openDetail(routine),
         );
       }).toList(),
     );
   }
 }
 
-class _PremiumRoutineCard extends StatefulWidget {
+class _PremiumRoutineCard extends StatelessWidget {
   const _PremiumRoutineCard({required this.routine, required this.onTap});
 
   final RoutineModel routine;
   final VoidCallback onTap;
 
   @override
-  State<_PremiumRoutineCard> createState() => _PremiumRoutineCardState();
-}
-
-class _PremiumRoutineCardState extends State<_PremiumRoutineCard> {
-  bool _isPressed = false;
-
-  @override
   Widget build(BuildContext context) {
-    return AnimatedScale(
-      scale: _isPressed ? 0.96 : 1.0,
-      duration: const Duration(milliseconds: 100),
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 16),
-        decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: BorderRadius.circular(32),
-          border: Border.all(
-            color: AppColors.divider.withOpacity(0.1),
-            width: 1.5,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 20,
-              offset: const Offset(0, 10),
-            ),
-          ],
-        ),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: widget.onTap,
-            onTapDown: (_) => setState(() => _isPressed = true),
-            onTapUp: (_) => setState(() => _isPressed = false),
-            onTapCancel: () => setState(() => _isPressed = false),
-            borderRadius: BorderRadius.circular(32),
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: AppCard(
+        borderRadius: 32,
+        borderColor: AppColors.divider.withOpacity(0.1),
+        borderWidth: 1.5,
+        padding: const EdgeInsets.all(24),
+        onTap: onTap,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [AppColors.tertiary, AppColors.secondary],
+                    ),
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                  child: const Icon(
+                    Icons.bolt_rounded,
+                    color: Colors.white,
+                    size: 28,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Text(
+                        routine.name,
+                        style: const TextStyle(
+                          color: AppColors.textMain,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
                       Container(
-                        width: 56,
-                        height: 56,
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                         decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [AppColors.tertiary, AppColors.secondary],
+                          color: AppColors.primary.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          routine.targetGoal.toUpperCase(),
+                          style: const TextStyle(
+                            color: AppColors.primary,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w900,
                           ),
-                          borderRadius: BorderRadius.circular(18),
                         ),
-                        child: const Icon(
-                          Icons.bolt_rounded,
-                          color: Colors.white,
-                          size: 28,
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              widget.routine.name,
-                              style: const TextStyle(
-                                color: AppColors.textMain,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w900,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: AppColors.primary.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Text(
-                                widget.routine.targetGoal.toUpperCase(),
-                                style: const TextStyle(
-                                  color: AppColors.primary,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w900,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Icon(
-                        Icons.chevron_right_rounded,
-                        color: AppColors.divider,
-                        size: 24,
                       ),
                     ],
                   ),
-                  if (widget.routine.description.isNotEmpty) ...[
-                    const SizedBox(height: 16),
-                    Text(
-                      widget.routine.description,
-                      maxLines: 2,
+                ),
+                const Icon(
+                  Icons.chevron_right_rounded,
+                  color: AppColors.divider,
+                  size: 24,
+                ),
+              ],
+            ),
+            if (routine.description.isNotEmpty) ...[
+              const SizedBox(height: 16),
+              Text(
+                routine.description,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: AppColors.textMain.withOpacity(0.5),
+                  fontSize: 13,
+                  height: 1.4,
+                ),
+              ),
+            ],
+            const SizedBox(height: 16),
+            const Divider(height: 1, color: AppColors.divider),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Icon(
+                  Icons.layers_outlined,
+                  color: AppColors.textMain.withOpacity(0.3),
+                  size: 14,
+                ),
+                const SizedBox(width: 4),
+                Text(
+                  '${routine.exercises.length} ejercicios',
+                  style: TextStyle(
+                    color: AppColors.textMain.withOpacity(0.5),
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                if (routine.exercises.isNotEmpty) ...[
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Text(
+                      routine.exercises.map((e) => e.name).join(', '),
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        color: AppColors.textMain.withOpacity(0.5),
-                        fontSize: 13,
-                        height: 1.4,
+                        color: AppColors.textMain.withOpacity(0.3),
+                        fontSize: 12,
+                        fontStyle: FontStyle.italic,
                       ),
                     ),
-                  ],
-                  const SizedBox(height: 16),
-                  const Divider(height: 1, color: AppColors.divider),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.layers_outlined,
-                        color: AppColors.textMain.withOpacity(0.3),
-                        size: 14,
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        '${widget.routine.exercises.length} ejercicios',
-                        style: TextStyle(
-                          color: AppColors.textMain.withOpacity(0.5),
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      if (widget.routine.exercises.isNotEmpty) ...[
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: Text(
-                            widget.routine.exercises.map((e) => e.name).join(', '),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: AppColors.textMain.withOpacity(0.3),
-                              fontSize: 12,
-                              fontStyle: FontStyle.italic,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ],
                   ),
                 ],
-              ),
+              ],
             ),
-          ),
+          ],
         ),
       ),
     );
   }
+
+
 }

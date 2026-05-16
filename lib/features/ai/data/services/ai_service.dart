@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import '../../../../core/network/api_endpoints.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/storage/secure_storage_service.dart';
+import '../models/chat_message_model.dart';
 
 class AiService {
   AiService({
@@ -16,7 +17,10 @@ class AiService {
   final http.Client _client;
   final SecureStorageService _storageService;
 
-  Future<String> chat(String message) async {
+  Future<String> chat(
+    String message,
+    List<ChatMessageModel> history,
+  ) async {
     final token = await _storageService.getToken();
 
     final response = await _client.post(
@@ -25,37 +29,20 @@ class AiService {
         'Content-Type': 'application/json',
         if (token != null) 'Authorization': 'Bearer $token',
       },
-      body: jsonEncode({'message': message}),
+      body: jsonEncode({
+        'message': message,
+        'history': history.map((m) => m.toJson()).toList(),
+      }),
     );
 
     if (response.statusCode == 200) {
-      return _extractText(response.body);
+      return response.body;
     }
 
     throw ApiException(
       _parseErrorMessage(response.body),
       statusCode: response.statusCode,
     );
-  }
-
-  String _extractText(String body) {
-    try {
-      final decoded = jsonDecode(body);
-      if (decoded is Map<String, dynamic>) {
-        final candidates = decoded['candidates'] as List?;
-        if (candidates != null && candidates.isNotEmpty) {
-          final content = candidates[0]['content'] as Map?;
-          if (content != null) {
-            final parts = content['parts'] as List?;
-            if (parts != null && parts.isNotEmpty) {
-              final text = parts[0]['text'] as String?;
-              if (text != null) return text;
-            }
-          }
-        }
-      }
-    } catch (_) {}
-    return body;
   }
 
   String _parseErrorMessage(String body) {

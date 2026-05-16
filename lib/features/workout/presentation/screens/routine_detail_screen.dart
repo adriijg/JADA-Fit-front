@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_card.dart';
 import '../../data/models/routine_model.dart';
 import '../../data/services/routine_service.dart';
 
@@ -311,14 +312,11 @@ class _PremiumExerciseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: AppColors.divider.withOpacity(0.3),
-        ),
-      ),
+    return AppCard(
+      borderRadius: 24,
+      padding: EdgeInsets.zero,
+      borderColor: AppColors.divider.withOpacity(0.3),
+      borderWidth: 1,
       child: IntrinsicHeight(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,

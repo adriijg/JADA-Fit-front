@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_card.dart';
 import '../../data/models/fitness_progress_model.dart';
 import 'add_physical_log_screen.dart';
 
@@ -247,24 +248,9 @@ class _MonthlyCalendarCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
+    return AppCard.elevated(
+      borderRadius: 26,
       padding: const EdgeInsets.all(22),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(26),
-        border: Border.all(
-          color: AppColors.divider.withOpacity(0.4),
-          width: 0.7,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            blurRadius: 22,
-            offset: const Offset(0, 12),
-          ),
-        ],
-      ),
       child: Column(
         children: [
           Row(
@@ -445,45 +431,18 @@ class _MonthlySelectedDayCard extends StatelessWidget {
     final sortedRecords = [...records]
       ..sort((a, b) => b.loggedAt.compareTo(a.loggedAt));
 
-    return Container(
-      width: double.infinity,
+    return AppCard.elevated(
+      borderRadius: 28,
       padding: const EdgeInsets.all(22),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(28),
-        border: Border.all(
-          color: AppColors.divider.withOpacity(0.4),
-          width: 0.7,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.18),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Container(
-                width: 46,
-                height: 46,
-                decoration: BoxDecoration(
-                  color: AppColors.inputBackground,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: AppColors.primary.withOpacity(0.35),
-                    width: 0.8,
-                  ),
-                ),
-                child: const Icon(
-                  Icons.event_available,
-                  color: AppColors.primary,
-                  size: 24,
-                ),
+              const AppCardIcon(
+                icon: Icons.event_available,
+                size: 46,
+                borderRadius: 16,
               ),
               const SizedBox(width: 14),
               Expanded(
@@ -571,17 +530,9 @@ class _MonthlyRecordCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
+    return AppCard.primary(
+      borderRadius: 22,
       padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: AppColors.inputBackground,
-        borderRadius: BorderRadius.circular(22),
-        border: Border.all(
-          color: AppColors.primary.withOpacity(0.22),
-          width: 0.8,
-        ),
-      ),
       child: Column(
         children: [
           Row(
@@ -748,17 +699,9 @@ class _NoDaySelectedCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
+    return AppCard.elevated(
+      borderRadius: 24,
       padding: const EdgeInsets.all(22),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: AppColors.divider.withOpacity(0.4),
-          width: 0.7,
-        ),
-      ),
       child: Column(
         children: [
           const Icon(

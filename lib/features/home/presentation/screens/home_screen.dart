@@ -7,16 +7,19 @@ import '../../../../core/widgets/app_bottom_navigation_bar.dart';
 import '../../../../core/widgets/app_header.dart';
 import '../../../ai/presentation/providers/ai_provider.dart';
 import '../../../ai/presentation/screens/ai_screen.dart';
+import '../../../fitness_profile/data/models/fitness_progress_model.dart';
+import '../../../fitness_profile/data/services/fitness_progress_service.dart';
 import '../../../fitness_profile/presentation/screens/fitness_profile_screen.dart';
 import '../../../nutrition/data/models/nutrition_day_summary_model.dart';
 import '../../../nutrition/data/services/nutrition_meal_service.dart';
 import '../../../nutrition/presentation/screens/nutrition_screen.dart';
 import '../../../profile/presentation/screens/profile_screen.dart';
 import '../../../social/presentation/screens/social_screen.dart';
+import '../../../workout/data/models/routine_model.dart';
+import '../../../workout/data/services/routine_service.dart';
 import '../../../workout/presentation/screens/routines_screen.dart';
 import '../widgets/ai_coach_card.dart';
 import '../widgets/dashboard_cards.dart';
-import '../widgets/greeting_card.dart';
 import '../widgets/nutrition_overview_card.dart';
 import '../widgets/quick_actions_card.dart';
 import '../widgets/social_summary_card.dart';
@@ -29,6 +32,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final GlobalKey<_HomeDashboardSectionState> _dashboardKey = GlobalKey();
   AppBottomNavigationItem _selectedItem = AppBottomNavigationItem.home;
 
   @override
@@ -50,7 +54,9 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (_) => const FitnessProfileScreen()),
-    );
+    ).then((_) {
+      _dashboardKey.currentState?.refreshNutrition();
+    });
   }
 
   void _selectNavigationItem(AppBottomNavigationItem item) {
@@ -62,33 +68,46 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildSection() {
     switch (_selectedItem) {
       case AppBottomNavigationItem.home:
-        return _HomeDashboardSection(
-          onOpenFitnessProfile: _openFitnessProfile,
-          onOpenNutrition: () {
-            _selectNavigationItem(AppBottomNavigationItem.nutrition);
-          },
-          onOpenAi: () {
-            _selectNavigationItem(AppBottomNavigationItem.ai);
-          },
-          onOpenWorkout: () {
-            _selectNavigationItem(AppBottomNavigationItem.routines);
-          },
-          onOpenSocial: () {
-            _selectNavigationItem(AppBottomNavigationItem.social);
-          },
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          child: _HomeDashboardSection(
+            key: _dashboardKey,
+            onOpenFitnessProfile: _openFitnessProfile,
+            onOpenNutrition: () {
+              _selectNavigationItem(AppBottomNavigationItem.nutrition);
+            },
+            onOpenAi: () {
+              _selectNavigationItem(AppBottomNavigationItem.ai);
+            },
+            onOpenWorkout: () {
+              _selectNavigationItem(AppBottomNavigationItem.routines);
+            },
+            onOpenSocial: () {
+              _selectNavigationItem(AppBottomNavigationItem.social);
+            },
+          ),
         );
 
       case AppBottomNavigationItem.nutrition:
-        return const NutritionScreen();
+        return const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          child: NutritionScreen(),
+        );
 
       case AppBottomNavigationItem.ai:
         return const AiScreen();
 
       case AppBottomNavigationItem.routines:
-        return const RoutinesScreen();
+        return const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          child: RoutinesScreen(),
+        );
 
       case AppBottomNavigationItem.social:
-        return const SocialScreen();
+        return const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          child: SocialScreen(),
+        );
     }
   }
 
@@ -100,10 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
         preferredSize: const Size.fromHeight(72),
         child: AppHeader(onProfileTap: _openProfile),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        child: _buildSection(),
-      ),
+      body: _buildSection(),
       bottomNavigationBar: AppBottomNavigationBar(
         selectedItem: _selectedItem,
         onItemSelected: _selectNavigationItem,
@@ -114,6 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
 class _HomeDashboardSection extends StatefulWidget {
   const _HomeDashboardSection({
+    super.key,
     required this.onOpenFitnessProfile,
     required this.onOpenNutrition,
     required this.onOpenAi,
@@ -133,15 +150,44 @@ class _HomeDashboardSection extends StatefulWidget {
 
 class _HomeDashboardSectionState extends State<_HomeDashboardSection> {
   final NutritionMealService _nutritionMealService = NutritionMealService();
+  final FitnessProgressService _fitnessProgressService = FitnessProgressService();
+  final RoutineService _routineService = RoutineService();
 
   NutritionDaySummaryModel? _daySummary;
   bool _isLoading = true;
   String? _errorMessage;
 
+  FitnessProgressModel? _latestProgress;
+  FitnessProgressModel? _firstProgress;
+  List<RoutineModel> _routines = [];
+
   @override
   void initState() {
     super.initState();
     _loadDaySummary();
+    _loadSecondaryData();
+  }
+
+  void refreshNutrition() {
+    _loadDaySummary();
+  }
+
+  Future<void> _loadSecondaryData() async {
+    try {
+      final progress = await _fitnessProgressService.getMyFitnessProgress();
+      if (mounted) {
+        setState(() {
+          _latestProgress = progress.isNotEmpty ? progress.last : null;
+          _firstProgress = progress.isNotEmpty ? progress.first : null;
+        });
+      }
+    } catch (_) {}
+    try {
+      final routines = await _routineService.getRoutines();
+      if (mounted) {
+        setState(() => _routines = routines);
+      }
+    } catch (_) {}
   }
 
   Future<void> _loadDaySummary() async {
@@ -202,6 +248,11 @@ class _HomeDashboardSectionState extends State<_HomeDashboardSection> {
         ? 0.0
         : (caloriesConsumed / caloriesGoal).clamp(0.0, 1.0);
 
+    final currentRoutine = _routines.isNotEmpty ? _routines.first : null;
+    final weightDelta = _latestProgress != null && _firstProgress != null
+        ? _latestProgress!.weight! - _firstProgress!.weight!
+        : null;
+
     return RefreshIndicator(
       onRefresh: _loadDaySummary,
       color: AppColors.primary,
@@ -211,8 +262,6 @@ class _HomeDashboardSectionState extends State<_HomeDashboardSection> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const GreetingCard(),
-            const SizedBox(height: 18),
             AiCoachCard(onTap: widget.onOpenAi),
             const SizedBox(height: 18),
             if (_isLoading)
@@ -246,10 +295,20 @@ class _HomeDashboardSectionState extends State<_HomeDashboardSection> {
             const SizedBox(height: 18),
             Row(
               children: [
-                Expanded(child: WorkoutSummaryCard(onTap: widget.onOpenWorkout)),
+                Expanded(
+                  child: WorkoutSummaryCard(
+                    onTap: widget.onOpenWorkout,
+                    workoutName: currentRoutine?.name,
+                    pendingExercises: currentRoutine?.exercises.length,
+                  ),
+                ),
                 const SizedBox(width: 14),
                 Expanded(
-                  child: PhysicalProgressCard(onTap: widget.onOpenFitnessProfile),
+                  child: PhysicalProgressCard(
+                    onTap: widget.onOpenFitnessProfile,
+                    currentWeight: _latestProgress?.weight,
+                    weightDelta: weightDelta,
+                  ),
                 ),
               ],
             ),
