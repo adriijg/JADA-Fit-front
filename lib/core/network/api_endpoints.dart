@@ -30,6 +30,11 @@ class ApiEndpoints {
   static const String follow = '$social/follow';
   static const String unfollow = '$social/unfollow';
 
+  static const String challenges = '${ApiConfig.baseUrl}/challenges';
+  static const String myChallenges = '$challenges/my';
+  static const String exerciseRecords = '$challenges/records';
+  static const String myExerciseRecords = '$exerciseRecords/my';
+
   static const String routines = '${ApiConfig.baseUrl}/routines';
 
   static String routineById(int id) => '$routines/$id';

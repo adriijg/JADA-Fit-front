@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../data/models/user_profile.dart';
 import '../../data/services/social_service.dart';
+import '../../data/services/challenge_service.dart';
 
 class UserProfileScreen extends StatefulWidget {
   final String userId;
@@ -15,6 +16,7 @@ class UserProfileScreen extends StatefulWidget {
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
   final SocialService _socialService = SocialService();
+  final ChallengeService _challengeService = ChallengeService();
   UserProfile? _profile;
   bool _isLoading = true;
   String? _error;
@@ -179,6 +181,22 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     ),
             ),
           ),
+          if (_profile!.isFollowing) ...[
+            const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: OutlinedButton.icon(
+                onPressed: _showChallengeDialog,
+                icon: const Icon(Icons.emoji_events_outlined, color: AppColors.primary),
+                label: const Text('¡Desafiar a un pique!', style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold)),
+                style: OutlinedButton.styleFrom(
+                  side: const BorderSide(color: AppColors.primary),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+              ),
+            ),
+          ],
           const SizedBox(height: 32),
           if (_profile!.shareProgress)
             Container(
@@ -240,6 +258,68 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           style: const TextStyle(color: AppColors.secondary, fontSize: 14),
         ),
       ],
+    );
+  }
+
+  void _showChallengeDialog() {
+    final TextEditingController exerciseController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: AppColors.surface,
+        title: Text('Desafiar a ${_profile!.username}', style: const TextStyle(color: AppColors.textMain)),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              '¿En qué ejercicio quieres competir?',
+              style: TextStyle(color: AppColors.secondary, fontSize: 14),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: exerciseController,
+              autofocus: true,
+              decoration: const InputDecoration(
+                hintText: 'Ej: Press Banca, Sentadilla...',
+                hintStyle: TextStyle(color: AppColors.secondary),
+                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.divider)),
+                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.primary)),
+              ),
+              style: const TextStyle(color: AppColors.textMain),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancelar', style: TextStyle(color: AppColors.secondary)),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              final exercise = exerciseController.text;
+              if (exercise.isNotEmpty) {
+                try {
+                  await _challengeService.createChallenge(widget.userId, exercise);
+                  if (mounted) {
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('¡Desafío enviado con éxito!')),
+                    );
+                  }
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Error: $e')),
+                  );
+                }
+              }
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
+            child: const Text('Enviar Desafío'),
+          ),
+        ],
+      ),
     );
   }
 }
