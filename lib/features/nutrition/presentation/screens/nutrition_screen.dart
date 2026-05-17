@@ -13,10 +13,13 @@ import '../../data/models/water_log_model.dart';
 import '../../data/services/water_log_service.dart';
 import '../../data/models/recipe_model.dart';
 import '../../data/services/recipe_service.dart';
-import '../../../../fitness_profile/data/models/fitness_progress_model.dart';
-import '../../../../fitness_profile/data/services/fitness_progress_service.dart';
-import '../../../../fitness_profile/presentation/screens/add_physical_log_screen.dart';
+import '../../../../features/fitness_profile/data/models/fitness_progress_model.dart';
+import '../../../../features/fitness_profile/data/services/fitness_progress_service.dart';
+import '../../../../features/fitness_profile/presentation/screens/add_physical_log_screen.dart';
+import '../../../../features/fitness_profile/presentation/screens/fitness_progress_screen.dart';
 import 'my_recipes_screen.dart';
+import 'create_recipe_screen.dart';
+
 class NutritionScreen extends StatefulWidget {
   const NutritionScreen({super.key});
 
@@ -35,6 +38,10 @@ class _NutritionScreenState extends State<NutritionScreen> {
   final RecipeService _recipeService = RecipeService();
   List<RecipeModel> _userRecipes = [];
   bool _isRecipesLoading = false;
+  bool _isLoading = false;
+  String? _errorMessage;
+  NutritionDaySummaryModel? _daySummary;
+  late DateTime _selectedDate;
 
   @override
   void initState() {
@@ -42,7 +49,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
 
     final now = DateTime.now();
 
-    selectedDate = DateTime(
+    _selectedDate = DateTime(
       now.year,
       now.month,
       now.day,
@@ -57,35 +64,35 @@ class _NutritionScreenState extends State<NutritionScreen> {
   Future<void> _loadDaySummary() async {
     try {
       setState(() {
-        isLoading = true;
-        errorMessage = null;
+        _isLoading = true;
+        _errorMessage = null;
       });
 
       final loadedSummary = await _nutritionMealService.getDaySummary(
-        date: selectedDate,
+        date: _selectedDate,
       );
 
       if (!mounted) return;
 
       setState(() {
-        daySummary = loadedSummary;
+        _daySummary = loadedSummary;
       });
     } on ApiException catch (error) {
       if (!mounted) return;
 
       setState(() {
-        errorMessage = error.message;
+        _errorMessage = error.message;
       });
     } catch (_) {
       if (!mounted) return;
 
       setState(() {
-        errorMessage = 'No se pudo cargar el resumen nutricional';
+        _errorMessage = 'No se pudo cargar el resumen nutricional';
       });
     } finally {
       if (mounted) {
         setState(() {
-          isLoading = false;
+          _isLoading = false;
         });
       }
     }
@@ -115,9 +122,9 @@ class _NutritionScreenState extends State<NutritionScreen> {
           content: Text('No se pudo eliminar la comida'),
           backgroundColor: AppColors.surface,
         ),
-      );
-    }
+    );
   }
+}
 
   Future<void> _openFoodSearch(MealType mealType) async {
     final registered = await Navigator.push<bool>(
@@ -125,7 +132,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
       MaterialPageRoute(
         builder: (_) => FoodSearchScreen(
           initialMealType: mealType,
-          initialDate: selectedDate,
+          initialDate: _selectedDate,
         ),
       ),
     );
@@ -137,7 +144,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
 
   void _selectDate(DateTime date) {
     setState(() {
-      selectedDate = DateTime(
+      _selectedDate = DateTime(
         date.year,
         date.month,
         date.day,
@@ -148,8 +155,77 @@ class _NutritionScreenState extends State<NutritionScreen> {
     _loadWaterToday();
   }
 
+  void _showAddFoodMenu() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AppColors.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (_) => Padding(
+        padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                width: 40, height: 4,
+                decoration: BoxDecoration(
+                  color: AppColors.divider,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'AÑADIR ALIMENTO A...',
+              style: TextStyle(
+                color: AppColors.secondary,
+                fontSize: 12, fontWeight: FontWeight.w800, letterSpacing: 1.2,
+              ),
+            ),
+            const SizedBox(height: 16),
+            _MealOptionRow(
+              icon: Icons.free_breakfast,
+              label: MealType.breakfast.label,
+              onTap: () {
+                Navigator.pop(context);
+                _openFoodSearch(MealType.breakfast);
+              },
+            ),
+            _MealOptionRow(
+              icon: Icons.lunch_dining,
+              label: MealType.lunch.label,
+              onTap: () {
+                Navigator.pop(context);
+                _openFoodSearch(MealType.lunch);
+              },
+            ),
+            _MealOptionRow(
+              icon: Icons.dinner_dining,
+              label: MealType.dinner.label,
+              onTap: () {
+                Navigator.pop(context);
+                _openFoodSearch(MealType.dinner);
+              },
+            ),
+            _MealOptionRow(
+              icon: Icons.cookie_outlined,
+              label: MealType.snack.label,
+              onTap: () {
+                Navigator.pop(context);
+                _openFoodSearch(MealType.snack);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   List<NutritionMealModel> _mealsByType(MealType mealType) {
-    final summary = daySummary;
+    final summary = _daySummary;
 
     if (summary == null) return const [];
 
@@ -258,7 +334,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
     }
 
     if (target == tomorrow) {
-      return 'Ma├▒ana';
+      return 'Mañana';
     }
 
     final day = date.day.toString().padLeft(2, '0');
@@ -269,111 +345,146 @@ class _NutritionScreenState extends State<NutritionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final summary = daySummary;
+    final summary = _daySummary;
 
-    return RefreshIndicator(
-      onRefresh: _loadDaySummary,
-      color: AppColors.primary,
-      backgroundColor: AppColors.surface,
-      child: SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.only(
-          bottom: 24,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              AppStrings.nutritionTitle,
-              style: TextStyle(
-                color: AppColors.textMain,
-                fontSize: 24,
-                fontWeight: FontWeight.w800,
-              ),
+    return Stack(
+      children: [
+        RefreshIndicator(
+          onRefresh: _loadDaySummary,
+          color: AppColors.primary,
+          backgroundColor: AppColors.surface,
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.only(
+              bottom: 80,
             ),
-            const SizedBox(height: 6),
-            Text(
-              _formatDayTitle(selectedDate),
-              style: const TextStyle(
-                color: AppColors.secondary,
-                fontSize: 14,
-                height: 1.5,
-              ),
-            ),
-            const SizedBox(height: 20),
-            _WeekCalendar(
-              selectedDate: selectedDate,
-              onDateSelected: _selectDate,
-            ),
-            const SizedBox(height: 20),
-            if (isLoading)
-              const SizedBox(
-                height: 420,
-                child: Center(
-                  child: CircularProgressIndicator(
-                    color: AppColors.primary,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  AppStrings.nutritionTitle,
+                  style: TextStyle(
+                    color: AppColors.textMain,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w800,
                   ),
                 ),
-              )
-            else if (errorMessage != null)
-              _ErrorCard(
-                message: errorMessage!,
-                onRetry: _loadDaySummary,
-              )
-            else if (summary != null) ...[
-              _DailySummaryCard(
-                summary: summary,
-              ),
-              const SizedBox(height: 18),
-              _MealSectionCard(
-                mealType: MealType.breakfast,
-                meals: _mealsByType(MealType.breakfast),
-                onAddFood: () => _openFoodSearch(MealType.breakfast),
-                onDeleteMeal: _deleteMeal,
-              ),
-              const SizedBox(height: 14),
-              _MealSectionCard(
-                mealType: MealType.lunch,
-                meals: _mealsByType(MealType.lunch),
-                onAddFood: () => _openFoodSearch(MealType.lunch),
-                onDeleteMeal: _deleteMeal,
-              ),
-              const SizedBox(height: 14),
-              _MealSectionCard(
-                mealType: MealType.dinner,
-                meals: _mealsByType(MealType.dinner),
-                onAddFood: () => _openFoodSearch(MealType.dinner),
-                onDeleteMeal: _deleteMeal,
-              ),
-              const SizedBox(height: 14),
-              _MealSectionCard(
-                mealType: MealType.snack,
-                meals: _mealsByType(MealType.snack),
-                onAddFood: () => _openFoodSearch(MealType.snack),
-                onDeleteMeal: _deleteMeal,
-              ),
-              const SizedBox(height: 20),
-              _WaterTrackerCard(
-                summary: _waterSummary,
-                isLoading: _isWaterLoading,
-                onAddWater: _addWater,
-                onDeleteWater: _deleteWaterAmount,
-                onDeleteLog: _deleteWaterLog,
-              ),
-              const SizedBox(height: 20),
-              _PhysicalTrackingCard(
-                logs: _fitnessLogs,
-                isLoading: _isFitnessLoading,
-              ),
-              const SizedBox(height: 20),
-              _RecipesCard(
-                recipes: _userRecipes,
-                isLoading: _isRecipesLoading,
-              ),
-            ],
-          ],
+                const SizedBox(height: 6),
+                Text(
+                  _formatDayTitle(_selectedDate),
+                  style: const TextStyle(
+                    color: AppColors.secondary,
+                    fontSize: 14,
+                    height: 1.5,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                _WeekCalendar(
+                  selectedDate: _selectedDate,
+                  onDateSelected: _selectDate,
+                ),
+                const SizedBox(height: 20),
+                if (_isLoading)
+                  const SizedBox(
+                    height: 420,
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  )
+                else if (_errorMessage != null)
+                  _ErrorCard(
+                    message: _errorMessage!,
+                    onRetry: _loadDaySummary,
+                  )
+                else if (summary != null) ...[
+                  _DailySummaryCard(
+                    summary: summary,
+                  ),
+                  const SizedBox(height: 18),
+                  _MealSectionCard(
+                    mealType: MealType.breakfast,
+                    meals: _mealsByType(MealType.breakfast),
+                    onDeleteMeal: _deleteMeal,
+                  ),
+                  const SizedBox(height: 14),
+                  _MealSectionCard(
+                    mealType: MealType.lunch,
+                    meals: _mealsByType(MealType.lunch),
+                    onDeleteMeal: _deleteMeal,
+                  ),
+                  const SizedBox(height: 14),
+                  _MealSectionCard(
+                    mealType: MealType.dinner,
+                    meals: _mealsByType(MealType.dinner),
+                    onDeleteMeal: _deleteMeal,
+                  ),
+                  const SizedBox(height: 14),
+                  _MealSectionCard(
+                    mealType: MealType.snack,
+                    meals: _mealsByType(MealType.snack),
+                    onDeleteMeal: _deleteMeal,
+                  ),
+                  const SizedBox(height: 20),
+                  _WaterTrackerCard(
+                    summary: _waterSummary,
+                    isLoading: _isWaterLoading,
+                    onAddWater: _addWater,
+                    onDeleteWater: _deleteWaterAmount,
+                    onDeleteLog: _deleteWaterLog,
+                  ),
+                  const SizedBox(height: 20),
+                  _PhysicalTrackingCard(
+                    logs: _fitnessLogs,
+                    isLoading: _isFitnessLoading,
+                  ),
+                  const SizedBox(height: 20),
+                  _RecipesCard(
+                    recipes: _userRecipes,
+                    isLoading: _isRecipesLoading,
+                    onCreateRecipe: () async {
+                      final created = await Navigator.push<bool>(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const CreateRecipeScreen(),
+                        ),
+                      );
+                      if (created == true) {
+                        _loadUserRecipes();
+                      }
+                    },
+                    onViewAll: () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const MyRecipesScreen(),
+                        ),
+                      );
+                      if (mounted) {
+                        _loadUserRecipes();
+                      }
+                    },
+                  ),
+                ],
+              ],
+            ),
+          ),
         ),
-      ),
+        Positioned(
+          right: 16,
+          bottom: 16,
+          child: FloatingActionButton(
+            onPressed: _showAddFoodMenu,
+            backgroundColor: AppColors.primary,
+            foregroundColor: AppColors.background,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: const Icon(Icons.add, size: 28),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -607,7 +718,7 @@ class _DailySummaryCard extends StatelessWidget {
             child: Column(
               children: [
                 _MacroProgressRow(
-                  label: 'Prote├¡nas',
+                  label: 'Proteínas',
                   current: summary.totalProtein,
                   target: summary.proteinTarget,
                   unit: 'g',
@@ -713,13 +824,11 @@ class _MealSectionCard extends StatelessWidget {
   const _MealSectionCard({
     required this.mealType,
     required this.meals,
-    required this.onAddFood,
     required this.onDeleteMeal,
   });
 
   final MealType mealType;
   final List<NutritionMealModel> meals;
-  final VoidCallback onAddFood;
   final ValueChanged<NutritionMealModel> onDeleteMeal;
 
   double get totalCalories {
@@ -906,7 +1015,7 @@ class _MealSectionCard extends StatelessWidget {
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(
-                      'A├▒ade alimentos para calcular calor├¡as y macros.',
+                      'Añade alimentos para calcular calorías y macros.',
                       style: TextStyle(
                         color: AppColors.textMain.withOpacity(0.55),
                         fontSize: 13,
@@ -918,34 +1027,6 @@ class _MealSectionCard extends StatelessWidget {
               ),
             ),
           ],
-          const SizedBox(height: 14),
-          SizedBox(
-            width: double.infinity,
-            height: 50,
-            child: ElevatedButton.icon(
-              onPressed: onAddFood,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.background,
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-              icon: const Icon(
-                Icons.add,
-                size: 20,
-              ),
-              label: const Text(
-                'A├æADIR ALIMENTO',
-                style: TextStyle(
-                  fontWeight: FontWeight.w900,
-                  fontSize: 13,
-                  letterSpacing: 0.8,
-                ),
-              ),
-            ),
-          ),
         ],
       ),
     );
@@ -969,7 +1050,7 @@ class _MealMacroSummary extends StatelessWidget {
       children: [
         Expanded(
           child: _MealMacroChip(
-            label: 'Prote├¡na',
+            label: 'Proteína',
             value: protein,
           ),
         ),
@@ -1573,27 +1654,54 @@ class _PhysicalTrackingCard extends StatelessWidget {
             }),
           ],
           const SizedBox(height: 10),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton.icon(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => const AddPhysicalLogScreen(),
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const AddPhysicalLogScreen(),
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.add, size: 18),
+                  label: const Text('Añadir registro'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: AppColors.background,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
                   ),
-                );
-              },
-              icon: const Icon(Icons.add, size: 18),
-              label: const Text('Añadir registro'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.background,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18),
                 ),
-                padding: const EdgeInsets.symmetric(vertical: 10),
               ),
-            ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const FitnessProgressScreen(),
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.show_chart, size: 18),
+                  label: const Text('Ver resumen'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: AppColors.primary,
+                    side: BorderSide(
+                      color: AppColors.primary.withOpacity(0.4),
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -1632,10 +1740,14 @@ class _RecipesCard extends StatelessWidget {
   const _RecipesCard({
     required this.recipes,
     required this.isLoading,
+    required this.onCreateRecipe,
+    required this.onViewAll,
   });
 
   final List<RecipeModel> recipes;
   final bool isLoading;
+  final VoidCallback onCreateRecipe;
+  final VoidCallback onViewAll;
 
   @override
   Widget build(BuildContext context) {
@@ -1726,29 +1838,94 @@ class _RecipesCard extends StatelessWidget {
             }),
           ],
           const SizedBox(height: 10),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton.icon(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => const MyRecipesScreen(),
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton.icon(
+                  onPressed: onCreateRecipe,
+                  icon: const Icon(Icons.add, size: 18),
+                  label: const Text('Crear receta'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: AppColors.background,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
                   ),
-                );
-              },
-              icon: const Icon(Icons.arrow_forward, size: 18),
-              label: const Text('Ver todas'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.background,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18),
                 ),
-                padding: const EdgeInsets.symmetric(vertical: 10),
               ),
-            ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: onViewAll,
+                  icon: const Icon(Icons.arrow_forward, size: 18),
+                  label: const Text('Ver todas'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: AppColors.primary,
+                    side: BorderSide(
+                      color: AppColors.primary.withOpacity(0.4),
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _MealOptionRow extends StatelessWidget {
+  const _MealOptionRow({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          decoration: BoxDecoration(
+            color: AppColors.inputBackground,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: AppColors.inputBorder,
+              width: 0.7,
+            ),
+          ),
+          child: Row(
+            children: [
+              Icon(icon, color: AppColors.primary, size: 22),
+              const SizedBox(width: 14),
+              Text(
+                label,
+                style: const TextStyle(
+                  color: AppColors.textMain,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const Spacer(),
+              const Icon(Icons.chevron_right, color: AppColors.secondary, size: 20),
+            ],
+          ),
+        ),
       ),
     );
   }
