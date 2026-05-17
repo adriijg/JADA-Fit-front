@@ -8,6 +8,7 @@ class ApiEndpoints {
   static const String me = '$users/me';
 
   static const String mePrivacy = '$me/privacy';
+  static const String meProfile = '$me/profile';
 
   static const String onboarding = '${ApiConfig.baseUrl}/onboarding';
   static const String completeOnboarding = '$onboarding/complete';
@@ -24,7 +25,13 @@ class ApiEndpoints {
 
   static const String nutrition = '${ApiConfig.baseUrl}/nutrition';
   static const String nutritionMeals = '$nutrition/meals';
+  static const String nutritionMealsFromRecipe = '$nutritionMeals/from-recipe';
   static const String nutritionDay = '$nutrition/day';
+  static const String nutritionGoals = '$nutrition/goals';
+  static const String nutritionGoalsRecalculate = '$nutritionGoals/me/recalculate';
+
+  static const String water = '$nutrition/water';
+  static const String waterToday = '$water/today';
 
   static const String social = '${ApiConfig.baseUrl}/social';
   static const String follow = '$social/follow';
@@ -35,9 +42,27 @@ class ApiEndpoints {
   static const String exerciseRecords = '$challenges/records';
   static const String myExerciseRecords = '$exerciseRecords/my';
 
+  // Posts
+  static const String posts = '$social/posts';
+  static const String postsFeed = '$posts/feed';
+  static const String postsExplore = '$posts/explore';
+
+  static String postsByUser(String userId) => '$posts/user/$userId';
+
+  // Stories
+  static const String stories = '$social/stories';
+  static const String storiesFeed = '$stories/feed';
+
   static const String routines = '${ApiConfig.baseUrl}/routines';
 
   static String routineById(int id) => '$routines/$id';
+
+  static const String recipes = '${ApiConfig.baseUrl}/recipes';
+
+  static String recipeById(String id) => '$recipes/$id';
+
+  static const String ai = '${ApiConfig.baseUrl}/ai';
+  static const String aiChat = '$ai/chat';
 
   static String foodByBarcode(String barcode) {
     return '$foods/barcode/$barcode';

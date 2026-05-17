@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
+import '../../../../core/widgets/app_card.dart';
+
+import '../../../../core/network/api_endpoints.dart';
 import '../../../../core/network/api_exception.dart';
+import '../../../../core/storage/secure_storage_service.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../data/models/fitness_profile_model.dart';
 import '../../data/services/fitness_profile_service.dart';
@@ -67,6 +72,8 @@ class _EditFitnessProfileScreenState extends State<EditFitnessProfileScreen> {
     if (normalized == 'GANAR_MUSCULO') return 'GANAR_MUSCULO';
     if (normalized == 'PERDER_GRASA') return 'PERDER_GRASA';
     if (normalized == 'MANTENERSE_ATLETICO') return 'MANTENERSE_ATLETICO';
+    if (normalized == 'MEJORAR_RENDIMIENTO') return 'MEJORAR_RENDIMIENTO';
+    if (normalized == 'RECOMPOSICION_CORPORAL') return 'RECOMPOSICION_CORPORAL';
 
     return null;
   }
@@ -144,6 +151,8 @@ class _EditFitnessProfileScreenState extends State<EditFitnessProfileScreen> {
         muscleMass: widget.currentProfile.muscleMass,
       );
 
+      await _recalculateGoals();
+
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -175,6 +184,24 @@ class _EditFitnessProfileScreenState extends State<EditFitnessProfileScreen> {
     }
   }
 
+  Future<void> _recalculateGoals() async {
+    try {
+      final storage = SecureStorageService();
+      final token = await storage.getToken();
+      if (token == null) return;
+
+      final client = http.Client();
+      await client.post(
+        Uri.parse(ApiEndpoints.nutritionGoalsRecalculate),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+      client.close();
+    } catch (_) {}
+  }
+
   String _genderLabel(String value) {
     switch (value) {
       case 'HOMBRE':
@@ -194,6 +221,10 @@ class _EditFitnessProfileScreenState extends State<EditFitnessProfileScreen> {
         return 'Perder grasa';
       case 'MANTENERSE_ATLETICO':
         return 'Mantenerse atlético/a';
+      case 'MEJORAR_RENDIMIENTO':
+        return 'Mejorar rendimiento';
+      case 'RECOMPOSICION_CORPORAL':
+        return 'Recomposición corporal';
       default:
         return value;
     }
@@ -255,6 +286,8 @@ class _EditFitnessProfileScreenState extends State<EditFitnessProfileScreen> {
                   'GANAR_MUSCULO',
                   'PERDER_GRASA',
                   'MANTENERSE_ATLETICO',
+                  'MEJORAR_RENDIMIENTO',
+                  'RECOMPOSICION_CORPORAL',
                 ],
                 labelBuilder: _goalLabel,
                 onSelected: (value) {
@@ -331,25 +364,10 @@ class _IntroCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(28),
-        border: Border.all(
-          color: AppColors.primary.withOpacity(0.28),
-          width: 0.8,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.24),
-            blurRadius: 22,
-            offset: const Offset(0, 12),
-          ),
-        ],
-      ),
-      child: const Column(
+    return AppCard.primary(
+        borderRadius: 28,
+        padding: const EdgeInsets.all(24),
+        child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(
@@ -393,18 +411,10 @@ class _FormCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(22),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(28),
-        border: Border.all(
-          color: AppColors.divider.withOpacity(0.4),
-          width: 0.7,
-        ),
-      ),
-      child: Column(
+    return AppCard.elevated(
+        borderRadius: 28,
+        padding: const EdgeInsets.all(22),
+        child: Column(
         children: [
           _FitnessTextField(
             controller: heightController,
@@ -513,18 +523,10 @@ class _SelectorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(22),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(28),
-        border: Border.all(
-          color: AppColors.divider.withOpacity(0.4),
-          width: 0.7,
-        ),
-      ),
-      child: Column(
+    return AppCard.elevated(
+        borderRadius: 28,
+        padding: const EdgeInsets.all(22),
+        child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(

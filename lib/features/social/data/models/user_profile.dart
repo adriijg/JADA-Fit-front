@@ -1,6 +1,8 @@
 class UserProfile {
   final String id;
   final String username;
+  final String? bio;
+  final String? profilePictureUrl;
   final int followersCount;
   final int followingCount;
   final bool isFollowing;
@@ -9,6 +11,8 @@ class UserProfile {
   UserProfile({
     required this.id,
     required this.username,
+    this.bio,
+    this.profilePictureUrl,
     required this.followersCount,
     required this.followingCount,
     required this.isFollowing,
@@ -19,6 +23,8 @@ class UserProfile {
     return UserProfile(
       id: json['id'],
       username: json['username'],
+      bio: json['bio'],
+      profilePictureUrl: json['profilePictureUrl'],
       followersCount: json['followersCount'] ?? 0,
       followingCount: json['followingCount'] ?? 0,
       isFollowing: json['isFollowing'] ?? false,
@@ -30,6 +36,8 @@ class UserProfile {
     return {
       'id': id,
       'username': username,
+      'bio': bio,
+      'profilePictureUrl': profilePictureUrl,
       'followersCount': followersCount,
       'followingCount': followingCount,
       'isFollowing': isFollowing,

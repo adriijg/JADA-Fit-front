@@ -233,13 +233,7 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
       padding: EdgeInsets.fromLTRB(24, 16, 24, 16 + MediaQuery.of(context).padding.bottom),
       decoration: BoxDecoration(
         color: AppColors.background,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, -5),
-          ),
-        ],
+
       ),
       child: SizedBox(
         width: double.infinity,
@@ -403,13 +397,7 @@ class _PremiumExerciseForm extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(color: AppColors.divider.withOpacity(0.1)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 15,
-            offset: const Offset(0, 8),
-          ),
-        ],
+
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

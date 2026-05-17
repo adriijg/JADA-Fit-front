@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_card.dart';
 import '../../data/models/fitness_progress_model.dart';
 import '../../data/services/fitness_progress_service.dart';
 import '../screens/add_physical_log_screen.dart';
@@ -521,24 +522,9 @@ class _ProgressHeroCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
+    return AppCard.primary(
+      borderRadius: 28,
       padding: const EdgeInsets.all(26),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(28),
-        border: Border.all(
-          color: AppColors.primary.withOpacity(0.35),
-          width: 0.9,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.25),
-            blurRadius: 24,
-            offset: const Offset(0, 14),
-          ),
-        ],
-      ),
       child: Column(
         children: [
           Row(
@@ -649,19 +635,11 @@ class _MonthSelectorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
+    return AppCard.elevated(
+      borderRadius: 24,
       padding: const EdgeInsets.symmetric(
         horizontal: 14,
         vertical: 14,
-      ),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: AppColors.divider.withOpacity(0.4),
-          width: 0.7,
-        ),
       ),
       child: Row(
         children: [
@@ -723,17 +701,9 @@ class _MetricSelectorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
+    return AppCard.elevated(
+      borderRadius: 24,
       padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: AppColors.divider.withOpacity(0.4),
-          width: 0.7,
-        ),
-      ),
       child: Row(
         children: _ProgressMetric.values.map((metric) {
           final isSelected = metric == selectedMetric;
@@ -857,17 +827,9 @@ class _SingleProgressChartCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final hasEnoughData = chartPoints.length >= 2;
 
-    return Container(
-      width: double.infinity,
+    return AppCard.elevated(
+      borderRadius: 26,
       padding: const EdgeInsets.all(22),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(26),
-        border: Border.all(
-          color: AppColors.divider.withOpacity(0.4),
-          width: 0.7,
-        ),
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1240,17 +1202,9 @@ class _WeeklyCalendarCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final days = _weekDays();
 
-    return Container(
-      width: double.infinity,
+    return AppCard.elevated(
+      borderRadius: 26,
       padding: const EdgeInsets.all(22),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(26),
-        border: Border.all(
-          color: AppColors.divider.withOpacity(0.4),
-          width: 0.7,
-        ),
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1547,17 +1501,9 @@ class _EmptyProgressCard extends StatelessWidget {
     return SizedBox(
       height: 500,
       child: Center(
-        child: Container(
-          width: double.infinity,
+        child: AppCard.elevated(
+          borderRadius: 26,
           padding: const EdgeInsets.all(26),
-          decoration: BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: BorderRadius.circular(26),
-            border: Border.all(
-              color: AppColors.divider.withOpacity(0.4),
-              width: 0.7,
-            ),
-          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -1629,17 +1575,9 @@ class _ErrorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
+    return AppCard(
+      borderRadius: 24,
       padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: AppColors.divider.withOpacity(0.4),
-          width: 0.7,
-        ),
-      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

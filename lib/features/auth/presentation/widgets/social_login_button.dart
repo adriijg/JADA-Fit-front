@@ -29,13 +29,7 @@ class SocialLoginButton extends StatelessWidget {
             color: AppColors.divider.withOpacity(0.7),
             width: 1.2,
           ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.18),
-              blurRadius: 8,
-              offset: const Offset(0, 4),
-            ),
-          ],
+
         ),
         child: FaIcon(
           icon,

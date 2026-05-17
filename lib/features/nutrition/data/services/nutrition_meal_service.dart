@@ -8,6 +8,7 @@ import '../../../../core/storage/secure_storage_service.dart';
 import '../models/meal_type.dart';
 import '../models/nutrition_day_summary_model.dart';
 import '../models/nutrition_meal_model.dart';
+import '../models/recipe_model.dart';
 
 class NutritionMealService {
   NutritionMealService({
@@ -121,6 +122,43 @@ class NutritionMealService {
       _parseErrorMessage(
         response.body,
         fallback: 'No se pudo eliminar la comida',
+        statusCode: response.statusCode,
+      ),
+      statusCode: response.statusCode,
+    );
+  }
+
+  Future<List<NutritionMealModel>> createMealsFromRecipe({
+    required RecipeModel recipe,
+    required MealType mealType,
+    required DateTime loggedAt,
+  }) async {
+    final token = await _getTokenOrThrow();
+
+    final response = await _client.post(
+      Uri.parse(ApiEndpoints.nutritionMealsFromRecipe),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode({
+        'recipeId': recipe.id,
+        'mealType': mealType.apiValue,
+        'loggedAt': _formatDateTimeForApi(loggedAt),
+      }),
+    );
+
+    if (response.statusCode == 201) {
+      final List<dynamic> data = jsonDecode(response.body) as List<dynamic>;
+      return data
+          .map((e) => NutritionMealModel.fromJson(e as Map<String, dynamic>))
+          .toList();
+    }
+
+    throw ApiException(
+      _parseErrorMessage(
+        response.body,
+        fallback: 'No se pudo añadir la receta',
         statusCode: response.statusCode,
       ),
       statusCode: response.statusCode,

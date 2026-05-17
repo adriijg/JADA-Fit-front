@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/network/api_exception.dart';
@@ -9,6 +9,17 @@ import '../../data/models/nutrition_meal_model.dart';
 import '../../data/services/nutrition_meal_service.dart';
 import 'food_search_screen.dart';
 
+import '../../data/models/water_log_model.dart';
+import '../../data/services/water_log_service.dart';
+import '../../data/models/recipe_model.dart';
+import '../../data/services/recipe_service.dart';
+import '../../../../features/fitness_profile/data/models/fitness_progress_model.dart';
+import '../../../../features/fitness_profile/data/services/fitness_progress_service.dart';
+import '../../../../features/fitness_profile/presentation/screens/add_physical_log_screen.dart';
+import '../../../../features/fitness_profile/presentation/screens/fitness_progress_screen.dart';
+import 'my_recipes_screen.dart';
+import 'create_recipe_screen.dart';
+
 class NutritionScreen extends StatefulWidget {
   const NutritionScreen({super.key});
 
@@ -18,12 +29,19 @@ class NutritionScreen extends StatefulWidget {
 
 class _NutritionScreenState extends State<NutritionScreen> {
   final NutritionMealService _nutritionMealService = NutritionMealService();
-
-  DateTime selectedDate = DateTime.now();
-
-  bool isLoading = true;
-  String? errorMessage;
-  NutritionDaySummaryModel? daySummary;
+  final WaterLogService _waterLogService = WaterLogService();
+  WaterDaySummaryModel? _waterSummary;
+  bool _isWaterLoading = false;
+  final FitnessProgressService _fitnessProgressService = FitnessProgressService();
+  List<FitnessProgressModel> _fitnessLogs = [];
+  bool _isFitnessLoading = false;
+  final RecipeService _recipeService = RecipeService();
+  List<RecipeModel> _userRecipes = [];
+  bool _isRecipesLoading = false;
+  bool _isLoading = false;
+  String? _errorMessage;
+  NutritionDaySummaryModel? _daySummary;
+  late DateTime _selectedDate;
 
   @override
   void initState() {
@@ -31,47 +49,50 @@ class _NutritionScreenState extends State<NutritionScreen> {
 
     final now = DateTime.now();
 
-    selectedDate = DateTime(
+    _selectedDate = DateTime(
       now.year,
       now.month,
       now.day,
     );
 
     _loadDaySummary();
+    _loadWaterToday();
+    _loadFitnessProgress();
+    _loadUserRecipes();
   }
 
   Future<void> _loadDaySummary() async {
     try {
       setState(() {
-        isLoading = true;
-        errorMessage = null;
+        _isLoading = true;
+        _errorMessage = null;
       });
 
       final loadedSummary = await _nutritionMealService.getDaySummary(
-        date: selectedDate,
+        date: _selectedDate,
       );
 
       if (!mounted) return;
 
       setState(() {
-        daySummary = loadedSummary;
+        _daySummary = loadedSummary;
       });
     } on ApiException catch (error) {
       if (!mounted) return;
 
       setState(() {
-        errorMessage = error.message;
+        _errorMessage = error.message;
       });
     } catch (_) {
       if (!mounted) return;
 
       setState(() {
-        errorMessage = 'No se pudo cargar el resumen nutricional';
+        _errorMessage = 'No se pudo cargar el resumen nutricional';
       });
     } finally {
       if (mounted) {
         setState(() {
-          isLoading = false;
+          _isLoading = false;
         });
       }
     }
@@ -101,9 +122,9 @@ class _NutritionScreenState extends State<NutritionScreen> {
           content: Text('No se pudo eliminar la comida'),
           backgroundColor: AppColors.surface,
         ),
-      );
-    }
+    );
   }
+}
 
   Future<void> _openFoodSearch(MealType mealType) async {
     final registered = await Navigator.push<bool>(
@@ -111,7 +132,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
       MaterialPageRoute(
         builder: (_) => FoodSearchScreen(
           initialMealType: mealType,
-          initialDate: selectedDate,
+          initialDate: _selectedDate,
         ),
       ),
     );
@@ -123,7 +144,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
 
   void _selectDate(DateTime date) {
     setState(() {
-      selectedDate = DateTime(
+      _selectedDate = DateTime(
         date.year,
         date.month,
         date.day,
@@ -131,14 +152,159 @@ class _NutritionScreenState extends State<NutritionScreen> {
     });
 
     _loadDaySummary();
+    _loadWaterToday();
+  }
+
+  void _showAddFoodMenu() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AppColors.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (_) => Padding(
+        padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                width: 40, height: 4,
+                decoration: BoxDecoration(
+                  color: AppColors.divider,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'AÑADIR ALIMENTO A...',
+              style: TextStyle(
+                color: AppColors.secondary,
+                fontSize: 12, fontWeight: FontWeight.w800, letterSpacing: 1.2,
+              ),
+            ),
+            const SizedBox(height: 16),
+            _MealOptionRow(
+              icon: Icons.free_breakfast,
+              label: MealType.breakfast.label,
+              onTap: () {
+                Navigator.pop(context);
+                _openFoodSearch(MealType.breakfast);
+              },
+            ),
+            _MealOptionRow(
+              icon: Icons.lunch_dining,
+              label: MealType.lunch.label,
+              onTap: () {
+                Navigator.pop(context);
+                _openFoodSearch(MealType.lunch);
+              },
+            ),
+            _MealOptionRow(
+              icon: Icons.dinner_dining,
+              label: MealType.dinner.label,
+              onTap: () {
+                Navigator.pop(context);
+                _openFoodSearch(MealType.dinner);
+              },
+            ),
+            _MealOptionRow(
+              icon: Icons.cookie_outlined,
+              label: MealType.snack.label,
+              onTap: () {
+                Navigator.pop(context);
+                _openFoodSearch(MealType.snack);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   List<NutritionMealModel> _mealsByType(MealType mealType) {
-    final summary = daySummary;
+    final summary = _daySummary;
 
     if (summary == null) return const [];
 
     return summary.meals.where((meal) => meal.mealType == mealType).toList();
+  }
+
+  Future<void> _loadWaterToday() async {
+    setState(() => _isWaterLoading = true);
+    try {
+      final summary = await _waterLogService.getTodaySummary();
+      if (mounted) setState(() => _waterSummary = summary);
+    } catch (_) {
+      if (mounted) setState(() => _waterSummary = null);
+    } finally {
+      if (mounted) setState(() => _isWaterLoading = false);
+    }
+  }
+
+  Future<void> _addWater(int ml) async {
+    if (ml <= 0) return;
+    try {
+      await _waterLogService.addLog(ml.toDouble());
+      if (mounted) _loadWaterToday();
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error al registrar $ml ml de agua'),
+            backgroundColor: AppColors.surface,
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> _deleteWaterLog(String logId) async {
+    try {
+      await _waterLogService.deleteLog(logId);
+      if (mounted) _loadWaterToday();
+    } catch (_) {}
+  }
+
+  Future<void> _deleteWaterAmount(int ml) async {
+    if (ml <= 0) return;
+    try {
+      var toRemove = ml;
+      final logs = List<WaterLogModel>.from(_waterSummary?.logs ?? [])
+        ..sort((a, b) => b.loggedAt.compareTo(a.loggedAt));
+      for (final log in logs) {
+        if (toRemove <= 0) break;
+        await _waterLogService.deleteLog(log.id);
+        toRemove -= log.amountMl.toInt();
+      }
+      if (mounted) _loadWaterToday();
+    } catch (_) {}
+  }
+
+  Future<void> _loadFitnessProgress() async {
+    setState(() => _isFitnessLoading = true);
+    try {
+      final logs = await _fitnessProgressService.getMyFitnessProgress();
+      if (mounted) setState(() => _fitnessLogs = logs);
+    } catch (_) {
+      if (mounted) setState(() => _fitnessLogs = []);
+    } finally {
+      if (mounted) setState(() => _isFitnessLoading = false);
+    }
+  }
+
+  Future<void> _loadUserRecipes() async {
+    setState(() => _isRecipesLoading = true);
+    try {
+      final recipes = await _recipeService.getMyRecipes();
+      if (mounted) setState(() => _userRecipes = recipes);
+    } catch (_) {
+      if (mounted) setState(() => _userRecipes = []);
+    } finally {
+      if (mounted) setState(() => _isRecipesLoading = false);
+    }
   }
 
   String _formatDayTitle(DateTime date) {
@@ -179,95 +345,146 @@ class _NutritionScreenState extends State<NutritionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final summary = daySummary;
+    final summary = _daySummary;
 
-    return RefreshIndicator(
-      onRefresh: _loadDaySummary,
-      color: AppColors.primary,
-      backgroundColor: AppColors.surface,
-      child: SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.only(
-          bottom: 24,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              AppStrings.nutritionTitle,
-              style: TextStyle(
-                color: AppColors.textMain,
-                fontSize: 24,
-                fontWeight: FontWeight.w800,
-              ),
+    return Stack(
+      children: [
+        RefreshIndicator(
+          onRefresh: _loadDaySummary,
+          color: AppColors.primary,
+          backgroundColor: AppColors.surface,
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.only(
+              bottom: 80,
             ),
-            const SizedBox(height: 6),
-            Text(
-              _formatDayTitle(selectedDate),
-              style: const TextStyle(
-                color: AppColors.secondary,
-                fontSize: 14,
-                height: 1.5,
-              ),
-            ),
-            const SizedBox(height: 20),
-            _WeekCalendar(
-              selectedDate: selectedDate,
-              onDateSelected: _selectDate,
-            ),
-            const SizedBox(height: 20),
-            if (isLoading)
-              const SizedBox(
-                height: 420,
-                child: Center(
-                  child: CircularProgressIndicator(
-                    color: AppColors.primary,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  AppStrings.nutritionTitle,
+                  style: TextStyle(
+                    color: AppColors.textMain,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w800,
                   ),
                 ),
-              )
-            else if (errorMessage != null)
-              _ErrorCard(
-                message: errorMessage!,
-                onRetry: _loadDaySummary,
-              )
-            else if (summary != null) ...[
-              _DailySummaryCard(
-                summary: summary,
-              ),
-              const SizedBox(height: 18),
-              _MealSectionCard(
-                mealType: MealType.breakfast,
-                meals: _mealsByType(MealType.breakfast),
-                onAddFood: () => _openFoodSearch(MealType.breakfast),
-                onDeleteMeal: _deleteMeal,
-              ),
-              const SizedBox(height: 14),
-              _MealSectionCard(
-                mealType: MealType.lunch,
-                meals: _mealsByType(MealType.lunch),
-                onAddFood: () => _openFoodSearch(MealType.lunch),
-                onDeleteMeal: _deleteMeal,
-              ),
-              const SizedBox(height: 14),
-              _MealSectionCard(
-                mealType: MealType.dinner,
-                meals: _mealsByType(MealType.dinner),
-                onAddFood: () => _openFoodSearch(MealType.dinner),
-                onDeleteMeal: _deleteMeal,
-              ),
-              const SizedBox(height: 14),
-              _MealSectionCard(
-                mealType: MealType.snack,
-                meals: _mealsByType(MealType.snack),
-                onAddFood: () => _openFoodSearch(MealType.snack),
-                onDeleteMeal: _deleteMeal,
-              ),
-              const SizedBox(height: 20),
-              const _AiRecipesCard(),
-            ],
-          ],
+                const SizedBox(height: 6),
+                Text(
+                  _formatDayTitle(_selectedDate),
+                  style: const TextStyle(
+                    color: AppColors.secondary,
+                    fontSize: 14,
+                    height: 1.5,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                _WeekCalendar(
+                  selectedDate: _selectedDate,
+                  onDateSelected: _selectDate,
+                ),
+                const SizedBox(height: 20),
+                if (_isLoading)
+                  const SizedBox(
+                    height: 420,
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  )
+                else if (_errorMessage != null)
+                  _ErrorCard(
+                    message: _errorMessage!,
+                    onRetry: _loadDaySummary,
+                  )
+                else if (summary != null) ...[
+                  _DailySummaryCard(
+                    summary: summary,
+                  ),
+                  const SizedBox(height: 18),
+                  _MealSectionCard(
+                    mealType: MealType.breakfast,
+                    meals: _mealsByType(MealType.breakfast),
+                    onDeleteMeal: _deleteMeal,
+                  ),
+                  const SizedBox(height: 14),
+                  _MealSectionCard(
+                    mealType: MealType.lunch,
+                    meals: _mealsByType(MealType.lunch),
+                    onDeleteMeal: _deleteMeal,
+                  ),
+                  const SizedBox(height: 14),
+                  _MealSectionCard(
+                    mealType: MealType.dinner,
+                    meals: _mealsByType(MealType.dinner),
+                    onDeleteMeal: _deleteMeal,
+                  ),
+                  const SizedBox(height: 14),
+                  _MealSectionCard(
+                    mealType: MealType.snack,
+                    meals: _mealsByType(MealType.snack),
+                    onDeleteMeal: _deleteMeal,
+                  ),
+                  const SizedBox(height: 20),
+                  _WaterTrackerCard(
+                    summary: _waterSummary,
+                    isLoading: _isWaterLoading,
+                    onAddWater: _addWater,
+                    onDeleteWater: _deleteWaterAmount,
+                    onDeleteLog: _deleteWaterLog,
+                  ),
+                  const SizedBox(height: 20),
+                  _PhysicalTrackingCard(
+                    logs: _fitnessLogs,
+                    isLoading: _isFitnessLoading,
+                  ),
+                  const SizedBox(height: 20),
+                  _RecipesCard(
+                    recipes: _userRecipes,
+                    isLoading: _isRecipesLoading,
+                    onCreateRecipe: () async {
+                      final created = await Navigator.push<bool>(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const CreateRecipeScreen(),
+                        ),
+                      );
+                      if (created == true) {
+                        _loadUserRecipes();
+                      }
+                    },
+                    onViewAll: () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const MyRecipesScreen(),
+                        ),
+                      );
+                      if (mounted) {
+                        _loadUserRecipes();
+                      }
+                    },
+                  ),
+                ],
+              ],
+            ),
+          ),
         ),
-      ),
+        Positioned(
+          right: 16,
+          bottom: 16,
+          child: FloatingActionButton(
+            onPressed: _showAddFoodMenu,
+            backgroundColor: AppColors.primary,
+            foregroundColor: AppColors.background,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: const Icon(Icons.add, size: 28),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -607,13 +824,11 @@ class _MealSectionCard extends StatelessWidget {
   const _MealSectionCard({
     required this.mealType,
     required this.meals,
-    required this.onAddFood,
     required this.onDeleteMeal,
   });
 
   final MealType mealType;
   final List<NutritionMealModel> meals;
-  final VoidCallback onAddFood;
   final ValueChanged<NutritionMealModel> onDeleteMeal;
 
   double get totalCalories {
@@ -812,34 +1027,6 @@ class _MealSectionCard extends StatelessWidget {
               ),
             ),
           ],
-          const SizedBox(height: 14),
-          SizedBox(
-            width: double.infinity,
-            height: 50,
-            child: ElevatedButton.icon(
-              onPressed: onAddFood,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.background,
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-              icon: const Icon(
-                Icons.add,
-                size: 20,
-              ),
-              label: const Text(
-                'AÑADIR ALIMENTO',
-                style: TextStyle(
-                  fontWeight: FontWeight.w900,
-                  fontSize: 13,
-                  letterSpacing: 0.8,
-                ),
-              ),
-            ),
-          ),
         ],
       ),
     );
@@ -1084,81 +1271,6 @@ class _MealInfoPill extends StatelessWidget {
   }
 }
 
-class _AiRecipesCard extends StatelessWidget {
-  const _AiRecipesCard();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(22),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(26),
-        border: Border.all(
-          color: AppColors.primary.withOpacity(0.28),
-          width: 0.8,
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Row(
-            children: [
-              Icon(
-                Icons.auto_awesome,
-                color: AppColors.primary,
-                size: 25,
-              ),
-              SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  'Recetas sugeridas por IA',
-                  style: TextStyle(
-                    color: AppColors.textMain,
-                    fontSize: 17,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          const Text(
-            'Cuando conectemos la IA con tus macros, aquí aparecerán recetas adaptadas a lo que te falta para completar el día.',
-            style: TextStyle(
-              color: AppColors.secondary,
-              fontSize: 13,
-              height: 1.5,
-            ),
-          ),
-          const SizedBox(height: 14),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(
-              color: AppColors.inputBackground,
-              borderRadius: BorderRadius.circular(18),
-              border: Border.all(
-                color: AppColors.inputBorder,
-                width: 0.7,
-              ),
-            ),
-            child: const Text(
-              'Ejemplo futuro: cena alta en proteína y baja en grasas.',
-              style: TextStyle(
-                color: AppColors.textMain,
-                fontSize: 13,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class _ErrorCard extends StatelessWidget {
   const _ErrorCard({
     required this.message,
@@ -1216,6 +1328,604 @@ class _ErrorCard extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _WaterTrackerCard extends StatefulWidget {
+  const _WaterTrackerCard({
+    required this.summary,
+    required this.isLoading,
+    required this.onAddWater,
+    required this.onDeleteWater,
+    required this.onDeleteLog,
+  });
+
+  final WaterDaySummaryModel? summary;
+  final bool isLoading;
+  final Future<void> Function(int ml) onAddWater;
+  final Future<void> Function(int ml) onDeleteWater;
+  final Future<void> Function(String logId) onDeleteLog;
+
+  @override
+  State<_WaterTrackerCard> createState() => _WaterTrackerCardState();
+}
+
+class _WaterTrackerCardState extends State<_WaterTrackerCard> {
+  static const int _glassCount = 10;
+  static const double _glassMl = 200;
+  int? _lastDragIndex;
+
+  double get _totalMl => widget.summary?.totalMl ?? 0;
+
+  int _getFilledGlasses(double total) => (total / _glassMl).floor();
+  double _getPartialFill(double total) => (total % _glassMl) / _glassMl;
+
+  void _setWaterLevel(int glassIndex) {
+    final targetMl = (glassIndex + 1) * _glassMl;
+    final current = _totalMl;
+    final diff = targetMl - current;
+    if (diff.abs() < _glassMl / 2) return;
+    if (diff > 0) {
+      widget.onAddWater(diff.ceil());
+    } else {
+      widget.onDeleteWater((-diff).ceil());
+    }
+  }
+
+  int _glassIndexFromDx(double dx) {
+    const step = 30.0;
+    return (dx / step).floor().clamp(0, _glassCount - 1);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final total = _totalMl;
+    final filledGlasses = _getFilledGlasses(total);
+    final partialFill = _getPartialFill(total);
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.water_drop, color: AppColors.primary, size: 20),
+              const SizedBox(width: 8),
+              Text(
+                'Agua',
+                style: TextStyle(
+                  color: AppColors.textMain,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const Spacer(),
+              if (widget.isLoading)
+                SizedBox(
+                  width: 14,
+                  height: 14,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: AppColors.primary,
+                  ),
+                )
+              else
+                Text(
+                  '${total.toInt()} / ${_glassCount * _glassMl} ml',
+                  style: TextStyle(
+                    color: AppColors.textMain.withValues(alpha: 0.55),
+                    fontSize: 13,
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          ClipRect(
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTapUp: (details) {
+                _setWaterLevel(
+                  _glassIndexFromDx(details.localPosition.dx),
+                );
+              },
+              onHorizontalDragStart: (details) {
+                _lastDragIndex = _glassIndexFromDx(
+                  details.localPosition.dx,
+                );
+                _setWaterLevel(_lastDragIndex!);
+              },
+              onHorizontalDragUpdate: (details) {
+                final i = _glassIndexFromDx(details.localPosition.dx);
+                if (i != _lastDragIndex) {
+                  _lastDragIndex = i;
+                  _setWaterLevel(i);
+                }
+              },
+              onHorizontalDragEnd: (_) => _lastDragIndex = null,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: List.generate(_glassCount, (i) {
+                  final fill = i < filledGlasses
+                      ? 1.0
+                      : i == filledGlasses
+                          ? partialFill
+                          : 0.0;
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 2),
+                    child: _WaterGlass(
+                      fillLevel: fill,
+                      isFilled: i < filledGlasses,
+                    ),
+                  );
+                }),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _WaterGlass extends StatelessWidget {
+  const _WaterGlass({
+    required this.fillLevel,
+    required this.isFilled,
+  });
+
+  final double fillLevel;
+  final bool isFilled;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 28,
+      height: 70,
+      child: CustomPaint(
+        painter: _WaterGlassPainter(
+          fillLevel: fillLevel,
+          isFilled: isFilled,
+        ),
+      ),
+    );
+  }
+}
+
+class _WaterGlassPainter extends CustomPainter {
+  _WaterGlassPainter({
+    required this.fillLevel,
+    required this.isFilled,
+  });
+
+  final double fillLevel;
+  final bool isFilled;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final w = size.width;
+    final h = size.height;
+    final glassTop = h * 0.06;
+    final glassHeight = h * 0.72;
+    final rimThickness = 2.5;
+    final topWidth = w * 0.8;
+    final bottomWidth = w * 0.56;
+
+    final glassPath = Path()
+      ..moveTo((w - topWidth) / 2, glassTop)
+      ..lineTo((w - topWidth) / 2 + topWidth, glassTop)
+      ..lineTo((w - bottomWidth) / 2 + bottomWidth, glassTop + glassHeight)
+      ..lineTo((w - bottomWidth) / 2, glassTop + glassHeight)
+      ..close();
+
+    if (fillLevel > 0) {
+      final waterBottom = glassTop + glassHeight;
+      final waterTop = glassTop + glassHeight * (1 - fillLevel);
+      final t = (waterTop - glassTop) / glassHeight;
+      final waterTopWidth = topWidth + (bottomWidth - topWidth) * t;
+      final waterPath = Path()
+        ..moveTo((w - waterTopWidth) / 2, waterTop)
+        ..lineTo((w - waterTopWidth) / 2 + waterTopWidth, waterTop)
+        ..lineTo((w - bottomWidth) / 2 + bottomWidth, waterBottom)
+        ..lineTo((w - bottomWidth) / 2, waterBottom)
+        ..close();
+      canvas.drawPath(
+        waterPath,
+        Paint()
+          ..color = isFilled
+              ? const Color(0xFF4FC3F7).withValues(alpha: 0.8)
+              : const Color(0xFF4FC3F7).withValues(alpha: 0.5)
+          ..style = PaintingStyle.fill,
+      );
+    }
+
+    canvas.drawPath(
+      glassPath,
+      Paint()
+        ..color = AppColors.textMain.withValues(alpha: 0.35)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1.5,
+    );
+
+    canvas.drawLine(
+      Offset((w - topWidth) / 2, glassTop),
+      Offset((w - topWidth) / 2 + topWidth, glassTop),
+      Paint()
+        ..color = AppColors.textMain.withValues(alpha: 0.5)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = rimThickness,
+    );
+  }
+
+  @override
+  bool shouldRepaint(_WaterGlassPainter oldDelegate) =>
+      oldDelegate.fillLevel != fillLevel || oldDelegate.isFilled != isFilled;
+}
+
+class _PhysicalTrackingCard extends StatelessWidget {
+  const _PhysicalTrackingCard({
+    required this.logs,
+    required this.isLoading,
+  });
+
+  final List<FitnessProgressModel> logs;
+  final bool isLoading;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.fitness_center, color: AppColors.primary, size: 20),
+              const SizedBox(width: 8),
+              Text(
+                'Seguimiento Físico',
+                style: TextStyle(
+                  color: AppColors.textMain,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const Spacer(),
+              if (isLoading)
+                SizedBox(
+                  width: 14,
+                  height: 14,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: AppColors.primary,
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          if (logs.isEmpty && !isLoading)
+            Text(
+              'Aún no hay registros',
+              style: TextStyle(
+                color: AppColors.textMain.withValues(alpha: 0.45),
+                fontSize: 13,
+              ),
+            )
+          else ...[
+            ...logs.take(3).map((log) {
+              final dateStr =
+                  '${log.loggedAt.day.toString().padLeft(2, '0')}/'
+                  '${log.loggedAt.month.toString().padLeft(2, '0')}';
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 6),
+                child: Row(
+                  children: [
+                    Text(
+                      dateStr,
+                      style: TextStyle(
+                        color: AppColors.textMain.withValues(alpha: 0.5),
+                        fontSize: 12,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    if (log.weight != null)
+                      _StatChip(label: '${log.weight!.toStringAsFixed(1)} kg'),
+                    if (log.bodyFat != null)
+                      _StatChip(
+                          label:
+                              '${log.bodyFat!.toStringAsFixed(1)}% grasa'),
+                    if (log.muscleMass != null)
+                      _StatChip(
+                          label:
+                              '${log.muscleMass!.toStringAsFixed(1)} kg músculo'),
+                  ],
+                ),
+              );
+            }),
+          ],
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const AddPhysicalLogScreen(),
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.add, size: 18),
+                  label: const Text('Añadir registro'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: AppColors.background,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const FitnessProgressScreen(),
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.show_chart, size: 18),
+                  label: const Text('Ver resumen'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: AppColors.primary,
+                    side: BorderSide(
+                      color: AppColors.primary.withOpacity(0.4),
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _StatChip extends StatelessWidget {
+  const _StatChip({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 6),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+        decoration: BoxDecoration(
+          color: AppColors.inputBackground,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            color: AppColors.textMain.withValues(alpha: 0.8),
+            fontSize: 11,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _RecipesCard extends StatelessWidget {
+  const _RecipesCard({
+    required this.recipes,
+    required this.isLoading,
+    required this.onCreateRecipe,
+    required this.onViewAll,
+  });
+
+  final List<RecipeModel> recipes;
+  final bool isLoading;
+  final VoidCallback onCreateRecipe;
+  final VoidCallback onViewAll;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.menu_book, color: AppColors.primary, size: 20),
+              const SizedBox(width: 8),
+              Text(
+                'Mis Recetas',
+                style: TextStyle(
+                  color: AppColors.textMain,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const Spacer(),
+              if (isLoading)
+                SizedBox(
+                  width: 14,
+                  height: 14,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: AppColors.primary,
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          if (recipes.isEmpty && !isLoading)
+            Text(
+              'Aún no tienes recetas',
+              style: TextStyle(
+                color: AppColors.textMain.withValues(alpha: 0.45),
+                fontSize: 13,
+              ),
+            )
+          else ...[
+            ...recipes.take(3).map((recipe) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 32,
+                      height: 32,
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(
+                        Icons.restaurant,
+                        color: AppColors.primary,
+                        size: 16,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        recipe.name,
+                        style: TextStyle(
+                          color: AppColors.textMain,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    Text(
+                      '${recipe.totalCalories.toInt()} kcal',
+                      style: TextStyle(
+                        color: AppColors.textMain.withValues(alpha: 0.55),
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }),
+          ],
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton.icon(
+                  onPressed: onCreateRecipe,
+                  icon: const Icon(Icons.add, size: 18),
+                  label: const Text('Crear receta'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: AppColors.background,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: onViewAll,
+                  icon: const Icon(Icons.arrow_forward, size: 18),
+                  label: const Text('Ver todas'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: AppColors.primary,
+                    side: BorderSide(
+                      color: AppColors.primary.withOpacity(0.4),
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _MealOptionRow extends StatelessWidget {
+  const _MealOptionRow({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          decoration: BoxDecoration(
+            color: AppColors.inputBackground,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: AppColors.inputBorder,
+              width: 0.7,
+            ),
+          ),
+          child: Row(
+            children: [
+              Icon(icon, color: AppColors.primary, size: 22),
+              const SizedBox(width: 14),
+              Text(
+                label,
+                style: const TextStyle(
+                  color: AppColors.textMain,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const Spacer(),
+              const Icon(Icons.chevron_right, color: AppColors.secondary, size: 20),
+            ],
+          ),
+        ),
       ),
     );
   }

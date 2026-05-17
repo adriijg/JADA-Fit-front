@@ -17,15 +17,11 @@ class AppHeader extends StatelessWidget {
       bottom: false,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: AppColors.surface,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.16),
-              blurRadius: 20,
-              offset: const Offset(0, 8),
-            ),
-          ],
+          border: Border(
+            bottom: BorderSide(color: AppColors.divider, width: 0.5),
+          ),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

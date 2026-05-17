@@ -158,6 +158,28 @@ class SocialService {
     }
   }
 
+  Future<void> updateProfile({String? bio, String? profilePictureUrl}) async {
+    final token = await _getTokenOrThrow();
+    final response = await _client.put(
+      Uri.parse(ApiEndpoints.meProfile),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode({
+        'bio': ?bio,
+        'profilePictureUrl': ?profilePictureUrl,
+      }),
+    );
+
+    if (response.statusCode != 200 && response.statusCode != 204) {
+      throw ApiException(
+        _parseErrorMessage(response.body),
+        statusCode: response.statusCode,
+      );
+    }
+  }
+
   Future<String> _getTokenOrThrow() async {
     final token = await _storageService.getToken();
     if (token == null || token.isEmpty) {
