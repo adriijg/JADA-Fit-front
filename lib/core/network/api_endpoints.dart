@@ -67,4 +67,7 @@ class ApiEndpoints {
   static String foodByBarcode(String barcode) {
     return '$foods/barcode/$barcode';
   }
+
+  // Catalog Exercises
+  static const String catalogExercises = '${ApiConfig.baseUrl}/catalog/exercises';
 }

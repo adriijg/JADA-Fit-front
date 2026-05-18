@@ -536,40 +536,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       ),
     );
   }
-}
-
-// ─── Stat Column ─────────────────────────────────────────────────────────────
-
-class _StatColumn extends StatelessWidget {
-  const _StatColumn({required this.value, required this.label});
-
-  final String value;
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          value,
-          style: const TextStyle(
-            color: AppColors.textMain,
-            fontSize: 18,
-            fontWeight: FontWeight.w800,
-          ),
-        ),
-        const SizedBox(height: 3),
-        Text(
-          label,
-          style: TextStyle(
-            color: AppColors.secondary.withValues(alpha: 0.7),
-            fontSize: 11,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ],
-    );
-  }
 
   void _showChallengeDialog() {
     final TextEditingController exerciseController = TextEditingController();
@@ -630,6 +596,40 @@ class _StatColumn extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+// ─── Stat Column ─────────────────────────────────────────────────────────────
+
+class _StatColumn extends StatelessWidget {
+  const _StatColumn({required this.value, required this.label});
+
+  final String value;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          value,
+          style: const TextStyle(
+            color: AppColors.textMain,
+            fontSize: 18,
+            fontWeight: FontWeight.w800,
+          ),
+        ),
+        const SizedBox(height: 3),
+        Text(
+          label,
+          style: TextStyle(
+            color: AppColors.secondary.withValues(alpha: 0.7),
+            fontSize: 11,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ],
     );
   }
 }

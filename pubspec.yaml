@@ -27,6 +27,7 @@ dependencies:
   # Renderizar Markdown en respuestas de IA
   flutter_markdown: ^0.7.6
   shimmer: ^3.0.0
+  video_player: ^2.11.1
 
 dev_dependencies:
   flutter_test:

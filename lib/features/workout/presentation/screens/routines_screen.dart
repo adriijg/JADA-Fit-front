@@ -8,6 +8,7 @@ import '../../data/models/routine_model.dart';
 import '../../data/services/routine_service.dart';
 import 'create_routine_screen.dart';
 import 'routine_detail_screen.dart';
+import 'exercise_library_screen.dart';
 import '../widgets/routine_skeleton.dart';
 
 class RoutinesScreen extends StatefulWidget {
@@ -142,17 +143,36 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
                     ),
                   ],
                 ),
-                GestureDetector(
-                  onTap: _openCreateRoutine,
-                  child: Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: AppColors.primary,
-                      borderRadius: BorderRadius.circular(16),
-
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => const ExerciseLibraryScreen()));
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(12),
+                        margin: const EdgeInsets.only(right: 12),
+                        decoration: BoxDecoration(
+                          color: AppColors.surface,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: AppColors.divider.withOpacity(0.1)),
+                        ),
+                        child: const Icon(Icons.menu_book_rounded, color: AppColors.primary, size: 24),
+                      ),
                     ),
-                    child: const Icon(Icons.add_rounded, color: Colors.black, size: 24),
-                  ),
+                    GestureDetector(
+                      onTap: _openCreateRoutine,
+                      child: Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary,
+                          borderRadius: BorderRadius.circular(16),
+
+                        ),
+                        child: const Icon(Icons.add_rounded, color: Colors.black, size: 24),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
