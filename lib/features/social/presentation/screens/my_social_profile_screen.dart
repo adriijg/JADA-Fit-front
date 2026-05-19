@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../../../core/network/api_endpoints.dart';
 import '../../../../core/storage/secure_storage_service.dart';
@@ -87,9 +90,22 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
     }
   }
 
+  Future<String?> _pickImageFromGallery() async {
+    if (Platform.isAndroid || Platform.isIOS) {
+      var status = await Permission.photos.status;
+      if (!status.isGranted) {
+        status = await Permission.photos.request();
+      }
+    }
+
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    return pickedFile?.path;
+  }
+
   void _showCreatePostDialog() {
-    final imageUrlController = TextEditingController();
     final captionController = TextEditingController();
+    String? selectedImagePath;
 
     showModalBottomSheet(
       context: context,
@@ -99,110 +115,163 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (context) {
-        return Padding(
-          padding: EdgeInsets.fromLTRB(
-            24,
-            24,
-            24,
-            MediaQuery.of(context).viewInsets.bottom + 24,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: AppColors.divider,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return Padding(
+              padding: EdgeInsets.fromLTRB(
+                24,
+                24,
+                24,
+                MediaQuery.of(context).viewInsets.bottom + 24,
               ),
-              const SizedBox(height: 20),
-              const Text(
-                'Nueva publicación',
-                style: TextStyle(
-                  color: AppColors.textMain,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-              const SizedBox(height: 20),
-              _buildInputField(
-                controller: imageUrlController,
-                label: 'URL de la imagen',
-                icon: Icons.image_outlined,
-              ),
-              const SizedBox(height: 14),
-              _buildInputField(
-                controller: captionController,
-                label: 'Descripción (opcional)',
-                icon: Icons.edit_outlined,
-                maxLines: 3,
-              ),
-              const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: () async {
-                    if (imageUrlController.text.trim().isEmpty) return;
-
-                    try {
-                      await _postService.createPost(
-                        imageUrl: imageUrlController.text.trim(),
-                        caption: captionController.text.trim().isNotEmpty
-                            ? captionController.text.trim()
-                            : null,
-                      );
-                      if (mounted) {
-                        Navigator.pop(context);
-                        _loadProfile();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('¡Publicación creada!'),
-                            backgroundColor: AppColors.surface,
-                          ),
-                        );
-                      }
-                    } catch (e) {
-                      if (mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Error: $e'),
-                            backgroundColor: AppColors.error,
-                          ),
-                        );
-                      }
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: AppColors.background,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: AppColors.divider,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
                     ),
                   ),
-                  child: const Text(
-                    'Publicar',
+                  const SizedBox(height: 20),
+                  const Text(
+                    'Nueva publicación',
                     style: TextStyle(
+                      color: AppColors.textMain,
+                      fontSize: 20,
                       fontWeight: FontWeight.w800,
-                      fontSize: 15,
                     ),
                   ),
-                ),
+                  const SizedBox(height: 20),
+                  GestureDetector(
+                    onTap: () async {
+                      final path = await _pickImageFromGallery();
+                      if (path != null) {
+                        setModalState(() {
+                          selectedImagePath = path;
+                        });
+                      }
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: 180,
+                      decoration: BoxDecoration(
+                        color: AppColors.inputBackground,
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(
+                          color: AppColors.inputBorder.withValues(alpha: 0.5),
+                          width: 0.8,
+                        ),
+                      ),
+                      child: selectedImagePath != null
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(14),
+                              child: Image.file(
+                                File(selectedImagePath!),
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                              ),
+                            )
+                          : Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.add_photo_alternate_outlined,
+                                  color: AppColors.secondary,
+                                  size: 40,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  'Seleccionar de la galería',
+                                  style: TextStyle(
+                                    color: AppColors.secondary.withValues(alpha: 0.7),
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                            ),
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  _buildInputField(
+                    controller: captionController,
+                    label: 'Descripción (opcional)',
+                    icon: Icons.edit_outlined,
+                    maxLines: 3,
+                  ),
+                  const SizedBox(height: 24),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if (selectedImagePath == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Selecciona una imagen primero')),
+                          );
+                          return;
+                        }
+
+                        try {
+                          await _postService.createPost(
+                            imageUrl: selectedImagePath!,
+                            caption: captionController.text.trim().isNotEmpty
+                                ? captionController.text.trim()
+                                : null,
+                          );
+                          if (mounted) {
+                            Navigator.pop(context);
+                            _loadProfile();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('¡Publicación creada!'),
+                                backgroundColor: AppColors.surface,
+                              ),
+                            );
+                          }
+                        } catch (e) {
+                          if (mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Error: $e'),
+                                backgroundColor: AppColors.error,
+                              ),
+                            );
+                          }
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: AppColors.background,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                      ),
+                      child: const Text(
+                        'Publicar',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w800,
+                          fontSize: 15,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         );
       },
     );
   }
 
   void _showCreateStoryDialog() {
-    final imageUrlController = TextEditingController();
+    String? selectedImagePath;
 
     showModalBottomSheet(
       context: context,
@@ -212,103 +281,156 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (context) {
-        return Padding(
-          padding: EdgeInsets.fromLTRB(
-            24,
-            24,
-            24,
-            MediaQuery.of(context).viewInsets.bottom + 24,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: AppColors.divider,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return Padding(
+              padding: EdgeInsets.fromLTRB(
+                24,
+                24,
+                24,
+                MediaQuery.of(context).viewInsets.bottom + 24,
               ),
-              const SizedBox(height: 20),
-              const Text(
-                'Nueva historia',
-                style: TextStyle(
-                  color: AppColors.textMain,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Las historias desaparecen en 24 horas',
-                style: TextStyle(
-                  color: AppColors.secondary.withValues(alpha: 0.7),
-                  fontSize: 13,
-                ),
-              ),
-              const SizedBox(height: 20),
-              _buildInputField(
-                controller: imageUrlController,
-                label: 'URL de la imagen',
-                icon: Icons.image_outlined,
-              ),
-              const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: () async {
-                    if (imageUrlController.text.trim().isEmpty) return;
-
-                    try {
-                      final storyService = StoryService();
-                      await storyService.createStory(
-                        imageUrl: imageUrlController.text.trim(),
-                      );
-
-                      if (mounted) {
-                        Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('¡Historia creada!'),
-                            backgroundColor: AppColors.surface,
-                          ),
-                        );
-                      }
-                    } catch (e) {
-                      if (mounted) {
-                        Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Error: $e'),
-                            backgroundColor: AppColors.error,
-                          ),
-                        );
-                      }
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.secondary,
-                    foregroundColor: AppColors.background,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: AppColors.divider,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
                     ),
                   ),
-                  child: const Text(
-                    'Subir historia',
+                  const SizedBox(height: 20),
+                  const Text(
+                    'Nueva historia',
                     style: TextStyle(
+                      color: AppColors.textMain,
+                      fontSize: 20,
                       fontWeight: FontWeight.w800,
-                      fontSize: 15,
                     ),
                   ),
-                ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Las historias desaparecen en 24 horas',
+                    style: TextStyle(
+                      color: AppColors.secondary.withValues(alpha: 0.7),
+                      fontSize: 13,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  GestureDetector(
+                    onTap: () async {
+                      final path = await _pickImageFromGallery();
+                      if (path != null) {
+                        setModalState(() {
+                          selectedImagePath = path;
+                        });
+                      }
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: 300,
+                      decoration: BoxDecoration(
+                        color: AppColors.inputBackground,
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(
+                          color: AppColors.inputBorder.withValues(alpha: 0.5),
+                          width: 0.8,
+                        ),
+                      ),
+                      child: selectedImagePath != null
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(14),
+                              child: Image.file(
+                                File(selectedImagePath!),
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                              ),
+                            )
+                          : Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.add_photo_alternate_outlined,
+                                  color: AppColors.secondary,
+                                  size: 40,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  'Seleccionar de la galería',
+                                  style: TextStyle(
+                                    color: AppColors.secondary.withValues(alpha: 0.7),
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                            ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if (selectedImagePath == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Selecciona una imagen primero')),
+                          );
+                          return;
+                        }
+
+                        try {
+                          final storyService = StoryService();
+                          await storyService.createStory(
+                            imageUrl: selectedImagePath!,
+                          );
+
+                          if (mounted) {
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('¡Historia creada!'),
+                                backgroundColor: AppColors.surface,
+                              ),
+                            );
+                          }
+                        } catch (e) {
+                          if (mounted) {
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Error: $e'),
+                                backgroundColor: AppColors.error,
+                              ),
+                            );
+                          }
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.secondary,
+                        foregroundColor: AppColors.background,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                      ),
+                      child: const Text(
+                        'Subir historia',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w800,
+                          fontSize: 15,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         );
       },
     );
@@ -318,9 +440,8 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
     final bioController = TextEditingController(
       text: _currentUser?['bio'] ?? '',
     );
-    final pictureController = TextEditingController(
-      text: _currentUser?['profilePictureUrl'] ?? '',
-    );
+    String? selectedImagePath = _currentUser?['profilePictureUrl'];
+    bool isNewImage = false;
 
     showModalBottomSheet(
       context: context,
@@ -330,102 +451,172 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (context) {
-        return Padding(
-          padding: EdgeInsets.fromLTRB(
-            24,
-            24,
-            24,
-            MediaQuery.of(context).viewInsets.bottom + 24,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: AppColors.divider,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return Padding(
+              padding: EdgeInsets.fromLTRB(
+                24,
+                24,
+                24,
+                MediaQuery.of(context).viewInsets.bottom + 24,
               ),
-              const SizedBox(height: 20),
-              const Text(
-                'Editar perfil',
-                style: TextStyle(
-                  color: AppColors.textMain,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-              const SizedBox(height: 20),
-              _buildInputField(
-                controller: pictureController,
-                label: 'URL de foto de perfil',
-                icon: Icons.account_circle_outlined,
-              ),
-              const SizedBox(height: 14),
-              _buildInputField(
-                controller: bioController,
-                label: 'Biografía',
-                icon: Icons.info_outline,
-                maxLines: 3,
-              ),
-              const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: () async {
-                    try {
-                      await _socialService.updateProfile(
-                        bio: bioController.text.trim(),
-                        profilePictureUrl:
-                            pictureController.text.trim().isNotEmpty
-                                ? pictureController.text.trim()
-                                : null,
-                      );
-                      if (mounted) {
-                        Navigator.pop(context);
-                        _loadProfile();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('¡Perfil actualizado!'),
-                            backgroundColor: AppColors.surface,
-                          ),
-                        );
-                      }
-                    } catch (e) {
-                      if (mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Error: $e'),
-                            backgroundColor: AppColors.error,
-                          ),
-                        );
-                      }
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: AppColors.background,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: AppColors.divider,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
                     ),
                   ),
-                  child: const Text(
-                    'Guardar',
+                  const SizedBox(height: 20),
+                  const Text(
+                    'Editar perfil',
                     style: TextStyle(
+                      color: AppColors.textMain,
+                      fontSize: 20,
                       fontWeight: FontWeight.w800,
-                      fontSize: 15,
                     ),
                   ),
-                ),
+                  const SizedBox(height: 20),
+                  GestureDetector(
+                    onTap: () async {
+                      final path = await _pickImageFromGallery();
+                      if (path != null) {
+                        setModalState(() {
+                          selectedImagePath = path;
+                          isNewImage = true;
+                        });
+                      }
+                    },
+                    child: Center(
+                      child: Stack(
+                        alignment: Alignment.bottomRight,
+                        children: [
+                          Container(
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColors.inputBackground,
+                              border: Border.all(
+                                color: AppColors.inputBorder.withValues(alpha: 0.5),
+                                width: 0.8,
+                              ),
+                            ),
+                            child: ClipOval(
+                              child: selectedImagePath != null && selectedImagePath!.isNotEmpty
+                                  ? (isNewImage || !selectedImagePath!.startsWith('http')
+                                      ? Image.file(
+                                          File(selectedImagePath!),
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (_, __, ___) => const Icon(
+                                            Icons.person,
+                                            size: 50,
+                                            color: AppColors.secondary,
+                                          ),
+                                        )
+                                      : Image.network(
+                                          selectedImagePath!,
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (_, __, ___) => const Icon(
+                                            Icons.person,
+                                            size: 50,
+                                            color: AppColors.secondary,
+                                          ),
+                                        ))
+                                  : const Icon(
+                                      Icons.person,
+                                      color: AppColors.secondary,
+                                      size: 50,
+                                    ),
+                            ),
+                          ),
+                          Container(
+                            width: 32,
+                            height: 32,
+                            decoration: BoxDecoration(
+                              color: AppColors.primary,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: AppColors.background,
+                                width: 2,
+                              ),
+                            ),
+                            child: const Icon(
+                              Icons.camera_alt,
+                              size: 16,
+                              color: AppColors.background,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  _buildInputField(
+                    controller: bioController,
+                    label: 'Biografía',
+                    icon: Icons.info_outline,
+                    maxLines: 3,
+                  ),
+                  const SizedBox(height: 24),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        try {
+                          await _socialService.updateProfile(
+                            bio: bioController.text.trim(),
+                            profilePictureUrl: selectedImagePath,
+                          );
+                          if (mounted) {
+                            Navigator.pop(context);
+                            _loadProfile();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('¡Perfil actualizado!'),
+                                backgroundColor: AppColors.surface,
+                              ),
+                            );
+                          }
+                        } catch (e) {
+                          if (mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Error: $e'),
+                                backgroundColor: AppColors.error,
+                              ),
+                            );
+                          }
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: AppColors.background,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                      ),
+                      child: const Text(
+                        'Guardar',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w800,
+                          fontSize: 15,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         );
       },
     );
@@ -763,22 +954,30 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
                       final post = _myPosts[index];
-                      return Image.network(
-                        post.imageUrl,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            color: AppColors.inputBackground,
-                            child: const Center(
-                              child: Icon(
-                                Icons.image_not_supported_outlined,
-                                color: AppColors.secondary,
-                                size: 24,
-                              ),
+                      Widget errorPlaceholder() {
+                        return Container(
+                          color: AppColors.inputBackground,
+                          child: const Center(
+                            child: Icon(
+                              Icons.image_not_supported_outlined,
+                              color: AppColors.secondary,
+                              size: 24,
                             ),
-                          );
-                        },
-                      );
+                          ),
+                        );
+                      }
+
+                      return post.imageUrl.startsWith('http')
+                          ? Image.network(
+                              post.imageUrl,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) => errorPlaceholder(),
+                            )
+                          : Image.file(
+                              File(post.imageUrl),
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) => errorPlaceholder(),
+                            );
                     },
                     childCount: _myPosts.length,
                   ),
