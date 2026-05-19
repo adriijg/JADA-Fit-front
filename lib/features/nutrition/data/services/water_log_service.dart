@@ -40,7 +40,7 @@ class WaterLogService {
         statusCode: response.statusCode);
   }
 
-  Future<WaterLogModel> addLog(double amountMl) async {
+  Future<WaterLogModel> setLog(double amountMl) async {
     final token = await _storageService.getToken();
     if (token == null || token.isEmpty) {
       throw ApiException('No hay sesión activa');
@@ -57,32 +57,12 @@ class WaterLogService {
       }),
     );
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 201 || response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
       return WaterLogModel.fromJson(data);
     }
 
     throw ApiException('Error al registrar agua',
         statusCode: response.statusCode);
-  }
-
-  Future<void> deleteLog(String logId) async {
-    final token = await _storageService.getToken();
-    if (token == null || token.isEmpty) {
-      throw ApiException('No hay sesión activa');
-    }
-
-    final response = await _client.delete(
-      Uri.parse('${ApiEndpoints.water}/$logId'),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-    );
-
-    if (response.statusCode != 204) {
-      throw ApiException('Error al eliminar registro de agua',
-          statusCode: response.statusCode);
-    }
   }
 }

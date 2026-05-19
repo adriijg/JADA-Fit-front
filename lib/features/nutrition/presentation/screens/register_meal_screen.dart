@@ -4,6 +4,7 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../data/models/catalog_food_model.dart';
 import '../../data/models/meal_type.dart';
+import '../../data/services/catalog_food_service.dart';
 import '../../data/services/nutrition_meal_service.dart';
 
 class RegisterMealScreen extends StatefulWidget {
@@ -12,11 +13,55 @@ class RegisterMealScreen extends StatefulWidget {
     required this.food,
     required this.initialMealType,
     required this.initialDate,
-  });
+  }) : isManualCreate = false;
+
+  RegisterMealScreen.fromRecent({
+    super.key,
+    required String foodName,
+    required double caloriesPer100g,
+    required double proteinPer100g,
+    required double carbsPer100g,
+    required double fatsPer100g,
+    required MealType initialMealType,
+    required DateTime initialDate,
+  })  : food = CatalogFoodModel(
+          id: '',
+          name: foodName,
+          brand: null,
+          barcode: null,
+          source: 'USER',
+          caloriesPer100g: caloriesPer100g,
+          proteinPer100g: proteinPer100g,
+          carbsPer100g: carbsPer100g,
+          fatsPer100g: fatsPer100g,
+        ),
+        initialMealType = initialMealType,
+        initialDate = initialDate,
+        isManualCreate = false;
+
+  RegisterMealScreen.manualCreate({
+    super.key,
+    required MealType initialMealType,
+    required DateTime initialDate,
+  })  : food = CatalogFoodModel(
+          id: '',
+          name: '',
+          brand: null,
+          barcode: null,
+          source: 'USER',
+          caloriesPer100g: 0,
+          proteinPer100g: 0,
+          carbsPer100g: 0,
+          fatsPer100g: 0,
+        ),
+        initialMealType = initialMealType,
+        initialDate = initialDate,
+        isManualCreate = true;
 
   final CatalogFoodModel food;
   final MealType initialMealType;
   final DateTime initialDate;
+  final bool isManualCreate;
 
   @override
   State<RegisterMealScreen> createState() => _RegisterMealScreenState();
@@ -24,7 +69,13 @@ class RegisterMealScreen extends StatefulWidget {
 
 class _RegisterMealScreenState extends State<RegisterMealScreen> {
   final NutritionMealService _nutritionMealService = NutritionMealService();
+  final CatalogFoodService _catalogFoodService = CatalogFoodService();
   final TextEditingController quantityController = TextEditingController();
+  final TextEditingController foodNameController = TextEditingController();
+  final TextEditingController caloriesController = TextEditingController();
+  final TextEditingController proteinController = TextEditingController();
+  final TextEditingController carbsController = TextEditingController();
+  final TextEditingController fatsController = TextEditingController();
 
   late MealType selectedMealType;
   late DateTime selectedDate;
@@ -37,6 +88,13 @@ class _RegisterMealScreenState extends State<RegisterMealScreen> {
     super.initState();
 
     quantityController.text = '100';
+    if (widget.isManualCreate) {
+      foodNameController.text = '';
+      caloriesController.text = '';
+      proteinController.text = '';
+      carbsController.text = '';
+      fatsController.text = '';
+    }
     selectedMealType = widget.initialMealType;
     selectedDate = DateTime(
       widget.initialDate.year,
@@ -48,6 +106,11 @@ class _RegisterMealScreenState extends State<RegisterMealScreen> {
   @override
   void dispose() {
     quantityController.dispose();
+    foodNameController.dispose();
+    caloriesController.dispose();
+    proteinController.dispose();
+    carbsController.dispose();
+    fatsController.dispose();
     super.dispose();
   }
 
@@ -150,6 +213,13 @@ class _RegisterMealScreenState extends State<RegisterMealScreen> {
       return;
     }
 
+    if (widget.isManualCreate && _foodName.isEmpty) {
+      setState(() {
+        errorMessage = 'Introduce el nombre del alimento';
+      });
+      return;
+    }
+
     if (loggedAt.isAfter(DateTime.now())) {
       setState(() {
         errorMessage = 'No puedes registrar una comida en una fecha futura';
@@ -162,15 +232,27 @@ class _RegisterMealScreenState extends State<RegisterMealScreen> {
         isLoading = true;
       });
 
+      if (widget.isManualCreate) {
+        await _catalogFoodService.createCustomFood(
+          name: _foodName,
+          caloriesPer100g: _calsPer100g,
+          proteinPer100g: _protPer100g,
+          carbsPer100g: _carbPer100g,
+          fatsPer100g: _fatPer100g,
+        );
+        if (!mounted) return;
+      }
+
       await _nutritionMealService.createMeal(
         externalFoodId: widget.food.externalFoodId ?? widget.food.barcode,
-        foodName: widget.food.name,
+        foodName: _foodName,
+        foodSource: widget.food.source,
         mealType: selectedMealType,
         quantityGrams: quantity,
-        caloriesPer100g: widget.food.caloriesPer100g,
-        proteinPer100g: widget.food.proteinPer100g,
-        carbsPer100g: widget.food.carbsPer100g,
-        fatsPer100g: widget.food.fatsPer100g,
+        caloriesPer100g: _calsPer100g,
+        proteinPer100g: _protPer100g,
+        carbsPer100g: _carbPer100g,
+        fatsPer100g: _fatPer100g,
         loggedAt: loggedAt,
       );
 
@@ -205,24 +287,35 @@ class _RegisterMealScreenState extends State<RegisterMealScreen> {
     }
   }
 
+  double get _calsPer100g =>
+      widget.isManualCreate ? (_parseDouble(caloriesController.text) ?? 0) : widget.food.caloriesPer100g;
+  double get _protPer100g =>
+      widget.isManualCreate ? (_parseDouble(proteinController.text) ?? 0) : widget.food.proteinPer100g;
+  double get _carbPer100g =>
+      widget.isManualCreate ? (_parseDouble(carbsController.text) ?? 0) : widget.food.carbsPer100g;
+  double get _fatPer100g =>
+      widget.isManualCreate ? (_parseDouble(fatsController.text) ?? 0) : widget.food.fatsPer100g;
+  String get _foodName =>
+      widget.isManualCreate ? foodNameController.text.trim() : widget.food.name;
+
   @override
   Widget build(BuildContext context) {
     final quantity = _parseDouble(quantityController.text) ?? 0;
 
     final calories = _calculateForQuantity(
-      widget.food.caloriesPer100g,
+      _calsPer100g,
       quantity,
     );
     final protein = _calculateForQuantity(
-      widget.food.proteinPer100g,
+      _protPer100g,
       quantity,
     );
     final carbs = _calculateForQuantity(
-      widget.food.carbsPer100g,
+      _carbPer100g,
       quantity,
     );
     final fats = _calculateForQuantity(
-      widget.food.fatsPer100g,
+      _fatPer100g,
       quantity,
     );
 
@@ -251,7 +344,15 @@ class _RegisterMealScreenState extends State<RegisterMealScreen> {
           ),
           child: Column(
             children: [
-              _FoodHeaderCard(food: widget.food),
+              widget.isManualCreate
+                  ? _ManualFoodCard(
+                      foodNameController: foodNameController,
+                      caloriesController: caloriesController,
+                      proteinController: proteinController,
+                      carbsController: carbsController,
+                      fatsController: fatsController,
+                    )
+                  : _FoodHeaderCard(food: widget.food),
               const SizedBox(height: 20),
               _QuantityCard(
                 controller: quantityController,
@@ -334,6 +435,161 @@ class _RegisterMealScreenState extends State<RegisterMealScreen> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ManualFoodCard extends StatelessWidget {
+  const _ManualFoodCard({
+    required this.foodNameController,
+    required this.caloriesController,
+    required this.proteinController,
+    required this.carbsController,
+    required this.fatsController,
+  });
+
+  final TextEditingController foodNameController;
+  final TextEditingController caloriesController;
+  final TextEditingController proteinController;
+  final TextEditingController carbsController;
+  final TextEditingController fatsController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(28),
+        border: Border.all(
+          color: AppColors.primary.withOpacity(0.28),
+          width: 0.8,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Row(
+            children: [
+              Icon(Icons.create, color: AppColors.primary, size: 22),
+              SizedBox(width: 10),
+              Text(
+                'NUEVO ALIMENTO',
+                style: TextStyle(
+                  color: AppColors.secondary,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 1,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 18),
+          _ManualField(
+            controller: foodNameController,
+            label: 'Nombre del alimento',
+            hint: 'Ej: Arroz integral',
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(
+                child: _ManualField(
+                  controller: caloriesController,
+                  label: 'Calorías /100g',
+                  hint: 'Ej: 130',
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: _ManualField(
+                  controller: proteinController,
+                  label: 'Proteína /100g',
+                  hint: 'Ej: 2.7',
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(
+                child: _ManualField(
+                  controller: carbsController,
+                  label: 'Hidratos /100g',
+                  hint: 'Ej: 28',
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: _ManualField(
+                  controller: fatsController,
+                  label: 'Grasas /100g',
+                  hint: 'Ej: 1.2',
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ManualField extends StatelessWidget {
+  const _ManualField({
+    required this.controller,
+    required this.label,
+    required this.hint,
+    this.keyboardType,
+  });
+
+  final TextEditingController controller;
+  final String label;
+  final String hint;
+  final TextInputType? keyboardType;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: controller,
+      keyboardType: keyboardType ?? TextInputType.text,
+      style: const TextStyle(
+        color: AppColors.textMain,
+        fontSize: 15,
+      ),
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: AppColors.inputBackground,
+        labelText: label,
+        labelStyle: const TextStyle(
+          color: AppColors.secondary,
+          fontWeight: FontWeight.w600,
+        ),
+        hintText: hint,
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(18),
+          borderSide: const BorderSide(
+            color: AppColors.inputBorder,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(18),
+          borderSide: const BorderSide(
+            color: AppColors.primary,
+            width: 1.4,
+          ),
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
         ),
       ),
     );

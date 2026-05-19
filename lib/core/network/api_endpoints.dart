@@ -6,6 +6,8 @@ class ApiEndpoints {
   static const String login = '$users/login';
   static const String register = '$users/register';
   static const String me = '$users/me';
+  static const String forgotPassword = '$users/forgot-password';
+  static const String resetPassword = '$users/reset-password';
 
   static const String mePrivacy = '$me/privacy';
   static const String meProfile = '$me/profile';
@@ -22,10 +24,13 @@ class ApiEndpoints {
   static const String foods = '${ApiConfig.baseUrl}/foods';
   static const String foodsSearch = '$foods/search';
   static const String foodsBarcode = '$foods/barcode';
+  static const String foodsCustom = '$foods/custom';
+  static const String myCustomFoods = '$foods/my-custom';
 
   static const String nutrition = '${ApiConfig.baseUrl}/nutrition';
   static const String nutritionMeals = '$nutrition/meals';
   static const String nutritionMealsFromRecipe = '$nutritionMeals/from-recipe';
+  static const String nutritionMealsRecent = '$nutritionMeals/recent';
   static const String nutritionDay = '$nutrition/day';
   static const String nutritionGoals = '$nutrition/goals';
   static const String nutritionGoalsRecalculate = '$nutritionGoals/me/recalculate';
@@ -67,6 +72,8 @@ class ApiEndpoints {
   static String foodByBarcode(String barcode) {
     return '$foods/barcode/$barcode';
   }
+
+  static String customFoodById(String foodId) => '$foodsCustom/$foodId';
 
   // Catalog Exercises
   static const String catalogExercises = '${ApiConfig.baseUrl}/catalog/exercises';

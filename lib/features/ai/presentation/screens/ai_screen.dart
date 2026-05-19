@@ -7,6 +7,9 @@ import '../../../../core/theme/app_colors.dart';
 import '../../data/models/chat_message_model.dart';
 import '../providers/ai_provider.dart';
 
+const String _limitReachedMessage =
+    'Limite de historial de chat alcanzado. Elimina un chat existente para crear uno nuevo.';
+
 class AiScreen extends StatefulWidget {
   const AiScreen({super.key});
 
@@ -159,7 +162,17 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
           const SizedBox(width: 6),
           _HeaderButton(
             icon: Icons.add_rounded,
-            onTap: () => aiProvider.newChat(),
+            onTap: () {
+              if (!aiProvider.newChat()) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: const Text(_limitReachedMessage),
+                    backgroundColor: AppColors.surface,
+                    duration: const Duration(seconds: 3),
+                  ),
+                );
+              }
+            },
           ),
         ],
       ),

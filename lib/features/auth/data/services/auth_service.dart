@@ -48,7 +48,7 @@ class AuthService {
     );
   }
 
-  Future<void> register({
+  Future<LoginResponseModel> register({
     required String username,
     required String email,
     required String password,
@@ -66,7 +66,12 @@ class AuthService {
     );
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      return;
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      final loginResponse = LoginResponseModel.fromJson(data);
+
+      await _storageService.saveToken(loginResponse.token);
+
+      return loginResponse;
     }
 
     throw ApiException(
@@ -103,6 +108,41 @@ class AuthService {
 
   Future<void> logout() {
     return _storageService.deleteToken();
+  }
+
+  Future<void> forgotPassword(String email) async {
+    final response = await _client.post(
+      Uri.parse(ApiEndpoints.forgotPassword),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'email': email}),
+    );
+
+    if (response.statusCode == 200) {
+      return;
+    }
+
+    throw ApiException(
+      _parseErrorMessage(response.body),
+      statusCode: response.statusCode,
+    );
+  }
+
+  Future<String> resetPassword(String token, String newPassword) async {
+    final response = await _client.post(
+      Uri.parse(ApiEndpoints.resetPassword),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'token': token, 'newPassword': newPassword}),
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return data['message'] as String;
+    }
+
+    throw ApiException(
+      _parseErrorMessage(response.body),
+      statusCode: response.statusCode,
+    );
   }
 
   Future<String> _getTokenOrThrow() async {

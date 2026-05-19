@@ -11,6 +11,7 @@ class AuthTextField extends StatelessWidget {
     this.obscureText = false,
     this.keyboardType = TextInputType.text,
     this.errorText,
+    this.suffixIcon,
   });
 
   final TextEditingController controller;
@@ -19,6 +20,7 @@ class AuthTextField extends StatelessWidget {
   final bool obscureText;
   final TextInputType keyboardType;
   final String? errorText;
+  final Widget? suffixIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +61,7 @@ class AuthTextField extends StatelessWidget {
           prefixIconConstraints: const BoxConstraints(
             minWidth: 44,
           ),
+          suffixIcon: suffixIcon,
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 12,

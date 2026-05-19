@@ -75,5 +75,20 @@ class AppStrings {
   static const appleProvider = 'Apple';
   static const facebookProvider = 'Facebook';
 
+  // Forgot / Reset Password
+  static const forgotPasswordTitle = 'RESTABLECER CONTRASEÑA';
+  static const forgotPasswordEmailLabel = 'EMAIL';
+  static const forgotPasswordEmailHint = 'TU EMAIL';
+  static const forgotPasswordButton = 'ENVIAR CÓDIGO';
+  static const forgotPasswordSuccess = 'Revisa tu correo electrónico';
+
+  static const resetPasswordTitle = 'RESTABLECER CONTRASEÑA';
+  static const resetPasswordTokenLabel = 'CÓDIGO DE VERIFICACIÓN';
+  static const resetPasswordTokenHint = 'CÓDIGO';
+  static const resetPasswordNewPasswordLabel = 'NUEVA CONTRASEÑA';
+  static const resetPasswordNewPasswordHint = 'NUEVA CONTRASEÑA';
+  static const resetPasswordButton = 'CAMBIAR CONTRASEÑA';
+  static const backToLogin = 'Volver al inicio de sesión';
+
   static String comingSoonProvider(String provider) => 'Inicio con $provider próximamente';
 }
