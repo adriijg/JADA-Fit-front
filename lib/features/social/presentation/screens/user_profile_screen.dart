@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
@@ -508,20 +509,32 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                   ? const BorderRadius.only(
                                       topRight: Radius.circular(8))
                                   : BorderRadius.zero,
-                          child: Image.network(
-                            post.imageUrl,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Container(
-                                color: AppColors.inputBackground,
-                                child: const Center(
-                                  child: Icon(
-                                    Icons.image_not_supported_outlined,
-                                    color: AppColors.secondary,
-                                    size: 24,
+                          child: Builder(
+                            builder: (context) {
+                              Widget errorPlaceholder() {
+                                return Container(
+                                  color: AppColors.inputBackground,
+                                  child: const Center(
+                                    child: Icon(
+                                      Icons.image_not_supported_outlined,
+                                      color: AppColors.secondary,
+                                      size: 24,
+                                    ),
                                   ),
-                                ),
-                              );
+                                );
+                              }
+
+                              return post.imageUrl.startsWith('http')
+                                  ? Image.network(
+                                      post.imageUrl,
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (context, error, stackTrace) => errorPlaceholder(),
+                                    )
+                                  : Image.file(
+                                      File(post.imageUrl),
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (context, error, stackTrace) => errorPlaceholder(),
+                                    );
                             },
                           ),
                         );
@@ -585,9 +598,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     );
                   }
                 } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Error: $e')),
-                  );
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Error: $e')),
+                    );
+                  }
                 }
               }
             },

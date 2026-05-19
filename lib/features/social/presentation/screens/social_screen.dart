@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
@@ -508,32 +509,46 @@ class _PostCard extends StatelessWidget {
           ClipRRect(
             child: AspectRatio(
               aspectRatio: 1,
-              child: Image.network(
-                post.imageUrl,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    color: AppColors.inputBackground,
-                    child: const Center(
-                      child: Icon(
-                        Icons.image_not_supported_outlined,
-                        color: AppColors.secondary,
-                        size: 48,
+              child: Builder(
+                builder: (context) {
+                  Widget errorPlaceholder() {
+                    return Container(
+                      color: AppColors.inputBackground,
+                      child: const Center(
+                        child: Icon(
+                          Icons.image_not_supported_outlined,
+                          color: AppColors.secondary,
+                          size: 48,
+                        ),
                       ),
-                    ),
-                  );
-                },
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return Container(
-                    color: AppColors.inputBackground,
-                    child: const Center(
-                      child: CircularProgressIndicator(
-                        color: AppColors.primary,
-                        strokeWidth: 2,
+                    );
+                  }
+
+                  Widget loadingPlaceholder(BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Container(
+                      color: AppColors.inputBackground,
+                      child: const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.primary,
+                          strokeWidth: 2,
+                        ),
                       ),
-                    ),
-                  );
+                    );
+                  }
+
+                  return post.imageUrl.startsWith('http')
+                      ? Image.network(
+                          post.imageUrl,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) => errorPlaceholder(),
+                          loadingBuilder: loadingPlaceholder,
+                        )
+                      : Image.file(
+                          File(post.imageUrl),
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) => errorPlaceholder(),
+                        );
                 },
               ),
             ),
