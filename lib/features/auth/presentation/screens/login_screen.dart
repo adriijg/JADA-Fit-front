@@ -4,11 +4,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/widgets/app_card.dart';
 import '../../data/services/auth_service.dart';
 import '../widgets/auth_text_field.dart';
 import '../widgets/social_login_button.dart';
 import 'auth_gate.dart';
+import 'forgot_password_screen.dart';
 import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -28,6 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
   String? identifierError;
   String? passwordError;
   bool isLoading = false;
+  bool _obscurePassword = true;
 
   @override
   void dispose() {
@@ -127,86 +128,63 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: Stack(
-        children: [
-          const Positioned.fill(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    AppColors.background,
-                    Color(0xFF061216),
-                    Color(0xFF071A20),
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 30,
+                vertical: 28,
+              ),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: constraints.maxHeight - 56,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.fitness_center,
+                      size: 82,
+                      color: AppColors.primary,
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      AppStrings.appName,
+                      style: TextStyle(
+                        color: AppColors.primary,
+                        fontFamily: 'Orbitron',
+                        fontSize: 34,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 2.8,
+                      ),
+                    ),
+                    const SizedBox(height: 48),
+                    _LoginCard(
+                      identifierController: identifierController,
+                      passwordController: passwordController,
+                      isLoading: isLoading,
+                      errorMessage: errorMessage,
+                      identifierError: identifierError,
+                      passwordError: passwordError,
+                      obscurePassword: _obscurePassword,
+                      onToggleObscure: () => setState(() => _obscurePassword = !_obscurePassword),
+                      onLogin: _login,
+                      onGoToRegister: _goToRegister,
+                      onGoogleLogin: () =>
+                          _showComingSoon(AppStrings.googleProvider),
+                      onAppleLogin: () =>
+                          _showComingSoon(AppStrings.appleProvider),
+                      onFacebookLogin: () =>
+                          _showComingSoon(AppStrings.facebookProvider),
+                    ),
+                    const SizedBox(height: 30),
                   ],
                 ),
               ),
-            ),
-          ),
-          SafeArea(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                return SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 30,
-                    vertical: 28,
-                  ),
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      minHeight: constraints.maxHeight - 56,
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.fitness_center,
-                          size: 82,
-                          color: AppColors.primary,
-                        ),
-                        const SizedBox(height: 16),
-                        const Text(
-                          AppStrings.appName,
-                          style: TextStyle(
-                            color: AppColors.primary,
-                            fontFamily: 'Orbitron',
-                            fontSize: 34,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 2.8,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Container(
-                          height: 2,
-                          width: 92,
-                          color: AppColors.primary,
-                        ),
-                        const SizedBox(height: 48),
-                        _LoginCard(
-                          identifierController: identifierController,
-                          passwordController: passwordController,
-                          isLoading: isLoading,
-                          errorMessage: errorMessage,
-                          identifierError: identifierError,
-                          passwordError: passwordError,
-                          onLogin: _login,
-                          onGoToRegister: _goToRegister,
-                          onGoogleLogin: () =>
-                              _showComingSoon(AppStrings.googleProvider),
-                          onAppleLogin: () =>
-                              _showComingSoon(AppStrings.appleProvider),
-                          onFacebookLogin: () =>
-                              _showComingSoon(AppStrings.facebookProvider),
-                        ),
-                        const SizedBox(height: 30),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -220,6 +198,8 @@ class _LoginCard extends StatelessWidget {
     required this.errorMessage,
     required this.identifierError,
     required this.passwordError,
+    required this.obscurePassword,
+    required this.onToggleObscure,
     required this.onLogin,
     required this.onGoToRegister,
     required this.onGoogleLogin,
@@ -233,6 +213,8 @@ class _LoginCard extends StatelessWidget {
   final String? errorMessage;
   final String? identifierError;
   final String? passwordError;
+  final bool obscurePassword;
+  final VoidCallback onToggleObscure;
   final VoidCallback onLogin;
   final VoidCallback onGoToRegister;
   final VoidCallback onGoogleLogin;
@@ -241,9 +223,12 @@ class _LoginCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppCard.elevated(
+    return Container(
       padding: const EdgeInsets.all(26),
-      borderRadius: 28,
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(28),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -275,18 +260,6 @@ class _LoginCard extends StatelessWidget {
             keyboardType: TextInputType.text,
             errorText: identifierError,
           ),
-          if (identifierError != null)
-            Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: Text(
-                identifierError!,
-                style: const TextStyle(
-                  color: AppColors.error,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
           const SizedBox(height: 22),
           const Text(
             AppStrings.loginPasswordLabel,
@@ -301,30 +274,26 @@ class _LoginCard extends StatelessWidget {
             controller: passwordController,
             hintText: AppStrings.loginPasswordHint,
             icon: Icons.lock_outline,
-            obscureText: true,
+            obscureText: obscurePassword,
             errorText: passwordError,
-          ),
-          if (passwordError != null)
-            Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: Text(
-                passwordError!,
-                style: const TextStyle(
-                  color: AppColors.error,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                ),
+            suffixIcon: IconButton(
+              icon: Icon(
+                obscurePassword ? Icons.visibility_off : Icons.visibility,
+                color: AppColors.secondary,
+                size: 20,
               ),
+              onPressed: onToggleObscure,
             ),
+          ),
           const SizedBox(height: 18),
           Align(
             alignment: Alignment.centerRight,
             child: TextButton(
               onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text(AppStrings.recoverPasswordSoon),
-                    backgroundColor: AppColors.surface,
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const ForgotPasswordScreen(),
                   ),
                 );
               },
@@ -365,8 +334,6 @@ class _LoginCard extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: AppColors.background,
-                elevation: 12,
-                shadowColor: AppColors.primary.withOpacity(0.32),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(24),
                 ),

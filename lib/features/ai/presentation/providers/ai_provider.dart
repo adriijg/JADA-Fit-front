@@ -52,6 +52,7 @@ class AiProvider extends ChangeNotifier {
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
   static const String _storageKey = 'ai_chat_sessions';
+  static const int maxSessions = 5;
 
   List<ChatSession> _sessions = [];
   int _currentSessionIndex = -1;
@@ -74,6 +75,7 @@ class AiProvider extends ChangeNotifier {
   List<String> get suggestedQuestions => List.unmodifiable(_suggestedQuestions);
   List<ChatSession> get sessions => List.unmodifiable(_sessions);
   int get currentSessionIndex => _currentSessionIndex;
+  bool get canCreateNewSession => _sessions.length < maxSessions;
   String? get currentSessionTitle => _currentSessionIndex >= 0
       ? _sessions[_currentSessionIndex].title
       : null;
@@ -100,7 +102,8 @@ class AiProvider extends ChangeNotifier {
     } catch (_) {}
   }
 
-  void _newSession() {
+  bool _newSession() {
+    if (!canCreateNewSession) return false;
     _sessions.add(ChatSession(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       title: 'Chat ${_sessions.length + 1}',
@@ -108,6 +111,7 @@ class AiProvider extends ChangeNotifier {
       createdAt: DateTime.now(),
     ));
     _currentSessionIndex = _sessions.length - 1;
+    return true;
   }
 
   void switchToSession(int index) {
@@ -131,11 +135,13 @@ class AiProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void newChat() {
-    _newSession();
+  bool newChat() {
+    final created = _newSession();
+    if (!created) return false;
     _suggestedQuestions = List.of(_initialSuggestions);
     _saveSessions();
     notifyListeners();
+    return true;
   }
 
   void setActive(bool value) {

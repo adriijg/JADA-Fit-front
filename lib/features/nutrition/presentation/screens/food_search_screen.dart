@@ -4,8 +4,13 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../data/models/catalog_food_model.dart';
 import '../../data/models/meal_type.dart';
+import '../../data/models/recent_food_model.dart';
+import '../../data/models/recipe_model.dart';
 import '../../data/services/catalog_food_service.dart';
+import '../../data/services/nutrition_meal_service.dart';
+import '../../data/services/recipe_service.dart';
 import 'barcode_scanner_screen.dart';
+import 'my_recipes_screen.dart';
 import 'register_meal_screen.dart';
 
 class FoodSearchScreen extends StatefulWidget {
@@ -26,16 +31,161 @@ class FoodSearchScreen extends StatefulWidget {
 
 class _FoodSearchScreenState extends State<FoodSearchScreen> {
   final CatalogFoodService _catalogFoodService = CatalogFoodService();
+  final RecipeService _recipeService = RecipeService();
+  final NutritionMealService _nutritionMealService = NutritionMealService();
   final TextEditingController searchController = TextEditingController();
 
   bool isLoading = false;
   String? errorMessage;
   List<CatalogFoodModel> foods = const [];
 
+  List<RecipeModel> _recipes = [];
+  bool _isRecipesLoading = true;
+  List<RecentFoodModel> _recentFoods = [];
+  bool _isRecentFoodsLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRecipes();
+    _loadRecentFoods();
+  }
+
   @override
   void dispose() {
     searchController.dispose();
     super.dispose();
+  }
+
+  Future<void> _loadRecipes() async {
+    try {
+      final recipes = await _recipeService.getMyRecipes();
+      if (!mounted) return;
+      recipes.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+      setState(() => _recipes = recipes);
+    } catch (_) {
+      if (!mounted) return;
+    } finally {
+      if (mounted) setState(() => _isRecipesLoading = false);
+    }
+  }
+
+  Future<void> _openCreateFood() async {
+    final registered = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => RegisterMealScreen.manualCreate(
+          initialMealType: widget.initialMealType,
+          initialDate: widget.initialDate,
+        ),
+      ),
+    );
+    if (registered == true && mounted) {
+      Navigator.pop(context, true);
+    }
+  }
+
+  Future<void> _loadRecentFoods() async {
+    try {
+      final foods = await _nutritionMealService.getRecentFoods();
+      if (!mounted) return;
+      setState(() => _recentFoods = foods);
+    } catch (e) {
+      if (!mounted) return;
+      debugPrint('Error loading recent foods: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              e is ApiException ? e.message : 'Error al cargar alimentos recientes',
+            ),
+            backgroundColor: AppColors.error,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isRecentFoodsLoading = false);
+    }
+  }
+
+  Future<void> _addRecipeToMeal(RecipeModel recipe) async {
+    try {
+      await _nutritionMealService.createMealsFromRecipe(
+        recipe: recipe,
+        mealType: widget.initialMealType,
+        loggedAt: widget.initialDate,
+      );
+      if (!mounted) return;
+      Navigator.pop(context, true);
+    } on ApiException catch (error) {
+      if (!mounted) return;
+      setState(() => errorMessage = error.message);
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => errorMessage = 'No se pudo añadir la receta');
+    }
+  }
+
+  Future<void> _openViewAllRecipes() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const MyRecipesScreen()),
+    );
+    if (!mounted) return;
+    _loadRecipes();
+  }
+
+  Future<void> _deleteRecentFood(RecentFoodModel food) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.surface,
+        title: const Text(
+          'Eliminar alimento',
+          style: TextStyle(color: AppColors.textMain),
+        ),
+        content: Text(
+          '¿Eliminar "${food.foodName}" del historial?',
+          style: const TextStyle(color: AppColors.textMain),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text(
+              'Eliminar',
+              style: TextStyle(color: AppColors.error),
+            ),
+          ),
+        ],
+      ),
+    );
+    if (confirm != true || !mounted) return;
+
+    try {
+      await _nutritionMealService.deleteMeal(mealId: food.id);
+      if (!mounted) return;
+      setState(() => _recentFoods.removeWhere((f) => f.id == food.id));
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Alimento eliminado del historial'),
+            backgroundColor: AppColors.surface,
+          ),
+        );
+      }
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No se pudo eliminar el alimento'),
+          backgroundColor: AppColors.error,
+        ),
+      );
+    }
   }
 
   Future<void> _searchFoods() async {
@@ -170,6 +320,8 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final recentRecipes = _recipes.take(5).toList();
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -196,14 +348,16 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
             vertical: 20,
           ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _SearchCard(
+               _SearchCard(
                 controller: searchController,
                 isLoading: isLoading,
                 onSearch: _searchFoods,
                 onScan: _scanFood,
+                onCreateFood: _openCreateFood,
               ),
-              const SizedBox(height: 18),
+              const SizedBox(height: 20),
               if (errorMessage != null)
                 _ErrorCard(
                   message: errorMessage!,
@@ -215,6 +369,91 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
                     color: AppColors.primary,
                   ),
                 ),
+              if (!isLoading && foods.isEmpty && errorMessage == null) ...[
+                if (!_isRecentFoodsLoading && _recentFoods.isNotEmpty) ...[
+                  const Text(
+                    'Registrados recientemente',
+                    style: TextStyle(
+                      color: AppColors.secondary,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  ..._recentFoods.take(5).map((food) => Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: _RecentFoodTile(
+                      food: food,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => RegisterMealScreen.fromRecent(
+                              foodName: food.foodName,
+                              caloriesPer100g: food.caloriesPer100g,
+                              proteinPer100g: food.proteinPer100g,
+                              carbsPer100g: food.carbsPer100g,
+                              fatsPer100g: food.fatsPer100g,
+                              initialMealType: widget.initialMealType,
+                              initialDate: widget.initialDate,
+                            ),
+                          ),
+                        ).then((registered) {
+                          if (registered == true && mounted) {
+                            Navigator.pop(context, true);
+                          }
+                        });
+                      },
+                      onDelete: food.isUserCreated
+                          ? () => _deleteRecentFood(food)
+                          : null,
+                    ),
+                  )),
+                  const SizedBox(height: 16),
+                ],
+                if (!_isRecipesLoading && recentRecipes.isNotEmpty) ...[
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'Tus recetas',
+                          style: const TextStyle(
+                            color: AppColors.secondary,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: _openViewAllRecipes,
+                        style: TextButton.styleFrom(
+                          foregroundColor: AppColors.primary,
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          minimumSize: Size.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        child: const Text(
+                          'Ver todas',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  ...recentRecipes.map((recipe) => Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: _RecentRecipeTile(
+                      recipe: recipe,
+                      onTap: () => _addRecipeToMeal(recipe),
+                    ),
+                  )),
+                ],
+              ],
               if (!isLoading && foods.isNotEmpty)
                 ListView.separated(
                   shrinkWrap: true,
@@ -303,21 +542,231 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
                     );
                   },
                 ),
-              if (!isLoading && foods.isEmpty && errorMessage == null)
-                Padding(
-                  padding: const EdgeInsets.only(top: 30),
-                  child: Text(
-                    'Busca un alimento por nombre o escanea su código de barras.',
-                    style: TextStyle(
-                      color: AppColors.textMain.withOpacity(0.55),
-                      fontSize: 14,
-                      height: 1.5,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _RecentFoodTile extends StatelessWidget {
+  const _RecentFoodTile({
+    required this.food,
+    required this.onTap,
+    this.onDelete,
+  });
+
+  final RecentFoodModel food;
+  final VoidCallback onTap;
+  final VoidCallback? onDelete;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(22),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(22),
+          border: Border.all(
+            color: AppColors.divider.withOpacity(0.4),
+            width: 0.7,
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 42,
+              height: 42,
+              decoration: BoxDecoration(
+                color: AppColors.inputBackground,
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: const Icon(
+                Icons.restaurant,
+                color: AppColors.primary,
+                size: 20,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          food.foodName,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: AppColors.textMain,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ),
+                      if (food.isUserCreated) ...[
+                        const SizedBox(width: 6),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.primary.withOpacity(0.12),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: const Text(
+                            'TUYO',
+                            style: TextStyle(
+                              color: AppColors.primary,
+                              fontSize: 8,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 0.3,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    '${food.caloriesPer100g.toInt()} kcal / 100g',
+                    style: const TextStyle(
+                      color: AppColors.secondary,
+                      fontSize: 11,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (food.isUserCreated && onDelete != null)
+              IconButton(
+                onPressed: onDelete,
+                icon: const Icon(Icons.delete_outline, size: 20),
+                color: AppColors.error,
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                visualDensity: VisualDensity.compact,
+              ),
+            const SizedBox(width: 8),
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 10,
+                vertical: 6,
+              ),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withOpacity(0.12),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Text(
+                'AÑADIR',
+                style: TextStyle(
+                  color: AppColors.primary,
+                  fontSize: 10,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 0.5,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _RecentRecipeTile extends StatelessWidget {
+  const _RecentRecipeTile({
+    required this.recipe,
+    required this.onTap,
+  });
+
+  final RecipeModel recipe;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(22),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(22),
+          border: Border.all(
+            color: AppColors.divider.withOpacity(0.4),
+            width: 0.7,
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 42,
+              height: 42,
+              decoration: BoxDecoration(
+                color: AppColors.inputBackground,
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: const Icon(
+                Icons.menu_book,
+                color: AppColors.primary,
+                size: 20,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    recipe.name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: AppColors.textMain,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    '${recipe.totalCalories.toInt()} kcal · '
+                    '${recipe.ingredients.length} ingr.',
+                    style: const TextStyle(
+                      color: AppColors.secondary,
+                      fontSize: 11,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 10,
+                vertical: 6,
+              ),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withOpacity(0.12),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Text(
+                'AÑADIR',
+                style: TextStyle(
+                  color: AppColors.primary,
+                  fontSize: 10,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 0.5,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -330,12 +779,14 @@ class _SearchCard extends StatelessWidget {
     required this.isLoading,
     required this.onSearch,
     required this.onScan,
+    required this.onCreateFood,
   });
 
   final TextEditingController controller;
   final bool isLoading;
   final VoidCallback onSearch;
   final VoidCallback onScan;
+  final VoidCallback onCreateFood;
 
   @override
   Widget build(BuildContext context) {
@@ -414,20 +865,35 @@ class _SearchCard extends StatelessWidget {
               const SizedBox(width: 12),
               SizedBox(
                 height: 52,
-                width: 58,
-                child: OutlinedButton(
+                width: 52,
+                child: ElevatedButton(
                   onPressed: isLoading ? null : onScan,
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: AppColors.primary,
-                    side: const BorderSide(
-                      color: AppColors.primary,
-                      width: 1.2,
-                    ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: AppColors.background,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
+                    padding: EdgeInsets.zero,
                   ),
-                  child: const Icon(Icons.qr_code_scanner),
+                  child: const Icon(Icons.camera_alt, size: 22),
+                ),
+              ),
+              const SizedBox(width: 8),
+              SizedBox(
+                height: 52,
+                width: 52,
+                child: ElevatedButton(
+                  onPressed: isLoading ? null : onCreateFood,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: AppColors.background,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    padding: EdgeInsets.zero,
+                  ),
+                  child: const Icon(Icons.add, size: 22),
                 ),
               ),
             ],

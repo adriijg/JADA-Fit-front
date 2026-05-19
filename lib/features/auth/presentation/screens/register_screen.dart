@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/widgets/app_card.dart';
 import '../../data/services/auth_service.dart';
-import 'package:jada_fit/features/home/presentation/screens/home_screen.dart';
 import '../widgets/auth_text_field.dart';
+import 'auth_gate.dart';
 import 'login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -48,8 +47,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Future<void> _register() async {
     final name = nameController.text.trim();
     final email = emailController.text.trim();
-    final password = passwordController.text.trim();
-    final repeatPassword = repeatPasswordController.text.trim();
+    final password = passwordController.text;
+    final repeatPassword = repeatPasswordController.text;
 
     setState(() {
       errorMessage = null;
@@ -100,22 +99,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         password: password,
       );
 
-      await _authService.login(
-        email: email,
-        password: password,
-      );
-
       if (!mounted) return;
 
-      _showMessage(AppStrings.accountCreated);
-
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (_) => const HomeScreen(),
-        ),
-        (route) => false,
-      );
+      _goToHome();
     } on ApiException catch (error) {
       if (!mounted) return;
 
@@ -148,6 +134,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
+  void _goToHome() {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const AuthGate(),
+      ),
+      (route) => false,
+    );
+  }
+
   void _showMessage(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -161,84 +157,59 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: Stack(
-        children: [
-          const Positioned.fill(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    AppColors.background,
-                    Color(0xFF061216),
-                    Color(0xFF071A20),
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 30,
+                vertical: 28,
+              ),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: constraints.maxHeight - 56,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.fitness_center,
+                      size: 72,
+                      color: AppColors.primary,
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      AppStrings.appName,
+                      style: TextStyle(
+                        color: AppColors.primary,
+                        fontFamily: 'Orbitron',
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 2.8,
+                      ),
+                    ),
+                    const SizedBox(height: 40),
+                    _RegisterCard(
+                      nameController: nameController,
+                      emailController: emailController,
+                      passwordController: passwordController,
+                      repeatPasswordController: repeatPasswordController,
+                      isLoading: isLoading,
+                      onRegister: _register,
+                      onGoToLogin: _goToLogin,
+                      nameError: nameError,
+                      emailError: emailError,
+                      passwordError: passwordError,
+                      repeatPasswordError: repeatPasswordError,
+                      errorMessage: errorMessage,
+                    ),
+                    const SizedBox(height: 30),
                   ],
                 ),
               ),
-            ),
-          ),
-          SafeArea(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                return SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 30,
-                    vertical: 28,
-                  ),
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      minHeight: constraints.maxHeight - 56,
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.fitness_center,
-                          size: 72,
-                          color: AppColors.primary,
-                        ),
-                        const SizedBox(height: 16),
-                        const Text(
-                          AppStrings.appName,
-                          style: TextStyle(
-                            color: AppColors.primary,
-                            fontFamily: 'Orbitron',
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 2.8,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Container(
-                          height: 2,
-                          width: 92,
-                          color: AppColors.primary,
-                        ),
-                        const SizedBox(height: 40),
-                        _RegisterCard(
-                          nameController: nameController,
-                          emailController: emailController,
-                          passwordController: passwordController,
-                          repeatPasswordController: repeatPasswordController,
-                          isLoading: isLoading,
-                          onRegister: _register,
-                          onGoToLogin: _goToLogin,
-                          nameError: nameError,
-                          emailError: emailError,
-                          passwordError: passwordError,
-                          repeatPasswordError: repeatPasswordError,
-                          errorMessage: errorMessage,
-                        ),
-                        const SizedBox(height: 30),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -275,9 +246,12 @@ class _RegisterCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppCard.elevated(
+    return Container(
       padding: const EdgeInsets.all(26),
-      borderRadius: 28,
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(28),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -308,18 +282,6 @@ class _RegisterCard extends StatelessWidget {
             icon: Icons.person_outline,
             errorText: nameError,
           ),
-          if (nameError != null)
-            Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: Text(
-                nameError!,
-                style: const TextStyle(
-                  color: AppColors.error,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
           const SizedBox(height: 22),
           const Text(
             AppStrings.registerEmailLabel,
@@ -333,22 +295,10 @@ class _RegisterCard extends StatelessWidget {
           AuthTextField(
             controller: emailController,
             hintText: AppStrings.registerEmailHint,
-            icon: Icons.alternate_email,
+            icon: Icons.email_outlined,
             keyboardType: TextInputType.emailAddress,
             errorText: emailError,
           ),
-          if (emailError != null)
-            Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: Text(
-                emailError!,
-                style: const TextStyle(
-                  color: AppColors.error,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
           const SizedBox(height: 22),
           const Text(
             AppStrings.registerPasswordLabel,
@@ -366,18 +316,6 @@ class _RegisterCard extends StatelessWidget {
             obscureText: true,
             errorText: passwordError,
           ),
-          if (passwordError != null)
-            Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: Text(
-                passwordError!,
-                style: const TextStyle(
-                  color: AppColors.error,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
           const SizedBox(height: 22),
           const Text(
             AppStrings.registerRepeatPasswordLabel,
@@ -395,30 +333,20 @@ class _RegisterCard extends StatelessWidget {
             obscureText: true,
             errorText: repeatPasswordError,
           ),
-          if (repeatPasswordError != null)
-            Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: Text(
-                repeatPasswordError!,
-                style: const TextStyle(
-                  color: AppColors.error,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
           const SizedBox(height: 28),
           if (errorMessage != null)
             Padding(
               padding: const EdgeInsets.only(bottom: 16),
-              child: Text(
-                errorMessage!,
-                style: const TextStyle(
-                  color: AppColors.error,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
+              child: Center(
+                child: Text(
+                  errorMessage!,
+                  style: const TextStyle(
+                    color: AppColors.error,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
               ),
             ),
           SizedBox(
@@ -429,8 +357,6 @@ class _RegisterCard extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: AppColors.background,
-                elevation: 12,
-                shadowColor: AppColors.primary.withOpacity(0.32),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(24),
                 ),

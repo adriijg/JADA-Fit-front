@@ -8,6 +8,7 @@ import '../../../../core/storage/secure_storage_service.dart';
 import '../models/meal_type.dart';
 import '../models/nutrition_day_summary_model.dart';
 import '../models/nutrition_meal_model.dart';
+import '../models/recent_food_model.dart';
 import '../models/recipe_model.dart';
 
 class NutritionMealService {
@@ -30,6 +31,7 @@ class NutritionMealService {
     required double fatsPer100g,
     required DateTime loggedAt,
     String? externalFoodId,
+    String? foodSource,
   }) async {
     final token = await _getTokenOrThrow();
 
@@ -42,6 +44,7 @@ class NutritionMealService {
       body: jsonEncode({
         'externalFoodId': externalFoodId,
         'foodName': foodName,
+        'foodSource': foodSource,
         'mealType': mealType.apiValue,
         'quantityGrams': quantityGrams,
         'caloriesPer100g': caloriesPer100g,
@@ -122,6 +125,34 @@ class NutritionMealService {
       _parseErrorMessage(
         response.body,
         fallback: 'No se pudo eliminar la comida',
+        statusCode: response.statusCode,
+      ),
+      statusCode: response.statusCode,
+    );
+  }
+
+  Future<List<RecentFoodModel>> getRecentFoods() async {
+    final token = await _getTokenOrThrow();
+
+    final response = await _client.get(
+      Uri.parse(ApiEndpoints.nutritionMealsRecent),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body) as List<dynamic>;
+      return data
+          .map((e) => RecentFoodModel.fromJson(e as Map<String, dynamic>))
+          .toList();
+    }
+
+    throw ApiException(
+      _parseErrorMessage(
+        response.body,
+        fallback: 'No se pudieron cargar alimentos recientes',
         statusCode: response.statusCode,
       ),
       statusCode: response.statusCode,
