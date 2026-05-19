@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
@@ -83,45 +84,59 @@ class _StoryViewerScreenState extends State<StoryViewerScreen>
           fit: StackFit.expand,
           children: [
             // Story image
-            Image.network(
-              story.imageUrl,
-              fit: BoxFit.contain,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  color: AppColors.background,
-                  child: const Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.image_not_supported_outlined,
-                          color: AppColors.secondary,
-                          size: 56,
-                        ),
-                        SizedBox(height: 12),
-                        Text(
-                          'No se pudo cargar la historia',
-                          style: TextStyle(
+            Builder(
+              builder: (context) {
+                Widget errorPlaceholder() {
+                  return Container(
+                    color: AppColors.background,
+                    child: const Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.image_not_supported_outlined,
                             color: AppColors.secondary,
-                            fontSize: 14,
+                            size: 56,
                           ),
-                        ),
-                      ],
+                          SizedBox(height: 12),
+                          Text(
+                            'No se pudo cargar la historia',
+                            style: TextStyle(
+                              color: AppColors.secondary,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
-              loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress == null) return child;
-                return Container(
-                  color: AppColors.background,
-                  child: const Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.primary,
-                      strokeWidth: 2,
+                  );
+                }
+
+                Widget loadingPlaceholder(BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Container(
+                    color: AppColors.background,
+                    child: const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.primary,
+                        strokeWidth: 2,
+                      ),
                     ),
-                  ),
-                );
+                  );
+                }
+
+                return story.imageUrl.startsWith('http')
+                    ? Image.network(
+                        story.imageUrl,
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) => errorPlaceholder(),
+                        loadingBuilder: loadingPlaceholder,
+                      )
+                    : Image.file(
+                        File(story.imageUrl),
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) => errorPlaceholder(),
+                      );
               },
             ),
 

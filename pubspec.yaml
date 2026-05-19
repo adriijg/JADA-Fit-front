@@ -27,6 +27,8 @@ dependencies:
   # Renderizar Markdown en respuestas de IA
   flutter_markdown: ^0.7.6
   shimmer: ^3.0.0
+  image_picker: ^1.2.2
+  permission_handler: ^12.0.1
 
 dev_dependencies:
   flutter_test:
