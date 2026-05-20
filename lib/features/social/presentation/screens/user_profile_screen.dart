@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/utils/image_url_resolver.dart';
 import '../../data/models/post.dart';
 import '../../data/models/user_profile.dart';
 import '../../data/services/post_service.dart';
@@ -212,7 +213,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       backgroundImage:
                           _profile!.profilePictureUrl != null &&
                                   _profile!.profilePictureUrl!.isNotEmpty
-                              ? NetworkImage(_profile!.profilePictureUrl!)
+                              ? NetworkImage(ImageUrlResolver.resolve(_profile!.profilePictureUrl!))
                               : null,
                       child: _profile!.profilePictureUrl == null ||
                               _profile!.profilePictureUrl!.isEmpty
@@ -524,14 +525,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                 );
                               }
 
-                              return post.imageUrl.startsWith('http')
+                              final imageUrl = ImageUrlResolver.resolve(post.imageUrl);
+                              return imageUrl.startsWith('http')
                                   ? Image.network(
-                                      post.imageUrl,
+                                      imageUrl,
                                       fit: BoxFit.cover,
                                       errorBuilder: (context, error, stackTrace) => errorPlaceholder(),
                                     )
                                   : Image.file(
-                                      File(post.imageUrl),
+                                      File(imageUrl),
                                       fit: BoxFit.cover,
                                       errorBuilder: (context, error, stackTrace) => errorPlaceholder(),
                                     );

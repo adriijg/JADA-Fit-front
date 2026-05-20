@@ -160,6 +160,7 @@ class SocialService {
 
   Future<void> updateProfile({String? bio, String? profilePictureUrl}) async {
     final token = await _getTokenOrThrow();
+
     final response = await _client.put(
       Uri.parse(ApiEndpoints.meProfile),
       headers: {
@@ -167,8 +168,8 @@ class SocialService {
         'Authorization': 'Bearer $token',
       },
       body: jsonEncode({
-        'bio': ?bio,
-        'profilePictureUrl': ?profilePictureUrl,
+        'bio': bio,
+        'profilePictureUrl': finalProfilePictureUrl,
       }),
     );
 

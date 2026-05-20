@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/utils/image_url_resolver.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../data/models/post.dart';
 import '../../data/models/story.dart';
@@ -398,7 +399,7 @@ class _StoriesBar extends StatelessWidget {
                       child: CircleAvatar(
                         backgroundColor: AppColors.surface,
                         backgroundImage: story.author.profilePictureUrl != null
-                            ? NetworkImage(story.author.profilePictureUrl!)
+                            ? NetworkImage(ImageUrlResolver.resolve(story.author.profilePictureUrl!))
                             : null,
                         child: story.author.profilePictureUrl == null
                             ? Text(
@@ -460,7 +461,7 @@ class _PostCard extends StatelessWidget {
                   radius: 18,
                   backgroundColor: AppColors.primary.withOpacity(0.2),
                   backgroundImage: post.author.profilePictureUrl != null
-                      ? NetworkImage(post.author.profilePictureUrl!)
+                      ? NetworkImage(ImageUrlResolver.resolve(post.author.profilePictureUrl!))
                       : null,
                   child: post.author.profilePictureUrl == null
                       ? Text(
@@ -537,15 +538,16 @@ class _PostCard extends StatelessWidget {
                     );
                   }
 
-                  return post.imageUrl.startsWith('http')
+                  final imageUrl = ImageUrlResolver.resolve(post.imageUrl);
+                  return imageUrl.startsWith('http')
                       ? Image.network(
-                          post.imageUrl,
+                          imageUrl,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) => errorPlaceholder(),
                           loadingBuilder: loadingPlaceholder,
                         )
                       : Image.file(
-                          File(post.imageUrl),
+                          File(imageUrl),
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) => errorPlaceholder(),
                         );

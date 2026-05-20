@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
+import 'dart:io' show File, Platform;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -8,6 +9,7 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../../../core/network/api_endpoints.dart';
 import '../../../../core/storage/secure_storage_service.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/utils/image_url_resolver.dart';
 import '../../data/models/post.dart';
 import '../../data/services/post_service.dart';
 import '../../data/services/social_service.dart';
@@ -91,11 +93,13 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
   }
 
   Future<String?> _pickImageFromGallery() async {
-    if (Platform.isAndroid || Platform.isIOS) {
-      var status = await Permission.photos.status;
-      if (!status.isGranted) {
-        status = await Permission.photos.request();
-      }
+    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+      try {
+        var status = await Permission.photos.status;
+        if (!status.isGranted) {
+          status = await Permission.photos.request();
+        }
+      } catch (_) {}
     }
 
     final picker = ImagePicker();
@@ -219,7 +223,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
 
                         try {
                           await _postService.createPost(
-                            imageUrl: selectedImagePath!,
+                            imagePath: selectedImagePath!,
                             caption: captionController.text.trim().isNotEmpty
                                 ? captionController.text.trim()
                                 : null,
@@ -387,7 +391,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                         try {
                           final storyService = StoryService();
                           await storyService.createStory(
-                            imageUrl: selectedImagePath!,
+                            imagePath: selectedImagePath!,
                           );
 
                           if (mounted) {
@@ -511,7 +515,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                             ),
                             child: ClipOval(
                               child: selectedImagePath != null && selectedImagePath!.isNotEmpty
-                                  ? (isNewImage || !selectedImagePath!.startsWith('http')
+                                  ? (isNewImage
                                       ? Image.file(
                                           File(selectedImagePath!),
                                           fit: BoxFit.cover,
@@ -522,7 +526,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                                           ),
                                         )
                                       : Image.network(
-                                          selectedImagePath!,
+                                          ImageUrlResolver.resolve(selectedImagePath!),
                                           fit: BoxFit.cover,
                                           errorBuilder: (_, __, ___) => const Icon(
                                             Icons.person,
@@ -731,7 +735,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                         backgroundColor: AppColors.surface,
                         backgroundImage: profilePicUrl != null &&
                                 profilePicUrl.isNotEmpty
-                            ? NetworkImage(profilePicUrl)
+                            ? NetworkImage(ImageUrlResolver.resolve(profilePicUrl))
                             : null,
                         child: profilePicUrl == null || profilePicUrl.isEmpty
                             ? Text(
@@ -967,14 +971,15 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                         );
                       }
 
-                      return post.imageUrl.startsWith('http')
+                      final imageUrl = ImageUrlResolver.resolve(post.imageUrl);
+                      return imageUrl.startsWith('http')
                           ? Image.network(
-                              post.imageUrl,
+                              imageUrl,
                               fit: BoxFit.cover,
                               errorBuilder: (context, error, stackTrace) => errorPlaceholder(),
                             )
                           : Image.file(
-                              File(post.imageUrl),
+                              File(imageUrl),
                               fit: BoxFit.cover,
                               errorBuilder: (context, error, stackTrace) => errorPlaceholder(),
                             );

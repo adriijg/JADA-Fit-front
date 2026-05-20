@@ -21,6 +21,7 @@ class PostService {
     String? caption,
   }) async {
     final token = await _getTokenOrThrow();
+
     final response = await _client.post(
       Uri.parse(ApiEndpoints.posts),
       headers: {
@@ -29,7 +30,7 @@ class PostService {
       },
       body: jsonEncode({
         'imageUrl': imageUrl,
-        'caption': ?caption,
+        'caption': caption,
       }),
     );
 

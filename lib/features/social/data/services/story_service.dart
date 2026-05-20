@@ -18,6 +18,7 @@ class StoryService {
 
   Future<Story> createStory({required String imageUrl}) async {
     final token = await _getTokenOrThrow();
+
     final response = await _client.post(
       Uri.parse(ApiEndpoints.stories),
       headers: {

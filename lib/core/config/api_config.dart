@@ -1,7 +1,6 @@
 class ApiConfig {
-  // Emulador Android
-  static const String baseUrl = 'http://10.0.2.2:8080/api';
-
-  // Móvil físico en la misma WiFi
-  //static const String baseUrl = 'http://192.168.1.50:8080/api';
+  // Emulador Android (default)
+  // Para web, serve_web.bat lo sobreescribe con --dart-define=BASE_URL=http://IP:8080/api
+  static const String baseUrl = String.fromEnvironment('BASE_URL',
+      defaultValue: 'http://10.0.2.2:8080/api');
 }

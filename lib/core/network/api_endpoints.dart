@@ -77,4 +77,7 @@ class ApiEndpoints {
 
   // Catalog Exercises
   static const String catalogExercises = '${ApiConfig.baseUrl}/catalog/exercises';
+
+  // Upload
+  static const String uploadImage = '${ApiConfig.baseUrl}/upload/image';
 }

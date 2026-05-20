@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/utils/image_url_resolver.dart';
 import '../../data/models/story.dart';
 
 class StoryViewerScreen extends StatefulWidget {
@@ -125,15 +126,16 @@ class _StoryViewerScreenState extends State<StoryViewerScreen>
                   );
                 }
 
-                return story.imageUrl.startsWith('http')
+                final imageUrl = ImageUrlResolver.resolve(story.imageUrl);
+                return imageUrl.startsWith('http')
                     ? Image.network(
-                        story.imageUrl,
+                        imageUrl,
                         fit: BoxFit.contain,
                         errorBuilder: (context, error, stackTrace) => errorPlaceholder(),
                         loadingBuilder: loadingPlaceholder,
                       )
                     : Image.file(
-                        File(story.imageUrl),
+                        File(imageUrl),
                         fit: BoxFit.contain,
                         errorBuilder: (context, error, stackTrace) => errorPlaceholder(),
                       );
@@ -216,7 +218,7 @@ class _StoryViewerScreenState extends State<StoryViewerScreen>
                         backgroundImage:
                             story.author.profilePictureUrl != null
                                 ? NetworkImage(
-                                    story.author.profilePictureUrl!)
+                                    ImageUrlResolver.resolve(story.author.profilePictureUrl!))
                                 : null,
                         child: story.author.profilePictureUrl == null
                             ? Text(

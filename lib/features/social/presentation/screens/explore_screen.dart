@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/utils/image_url_resolver.dart';
 import '../../data/models/post.dart';
 import '../../data/models/user_summary.dart';
 import '../../data/services/post_service.dart';
@@ -333,7 +334,7 @@ class _UserSearchTile extends StatelessWidget {
         radius: 22,
         backgroundColor: AppColors.primary.withValues(alpha: 0.15),
         backgroundImage: user.profilePictureUrl != null
-            ? NetworkImage(user.profilePictureUrl!)
+            ? NetworkImage(ImageUrlResolver.resolve(user.profilePictureUrl!))
             : null,
         child: user.profilePictureUrl == null
             ? Text(
@@ -376,7 +377,7 @@ class _ExploreGridTile extends StatelessWidget {
         // Could show post detail in the future
       },
       child: Image.network(
-        post.imageUrl,
+        ImageUrlResolver.resolve(post.imageUrl),
         fit: BoxFit.cover,
         errorBuilder: (context, error, stackTrace) {
           return Container(
