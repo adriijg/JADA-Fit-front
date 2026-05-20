@@ -169,7 +169,7 @@ class SocialService {
       },
       body: jsonEncode({
         'bio': bio,
-        'profilePictureUrl': finalProfilePictureUrl,
+        'profilePictureUrl': profilePictureUrl,
       }),
     );
 

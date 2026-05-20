@@ -5,6 +5,7 @@ class ExerciseModel {
   final int sets;
   final int reps;
   final int durationSeconds;
+  final bool isCompleted;
 
   const ExerciseModel({
     this.id,
@@ -13,6 +14,7 @@ class ExerciseModel {
     required this.sets,
     required this.reps,
     required this.durationSeconds,
+    this.isCompleted = false,
   });
 
   factory ExerciseModel.fromJson(Map<String, dynamic> json) {
@@ -23,6 +25,7 @@ class ExerciseModel {
       sets: json['sets'] as int? ?? 0,
       reps: json['reps'] as int? ?? 0,
       durationSeconds: json['durationSeconds'] as int? ?? 0,
+      isCompleted: json['isCompleted'] as bool? ?? false,
     );
   }
 

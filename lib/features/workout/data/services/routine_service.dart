@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -16,16 +17,20 @@ class RoutineService {
   final http.Client _client;
   final SecureStorageService _storageService;
 
+  static const Duration _timeout = Duration(seconds: 15);
+
   Future<List<RoutineModel>> getRoutines() async {
     final token = await _getTokenOrThrow();
 
-    final response = await _client.get(
-      Uri.parse(ApiEndpoints.routines),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-    );
+    final response = await _client
+        .get(
+          Uri.parse(ApiEndpoints.routines),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        )
+        .timeout(_timeout);
 
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
@@ -47,14 +52,16 @@ class RoutineService {
   Future<RoutineModel> createRoutine(RoutineModel routine) async {
     final token = await _getTokenOrThrow();
 
-    final response = await _client.post(
-      Uri.parse(ApiEndpoints.routines),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-      body: jsonEncode(routine.toJson()),
-    );
+    final response = await _client
+        .post(
+          Uri.parse(ApiEndpoints.routines),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+          body: jsonEncode(routine.toJson()),
+        )
+        .timeout(_timeout);
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       final Map<String, dynamic> data = jsonDecode(response.body);
@@ -74,13 +81,15 @@ class RoutineService {
   Future<void> deleteRoutine(int id) async {
     final token = await _getTokenOrThrow();
 
-    final response = await _client.delete(
-      Uri.parse(ApiEndpoints.routineById(id)),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-    );
+    final response = await _client
+        .delete(
+          Uri.parse(ApiEndpoints.routineById(id)),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        )
+        .timeout(_timeout);
 
     if (response.statusCode == 200 || response.statusCode == 204) {
       return;
@@ -94,6 +103,34 @@ class RoutineService {
       ),
       statusCode: response.statusCode,
     );
+  }
+
+  Future<void> markRoutineCompleted(int routineId) async {
+    final token = await _getTokenOrThrow();
+
+    await _client
+        .post(
+          Uri.parse('${ApiEndpoints.routines}/$routineId/complete'),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        )
+        .timeout(_timeout);
+  }
+
+  Future<void> markExerciseCompleted(int routineId, int exerciseId) async {
+    final token = await _getTokenOrThrow();
+
+    await _client
+        .post(
+          Uri.parse('${ApiEndpoints.routines}/$routineId/exercises/$exerciseId/complete'),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        )
+        .timeout(_timeout);
   }
 
   Future<String> _getTokenOrThrow() async {
@@ -111,7 +148,6 @@ class RoutineService {
     required String fallback,
     required int statusCode,
   }) {
-    // DEBUG: return 'DEBUG: $statusCode - $body';
     if (statusCode == 401 || statusCode == 403) {
       return 'No autorizado ($statusCode). Prueba a cerrar sesión y entrar de nuevo.';
     }
@@ -128,7 +164,6 @@ class RoutineService {
         }
       }
     } catch (_) {
-      // fallback
     }
 
     if (body.trim().isNotEmpty) return body;

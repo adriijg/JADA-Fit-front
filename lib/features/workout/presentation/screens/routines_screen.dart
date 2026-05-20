@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -27,6 +26,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
   List<RoutineModel> _routines = [];
   String _searchQuery = '';
   String _selectedGoal = 'TODOS';
+  bool _showCompleted = false;
 
   final List<String> _goals = ['TODOS', 'FUERZA', 'VOLUMEN', 'RESISTENCIA', 'DEFINICIÓN'];
 
@@ -39,6 +39,12 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
       return matchesSearch && matchesGoal;
     }).toList();
   }
+
+  List<RoutineModel> get _inProgressRoutines =>
+      _filteredRoutines.where((r) => !r.isCompleted).toList();
+
+  List<RoutineModel> get _completedRoutines =>
+      _filteredRoutines.where((r) => r.isCompleted).toList();
 
   @override
   void initState() {
@@ -191,17 +197,15 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
 
   Widget _buildStats() {
     final totalRoutines = _routines.length;
-    final avgExercises = totalRoutines > 0 
-        ? (_routines.map((e) => e.exercises.length).reduce((a, b) => a + b) / totalRoutines).toStringAsFixed(1)
-        : '0';
+    final completedCount = _routines.where((r) => r.isCompleted).length;
 
     return AppCard.elevated(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16),
       child: Row(
         children: [
           _buildStatItem('RUTINAS', totalRoutines.toString(), Icons.fitness_center_rounded),
-          const SizedBox(width: 32),
-          _buildStatItem('PROM. EJER.', avgExercises, Icons.layers_rounded),
+          const SizedBox(width: 16),
+          _buildStatItem('COMPLETADAS', completedCount.toString(), Icons.check_circle_rounded),
         ],
       ),
     );
@@ -211,8 +215,8 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
     return Expanded(
       child: Row(
         children: [
-          AppCardIcon(icon: icon, size: 40, borderRadius: 12, iconSize: 20),
-          const SizedBox(width: 12),
+          AppCardIcon(icon: icon, size: 32, borderRadius: 10, iconSize: 16),
+          const SizedBox(width: 8),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -220,7 +224,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
                 value,
                 style: const TextStyle(
                   color: AppColors.textMain,
-                  fontSize: 20,
+                  fontSize: 16,
                   fontWeight: FontWeight.w900,
                 ),
               ),
@@ -228,7 +232,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
                 label,
                 style: TextStyle(
                   color: AppColors.textMain.withOpacity(0.4),
-                  fontSize: 9,
+                  fontSize: 8,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.5,
                 ),
@@ -353,9 +357,10 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
       );
     }
 
-    final filtered = _filteredRoutines;
+    final inProgress = _inProgressRoutines;
+    final completed = _completedRoutines;
 
-    if (filtered.isEmpty) {
+    if (inProgress.isEmpty && completed.isEmpty) {
       return Container(
         width: double.infinity,
         margin: const EdgeInsets.symmetric(vertical: 20),
@@ -406,12 +411,102 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
     }
 
     return Column(
-      children: filtered.map((routine) {
-        return _PremiumRoutineCard(
-          routine: routine,
-          onTap: () => _openDetail(routine),
-        );
-      }).toList(),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (inProgress.isNotEmpty) ...[
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(Icons.play_circle_rounded, color: AppColors.primary, size: 18),
+                ),
+                const SizedBox(width: 10),
+                Text(
+                  'En progreso',
+                  style: const TextStyle(
+                    color: AppColors.textMain,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const Spacer(),
+                Text(
+                  '${inProgress.length}',
+                  style: TextStyle(
+                    color: AppColors.textMain.withOpacity(0.4),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          ...inProgress.map((routine) => Padding(
+            padding: const EdgeInsets.only(bottom: 16),
+            child: _PremiumRoutineCard(
+              routine: routine,
+              onTap: () => _openDetail(routine),
+            ),
+          )),
+        ],
+        if (completed.isNotEmpty) ...[
+          const SizedBox(height: 8),
+          GestureDetector(
+            onTap: () => setState(() => _showCompleted = !_showCompleted),
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: AppColors.success.withOpacity(0.15),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Icon(
+                      _showCompleted ? Icons.expand_less_rounded : Icons.expand_more_rounded,
+                      color: AppColors.success,
+                      size: 18,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    'Completadas',
+                    style: TextStyle(
+                      color: AppColors.success.withOpacity(0.9),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  const Spacer(),
+                  Text(
+                    '${completed.length}',
+                    style: TextStyle(
+                      color: AppColors.success.withOpacity(0.6),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          if (_showCompleted)
+            ...completed.map((routine) => Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: _PremiumRoutineCard(
+                routine: routine,
+                onTap: () => _openDetail(routine),
+              ),
+            )),
+        ],
+      ],
     );
   }
 }

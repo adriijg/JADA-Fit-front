@@ -223,7 +223,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
 
                         try {
                           await _postService.createPost(
-                            imagePath: selectedImagePath!,
+                            imageUrl: selectedImagePath!,
                             caption: captionController.text.trim().isNotEmpty
                                 ? captionController.text.trim()
                                 : null,
@@ -391,7 +391,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                         try {
                           final storyService = StoryService();
                           await storyService.createStory(
-                            imagePath: selectedImagePath!,
+                            imageUrl: selectedImagePath!,
                           );
 
                           if (mounted) {

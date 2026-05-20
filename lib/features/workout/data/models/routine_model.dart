@@ -5,6 +5,7 @@ class RoutineModel {
   final String name;
   final String description;
   final String targetGoal;
+  final bool isCompleted;
   final List<ExerciseModel> exercises;
 
   const RoutineModel({
@@ -12,6 +13,7 @@ class RoutineModel {
     required this.name,
     required this.description,
     required this.targetGoal,
+    this.isCompleted = false,
     this.exercises = const [],
   });
 
@@ -28,6 +30,7 @@ class RoutineModel {
       name: json['name'] as String? ?? '',
       description: json['description'] as String? ?? '',
       targetGoal: json['targetGoal'] as String? ?? '',
+      isCompleted: json['isCompleted'] as bool? ?? false,
       exercises: exercises,
     );
   }

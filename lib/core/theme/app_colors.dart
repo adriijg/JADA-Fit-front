@@ -15,5 +15,6 @@ class AppColors {
 
   static const Color googleRed = Color(0xFFEA4335);
   static const Color error = Color(0xFFEA4335);
+  static const Color success = Color(0xFF2ECC71);
   static const Color divider = Color(0xFF2A3A45);
 }

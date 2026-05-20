@@ -5,6 +5,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../data/models/routine_model.dart';
 import '../../data/services/routine_service.dart';
+import '../../data/services/completed_storage_service.dart';
 
 class RoutineDetailScreen extends StatefulWidget {
   const RoutineDetailScreen({super.key, required this.routine});
@@ -17,7 +18,29 @@ class RoutineDetailScreen extends StatefulWidget {
 
 class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
   final RoutineService _service = RoutineService();
+  final CompletedStorageService _localComplete = CompletedStorageService();
+
   bool _deleting = false;
+  bool _completing = false;
+  late Set<int> _completedExercises;
+  late bool _routineCompleted;
+
+  @override
+  void initState() {
+    super.initState();
+    _routineCompleted = widget.routine.isCompleted;
+    _completedExercises = {};
+    _loadLocalState();
+  }
+
+  Future<void> _loadLocalState() async {
+    if (!_routineCompleted) {
+      final indices = await _localComplete.getCompletedExerciseIndices(widget.routine.id ?? -1);
+      if (mounted) {
+        setState(() => _completedExercises = indices);
+      }
+    }
+  }
 
   Future<void> _confirmDelete() async {
     final confirmed = await showDialog<bool>(
@@ -92,6 +115,50 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
     }
   }
 
+  Future<void> _markExerciseCompleted(int index) async {
+    if (_routineCompleted) return;
+
+    final exercise = widget.routine.exercises[index];
+    if (exercise.id == null) return;
+
+    setState(() => _completedExercises.add(index));
+
+    try {
+      await _service.markExerciseCompleted(widget.routine.id!, exercise.id!);
+      if (widget.routine.id != null) {
+        await _localComplete.markExerciseCompleted(widget.routine.id!, index);
+      }
+    } catch (_) {
+      if (mounted) setState(() => _completedExercises.remove(index));
+    }
+  }
+
+  Future<void> _markRoutineCompleted() async {
+    setState(() => _completing = true);
+
+    try {
+      await _service.markRoutineCompleted(widget.routine.id!);
+      if (widget.routine.id != null) {
+        await _localComplete.markRoutineCompleted(widget.routine.id!);
+      }
+      if (!mounted) return;
+      setState(() {
+        _routineCompleted = true;
+        _completedExercises = Set.from(
+          List.generate(widget.routine.exercises.length, (i) => i),
+        );
+      });
+    } on ApiException catch (e) {
+      if (!mounted) return;
+      _showError(e.message);
+    } catch (_) {
+      if (!mounted) return;
+      _showError('No se pudo completar la rutina');
+    } finally {
+      if (mounted) setState(() => _completing = false);
+    }
+  }
+
   void _showError(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -113,6 +180,7 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
   Widget build(BuildContext context) {
     final routine = widget.routine;
     final hasExercises = routine.exercises.isNotEmpty;
+    final allExercisesCompleted = hasExercises && _completedExercises.length == routine.exercises.length;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -134,6 +202,30 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
               ),
             ),
             actions: [
+              if (_routineCompleted)
+                Container(
+                  margin: const EdgeInsets.only(right: 12),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: AppColors.success.withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.check_circle, color: AppColors.success, size: 16),
+                      SizedBox(width: 4),
+                      Text(
+                        'Completada',
+                        style: TextStyle(
+                          color: AppColors.success,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               if (_deleting)
                 const Padding(
                   padding: EdgeInsets.only(right: 20),
@@ -279,15 +371,66 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
                     ...routine.exercises.asMap().entries.map((entry) {
                       final index = entry.key;
                       final exercise = entry.value;
+                      final isCompleted = _routineCompleted || _completedExercises.contains(index);
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 16),
                         child: _PremiumExerciseCard(
                           index: index + 1,
                           exercise: exercise,
                           formatDuration: _formatDuration,
+                          isCompleted: isCompleted,
+                          onToggleComplete: (_routineCompleted || _completing)
+                              ? null
+                              : () => _markExerciseCompleted(index),
                         ),
                       );
                     }),
+                  const SizedBox(height: 24),
+                  if (_routineCompleted)
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: AppColors.success.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: AppColors.success.withOpacity(0.3)),
+                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.celebration_rounded, color: AppColors.success, size: 24),
+                          SizedBox(width: 12),
+                          Text(
+                            '¡Rutina completada!',
+                            style: TextStyle(
+                              color: AppColors.success,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  else if (!_completing && allExercisesCompleted)
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        onPressed: _markRoutineCompleted,
+                        icon: const Icon(Icons.check_circle_outline, size: 22),
+                        label: const Text(
+                          'Completar rutina',
+                          style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.success,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+                        ),
+                      ),
+                    ),
                   const SizedBox(height: 40),
                 ],
               ),
@@ -304,97 +447,131 @@ class _PremiumExerciseCard extends StatelessWidget {
     required this.index,
     required this.exercise,
     required this.formatDuration,
+    this.isCompleted = false,
+    this.onToggleComplete,
   });
 
   final int index;
   final dynamic exercise;
   final String Function(int) formatDuration;
+  final bool isCompleted;
+  final VoidCallback? onToggleComplete;
 
   @override
   Widget build(BuildContext context) {
-    return AppCard(
-      borderRadius: 24,
-      padding: EdgeInsets.zero,
-      borderColor: AppColors.divider.withOpacity(0.3),
-      borderWidth: 1,
-      child: IntrinsicHeight(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Container(
-              width: 48,
-              decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(24),
-                  bottomLeft: Radius.circular(24),
+    return GestureDetector(
+      onTap: onToggleComplete,
+      child: AppCard(
+        borderRadius: 24,
+        padding: EdgeInsets.zero,
+        borderColor: isCompleted
+            ? AppColors.success.withOpacity(0.4)
+            : AppColors.divider.withOpacity(0.3),
+        borderWidth: isCompleted ? 1.5 : 1,
+        child: IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                width: 48,
+                decoration: BoxDecoration(
+                  color: isCompleted
+                      ? AppColors.success.withOpacity(0.15)
+                      : AppColors.primary.withOpacity(0.1),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(24),
+                    bottomLeft: Radius.circular(24),
+                  ),
+                ),
+                child: Center(
+                  child: isCompleted
+                      ? const Icon(Icons.check_circle, color: AppColors.success, size: 22)
+                      : Text(
+                          '$index',
+                          style: const TextStyle(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.w900,
+                            fontSize: 18,
+                          ),
+                        ),
                 ),
               ),
-              child: Center(
-                child: Text(
-                  '$index',
-                  style: const TextStyle(
-                    color: AppColors.primary,
-                    fontWeight: FontWeight.w900,
-                    fontSize: 18,
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              exercise.name,
+                              style: TextStyle(
+                                color: isCompleted
+                                    ? AppColors.success.withOpacity(0.8)
+                                    : AppColors.textMain,
+                                fontWeight: FontWeight.w800,
+                                fontSize: 17,
+                                decoration: isCompleted
+                                    ? TextDecoration.lineThrough
+                                    : null,
+                              ),
+                            ),
+                          ),
+                          if (onToggleComplete != null)
+                            Icon(
+                              isCompleted
+                                  ? Icons.check_circle_rounded
+                                  : Icons.radio_button_unchecked_rounded,
+                              color: isCompleted
+                                  ? AppColors.success
+                                  : AppColors.textMain.withOpacity(0.3),
+                              size: 24,
+                            ),
+                        ],
+                      ),
+                      if (exercise.description.isNotEmpty) ...[
+                        const SizedBox(height: 6),
+                        Text(
+                          exercise.description,
+                          style: TextStyle(
+                            color: AppColors.textMain.withOpacity(0.6),
+                            fontSize: 13,
+                            height: 1.4,
+                          ),
+                        ),
+                      ],
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          _StatPill(
+                            icon: Icons.repeat_rounded,
+                            value: '${exercise.sets} series',
+                            color: AppColors.secondary,
+                          ),
+                          const SizedBox(width: 8),
+                          _StatPill(
+                            icon: Icons.unfold_more_rounded,
+                            value: '${exercise.reps} reps',
+                            color: AppColors.secondary,
+                          ),
+                          if (exercise.durationSeconds > 0) ...[
+                            const SizedBox(width: 8),
+                            _StatPill(
+                              icon: Icons.timer_outlined,
+                              value: formatDuration(exercise.durationSeconds),
+                              color: AppColors.tertiary,
+                            ),
+                          ],
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      exercise.name,
-                      style: const TextStyle(
-                        color: AppColors.textMain,
-                        fontWeight: FontWeight.w800,
-                        fontSize: 17,
-                      ),
-                    ),
-                    if (exercise.description.isNotEmpty) ...[
-                      const SizedBox(height: 6),
-                      Text(
-                        exercise.description,
-                        style: TextStyle(
-                          color: AppColors.textMain.withOpacity(0.6),
-                          fontSize: 13,
-                          height: 1.4,
-                        ),
-                      ),
-                    ],
-                    const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        _StatPill(
-                          icon: Icons.repeat_rounded,
-                          value: '${exercise.sets} series',
-                          color: AppColors.secondary,
-                        ),
-                        const SizedBox(width: 8),
-                        _StatPill(
-                          icon: Icons.unfold_more_rounded,
-                          value: '${exercise.reps} reps',
-                          color: AppColors.secondary,
-                        ),
-                        if (exercise.durationSeconds > 0) ...[
-                          const SizedBox(width: 8),
-                          _StatPill(
-                            icon: Icons.timer_outlined,
-                            value: formatDuration(exercise.durationSeconds),
-                            color: AppColors.tertiary,
-                          ),
-                        ],
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
