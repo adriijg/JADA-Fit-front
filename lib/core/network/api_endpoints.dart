@@ -1,73 +1,73 @@
 import '../config/api_config.dart';
 
 class ApiEndpoints {
-  static const String users = '${ApiConfig.baseUrl}/users';
+  static String get users => '${ApiConfig.baseUrl}/users';
 
-  static const String login = '$users/login';
-  static const String register = '$users/register';
-  static const String me = '$users/me';
-  static const String forgotPassword = '$users/forgot-password';
-  static const String resetPassword = '$users/reset-password';
+  static String get login => '$users/login';
+  static String get register => '$users/register';
+  static String get me => '$users/me';
+  static String get forgotPassword => '$users/forgot-password';
+  static String get resetPassword => '$users/reset-password';
 
-  static const String mePrivacy = '$me/privacy';
-  static const String meProfile = '$me/profile';
+  static String get mePrivacy => '$me/privacy';
+  static String get meProfile => '$me/profile';
 
-  static const String onboarding = '${ApiConfig.baseUrl}/onboarding';
-  static const String completeOnboarding = '$onboarding/complete';
+  static String get onboarding => '${ApiConfig.baseUrl}/onboarding';
+  static String get completeOnboarding => '$onboarding/complete';
 
-  static const String fitnessProfile = '${ApiConfig.baseUrl}/fitness-profile';
-  static const String myFitnessProfile = '$fitnessProfile/me';
+  static String get fitnessProfile => '${ApiConfig.baseUrl}/fitness-profile';
+  static String get myFitnessProfile => '$fitnessProfile/me';
 
-  static const String fitnessProgress = '${ApiConfig.baseUrl}/fitness-progress';
-  static const String myFitnessProgress = '$fitnessProgress/me';
+  static String get fitnessProgress => '${ApiConfig.baseUrl}/fitness-progress';
+  static String get myFitnessProgress => '$fitnessProgress/me';
 
-  static const String foods = '${ApiConfig.baseUrl}/foods';
-  static const String foodsSearch = '$foods/search';
-  static const String foodsBarcode = '$foods/barcode';
-  static const String foodsCustom = '$foods/custom';
-  static const String myCustomFoods = '$foods/my-custom';
+  static String get foods => '${ApiConfig.baseUrl}/foods';
+  static String get foodsSearch => '$foods/search';
+  static String get foodsBarcode => '$foods/barcode';
+  static String get foodsCustom => '$foods/custom';
+  static String get myCustomFoods => '$foods/my-custom';
 
-  static const String nutrition = '${ApiConfig.baseUrl}/nutrition';
-  static const String nutritionMeals = '$nutrition/meals';
-  static const String nutritionMealsFromRecipe = '$nutritionMeals/from-recipe';
-  static const String nutritionMealsRecent = '$nutritionMeals/recent';
-  static const String nutritionDay = '$nutrition/day';
-  static const String nutritionGoals = '$nutrition/goals';
-  static const String nutritionGoalsRecalculate = '$nutritionGoals/me/recalculate';
+  static String get nutrition => '${ApiConfig.baseUrl}/nutrition';
+  static String get nutritionMeals => '$nutrition/meals';
+  static String get nutritionMealsFromRecipe => '$nutritionMeals/from-recipe';
+  static String get nutritionMealsRecent => '$nutritionMeals/recent';
+  static String get nutritionDay => '$nutrition/day';
+  static String get nutritionGoals => '$nutrition/goals';
+  static String get nutritionGoalsRecalculate => '$nutritionGoals/me/recalculate';
 
-  static const String water = '$nutrition/water';
-  static const String waterToday = '$water/today';
+  static String get water => '$nutrition/water';
+  static String get waterToday => '$water/today';
 
-  static const String social = '${ApiConfig.baseUrl}/social';
-  static const String follow = '$social/follow';
-  static const String unfollow = '$social/unfollow';
+  static String get social => '${ApiConfig.baseUrl}/social';
+  static String get follow => '$social/follow';
+  static String get unfollow => '$social/unfollow';
 
-  static const String challenges = '${ApiConfig.baseUrl}/challenges';
-  static const String myChallenges = '$challenges/my';
-  static const String exerciseRecords = '$challenges/records';
-  static const String myExerciseRecords = '$exerciseRecords/my';
+  static String get challenges => '${ApiConfig.baseUrl}/challenges';
+  static String get myChallenges => '$challenges/my';
+  static String get exerciseRecords => '$challenges/records';
+  static String get myExerciseRecords => '$exerciseRecords/my';
 
   // Posts
-  static const String posts = '$social/posts';
-  static const String postsFeed = '$posts/feed';
-  static const String postsExplore = '$posts/explore';
+  static String get posts => '$social/posts';
+  static String get postsFeed => '$posts/feed';
+  static String get postsExplore => '$posts/explore';
 
   static String postsByUser(String userId) => '$posts/user/$userId';
 
   // Stories
-  static const String stories = '$social/stories';
-  static const String storiesFeed = '$stories/feed';
+  static String get stories => '$social/stories';
+  static String get storiesFeed => '$stories/feed';
 
-  static const String routines = '${ApiConfig.baseUrl}/routines';
+  static String get routines => '${ApiConfig.baseUrl}/routines';
 
   static String routineById(int id) => '$routines/$id';
 
-  static const String recipes = '${ApiConfig.baseUrl}/recipes';
+  static String get recipes => '${ApiConfig.baseUrl}/recipes';
 
   static String recipeById(String id) => '$recipes/$id';
 
-  static const String ai = '${ApiConfig.baseUrl}/ai';
-  static const String aiChat = '$ai/chat';
+  static String get ai => '${ApiConfig.baseUrl}/ai';
+  static String get aiChat => '$ai/chat';
 
   static String foodByBarcode(String barcode) {
     return '$foods/barcode/$barcode';
@@ -76,8 +76,8 @@ class ApiEndpoints {
   static String customFoodById(String foodId) => '$foodsCustom/$foodId';
 
   // Catalog Exercises
-  static const String catalogExercises = '${ApiConfig.baseUrl}/catalog/exercises';
+  static String get catalogExercises => '${ApiConfig.baseUrl}/catalog/exercises';
 
   // Upload
-  static const String uploadImage = '${ApiConfig.baseUrl}/upload/image';
+  static String get uploadImage => '${ApiConfig.baseUrl}/upload/image';
 }

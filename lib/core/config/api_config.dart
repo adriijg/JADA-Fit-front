@@ -1,6 +1,10 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
+
 class ApiConfig {
-  // Emulador Android (default)
-  // Para web, serve_web.bat lo sobreescribe con --dart-define=BASE_URL=http://IP:8080/api
-  static const String baseUrl = String.fromEnvironment('BASE_URL',
-      defaultValue: 'http://10.0.2.2:8080/api');
+  /// Web: mismo origen (/api), el backend sirve frontend + API.
+  /// Android emulador: 10.0.2.2 mapea a localhost de la máquina host.
+  static String get baseUrl {
+    if (kIsWeb) return '/api';
+    return 'http://10.0.2.2:8080/api';
+  }
 }
