@@ -193,7 +193,9 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                                 Text(
                                   'Seleccionar de la galería',
                                   style: TextStyle(
-                                    color: AppColors.secondary.withValues(alpha: 0.7),
+                                    color: AppColors.secondary.withValues(
+                                      alpha: 0.7,
+                                    ),
                                     fontSize: 14,
                                   ),
                                 ),
@@ -216,14 +218,16 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                       onPressed: () async {
                         if (selectedImagePath == null) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Selecciona una imagen primero')),
+                            const SnackBar(
+                              content: Text('Selecciona una imagen primero'),
+                            ),
                           );
                           return;
                         }
 
                         try {
                           await _postService.createPost(
-                            imageUrl: selectedImagePath!,
+                            imagePath: selectedImagePath!,
                             caption: captionController.text.trim().isNotEmpty
                                 ? captionController.text.trim()
                                 : null,
@@ -367,7 +371,9 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                                 Text(
                                   'Seleccionar de la galería',
                                   style: TextStyle(
-                                    color: AppColors.secondary.withValues(alpha: 0.7),
+                                    color: AppColors.secondary.withValues(
+                                      alpha: 0.7,
+                                    ),
                                     fontSize: 14,
                                   ),
                                 ),
@@ -383,7 +389,9 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                       onPressed: () async {
                         if (selectedImagePath == null) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Selecciona una imagen primero')),
+                            const SnackBar(
+                              content: Text('Selecciona una imagen primero'),
+                            ),
                           );
                           return;
                         }
@@ -509,31 +517,39 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                               shape: BoxShape.circle,
                               color: AppColors.inputBackground,
                               border: Border.all(
-                                color: AppColors.inputBorder.withValues(alpha: 0.5),
+                                color: AppColors.inputBorder.withValues(
+                                  alpha: 0.5,
+                                ),
                                 width: 0.8,
                               ),
                             ),
                             child: ClipOval(
-                              child: selectedImagePath != null && selectedImagePath!.isNotEmpty
+                              child:
+                                  selectedImagePath != null &&
+                                      selectedImagePath!.isNotEmpty
                                   ? (isNewImage
-                                      ? Image.file(
-                                          File(selectedImagePath!),
-                                          fit: BoxFit.cover,
-                                          errorBuilder: (_, __, ___) => const Icon(
-                                            Icons.person,
-                                            size: 50,
-                                            color: AppColors.secondary,
-                                          ),
-                                        )
-                                      : Image.network(
-                                          ImageUrlResolver.resolve(selectedImagePath!),
-                                          fit: BoxFit.cover,
-                                          errorBuilder: (_, __, ___) => const Icon(
-                                            Icons.person,
-                                            size: 50,
-                                            color: AppColors.secondary,
-                                          ),
-                                        ))
+                                        ? Image.file(
+                                            File(selectedImagePath!),
+                                            fit: BoxFit.cover,
+                                            errorBuilder: (_, __, ___) =>
+                                                const Icon(
+                                                  Icons.person,
+                                                  size: 50,
+                                                  color: AppColors.secondary,
+                                                ),
+                                          )
+                                        : Image.network(
+                                            ImageUrlResolver.resolve(
+                                              selectedImagePath!,
+                                            ),
+                                            fit: BoxFit.cover,
+                                            errorBuilder: (_, __, ___) =>
+                                                const Icon(
+                                                  Icons.person,
+                                                  size: 50,
+                                                  color: AppColors.secondary,
+                                                ),
+                                          ))
                                   : const Icon(
                                       Icons.person,
                                       color: AppColors.secondary,
@@ -675,7 +691,11 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.cloud_off_rounded, color: AppColors.error, size: 48),
+            const Icon(
+              Icons.cloud_off_rounded,
+              color: AppColors.error,
+              size: 48,
+            ),
             const SizedBox(height: 16),
             Text(
               _error!,
@@ -686,8 +706,10 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
             TextButton.icon(
               onPressed: _loadProfile,
               icon: const Icon(Icons.refresh, color: AppColors.primary),
-              label: const Text('Reintentar',
-                  style: TextStyle(color: AppColors.primary)),
+              label: const Text(
+                'Reintentar',
+                style: TextStyle(color: AppColors.primary),
+              ),
             ),
           ],
         ),
@@ -733,9 +755,11 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                       child: CircleAvatar(
                         radius: 42,
                         backgroundColor: AppColors.surface,
-                        backgroundImage: profilePicUrl != null &&
-                                profilePicUrl.isNotEmpty
-                            ? NetworkImage(ImageUrlResolver.resolve(profilePicUrl))
+                        backgroundImage:
+                            profilePicUrl != null && profilePicUrl.isNotEmpty
+                            ? NetworkImage(
+                                ImageUrlResolver.resolve(profilePicUrl),
+                              )
                             : null,
                         child: profilePicUrl == null || profilePicUrl.isEmpty
                             ? Text(
@@ -814,28 +838,19 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      _StatItem(
-                        value: '${_myPosts.length}',
-                        label: 'Posts',
-                      ),
+                      _StatItem(value: '${_myPosts.length}', label: 'Posts'),
                       Container(
                         width: 0.5,
                         height: 30,
                         color: AppColors.divider.withValues(alpha: 0.4),
                       ),
-                      const _StatItem(
-                        value: '-',
-                        label: 'Seguidores',
-                      ),
+                      const _StatItem(value: '-', label: 'Seguidores'),
                       Container(
                         width: 0.5,
                         height: 30,
                         color: AppColors.divider.withValues(alpha: 0.4),
                       ),
-                      const _StatItem(
-                        value: '-',
-                        label: 'Siguiendo',
-                      ),
+                      const _StatItem(value: '-', label: 'Siguiendo'),
                     ],
                   ),
                 ),
@@ -955,37 +970,36 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                     crossAxisSpacing: 3,
                     mainAxisSpacing: 3,
                   ),
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final post = _myPosts[index];
-                      Widget errorPlaceholder() {
-                        return Container(
-                          color: AppColors.inputBackground,
-                          child: const Center(
-                            child: Icon(
-                              Icons.image_not_supported_outlined,
-                              color: AppColors.secondary,
-                              size: 24,
-                            ),
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                    final post = _myPosts[index];
+                    Widget errorPlaceholder() {
+                      return Container(
+                        color: AppColors.inputBackground,
+                        child: const Center(
+                          child: Icon(
+                            Icons.image_not_supported_outlined,
+                            color: AppColors.secondary,
+                            size: 24,
                           ),
-                        );
-                      }
+                        ),
+                      );
+                    }
 
-                      final imageUrl = ImageUrlResolver.resolve(post.imageUrl);
-                      return imageUrl.startsWith('http')
-                          ? Image.network(
-                              imageUrl,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) => errorPlaceholder(),
-                            )
-                          : Image.file(
-                              File(imageUrl),
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) => errorPlaceholder(),
-                            );
-                    },
-                    childCount: _myPosts.length,
-                  ),
+                    final imageUrl = ImageUrlResolver.resolve(post.imageUrl);
+                    return imageUrl.startsWith('http')
+                        ? Image.network(
+                            imageUrl,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                errorPlaceholder(),
+                          )
+                        : Image.file(
+                            File(imageUrl),
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                errorPlaceholder(),
+                          );
+                  }, childCount: _myPosts.length),
                 ),
 
           const SliverToBoxAdapter(child: SizedBox(height: 24)),
@@ -1053,10 +1067,7 @@ class _ActionButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: color.withValues(alpha: 0.12),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: color.withValues(alpha: 0.25),
-            width: 0.8,
-          ),
+          border: Border.all(color: color.withValues(alpha: 0.25), width: 0.8),
         ),
         child: Column(
           children: [

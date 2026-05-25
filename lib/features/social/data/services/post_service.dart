@@ -5,6 +5,7 @@ import '../../../../core/network/api_endpoints.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/storage/secure_storage_service.dart';
 import '../models/post.dart';
+import '../models/post_comment.dart';
 
 class PostService {
   PostService({
@@ -16,12 +17,18 @@ class PostService {
   final http.Client _client;
   final SecureStorageService _storageService;
 
+  // ── Upload image then create post ─────────────────────────────────────────
+
   Future<Post> createPost({
-    required String imageUrl,
+    required String imagePath,
     String? caption,
   }) async {
     final token = await _getTokenOrThrow();
 
+    // 1. Upload image first and get the server URL
+    final serverImageUrl = await _uploadImage(imagePath, token);
+
+    // 2. Create the post with the server URL
     final response = await _client.post(
       Uri.parse(ApiEndpoints.posts),
       headers: {
@@ -29,7 +36,7 @@ class PostService {
         'Authorization': 'Bearer $token',
       },
       body: jsonEncode({
-        'imageUrl': imageUrl,
+        'imageUrl': serverImageUrl,
         'caption': caption,
       }),
     );
@@ -43,6 +50,30 @@ class PostService {
       statusCode: response.statusCode,
     );
   }
+
+  Future<String> _uploadImage(String imagePath, String token) async {
+    final request = http.MultipartRequest(
+      'POST',
+      Uri.parse(ApiEndpoints.uploadImage),
+    );
+    request.headers['Authorization'] = 'Bearer $token';
+    request.files.add(await http.MultipartFile.fromPath('file', imagePath));
+
+    final streamedResponse = await request.send();
+    final response = await http.Response.fromStream(streamedResponse);
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body) as Map<String, dynamic>;
+      return data['url'] as String;
+    }
+
+    throw ApiException(
+      'Error al subir la imagen: ${response.statusCode}',
+      statusCode: response.statusCode,
+    );
+  }
+
+  // ── Feed / posts ──────────────────────────────────────────────────────────
 
   Future<List<Post>> getFeed() async {
     final token = await _getTokenOrThrow();
@@ -106,6 +137,71 @@ class PostService {
       statusCode: response.statusCode,
     );
   }
+
+  // ── Likes ─────────────────────────────────────────────────────────────────
+
+  Future<void> likePost(String postId) async {
+    final token = await _getTokenOrThrow();
+    final response = await _client.post(
+      Uri.parse(ApiEndpoints.postLike(postId)),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw ApiException(_parseErrorMessage(response.body),
+          statusCode: response.statusCode);
+    }
+  }
+
+  Future<void> unlikePost(String postId) async {
+    final token = await _getTokenOrThrow();
+    final response = await _client.delete(
+      Uri.parse(ApiEndpoints.postLike(postId)),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+    if (response.statusCode != 200 && response.statusCode != 204) {
+      throw ApiException(_parseErrorMessage(response.body),
+          statusCode: response.statusCode);
+    }
+  }
+
+  // ── Comments ──────────────────────────────────────────────────────────────
+
+  Future<List<PostComment>> getComments(String postId) async {
+    final token = await _getTokenOrThrow();
+    final response = await _client.get(
+      Uri.parse(ApiEndpoints.postComments(postId)),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      return data.map((json) => PostComment.fromJson(json)).toList();
+    }
+
+    throw ApiException(_parseErrorMessage(response.body),
+        statusCode: response.statusCode);
+  }
+
+  Future<PostComment> addComment(String postId, String content) async {
+    final token = await _getTokenOrThrow();
+    final response = await _client.post(
+      Uri.parse(ApiEndpoints.postComments(postId)),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode({'content': content}),
+    );
+
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      return PostComment.fromJson(jsonDecode(response.body));
+    }
+
+    throw ApiException(_parseErrorMessage(response.body),
+        statusCode: response.statusCode);
+  }
+
+  // ── Helpers ───────────────────────────────────────────────────────────────
 
   Future<String> _getTokenOrThrow() async {
     final token = await _storageService.getToken();

@@ -53,6 +53,8 @@ class ApiEndpoints {
   static const String postsExplore = '$posts/explore';
 
   static String postsByUser(String userId) => '$posts/user/$userId';
+  static String postLike(String postId) => '$posts/$postId/like';
+  static String postComments(String postId) => '$posts/$postId/comments';
 
   // Stories
   static const String stories = '$social/stories';
