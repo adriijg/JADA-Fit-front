@@ -3,7 +3,9 @@ import 'package:http/http.dart' as http;
 
 import '../../../../core/network/api_endpoints.dart';
 import '../../../../core/network/api_exception.dart';
+import '../../../../core/network/upload_service.dart';
 import '../../../../core/storage/secure_storage_service.dart';
+import '../../../../core/utils/image_url_resolver.dart';
 import '../models/story.dart';
 
 class StoryService {
@@ -18,6 +20,9 @@ class StoryService {
 
   Future<Story> createStory({required String imageUrl}) async {
     final token = await _getTokenOrThrow();
+    final serverImageUrl = ImageUrlResolver.isServerImageUrl(imageUrl)
+        ? imageUrl
+        : await UploadService().uploadImage(imageUrl);
 
     final response = await _client.post(
       Uri.parse(ApiEndpoints.stories),
@@ -26,7 +31,7 @@ class StoryService {
         'Authorization': 'Bearer $token',
       },
       body: jsonEncode({
-        'imageUrl': imageUrl,
+        'imageUrl': serverImageUrl,
       }),
     );
 
