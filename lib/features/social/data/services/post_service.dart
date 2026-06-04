@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 
 import '../../../../core/network/api_endpoints.dart';
 import '../../../../core/network/api_exception.dart';
+import '../../../../core/network/upload_service.dart';
 import '../../../../core/storage/secure_storage_service.dart';
 import '../models/post.dart';
 import '../models/post_comment.dart';
@@ -26,7 +27,7 @@ class PostService {
     final token = await _getTokenOrThrow();
 
     // 1. Upload image first and get the server URL
-    final serverImageUrl = await _uploadImage(imagePath, token);
+    final serverImageUrl = await UploadService().uploadImage(imagePath);
 
     // 2. Create the post with the server URL
     final response = await _client.post(
@@ -47,28 +48,6 @@ class PostService {
 
     throw ApiException(
       _parseErrorMessage(response.body),
-      statusCode: response.statusCode,
-    );
-  }
-
-  Future<String> _uploadImage(String imagePath, String token) async {
-    final request = http.MultipartRequest(
-      'POST',
-      Uri.parse(ApiEndpoints.uploadImage),
-    );
-    request.headers['Authorization'] = 'Bearer $token';
-    request.files.add(await http.MultipartFile.fromPath('file', imagePath));
-
-    final streamedResponse = await request.send();
-    final response = await http.Response.fromStream(streamedResponse);
-
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body) as Map<String, dynamic>;
-      return data['url'] as String;
-    }
-
-    throw ApiException(
-      'Error al subir la imagen: ${response.statusCode}',
       statusCode: response.statusCode,
     );
   }

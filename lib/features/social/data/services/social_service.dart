@@ -3,7 +3,9 @@ import 'package:http/http.dart' as http;
 
 import '../../../../core/network/api_endpoints.dart';
 import '../../../../core/network/api_exception.dart';
+import '../../../../core/network/upload_service.dart';
 import '../../../../core/storage/secure_storage_service.dart';
+import '../../../../core/utils/image_url_resolver.dart';
 import '../models/user_profile.dart';
 import '../models/user_summary.dart';
 
@@ -160,6 +162,11 @@ class SocialService {
 
   Future<void> updateProfile({String? bio, String? profilePictureUrl}) async {
     final token = await _getTokenOrThrow();
+    final serverProfilePictureUrl = profilePictureUrl != null &&
+            profilePictureUrl.isNotEmpty &&
+            !ImageUrlResolver.isServerImageUrl(profilePictureUrl)
+        ? await UploadService().uploadImage(profilePictureUrl)
+        : profilePictureUrl;
 
     final response = await _client.put(
       Uri.parse(ApiEndpoints.meProfile),
@@ -169,7 +176,7 @@ class SocialService {
       },
       body: jsonEncode({
         'bio': bio,
-        'profilePictureUrl': profilePictureUrl,
+        'profilePictureUrl': serverProfilePictureUrl,
       }),
     );
 

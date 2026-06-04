@@ -11,12 +11,15 @@ import '../../../../core/storage/secure_storage_service.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/image_url_resolver.dart';
 import '../../data/models/post.dart';
+import '../../data/models/user_profile.dart';
 import '../../data/services/post_service.dart';
 import '../../data/services/social_service.dart';
 import '../../data/services/story_service.dart';
 
 class MySocialProfileScreen extends StatefulWidget {
-  const MySocialProfileScreen({super.key});
+  const MySocialProfileScreen({super.key, this.refreshVersion = 0});
+
+  final int refreshVersion;
 
   @override
   State<MySocialProfileScreen> createState() => _MySocialProfileScreenState();
@@ -28,6 +31,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
   final SecureStorageService _storageService = SecureStorageService();
 
   Map<String, dynamic>? _currentUser;
+  UserProfile? _socialProfile;
   List<Post> _myPosts = [];
   bool _isLoading = true;
   String? _error;
@@ -36,6 +40,14 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
   void initState() {
     super.initState();
     _loadProfile();
+  }
+
+  @override
+  void didUpdateWidget(covariant MySocialProfileScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.refreshVersion != oldWidget.refreshVersion) {
+      _loadProfile();
+    }
   }
 
   Future<void> _loadProfile() async {
@@ -59,6 +71,15 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
 
       if (meResponse.statusCode == 200) {
         final userData = jsonDecode(meResponse.body) as Map<String, dynamic>;
+        UserProfile? socialProfile;
+
+        try {
+          socialProfile = await _socialService.getUserProfile(
+            userData['id'].toString(),
+          );
+        } catch (_) {
+          // Keep the profile usable even if social stats cannot be loaded.
+        }
 
         // Get user posts
         List<Post> posts = [];
@@ -71,6 +92,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
         if (mounted) {
           setState(() {
             _currentUser = userData;
+            _socialProfile = socialProfile;
             _myPosts = posts;
           });
         }
@@ -528,24 +550,28 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                                   selectedImagePath != null &&
                                       selectedImagePath!.isNotEmpty
                                   ? (isNewImage
-                                      ? Image.file(
-                                          File(selectedImagePath!),
-                                          fit: BoxFit.cover,
-                                          errorBuilder: (_, _, _) => const Icon(
-                                            Icons.person,
-                                            size: 50,
-                                            color: AppColors.secondary,
-                                          ),
-                                        )
-                                      : Image.network(
-                                          ImageUrlResolver.resolve(selectedImagePath!),
-                                          fit: BoxFit.cover,
-                                          errorBuilder: (_, _, _) => const Icon(
-                                            Icons.person,
-                                            size: 50,
-                                            color: AppColors.secondary,
-                                          ),
-                                        ))
+                                        ? Image.file(
+                                            File(selectedImagePath!),
+                                            fit: BoxFit.cover,
+                                            errorBuilder: (_, _, _) =>
+                                                const Icon(
+                                                  Icons.person,
+                                                  size: 50,
+                                                  color: AppColors.secondary,
+                                                ),
+                                          )
+                                        : Image.network(
+                                            ImageUrlResolver.resolve(
+                                              selectedImagePath!,
+                                            ),
+                                            fit: BoxFit.cover,
+                                            errorBuilder: (_, _, _) =>
+                                                const Icon(
+                                                  Icons.person,
+                                                  size: 50,
+                                                  color: AppColors.secondary,
+                                                ),
+                                          ))
                                   : const Icon(
                                       Icons.person,
                                       color: AppColors.secondary,
@@ -717,6 +743,8 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
     final username = _currentUser!['username'] ?? 'Usuario';
     final bio = _currentUser!['bio'] as String?;
     final profilePicUrl = _currentUser!['profilePictureUrl'] as String?;
+    final followersCount = _socialProfile?.followersCount ?? 0;
+    final followingCount = _socialProfile?.followingCount ?? 0;
 
     return RefreshIndicator(
       onRefresh: _loadProfile,
@@ -840,13 +868,13 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                         height: 30,
                         color: AppColors.divider.withValues(alpha: 0.4),
                       ),
-                      const _StatItem(value: '-', label: 'Seguidores'),
+                      _StatItem(value: '$followersCount', label: 'Seguidores'),
                       Container(
                         width: 0.5,
                         height: 30,
                         color: AppColors.divider.withValues(alpha: 0.4),
                       ),
-                      const _StatItem(value: '-', label: 'Siguiendo'),
+                      _StatItem(value: '$followingCount', label: 'Siguiendo'),
                     ],
                   ),
                 ),

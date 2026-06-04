@@ -23,13 +23,7 @@ class SocialScreen extends StatefulWidget {
 
 class _SocialScreenState extends State<SocialScreen> {
   int _currentTab = 0;
-
-  final List<Widget> _screens = const [
-    _FeedTab(),
-    ExploreScreen(),
-    _PiquesTab(),
-    MySocialProfileScreen(),
-  ];
+  int _profileRefreshVersion = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +35,9 @@ class _SocialScreenState extends State<SocialScreen> {
           onTabSelected: (index) {
             setState(() {
               _currentTab = index;
+              if (index == 3) {
+                _profileRefreshVersion++;
+              }
             });
           },
         ),
@@ -48,7 +45,12 @@ class _SocialScreenState extends State<SocialScreen> {
         Expanded(
           child: IndexedStack(
             index: _currentTab,
-            children: _screens,
+            children: [
+              const _FeedTab(),
+              const ExploreScreen(),
+              const _PiquesTab(),
+              MySocialProfileScreen(refreshVersion: _profileRefreshVersion),
+            ],
           ),
         ),
       ],
@@ -59,10 +61,7 @@ class _SocialScreenState extends State<SocialScreen> {
 // ─── Top Navigation Bar ──────────────────────────────────────────────────────
 
 class _SocialTopBar extends StatelessWidget {
-  const _SocialTopBar({
-    required this.currentTab,
-    required this.onTabSelected,
-  });
+  const _SocialTopBar({required this.currentTab, required this.onTabSelected});
 
   final int currentTab;
   final ValueChanged<int> onTabSelected;
@@ -232,10 +231,7 @@ class _FeedTabState extends State<_FeedTab> {
     }
 
     if (_error != null) {
-      return _ErrorView(
-        message: _error!,
-        onRetry: _loadFeed,
-      );
+      return _ErrorView(message: _error!, onRetry: _loadFeed);
     }
 
     return RefreshIndicator(
@@ -311,7 +307,9 @@ class _FeedTabState extends State<_FeedTab> {
                 context,
                 MaterialPageRoute(
                   builder: (_) => StoryViewerScreen(
-                    stories: _stories.where((s) => s.author.id == story.author.id).toList(),
+                    stories: _stories
+                        .where((s) => s.author.id == story.author.id)
+                        .toList(),
                     authorName: story.author.username,
                   ),
                 ),
@@ -331,10 +329,7 @@ class _FeedTabState extends State<_FeedTab> {
 // ─── Stories Bar ─────────────────────────────────────────────────────────────
 
 class _StoriesBar extends StatelessWidget {
-  const _StoriesBar({
-    required this.stories,
-    required this.onStoryTap,
-  });
+  const _StoriesBar({required this.stories, required this.onStoryTap});
 
   final List<Story> stories;
   final ValueChanged<Story> onStoryTap;
@@ -372,10 +367,7 @@ class _StoriesBar extends StatelessWidget {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       gradient: const LinearGradient(
-                        colors: [
-                          AppColors.primary,
-                          AppColors.secondary,
-                        ],
+                        colors: [AppColors.primary, AppColors.secondary],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
@@ -397,7 +389,11 @@ class _StoriesBar extends StatelessWidget {
                       child: CircleAvatar(
                         backgroundColor: AppColors.surface,
                         backgroundImage: story.author.profilePictureUrl != null
-                            ? NetworkImage(ImageUrlResolver.resolve(story.author.profilePictureUrl!))
+                            ? NetworkImage(
+                                ImageUrlResolver.resolve(
+                                  story.author.profilePictureUrl!,
+                                ),
+                              )
                             : null,
                         child: story.author.profilePictureUrl == null
                             ? Text(
@@ -459,7 +455,11 @@ class _PostCard extends StatelessWidget {
                   radius: 18,
                   backgroundColor: AppColors.primary.withOpacity(0.2),
                   backgroundImage: post.author.profilePictureUrl != null
-                      ? NetworkImage(ImageUrlResolver.resolve(post.author.profilePictureUrl!))
+                      ? NetworkImage(
+                          ImageUrlResolver.resolve(
+                            post.author.profilePictureUrl!,
+                          ),
+                        )
                       : null,
                   child: post.author.profilePictureUrl == null
                       ? Text(
@@ -523,7 +523,11 @@ class _PostCard extends StatelessWidget {
                     );
                   }
 
-                  Widget loadingPlaceholder(BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                  Widget loadingPlaceholder(
+                    BuildContext context,
+                    Widget child,
+                    ImageChunkEvent? loadingProgress,
+                  ) {
                     if (loadingProgress == null) return child;
                     return Container(
                       color: AppColors.inputBackground,
@@ -541,13 +545,15 @@ class _PostCard extends StatelessWidget {
                       ? Image.network(
                           imageUrl,
                           fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) => errorPlaceholder(),
+                          errorBuilder: (context, error, stackTrace) =>
+                              errorPlaceholder(),
                           loadingBuilder: loadingPlaceholder,
                         )
                       : Image.file(
                           File(imageUrl),
                           fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) => errorPlaceholder(),
+                          errorBuilder: (context, error, stackTrace) =>
+                              errorPlaceholder(),
                         );
                 },
               ),
@@ -621,21 +627,14 @@ class _ActionIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Icon(
-      icon,
-      color: AppColors.textMain.withOpacity(0.8),
-      size: 22,
-    );
+    return Icon(icon, color: AppColors.textMain.withOpacity(0.8), size: 22);
   }
 }
 
 // ─── Error View ──────────────────────────────────────────────────────────────
 
 class _ErrorView extends StatelessWidget {
-  const _ErrorView({
-    required this.message,
-    required this.onRetry,
-  });
+  const _ErrorView({required this.message, required this.onRetry});
 
   final String message;
   final VoidCallback onRetry;
@@ -709,9 +708,9 @@ class _PiquesTabState extends State<_PiquesTab> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error al cargar piques: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error al cargar piques: $e')));
       }
     } finally {
       if (mounted) {
@@ -725,7 +724,9 @@ class _PiquesTabState extends State<_PiquesTab> {
   @override
   Widget build(BuildContext context) {
     if (_isLoadingChallenges) {
-      return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+      return const Center(
+        child: CircularProgressIndicator(color: AppColors.primary),
+      );
     }
 
     if (_myChallenges.isEmpty) {
@@ -733,11 +734,19 @@ class _PiquesTabState extends State<_PiquesTab> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.emoji_events_outlined, size: 64, color: AppColors.secondary),
+            const Icon(
+              Icons.emoji_events_outlined,
+              size: 64,
+              color: AppColors.secondary,
+            ),
             const SizedBox(height: 16),
             const Text(
               'No tienes piques activos.',
-              style: TextStyle(color: AppColors.textMain, fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                color: AppColors.textMain,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(height: 8),
             const Text(
@@ -750,7 +759,9 @@ class _PiquesTabState extends State<_PiquesTab> {
               onPressed: _showUpdateRecordDialog,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
               child: const Text('Actualizar mis marcas'),
             ),
@@ -774,12 +785,19 @@ class _PiquesTabState extends State<_PiquesTab> {
                 children: [
                   const Text(
                     'Tus Piques',
-                    style: TextStyle(color: AppColors.textMain, fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      color: AppColors.textMain,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   TextButton.icon(
                     onPressed: _showUpdateRecordDialog,
                     icon: const Icon(Icons.add, color: AppColors.primary),
-                    label: const Text('Mis Marcas', style: TextStyle(color: AppColors.primary)),
+                    label: const Text(
+                      'Mis Marcas',
+                      style: TextStyle(color: AppColors.primary),
+                    ),
                   ),
                 ],
               ),
@@ -809,17 +827,29 @@ class _PiquesTabState extends State<_PiquesTab> {
                   backgroundColor: AppColors.primary.withOpacity(0.1),
                   child: Text(
                     challenge.challenger.username[0].toUpperCase(),
-                    style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 12),
-                const Text('vs', style: TextStyle(color: AppColors.secondary, fontStyle: FontStyle.italic)),
+                const Text(
+                  'vs',
+                  style: TextStyle(
+                    color: AppColors.secondary,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
                 const SizedBox(width: 12),
                 CircleAvatar(
                   backgroundColor: AppColors.primary.withOpacity(0.1),
                   child: Text(
                     challenge.challenged.username[0].toUpperCase(),
-                    style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 const Spacer(),
@@ -829,15 +859,25 @@ class _PiquesTabState extends State<_PiquesTab> {
             const SizedBox(height: 16),
             Text(
               challenge.exerciseName,
-              style: const TextStyle(color: AppColors.textMain, fontSize: 18, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                color: AppColors.textMain,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(height: 12),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildWeightInfo(challenge.challenger.username, challenge.challengerWeight),
+                _buildWeightInfo(
+                  challenge.challenger.username,
+                  challenge.challengerWeight,
+                ),
                 const Icon(Icons.bolt, color: Colors.orange),
-                _buildWeightInfo(challenge.challenged.username, challenge.challengedWeight),
+                _buildWeightInfo(
+                  challenge.challenged.username,
+                  challenge.challengedWeight,
+                ),
               ],
             ),
             if (challenge.status == ChallengeStatus.PENDING) ...[
@@ -849,9 +889,14 @@ class _PiquesTabState extends State<_PiquesTab> {
                       onPressed: () => _rejectChallenge(challenge.id),
                       style: OutlinedButton.styleFrom(
                         side: const BorderSide(color: Colors.red),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                       ),
-                      child: const Text('Rechazar', style: TextStyle(color: Colors.red)),
+                      child: const Text(
+                        'Rechazar',
+                        style: TextStyle(color: Colors.red),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -860,7 +905,9 @@ class _PiquesTabState extends State<_PiquesTab> {
                       onPressed: () => _acceptChallenge(challenge.id),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                       ),
                       child: const Text('Aceptar'),
                     ),
@@ -885,7 +932,11 @@ class _PiquesTabState extends State<_PiquesTab> {
         ),
         Text(
           '${weight.toStringAsFixed(1)} kg',
-          style: const TextStyle(color: AppColors.textMain, fontSize: 18, fontWeight: FontWeight.bold),
+          style: const TextStyle(
+            color: AppColors.textMain,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ],
     );
@@ -922,7 +973,11 @@ class _PiquesTabState extends State<_PiquesTab> {
       ),
       child: Text(
         text,
-        style: TextStyle(color: color, fontSize: 10, fontWeight: FontWeight.bold),
+        style: TextStyle(
+          color: color,
+          fontSize: 10,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }
@@ -932,7 +987,9 @@ class _PiquesTabState extends State<_PiquesTab> {
       await _challengeService.acceptChallenge(id);
       _loadChallenges();
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error: $e')));
     }
   }
 
@@ -941,7 +998,9 @@ class _PiquesTabState extends State<_PiquesTab> {
       await _challengeService.rejectChallenge(id);
       _loadChallenges();
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error: $e')));
     }
   }
 
@@ -953,7 +1012,10 @@ class _PiquesTabState extends State<_PiquesTab> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: AppColors.surface,
-        title: const Text('Actualizar Marca Personal', style: TextStyle(color: AppColors.textMain)),
+        title: const Text(
+          'Actualizar Marca Personal',
+          style: TextStyle(color: AppColors.textMain),
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -980,7 +1042,10 @@ class _PiquesTabState extends State<_PiquesTab> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancelar', style: TextStyle(color: AppColors.secondary)),
+            child: const Text(
+              'Cancelar',
+              style: TextStyle(color: AppColors.secondary),
+            ),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -992,10 +1057,14 @@ class _PiquesTabState extends State<_PiquesTab> {
                   if (mounted) {
                     Navigator.pop(context);
                     _loadChallenges();
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Marca actualizada')));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Marca actualizada')),
+                    );
                   }
                 } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text('Error: $e')));
                 }
               }
             },
