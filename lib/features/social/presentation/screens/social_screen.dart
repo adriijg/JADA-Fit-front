@@ -9,12 +9,10 @@ import '../../data/models/story.dart';
 import '../../data/models/challenge.dart';
 import '../../data/services/post_service.dart';
 import '../../data/services/story_service.dart';
-import '../../data/services/social_service.dart';
 import '../../data/services/challenge_service.dart';
 import 'explore_screen.dart';
 import 'my_social_profile_screen.dart';
 import 'story_viewer_screen.dart';
-import 'user_profile_screen.dart';
 
 class SocialScreen extends StatefulWidget {
   const SocialScreen({super.key});

@@ -97,8 +97,8 @@ class CatalogFoodService {
       },
       body: jsonEncode({
         'name': name,
-        if (brand != null) 'brand': brand,
-        if (barcode != null) 'barcode': barcode,
+        'brand': ?brand,
+        'barcode': ?barcode,
         'caloriesPer100g': caloriesPer100g,
         'proteinPer100g': proteinPer100g,
         'carbsPer100g': carbsPer100g,

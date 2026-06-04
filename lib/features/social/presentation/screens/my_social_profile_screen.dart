@@ -528,28 +528,24 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                                   selectedImagePath != null &&
                                       selectedImagePath!.isNotEmpty
                                   ? (isNewImage
-                                        ? Image.file(
-                                            File(selectedImagePath!),
-                                            fit: BoxFit.cover,
-                                            errorBuilder: (_, __, ___) =>
-                                                const Icon(
-                                                  Icons.person,
-                                                  size: 50,
-                                                  color: AppColors.secondary,
-                                                ),
-                                          )
-                                        : Image.network(
-                                            ImageUrlResolver.resolve(
-                                              selectedImagePath!,
-                                            ),
-                                            fit: BoxFit.cover,
-                                            errorBuilder: (_, __, ___) =>
-                                                const Icon(
-                                                  Icons.person,
-                                                  size: 50,
-                                                  color: AppColors.secondary,
-                                                ),
-                                          ))
+                                      ? Image.file(
+                                          File(selectedImagePath!),
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (_, _, _) => const Icon(
+                                            Icons.person,
+                                            size: 50,
+                                            color: AppColors.secondary,
+                                          ),
+                                        )
+                                      : Image.network(
+                                          ImageUrlResolver.resolve(selectedImagePath!),
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (_, _, _) => const Icon(
+                                            Icons.person,
+                                            size: 50,
+                                            color: AppColors.secondary,
+                                          ),
+                                        ))
                                   : const Icon(
                                       Icons.person,
                                       color: AppColors.secondary,
