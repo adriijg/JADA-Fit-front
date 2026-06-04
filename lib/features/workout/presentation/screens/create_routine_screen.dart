@@ -300,18 +300,10 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
   }
 
   Widget _buildSuggestions() {
-    final byGoal = ExerciseCatalog.suggestionsForGoal(_selectedGoal!);
-    final bySplit = _selectedSplit != null
-        ? ExerciseCatalog.bySplit(_selectedSplit!).map((e) => ExerciseSuggestion(
-              name: e.name,
-              suggestedSets: 3,
-              suggestedReps: 10,
-            ))
-        : <ExerciseSuggestion>[];
-    final suggestions = [
-      ...byGoal,
-      ...bySplit.where((s) => !byGoal.any((g) => g.name == s.name)),
-    ];
+    final suggestions = ExerciseCatalog.suggestionsForGoalAndSplit(
+      _selectedGoal!,
+      _selectedSplit,
+    );
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       padding: const EdgeInsets.all(16),
@@ -328,7 +320,9 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
               const Icon(Icons.auto_awesome_rounded, color: AppColors.tertiary, size: 18),
               const SizedBox(width: 8),
               Text(
-                'Ejercicios sugeridos para ${_selectedGoal!.displayName}',
+                _selectedSplit != null
+                    ? 'Ejercicios sugeridos para ${_selectedGoal!.displayName} - ${_selectedSplit!.displayName}'
+                    : 'Ejercicios sugeridos para ${_selectedGoal!.displayName}',
                 style: const TextStyle(
                   color: AppColors.tertiary,
                   fontSize: 14,

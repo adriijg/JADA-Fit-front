@@ -5,6 +5,7 @@ class ApiEndpoints {
 
   static String get login => '$users/login';
   static String get register => '$users/register';
+  static String get logout => '$users/logout';
   static String get me => '$users/me';
   static String get forgotPassword => '$users/forgot-password';
   static String get resetPassword => '$users/reset-password';

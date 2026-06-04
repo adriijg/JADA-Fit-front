@@ -861,6 +861,21 @@ class ExerciseCatalog {
   }
 
   static List<ExerciseSuggestion> suggestionsForGoal(RoutineGoal goal) {
+    return suggestionsForGoalAndSplit(goal, null);
+  }
+
+  static List<ExerciseSuggestion> suggestionsForGoalAndSplit(RoutineGoal goal, RoutineSplit? split) {
+    if (split != null) {
+      final matching = bySplit(split).where((e) => e.goals.contains(goal)).toList();
+      final reps = _repsForGoal(goal);
+      final sets = _setsForGoal(goal);
+      return matching.map((e) => ExerciseSuggestion(
+        name: e.name,
+        suggestedSets: sets,
+        suggestedReps: reps,
+      )).toList();
+    }
+
     switch (goal) {
       case RoutineGoal.fuerza:
         return [
@@ -917,6 +932,24 @@ class ExerciseCatalog {
           const ExerciseSuggestion(name: 'Bicicleta abdominal', suggestedSets: 3, suggestedReps: 20),
           const ExerciseSuggestion(name: 'Cruce de cables en polea alta', suggestedSets: 3, suggestedReps: 15),
         ];
+    }
+  }
+
+  static int _repsForGoal(RoutineGoal goal) {
+    switch (goal) {
+      case RoutineGoal.fuerza: return 6;
+      case RoutineGoal.volumen: return 10;
+      case RoutineGoal.resistencia: return 15;
+      case RoutineGoal.definicion: return 12;
+    }
+  }
+
+  static int _setsForGoal(RoutineGoal goal) {
+    switch (goal) {
+      case RoutineGoal.fuerza: return 4;
+      case RoutineGoal.volumen: return 4;
+      case RoutineGoal.resistencia: return 3;
+      case RoutineGoal.definicion: return 3;
     }
   }
 }

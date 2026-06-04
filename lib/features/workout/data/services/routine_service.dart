@@ -164,6 +164,20 @@ class RoutineService {
         .timeout(_timeout);
   }
 
+  Future<void> unmarkExerciseCompleted(int routineId, int exerciseId) async {
+    final token = await _getTokenOrThrow();
+
+    await _client
+        .delete(
+          Uri.parse('${ApiEndpoints.routines}/$routineId/exercises/$exerciseId/complete'),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        )
+        .timeout(_timeout);
+  }
+
   Future<String> _getTokenOrThrow() async {
     final token = await _storageService.getToken();
 

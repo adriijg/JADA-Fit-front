@@ -106,8 +106,21 @@ class AuthService {
     return _storageService.getToken();
   }
 
-  Future<void> logout() {
-    return _storageService.deleteToken();
+  Future<void> logout() async {
+    try {
+      final token = await _storageService.getToken();
+      if (token != null) {
+        await _client.post(
+          Uri.parse(ApiEndpoints.logout),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        );
+      }
+    } catch (_) {
+    }
+    await _storageService.deleteToken();
   }
 
   Future<void> forgotPassword(String email) async {

@@ -118,21 +118,31 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
     }
   }
 
-  Future<void> _markExerciseCompleted(int index) async {
+  Future<void> _toggleExerciseCompleted(int index) async {
     if (_routineCompleted) return;
 
     final exercise = widget.routine.exercises[index];
     if (exercise.id == null) return;
 
-    setState(() => _completedExercises.add(index));
+    final isCurrentlyCompleted = _completedExercises.contains(index);
 
-    try {
-      await _service.markExerciseCompleted(widget.routine.id!, exercise.id!);
-      if (widget.routine.id != null) {
-        await _localComplete.markExerciseCompleted(widget.routine.id!, index);
+    if (isCurrentlyCompleted) {
+      setState(() => _completedExercises.remove(index));
+      try {
+        await _service.unmarkExerciseCompleted(widget.routine.id!, exercise.id!);
+      } catch (_) {
+        if (mounted) setState(() => _completedExercises.add(index));
       }
-    } catch (_) {
-      if (mounted) setState(() => _completedExercises.remove(index));
+    } else {
+      setState(() => _completedExercises.add(index));
+      try {
+        await _service.markExerciseCompleted(widget.routine.id!, exercise.id!);
+        if (widget.routine.id != null) {
+          await _localComplete.markExerciseCompleted(widget.routine.id!, index);
+        }
+      } catch (_) {
+        if (mounted) setState(() => _completedExercises.remove(index));
+      }
     }
   }
 
@@ -411,7 +421,7 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
                           isCompleted: isCompleted,
                           onToggleComplete: (_routineCompleted || _completing)
                               ? null
-                              : () => _markExerciseCompleted(index),
+                              : () => _toggleExerciseCompleted(index),
                         ),
                       );
                     }),
