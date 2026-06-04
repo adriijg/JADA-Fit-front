@@ -9,6 +9,7 @@ import '../../../auth/data/services/auth_service.dart';
 import '../../../auth/presentation/screens/login_screen.dart';
 import '../../../social/data/services/social_service.dart' as es_jadafit_social_service;
 import '../../../../core/widgets/app_card.dart';
+import '../../../fitness_profile/presentation/screens/fitness_profile_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -181,6 +182,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
             user: currentUser,
             onSettings: () {
               _showComingSoonMessage('Configuración próximamente');
+            },
+            onFitnessProfile: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const FitnessProfileScreen(),
+                ),
+              );
             },
             onPrivacyChanged: _loadUserAccount,
             onIntegrations: () {
@@ -363,6 +372,7 @@ class _AccountOptionsCard extends StatefulWidget {
   const _AccountOptionsCard({
     required this.user,
     required this.onSettings,
+    required this.onFitnessProfile,
     required this.onIntegrations,
     required this.onLogout,
     required this.onPrivacyChanged,
@@ -370,6 +380,7 @@ class _AccountOptionsCard extends StatefulWidget {
 
   final UserAccountModel user;
   final VoidCallback onSettings;
+  final VoidCallback onFitnessProfile;
   final VoidCallback onIntegrations;
   final VoidCallback onLogout;
   final VoidCallback onPrivacyChanged;
@@ -451,6 +462,13 @@ class _AccountOptionsCardState extends State<_AccountOptionsCard> {
             title: 'Integraciones',
             subtitle: 'Apple Health, Google Fit y wearables',
             onTap: widget.onIntegrations,
+          ),
+          const SizedBox(height: 10),
+          _AccountOptionTile(
+            icon: Icons.monitor_heart_outlined,
+            title: 'Datos físicos',
+            subtitle: 'Peso, altura, composición corporal y más',
+            onTap: widget.onFitnessProfile,
           ),
           const SizedBox(height: 10),
           _AccountOptionTile(
