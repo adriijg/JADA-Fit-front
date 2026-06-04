@@ -1,4 +1,4 @@
-﻿import 'dart:async';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
@@ -23,7 +23,7 @@ import 'my_recipes_screen.dart';
 import 'my_foods_screen.dart';
 
 class NutritionScreen extends StatefulWidget {
-  const NutritionScreen({super.key});
+  NutritionScreen({super.key});
 
   @override
   State<NutritionScreen> createState() => _NutritionScreenState();
@@ -147,9 +147,8 @@ class _NutritionScreenState extends State<NutritionScreen> {
       if (!mounted) return;
       setState(() => _daySummary = summary);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text('No se pudo eliminar la comida'),
-          backgroundColor: AppColors.surface,
         ),
       );
     }
@@ -181,7 +180,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
     });
 
     _debounceTimer?.cancel();
-    _debounceTimer = Timer(const Duration(milliseconds: 300), () {
+    _debounceTimer = Timer(Duration(milliseconds: 300), () {
       _loadDaySummary();
       _loadWaterToday();
     });
@@ -190,8 +189,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
   void _showAddFoodMenu() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: AppColors.surface,
-      shape: const RoundedRectangleBorder(
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (_) => Padding(
@@ -209,15 +207,15 @@ class _NutritionScreenState extends State<NutritionScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
-            const Text(
-              'AÑADIR ALIMENTO A...',
+            SizedBox(height: 20),
+            Text(
+              'A�ADIR ALIMENTO A...',
               style: TextStyle(
                 color: AppColors.secondary,
                 fontSize: 12, fontWeight: FontWeight.w800, letterSpacing: 1.2,
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             _MealOptionRow(
               icon: Icons.free_breakfast,
               label: MealType.breakfast.label,
@@ -292,7 +290,6 @@ class _NutritionScreenState extends State<NutritionScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Error al registrar agua'),
-            backgroundColor: AppColors.surface,
           ),
         );
       }
@@ -325,15 +322,15 @@ class _NutritionScreenState extends State<NutritionScreen> {
       return 'Hoy';
     }
 
-    final yesterday = today.subtract(const Duration(days: 1));
-    final tomorrow = today.add(const Duration(days: 1));
+    final yesterday = today.subtract(Duration(days: 1));
+    final tomorrow = today.add(Duration(days: 1));
 
     if (target == yesterday) {
       return 'Ayer';
     }
 
     if (target == tomorrow) {
-      return 'Mañana';
+      return 'Ma�ana';
     }
 
     final day = date.day.toString().padLeft(2, '0');
@@ -351,16 +348,15 @@ class _NutritionScreenState extends State<NutritionScreen> {
         RefreshIndicator(
           onRefresh: _loadDaySummary,
           color: AppColors.primary,
-          backgroundColor: AppColors.surface,
           child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
+            physics: AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.only(
               bottom: 80,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   AppStrings.nutritionTitle,
                   style: TextStyle(
                     color: AppColors.textMain,
@@ -368,21 +364,21 @@ class _NutritionScreenState extends State<NutritionScreen> {
                     fontWeight: FontWeight.w800,
                   ),
                 ),
-                const SizedBox(height: 6),
+                SizedBox(height: 6),
                 Text(
                   _formatDayTitle(_selectedDate),
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.secondary,
                     fontSize: 14,
                     height: 1.5,
                   ),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
                 _WeekCalendar(
                   selectedDate: _selectedDate,
                   onDateSelected: _selectDate,
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
                 if (_isLoading)
                   const _NutritionShimmer()
                 else if (_errorMessage != null)
@@ -394,7 +390,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
                   _DailySummaryCard(
                     summary: summary,
                   ),
-                  const SizedBox(height: 18),
+                  SizedBox(height: 18),
                   _MealSectionCard(
                     mealType: MealType.breakfast,
                     meals: _mealsByType(MealType.breakfast),
@@ -403,7 +399,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
                     onToggleCollapse: () => _toggleSection(MealType.breakfast),
                     onAddFood: () => _openFoodSearch(MealType.breakfast),
                   ),
-                  const SizedBox(height: 14),
+                  SizedBox(height: 14),
                   _MealSectionCard(
                     mealType: MealType.lunch,
                     meals: _mealsByType(MealType.lunch),
@@ -412,7 +408,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
                     onToggleCollapse: () => _toggleSection(MealType.lunch),
                     onAddFood: () => _openFoodSearch(MealType.lunch),
                   ),
-                  const SizedBox(height: 14),
+                  SizedBox(height: 14),
                   _MealSectionCard(
                     mealType: MealType.dinner,
                     meals: _mealsByType(MealType.dinner),
@@ -421,7 +417,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
                     onToggleCollapse: () => _toggleSection(MealType.dinner),
                     onAddFood: () => _openFoodSearch(MealType.dinner),
                   ),
-                  const SizedBox(height: 14),
+                  SizedBox(height: 14),
                   _MealSectionCard(
                     mealType: MealType.snack,
                     meals: _mealsByType(MealType.snack),
@@ -430,13 +426,13 @@ class _NutritionScreenState extends State<NutritionScreen> {
                     onToggleCollapse: () => _toggleSection(MealType.snack),
                     onAddFood: () => _openFoodSearch(MealType.snack),
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
                   _WaterTrackerCard(
                     summary: _waterSummary,
                     isLoading: _isWaterLoading,
                     onSetWater: _setWater,
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -446,20 +442,20 @@ class _NutritionScreenState extends State<NutritionScreen> {
                             await Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => const MyRecipesScreen(),
+                                builder: (_) => MyRecipesScreen(),
                               ),
                             );
                           },
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      SizedBox(width: 12),
                       Expanded(
                         child: _CreateFoodCard(
                           onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => const MyFoodsScreen(),
+                                builder: (_) => MyFoodsScreen(),
                               ),
                             );
                           },
@@ -467,7 +463,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
                   _PhysicalTrackingCard(
                     logs: _fitnessLogs,
                     isLoading: _isFitnessLoading,
@@ -488,7 +484,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
-            child: const Icon(Icons.add, size: 28),
+            child: Icon(Icons.add, size: 28),
           ),
         ),
       ],
@@ -575,7 +571,7 @@ class _WeekCalendar extends StatelessWidget {
               onTap: () => onDateSelected(day),
               borderRadius: BorderRadius.circular(18),
               child: AnimatedContainer(
-                duration: const Duration(milliseconds: 180),
+                duration: Duration(milliseconds: 180),
                 padding: const EdgeInsets.symmetric(
                   vertical: 12,
                 ),
@@ -603,7 +599,7 @@ class _WeekCalendar extends StatelessWidget {
                         fontWeight: FontWeight.w800,
                       ),
                     ),
-                    const SizedBox(height: 7),
+                    SizedBox(height: 7),
                     Text(
                       day.day.toString(),
                       style: TextStyle(
@@ -693,16 +689,16 @@ class _DailySummaryCard extends StatelessWidget {
                   children: [
                     Text(
                       _formatDouble(summary.totalCalories, ''),
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.textMain,
                         fontSize: 23,
                         fontWeight: FontWeight.w900,
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2),
                     Text(
                       '/ ${_formatDouble(summary.caloriesTarget, 'kcal')}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.secondary,
                         fontSize: 11,
                         fontWeight: FontWeight.w700,
@@ -713,31 +709,31 @@ class _DailySummaryCard extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: 18),
+          SizedBox(width: 18),
           Expanded(
             child: Column(
               children: [
                 _MacroProgressRow(
-                  label: 'Proteínas',
+                  label: 'Prote�nas',
                   current: summary.totalProtein,
                   target: summary.proteinTarget,
                   unit: 'g',
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: 12),
                 _MacroProgressRow(
                   label: 'Hidratos',
                   current: summary.totalCarbs,
                   target: summary.carbsTarget,
                   unit: 'g',
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: 12),
                 _MacroProgressRow(
                   label: 'Grasas',
                   current: summary.totalFats,
                   target: summary.fatsTarget,
                   unit: 'g',
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: 10),
                 _RemainingCalories(
                   current: summary.totalCalories,
                   target: summary.caloriesTarget,
@@ -793,7 +789,7 @@ class _MacroProgressRow extends StatelessWidget {
             Expanded(
               child: Text(
                 label,
-                style: const TextStyle(
+                style: TextStyle(
                   color: AppColors.textMain,
                   fontSize: 13,
                   fontWeight: FontWeight.w800,
@@ -802,7 +798,7 @@ class _MacroProgressRow extends StatelessWidget {
             ),
             Text(
               '${_format(current)} / ${_format(target)} $unit',
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.secondary,
                 fontSize: 11,
                 fontWeight: FontWeight.w700,
@@ -810,7 +806,7 @@ class _MacroProgressRow extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 7),
+        SizedBox(height: 7),
         ClipRRect(
           borderRadius: BorderRadius.circular(999),
           child: LinearProgressIndicator(
@@ -889,7 +885,7 @@ class _MealSectionCard extends StatelessWidget {
         children: [
           InkWell(
             onTap: onToggleCollapse,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
             child: Padding(
               padding: const EdgeInsets.fromLTRB(18, 18, 14, 18),
               child: Row(
@@ -911,25 +907,25 @@ class _MealSectionCard extends StatelessWidget {
                       size: 23,
                     ),
                   ),
-                  const SizedBox(width: 13),
+                  SizedBox(width: 13),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           mealType.label,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: AppColors.textMain,
                             fontSize: 18,
                             fontWeight: FontWeight.w900,
                           ),
                         ),
-                        const SizedBox(height: 3),
+                        SizedBox(height: 3),
                         Text(
                           hasMeals
                               ? '${meals.length} alimento${meals.length == 1 ? '' : 's'}'
                               : 'Sin alimentos',
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: AppColors.secondary,
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
@@ -949,17 +945,17 @@ class _MealSectionCard extends StatelessWidget {
                     ),
                     child: Text(
                       hasMeals ? '${totalCalories.toInt()} kcal' : '-',
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.primary,
                         fontSize: 18,
                         fontWeight: FontWeight.w900,
                       ),
                     ),
                   ),
-                  const SizedBox(width: 4),
+                  SizedBox(width: 4),
                   AnimatedRotation(
                     turns: isCollapsed ? 0.5 : 0.0,
-                    duration: const Duration(milliseconds: 200),
+                    duration: Duration(milliseconds: 200),
                     child: Icon(
                       Icons.keyboard_arrow_up,
                       color: AppColors.secondary,
@@ -971,7 +967,7 @@ class _MealSectionCard extends StatelessWidget {
             ),
           ),
           AnimatedCrossFade(
-            firstChild: const SizedBox.shrink(),
+            firstChild: SizedBox.shrink(),
             secondChild: hasMeals
                 ? _MealSectionBody(
                     meals: meals,
@@ -984,7 +980,7 @@ class _MealSectionCard extends StatelessWidget {
             crossFadeState: isCollapsed
                 ? CrossFadeState.showFirst
                 : CrossFadeState.showSecond,
-            duration: const Duration(milliseconds: 200),
+            duration: Duration(milliseconds: 200),
           ),
         ],
       ),
@@ -1023,7 +1019,7 @@ class _MealSectionBody extends StatelessWidget {
             carbs: format(totalCarbs, 'g'),
             fats: format(totalFats, 'g'),
           ),
-          const SizedBox(height: 14),
+          SizedBox(height: 14),
           Column(
             children: meals.map((meal) {
               return Padding(
@@ -1065,10 +1061,10 @@ class _EmptyMealSection extends StatelessWidget {
               color: AppColors.primary,
               size: 22,
             ),
-            const SizedBox(width: 10),
+            SizedBox(width: 10),
             Expanded(
               child: Text(
-                'Añade alimentos para calcular calorías y macros.',
+                'A�ade alimentos para calcular calor�as y macros.',
                 style: TextStyle(
                   color: AppColors.textMain.withOpacity(0.55),
                   fontSize: 13,
@@ -1081,12 +1077,12 @@ class _EmptyMealSection extends StatelessWidget {
               style: TextButton.styleFrom(
                 foregroundColor: AppColors.primary,
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                textStyle: const TextStyle(
+                textStyle: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w800,
                 ),
               ),
-              child: const Text('AÑADIR'),
+              child: Text('A�ADIR'),
             ),
           ],
         ),
@@ -1112,18 +1108,18 @@ class _MealMacroSummary extends StatelessWidget {
       children: [
         Expanded(
           child: _MealMacroChip(
-            label: 'Proteína',
+            label: 'Prote�na',
             value: protein,
           ),
         ),
-        const SizedBox(width: 8),
+        SizedBox(width: 8),
         Expanded(
           child: _MealMacroChip(
             label: 'Hidratos',
             value: carbs,
           ),
         ),
-        const SizedBox(width: 8),
+        SizedBox(width: 8),
         Expanded(
           child: _MealMacroChip(
             label: 'Grasas',
@@ -1163,17 +1159,17 @@ class _MealMacroChip extends StatelessWidget {
         children: [
           Text(
             value,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.textMain,
               fontSize: 13,
               fontWeight: FontWeight.w900,
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           Text(
             label.toUpperCase(),
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.secondary,
               fontSize: 9,
               fontWeight: FontWeight.w800,
@@ -1215,7 +1211,7 @@ class _MealItem extends StatelessWidget {
           color: AppColors.error.withOpacity(0.85),
           borderRadius: BorderRadius.circular(20),
         ),
-        child: const Icon(Icons.delete_outline, color: Colors.white, size: 24),
+        child: Icon(Icons.delete_outline, color: Colors.white, size: 24),
       ),
       onDismissed: (_) => onDelete(),
       child: Container(
@@ -1239,13 +1235,13 @@ class _MealItem extends StatelessWidget {
                 color: AppColors.surface,
                 borderRadius: BorderRadius.circular(14),
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.restaurant,
                 color: AppColors.primary,
                 size: 20,
               ),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -1254,14 +1250,14 @@ class _MealItem extends StatelessWidget {
                     meal.foodName,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.textMain,
                       fontSize: 14,
                       fontWeight: FontWeight.w900,
                       height: 1.25,
                     ),
                   ),
-                  const SizedBox(height: 7),
+                  SizedBox(height: 7),
                   Wrap(
                     spacing: 8,
                     runSpacing: 5,
@@ -1287,7 +1283,7 @@ class _MealItem extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(width: 8),
+            SizedBox(width: 8),
             InkWell(
               onTap: onDelete,
               borderRadius: BorderRadius.circular(14),
@@ -1298,7 +1294,7 @@ class _MealItem extends StatelessWidget {
                   color: AppColors.surface,
                   borderRadius: BorderRadius.circular(14),
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.delete_outline,
                   color: AppColors.secondary,
                   size: 20,
@@ -1375,10 +1371,10 @@ class _RemainingCalories extends StatelessWidget {
             size: 16,
             color: color,
           ),
-          const SizedBox(width: 6),
+          SizedBox(width: 6),
           Text(
             remaining
-                ? '−${diff.toInt()} kcal'
+                ? '-${diff.toInt()} kcal'
                 : '+${(-diff).toInt()} kcal',
             style: TextStyle(
               color: color,
@@ -1397,7 +1393,7 @@ class _NutritionShimmer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Shimmer(
+    return Shimmer(
       gradient: LinearGradient(
         colors: [
           AppColors.inputBackground,
@@ -1468,22 +1464,22 @@ class _ErrorCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          const Icon(
+          Icon(
             Icons.error_outline,
             color: AppColors.error,
             size: 38,
           ),
-          const SizedBox(height: 14),
+          SizedBox(height: 14),
           Text(
             message,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.textMain,
               fontSize: 14,
               height: 1.5,
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 18),
+          SizedBox(height: 18),
           ElevatedButton(
             onPressed: onRetry,
             style: ElevatedButton.styleFrom(
@@ -1493,7 +1489,7 @@ class _ErrorCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(18),
               ),
             ),
-            child: const Text(
+            child: Text(
               'Reintentar',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -1543,8 +1539,9 @@ class _WaterTrackerCardBody extends StatefulWidget {
 }
 
 class _WaterTrackerCardBodyState extends State<_WaterTrackerCardBody> {
-  static const int _glassCount = 10;
-  static const double _glassMl = 200;
+  static int _glassCount = 10;
+  static double _glassMl = 200;
+  double gap = 3.0;
 
   double get _totalMl => widget.summary?.totalMl ?? 0;
 
@@ -1569,7 +1566,7 @@ class _WaterTrackerCardBodyState extends State<_WaterTrackerCardBody> {
           Row(
             children: [
               Icon(Icons.water_drop, color: AppColors.primary, size: 20),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Text(
                 'Agua',
                 style: TextStyle(
@@ -1578,7 +1575,7 @@ class _WaterTrackerCardBodyState extends State<_WaterTrackerCardBody> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const Spacer(),
+              Spacer(),
               if (widget.isLoading)
                 SizedBox(
                   width: 14,
@@ -1598,10 +1595,9 @@ class _WaterTrackerCardBodyState extends State<_WaterTrackerCardBody> {
                 ),
             ],
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           LayoutBuilder(
             builder: (context, constraints) {
-              const gap = 3.0;
               final glassWidth = (constraints.maxWidth - (_glassCount - 1) * gap) / _glassCount;
               return Row(
                 children: List.generate(_glassCount, (i) {
@@ -1752,16 +1748,16 @@ class _PhysicalTrackingCard extends StatelessWidget {
           Row(
             children: [
               Icon(Icons.fitness_center, color: AppColors.primary, size: 20),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Text(
-                'Seguimiento Físico',
+                'Seguimiento F�sico',
                 style: TextStyle(
                   color: AppColors.textMain,
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const Spacer(),
+              Spacer(),
               if (isLoading)
                 SizedBox(
                   width: 14,
@@ -1773,10 +1769,10 @@ class _PhysicalTrackingCard extends StatelessWidget {
                 ),
             ],
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           if (logs.isEmpty && !isLoading)
             Text(
-              'Aún no hay registros',
+              'A�n no hay registros',
               style: TextStyle(
                 color: AppColors.textMain.withValues(alpha: 0.45),
                 fontSize: 13,
@@ -1785,7 +1781,7 @@ class _PhysicalTrackingCard extends StatelessWidget {
           else if (logs.isNotEmpty) ...[
             _FitnessBarChart(log: logs.first, profile: profile),
           ],
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           Row(
             children: [
               Expanded(
@@ -1793,12 +1789,12 @@ class _PhysicalTrackingCard extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (_) => const AddPhysicalLogScreen(),
+                        builder: (_) => AddPhysicalLogScreen(),
                       ),
                     );
                   },
-                  icon: const Icon(Icons.add, size: 18),
-                  label: const Text('Añadir registro'),
+                  icon: Icon(Icons.add, size: 18),
+                  label: Text('A�adir registro'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     foregroundColor: AppColors.background,
@@ -1809,18 +1805,18 @@ class _PhysicalTrackingCard extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Expanded(
                 child: OutlinedButton.icon(
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (_) => const FitnessProgressScreen(),
+                        builder: (_) => FitnessProgressScreen(),
                       ),
                     );
                   },
-                  icon: const Icon(Icons.show_chart, size: 18),
-                  label: const Text('Ver resumen'),
+                  icon: Icon(Icons.show_chart, size: 18),
+                  label: Text('Ver resumen'),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: AppColors.primary,
                     side: BorderSide(
@@ -1873,7 +1869,7 @@ class _FitnessBarChart extends StatelessWidget {
       if (log.muscleMass != null)
         Expanded(
           child: _MiniMetricChart(
-            label: 'Músculo',
+            label: 'M�sculo',
             value: log.muscleMass!,
             unit: 'kg',
             maxRef: (log.muscleMass! * 2.0).clamp(30, 120),
@@ -1882,7 +1878,7 @@ class _FitnessBarChart extends StatelessWidget {
         ),
     ];
 
-    if (children.isEmpty) return const SizedBox.shrink();
+    if (children.isEmpty) return SizedBox.shrink();
 
     return SizedBox(
       height: 160,
@@ -1935,21 +1931,21 @@ class _MiniMetricChart extends StatelessWidget {
             fontWeight: FontWeight.w900,
           ),
         ),
-        const SizedBox(height: 4),
+        SizedBox(height: 4),
         Container(
           width: 32,
           height: barHeight,
           decoration: BoxDecoration(
             color: color.withOpacity(0.85),
-            borderRadius: const BorderRadius.vertical(
+            borderRadius: BorderRadius.vertical(
               top: Radius.circular(8),
             ),
           ),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 10,
             color: AppColors.secondary,
             fontWeight: FontWeight.w700,
@@ -1987,14 +1983,14 @@ class _CreateFoodCard extends StatelessWidget {
                 color: Colors.black.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(14),
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.fastfood,
                 color: Colors.black,
                 size: 24,
               ),
             ),
-            const SizedBox(height: 10),
-            const Text(
+            SizedBox(height: 10),
+            Text(
               'Mis\nalimentos',
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -2038,14 +2034,14 @@ class _RecipesCard extends StatelessWidget {
                 color: Colors.black.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(14),
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.menu_book,
                 color: Colors.black,
                 size: 24,
               ),
             ),
-            const SizedBox(height: 10),
-            const Text(
+            SizedBox(height: 10),
+            Text(
               'Mis\nrecetas',
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -2093,17 +2089,17 @@ class _MealOptionRow extends StatelessWidget {
           child: Row(
             children: [
               Icon(icon, color: AppColors.primary, size: 22),
-              const SizedBox(width: 14),
+              SizedBox(width: 14),
               Text(
                 label,
-                style: const TextStyle(
+                style: TextStyle(
                   color: AppColors.textMain,
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              const Spacer(),
-              const Icon(Icons.chevron_right, color: AppColors.secondary, size: 20),
+              Spacer(),
+              Icon(Icons.chevron_right, color: AppColors.secondary, size: 20),
             ],
           ),
         ),

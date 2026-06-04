@@ -12,7 +12,7 @@ import 'forgot_password_screen.dart';
 import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -75,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (_) => const AuthGate(),
+          builder: (_) => AuthGate(),
         ),
         (route) => false,
       );
@@ -106,7 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => const RegisterScreen(),
+        builder: (_) => RegisterScreen(),
       ),
     );
   }
@@ -119,7 +119,6 @@ class _LoginScreenState extends State<LoginScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: AppColors.surface,
       ),
     );
   }
@@ -127,12 +126,11 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
             return SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 30,
                 vertical: 28,
               ),
@@ -143,13 +141,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.fitness_center,
                       size: 82,
                       color: AppColors.primary,
                     ),
-                    const SizedBox(height: 16),
-                    const Text(
+                    SizedBox(height: 16),
+                    Text(
                       AppStrings.appName,
                       style: TextStyle(
                         color: AppColors.primary,
@@ -159,7 +157,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         letterSpacing: 2.8,
                       ),
                     ),
-                    const SizedBox(height: 48),
+                    SizedBox(height: 48),
                     _LoginCard(
                       identifierController: identifierController,
                       passwordController: passwordController,
@@ -178,7 +176,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       onFacebookLogin: () =>
                           _showComingSoon(AppStrings.facebookProvider),
                     ),
-                    const SizedBox(height: 30),
+                    SizedBox(height: 30),
                   ],
                 ),
               ),
@@ -224,7 +222,7 @@ class _LoginCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(26),
+      padding: EdgeInsets.all(26),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(28),
@@ -232,7 +230,7 @@ class _LoginCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Center(
+          Center(
             child: Text(
               AppStrings.loginTitle,
               style: TextStyle(
@@ -243,8 +241,8 @@ class _LoginCard extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 32),
-          const Text(
+          SizedBox(height: 32),
+          Text(
             AppStrings.loginUserLabel,
             style: TextStyle(
               color: AppColors.secondary,
@@ -252,7 +250,7 @@ class _LoginCard extends StatelessWidget {
               letterSpacing: 1,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           AuthTextField(
             controller: identifierController,
             hintText: AppStrings.loginIdentifierHint,
@@ -260,8 +258,8 @@ class _LoginCard extends StatelessWidget {
             keyboardType: TextInputType.text,
             errorText: identifierError,
           ),
-          const SizedBox(height: 22),
-          const Text(
+          SizedBox(height: 22),
+          Text(
             AppStrings.loginPasswordLabel,
             style: TextStyle(
               color: AppColors.secondary,
@@ -269,7 +267,7 @@ class _LoginCard extends StatelessWidget {
               letterSpacing: 1,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           AuthTextField(
             controller: passwordController,
             hintText: AppStrings.loginPasswordHint,
@@ -285,7 +283,7 @@ class _LoginCard extends StatelessWidget {
               onPressed: onToggleObscure,
             ),
           ),
-          const SizedBox(height: 18),
+          SizedBox(height: 18),
           Align(
             alignment: Alignment.centerRight,
             child: TextButton(
@@ -293,31 +291,31 @@ class _LoginCard extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => const ForgotPasswordScreen(),
+                    builder: (_) => ForgotPasswordScreen(),
                   ),
                 );
               },
               style: TextButton.styleFrom(
                 foregroundColor: AppColors.secondary,
                 padding: EdgeInsets.zero,
-                minimumSize: const Size(0, 0),
+                minimumSize: Size(0, 0),
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                textStyle: const TextStyle(
+                textStyle: TextStyle(
                   fontSize: 12,
                   letterSpacing: 0.9,
                 ),
               ),
-              child: const Text(AppStrings.forgotPasswordPrompt),
+              child: Text(AppStrings.forgotPasswordPrompt),
             ),
           ),
-          const SizedBox(height: 22),
+          SizedBox(height: 22),
           if (errorMessage != null)
             Padding(
-              padding: const EdgeInsets.only(bottom: 16),
+              padding: EdgeInsets.only(bottom: 16),
               child: Center(
                 child: Text(
                   errorMessage!,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.error,
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
@@ -339,7 +337,7 @@ class _LoginCard extends StatelessWidget {
                 ),
               ),
               child: isLoading
-                  ? const SizedBox(
+                  ? SizedBox(
                       width: 22,
                       height: 22,
                       child: CircularProgressIndicator(
@@ -347,7 +345,7 @@ class _LoginCard extends StatelessWidget {
                         color: AppColors.background,
                       ),
                     )
-                  : const Row(
+                  : Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
@@ -364,21 +362,21 @@ class _LoginCard extends StatelessWidget {
                     ),
             ),
           ),
-          const SizedBox(height: 22),
+          SizedBox(height: 22),
           Center(
             child: TextButton(
               onPressed: onGoToRegister,
               style: TextButton.styleFrom(
                 foregroundColor: AppColors.secondary,
-                textStyle: const TextStyle(
+                textStyle: TextStyle(
                   fontSize: 13,
                   letterSpacing: 0.4,
                 ),
               ),
-              child: const Text(AppStrings.noAccountPrompt),
+              child: Text(AppStrings.noAccountPrompt),
             ),
           ),
-          const SizedBox(height: 18),
+          SizedBox(height: 18),
           Row(
             children: [
               Expanded(
@@ -387,7 +385,7 @@ class _LoginCard extends StatelessWidget {
                   thickness: 1,
                 ),
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 child: Text(
                   AppStrings.continueWith,
@@ -405,7 +403,7 @@ class _LoginCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -421,7 +419,7 @@ class _LoginCard extends StatelessWidget {
               ),
               SocialLoginButton(
                 icon: FontAwesomeIcons.facebookF,
-                color: const Color(0xFF1877F2),
+                color: Color(0xFF1877F2),
                 onTap: onFacebookLogin,
               ),
             ],

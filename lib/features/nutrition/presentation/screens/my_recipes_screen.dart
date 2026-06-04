@@ -11,7 +11,7 @@ import 'create_recipe_screen.dart';
 import 'recipe_detail_screen.dart';
 
 class MyRecipesScreen extends StatefulWidget {
-  const MyRecipesScreen({super.key});
+  MyRecipesScreen({super.key});
 
   @override
   State<MyRecipesScreen> createState() => _MyRecipesScreenState();
@@ -118,26 +118,25 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.surface,
-        title: const Text(
+        title: Text(
           'Eliminar receta',
           style: TextStyle(color: AppColors.textMain, fontWeight: FontWeight.w800),
         ),
         content: Text(
           '¿Eliminar "${recipe.name}"?',
-          style: const TextStyle(color: AppColors.secondary),
+          style: TextStyle(color: AppColors.secondary),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text(
+            child: Text(
               'Cancelar',
               style: TextStyle(color: AppColors.secondary),
             ),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text(
+            child: Text(
               'Eliminar',
               style: TextStyle(color: AppColors.error, fontWeight: FontWeight.w800),
             ),
@@ -158,16 +157,14 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(error.message),
-          backgroundColor: AppColors.surface,
         ),
       );
     } catch (_) {
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text('Error al eliminar la receta'),
-          backgroundColor: AppColors.surface,
         ),
       );
     }
@@ -177,7 +174,7 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
     final created = await Navigator.push<bool>(
       context,
       MaterialPageRoute(
-        builder: (_) => const CreateRecipeScreen(),
+        builder: (_) => CreateRecipeScreen(),
       ),
     );
 
@@ -189,12 +186,11 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
   void _showAddToDaySheet(RecipeModel recipe) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: AppColors.surface,
-      shape: const RoundedRectangleBorder(
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (_) => Padding(
-        padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+        padding: EdgeInsets.fromLTRB(20, 16, 20, 24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -208,15 +204,15 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
-            const Text(
+            SizedBox(height: 20),
+            Text(
               'AÑADIR RECETA A...',
               style: TextStyle(
                 color: AppColors.secondary,
                 fontSize: 12, fontWeight: FontWeight.w800, letterSpacing: 1.2,
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             AppBottomSheetSimpleOption(
               icon: Icons.free_breakfast,
               label: MealType.breakfast.label,
@@ -269,7 +265,6 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('${recipe.name} añadida a ${mealType.label.toLowerCase()}'),
-            backgroundColor: AppColors.surface,
           ),
         );
       }
@@ -279,16 +274,14 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(error.message),
-          backgroundColor: AppColors.surface,
         ),
       );
     } catch (_) {
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text('Error al añadir la receta'),
-          backgroundColor: AppColors.surface,
         ),
       );
     }
@@ -297,10 +290,8 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.surface,
-        title: const Text(
+        title: Text(
           'Mis recetas',
           style: TextStyle(
             color: AppColors.textMain,
@@ -308,7 +299,7 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
           ),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.textMain),
+          icon: Icon(Icons.arrow_back, color: AppColors.textMain),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -319,7 +310,7 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(18),
         ),
-        child: const Icon(Icons.add, size: 28),
+        child: Icon(Icons.add, size: 28),
       ),
       body: Column(
         children: [
@@ -332,9 +323,9 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
 
   Widget _buildSearchBar() {
     return Container(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+      padding: EdgeInsets.fromLTRB(20, 16, 20, 8),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(18),
@@ -346,7 +337,7 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
         child: TextField(
           controller: _searchController,
           onChanged: _filterRecipes,
-          style: const TextStyle(
+          style: TextStyle(
             color: AppColors.textMain,
             fontSize: 14,
           ),
@@ -356,14 +347,14 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
               color: AppColors.textMain.withOpacity(0.4),
               fontSize: 14,
             ),
-            prefixIcon: const Icon(
+            prefixIcon: Icon(
               Icons.search,
               color: AppColors.secondary,
               size: 20,
             ),
             suffixIcon: _searchController.text.isNotEmpty
                 ? IconButton(
-                    icon: const Icon(Icons.clear, color: AppColors.secondary, size: 18),
+                    icon: Icon(Icons.clear, color: AppColors.secondary, size: 18),
                     onPressed: () {
                       _searchController.clear();
                       _filterRecipes('');
@@ -372,7 +363,7 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
                 : null,
             border: InputBorder.none,
             isDense: true,
-            contentPadding: const EdgeInsets.symmetric(vertical: 14),
+            contentPadding: EdgeInsets.symmetric(vertical: 14),
           ),
         ),
       ),
@@ -381,7 +372,7 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
 
   Widget _buildBody() {
     if (_isLoading) {
-      return const Center(
+      return Center(
         child: CircularProgressIndicator(color: AppColors.primary),
       );
     }
@@ -389,26 +380,26 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
     if (_errorMessage != null) {
       return Center(
         child: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: EdgeInsets.all(20),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
+              Icon(
                 Icons.error_outline,
                 color: AppColors.error,
                 size: 48,
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               Text(
                 _errorMessage!,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: TextStyle(
                   color: AppColors.textMain,
                   fontSize: 14,
                   height: 1.5,
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _loadRecipes,
                 style: ElevatedButton.styleFrom(
@@ -418,7 +409,7 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
                     borderRadius: BorderRadius.circular(18),
                   ),
                 ),
-                child: const Text('Reintentar'),
+                child: Text('Reintentar'),
               ),
             ],
           ),
@@ -429,7 +420,7 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
     if (_recipes.isEmpty) {
       return Center(
         child: Padding(
-          padding: const EdgeInsets.all(40),
+          padding: EdgeInsets.all(40),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -438,8 +429,8 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
                 color: AppColors.secondary.withOpacity(0.5),
                 size: 64,
               ),
-              const SizedBox(height: 20),
-              const Text(
+              SizedBox(height: 20),
+              Text(
                 'Todavía no tienes recetas',
                 style: TextStyle(
                   color: AppColors.textMain,
@@ -447,8 +438,8 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
                   fontWeight: FontWeight.w800,
                 ),
               ),
-              const SizedBox(height: 8),
-              const Text(
+              SizedBox(height: 8),
+              Text(
                 'Crea tu primera receta personalizada con tus alimentos favoritos.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -457,18 +448,18 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
                   height: 1.5,
                 ),
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
               ElevatedButton.icon(
                 onPressed: _openCreateRecipe,
-                icon: const Icon(Icons.add, size: 18),
-                label: const Text('Crear receta'),
+                icon: Icon(Icons.add, size: 18),
+                label: Text('Crear receta'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   foregroundColor: AppColors.background,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18),
                   ),
-                  padding: const EdgeInsets.symmetric(
+                  padding: EdgeInsets.symmetric(
                     horizontal: 24,
                     vertical: 14,
                   ),
@@ -483,17 +474,17 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
     if (_filteredRecipes.isEmpty) {
       return Center(
         child: Padding(
-          padding: const EdgeInsets.all(40),
+          padding: EdgeInsets.all(40),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
+              Icon(
                 Icons.search_off,
                 color: AppColors.secondary,
                 size: 48,
               ),
-              const SizedBox(height: 16),
-              const Text(
+              SizedBox(height: 16),
+              Text(
                 'No hay recetas que coincidan',
                 style: TextStyle(
                   color: AppColors.textMain,
@@ -501,8 +492,8 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
                   fontWeight: FontWeight.w800,
                 ),
               ),
-              const SizedBox(height: 6),
-              const Text(
+              SizedBox(height: 6),
+              Text(
                 'Prueba con otro término de búsqueda.',
                 style: TextStyle(
                   color: AppColors.secondary,
@@ -518,9 +509,8 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
     return RefreshIndicator(
       onRefresh: _loadRecipes,
       color: AppColors.primary,
-      backgroundColor: AppColors.surface,
       child: ListView.builder(
-        padding: const EdgeInsets.fromLTRB(20, 8, 20, 96),
+        padding: EdgeInsets.fromLTRB(20, 8, 20, 96),
         itemCount: _filteredRecipes.length,
         itemBuilder: (context, index) {
           final recipe = _filteredRecipes[index];
@@ -572,11 +562,11 @@ class _RecipeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 14),
+      padding: EdgeInsets.only(bottom: 14),
       child: AppCard.elevated(
         onTap: onTap,
         borderRadius: 24,
-        padding: const EdgeInsets.all(18),
+        padding: EdgeInsets.all(18),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -590,45 +580,45 @@ class _RecipeCard extends StatelessWidget {
                 borderColor: AppColors.primary.withOpacity(0.22),
                 iconSize: 22,
               ),
-              const SizedBox(width: 14),
+              SizedBox(width: 14),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       recipe.name,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.textMain,
                         fontSize: 17,
                         fontWeight: FontWeight.w900,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4),
                     Row(
                       children: [
                         if (recipe.servings != null) ...[
                           Text(
                             '${recipe.servings} porc.',
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: AppColors.secondary,
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                          const SizedBox(width: 10),
+                          SizedBox(width: 10),
                         ],
                         Text(
                           '${recipe.ingredients.length} ingr.',
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: AppColors.secondary,
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        const SizedBox(width: 10),
+                        SizedBox(width: 10),
                         Text(
                           _formatDate(recipe.createdAt),
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: AppColors.secondary,
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
@@ -649,7 +639,7 @@ class _RecipeCard extends StatelessWidget {
                     color: AppColors.inputBackground,
                     borderRadius: BorderRadius.circular(14),
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.delete_outline,
                     color: AppColors.secondary,
                     size: 20,
@@ -658,9 +648,9 @@ class _RecipeCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           AppCard.input(
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(12),
             borderRadius: 16,
             child: Row(
               children: [
@@ -668,28 +658,28 @@ class _RecipeCard extends StatelessWidget {
                   value: _formatDouble(recipe.totalCalories, 'kcal'),
                   highlighted: true,
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 _MacroChip(
                   value: 'P ${_formatDouble(recipe.totalProtein, 'g')}',
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 _MacroChip(
                   value: 'C ${_formatDouble(recipe.totalCarbs, 'g')}',
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 _MacroChip(
                   value: 'G ${_formatDouble(recipe.totalFats, 'g')}',
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           SizedBox(
             width: double.infinity,
             child: OutlinedButton.icon(
               onPressed: onAddToDay,
-              icon: const Icon(Icons.add_circle_outline, size: 16),
-              label: const Text('Añadir al día'),
+              icon: Icon(Icons.add_circle_outline, size: 16),
+              label: Text('Añadir al día'),
               style: OutlinedButton.styleFrom(
                 foregroundColor: AppColors.primary,
                 side: BorderSide(
@@ -698,7 +688,7 @@ class _RecipeCard extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(14),
                 ),
-                padding: const EdgeInsets.symmetric(vertical: 10),
+                padding: EdgeInsets.symmetric(vertical: 10),
               ),
             ),
           ),
@@ -721,7 +711,7 @@ class _MacroChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
+        padding: EdgeInsets.symmetric(horizontal: 6, vertical: 8),
         decoration: BoxDecoration(
           color: highlighted
               ? AppColors.primary.withOpacity(0.14)

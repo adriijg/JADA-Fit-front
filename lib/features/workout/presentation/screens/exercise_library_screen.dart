@@ -5,7 +5,7 @@ import '../../data/models/exercise_catalog.dart';
 import 'exercise_detail_screen.dart' as detail;
 
 class ExerciseLibraryScreen extends StatefulWidget {
-  const ExerciseLibraryScreen({super.key});
+  ExerciseLibraryScreen({super.key});
 
   @override
   State<ExerciseLibraryScreen> createState() => _ExerciseLibraryScreenState();
@@ -53,12 +53,11 @@ class _ExerciseLibraryScreenState extends State<ExerciseLibraryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        iconTheme: const IconThemeData(color: AppColors.textMain),
-        title: const Text(
+        iconTheme: IconThemeData(color: AppColors.textMain),
+        title: Text(
           'Biblioteca de Ejercicios',
           style: TextStyle(
             color: AppColors.textMain,
@@ -69,7 +68,7 @@ class _ExerciseLibraryScreenState extends State<ExerciseLibraryScreen> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
             child: Container(
               decoration: BoxDecoration(
                 color: AppColors.inputBackground,
@@ -78,16 +77,16 @@ class _ExerciseLibraryScreenState extends State<ExerciseLibraryScreen> {
               ),
               child: TextField(
                 controller: _searchController,
-                style: const TextStyle(color: AppColors.textMain, fontWeight: FontWeight.w500),
+                style: TextStyle(color: AppColors.textMain, fontWeight: FontWeight.w500),
                 decoration: InputDecoration(
                   hintText: 'Buscar ejercicio...',
                   hintStyle: TextStyle(color: AppColors.textMain.withOpacity(0.3)),
-                  prefixIcon: const Icon(Icons.search_rounded, color: AppColors.secondary),
+                  prefixIcon: Icon(Icons.search_rounded, color: AppColors.secondary),
                   border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                   suffixIcon: _searchQuery.isNotEmpty
                       ? IconButton(
-                          icon: const Icon(Icons.close_rounded, color: AppColors.textMain),
+                          icon: Icon(Icons.close_rounded, color: AppColors.textMain),
                           onPressed: () => _searchController.clear(),
                         )
                       : null,
@@ -105,7 +104,7 @@ class _ExerciseLibraryScreenState extends State<ExerciseLibraryScreen> {
   Widget _buildFilterChips() {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
+      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 4),
       child: Row(
         children: [
           _filterChip('Todas', null, _selectedMuscleGroup == null && !_showBodyweightOnly,
@@ -126,11 +125,11 @@ class _ExerciseLibraryScreenState extends State<ExerciseLibraryScreen> {
 
   Widget _filterChip(String label, String? group, bool isSelected, VoidCallback onTap, {IconData? icon}) {
     return Padding(
-      padding: const EdgeInsets.only(right: 8, bottom: 8),
+      padding: EdgeInsets.only(right: 8, bottom: 8),
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+          padding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
           decoration: BoxDecoration(
             color: isSelected ? AppColors.primary : AppColors.inputBackground,
             borderRadius: BorderRadius.circular(14),
@@ -143,7 +142,7 @@ class _ExerciseLibraryScreenState extends State<ExerciseLibraryScreen> {
             children: [
               if (icon != null) ...[
                 Icon(icon, color: isSelected ? Colors.black : AppColors.textMain.withOpacity(0.5), size: 16),
-                const SizedBox(width: 4),
+                SizedBox(width: 4),
               ],
               Text(
                 label,
@@ -169,7 +168,7 @@ class _ExerciseLibraryScreenState extends State<ExerciseLibraryScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.search_off_rounded, color: AppColors.textMain.withOpacity(0.2), size: 64),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             Text(
               'No se encontraron ejercicios',
               style: TextStyle(color: AppColors.textMain.withOpacity(0.5), fontSize: 16),
@@ -180,16 +179,16 @@ class _ExerciseLibraryScreenState extends State<ExerciseLibraryScreen> {
     }
 
     return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       itemCount: exercises.length,
       itemBuilder: (context, index) {
         final exercise = exercises[index];
         return Padding(
-          padding: const EdgeInsets.only(bottom: 12),
+          padding: EdgeInsets.only(bottom: 12),
           child: AppCard(
             borderRadius: 24,
             borderColor: AppColors.divider.withOpacity(0.1),
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(20),
             onTap: () {
               Navigator.push(
                 context,
@@ -215,7 +214,7 @@ class _ExerciseLibraryScreenState extends State<ExerciseLibraryScreen> {
                     size: 24,
                   ),
                 ),
-                const SizedBox(width: 16),
+                SizedBox(width: 16),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -225,7 +224,7 @@ class _ExerciseLibraryScreenState extends State<ExerciseLibraryScreen> {
                           Expanded(
                             child: Text(
                               exercise.name,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: AppColors.textMain,
                                 fontSize: 15,
                                 fontWeight: FontWeight.w800,
@@ -233,14 +232,14 @@ class _ExerciseLibraryScreenState extends State<ExerciseLibraryScreen> {
                             ),
                           ),
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                             decoration: BoxDecoration(
                               color: AppColors.tertiary.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(
                               exercise.muscleGroup,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: AppColors.tertiary,
                                 fontSize: 9,
                                 fontWeight: FontWeight.w800,
@@ -249,7 +248,7 @@ class _ExerciseLibraryScreenState extends State<ExerciseLibraryScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4),
                       Text(
                         exercise.description,
                         maxLines: 1,
@@ -262,7 +261,7 @@ class _ExerciseLibraryScreenState extends State<ExerciseLibraryScreen> {
                     ],
                   ),
                 ),
-                const Icon(Icons.chevron_right_rounded, color: AppColors.divider),
+                Icon(Icons.chevron_right_rounded, color: AppColors.divider),
               ],
             ),
           ),

@@ -6,7 +6,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_card.dart';
 
 class NutritionErrorCard extends StatelessWidget {
-  const NutritionErrorCard({
+  NutritionErrorCard({
     super.key,
     required this.message,
     required this.onRetry,
@@ -22,12 +22,12 @@ class NutritionErrorCard extends StatelessWidget {
     return AppCard.error(
       onTap: onTap,
       borderRadius: 28,
-      padding: const EdgeInsets.all(22),
+      padding: EdgeInsets.all(22),
       child: Column(
         children: [
           Row(
             children: [
-              const Expanded(
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -51,22 +51,22 @@ class NutritionErrorCard extends StatelessWidget {
                   ],
                 ),
               ),
-              const Icon(Icons.chevron_right, color: AppColors.secondary),
+              Icon(Icons.chevron_right, color: AppColors.secondary),
             ],
           ),
-          const SizedBox(height: 18),
-          const Icon(Icons.error_outline, color: AppColors.error, size: 36),
-          const SizedBox(height: 12),
+          SizedBox(height: 18),
+          Icon(Icons.error_outline, color: AppColors.error, size: 36),
+          SizedBox(height: 12),
           Text(
             message,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.textMain,
               fontSize: 13,
               height: 1.4,
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 14),
+          SizedBox(height: 14),
           AppCardButton(
             label: 'Reintentar',
             onTap: onRetry,
@@ -78,7 +78,7 @@ class NutritionErrorCard extends StatelessWidget {
 }
 
 class NutritionOverviewCard extends StatelessWidget {
-  const NutritionOverviewCard({
+  NutritionOverviewCard({
     super.key,
     required this.caloriesConsumed,
     required this.caloriesGoal,
@@ -114,12 +114,12 @@ class NutritionOverviewCard extends StatelessWidget {
     return AppCard.primary(
       onTap: onTap,
       borderRadius: 28,
-      padding: const EdgeInsets.all(22),
+      padding: EdgeInsets.all(22),
       child: Column(
         children: [
           Row(
             children: [
-              const Expanded(
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -143,10 +143,10 @@ class NutritionOverviewCard extends StatelessWidget {
                   ],
                 ),
               ),
-              const Icon(Icons.chevron_right, color: AppColors.secondary),
+              Icon(Icons.chevron_right, color: AppColors.secondary),
             ],
           ),
-          const SizedBox(height: 22),
+          SizedBox(height: 22),
           Row(
             children: [
               CalorieRingChart(
@@ -154,7 +154,7 @@ class NutritionOverviewCard extends StatelessWidget {
                 consumed: caloriesConsumed,
                 goal: caloriesGoal,
               ),
-              const SizedBox(width: 22),
+              SizedBox(width: 22),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -164,13 +164,13 @@ class NutritionOverviewCard extends StatelessWidget {
                       value: '$caloriesConsumed kcal',
                       icon: Icons.local_fire_department,
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12),
                     NutritionMetric(
                       label: 'Objetivo',
                       value: '$caloriesGoal kcal',
                       icon: Icons.flag_outlined,
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12),
                     NutritionMetric(
                       label: 'Restantes',
                       value:
@@ -182,21 +182,21 @@ class NutritionOverviewCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
           MacroProgressBar(
             label: 'Proteína',
             consumed: proteinConsumed,
             goal: proteinGoal,
             unit: 'g',
           ),
-          const SizedBox(height: 14),
+          SizedBox(height: 14),
           MacroProgressBar(
             label: 'Carbos',
             consumed: carbsConsumed,
             goal: carbsGoal,
             unit: 'g',
           ),
-          const SizedBox(height: 14),
+          SizedBox(height: 14),
           MacroProgressBar(
             label: 'Grasas',
             consumed: fatsConsumed,
@@ -210,7 +210,7 @@ class NutritionOverviewCard extends StatelessWidget {
 }
 
 class CalorieRingChart extends StatelessWidget {
-  const CalorieRingChart({
+  CalorieRingChart({
     super.key,
     required this.progress,
     required this.consumed,
@@ -232,7 +232,7 @@ class CalorieRingChart extends StatelessWidget {
         alignment: Alignment.center,
         children: [
           CustomPaint(
-            size: const Size(116, 116),
+            size: Size(116, 116),
             painter: _RingProgressPainter(progress: safeProgress),
           ),
           Column(
@@ -240,13 +240,13 @@ class CalorieRingChart extends StatelessWidget {
             children: [
               Text(
                 '${(safeProgress * 100).round()}%',
-                style: const TextStyle(
+                style: TextStyle(
                   color: AppColors.primary,
                   fontSize: 25,
                   fontWeight: FontWeight.w900,
                 ),
               ),
-              const SizedBox(height: 3),
+              SizedBox(height: 3),
               Text(
                 '$consumed/$goal',
                 style: TextStyle(
@@ -313,7 +313,7 @@ class _RingProgressPainter extends CustomPainter {
 }
 
 class NutritionMetric extends StatelessWidget {
-  const NutritionMetric({
+  NutritionMetric({
     super.key,
     required this.label,
     required this.value,
@@ -329,11 +329,11 @@ class NutritionMetric extends StatelessWidget {
     return Row(
       children: [
         Icon(icon, color: AppColors.primary, size: 19),
-        const SizedBox(width: 8),
+        SizedBox(width: 8),
         Expanded(
           child: Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.secondary,
               fontSize: 11,
               fontWeight: FontWeight.w700,
@@ -342,7 +342,7 @@ class NutritionMetric extends StatelessWidget {
         ),
         Text(
           value,
-          style: const TextStyle(
+          style: TextStyle(
             color: AppColors.textMain,
             fontSize: 12,
             fontWeight: FontWeight.w800,
@@ -354,7 +354,7 @@ class NutritionMetric extends StatelessWidget {
 }
 
 class MacroProgressBar extends StatelessWidget {
-  const MacroProgressBar({
+  MacroProgressBar({
     super.key,
     required this.label,
     required this.consumed,
@@ -377,16 +377,16 @@ class MacroProgressBar extends StatelessWidget {
           children: [
             Text(
               label,
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.textMain,
                 fontSize: 13,
                 fontWeight: FontWeight.w700,
               ),
             ),
-            const Spacer(),
+            Spacer(),
             Text(
               '$consumed / $goal $unit',
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.secondary,
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
@@ -394,14 +394,14 @@ class MacroProgressBar extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
         ClipRRect(
           borderRadius: BorderRadius.circular(999),
           child: LinearProgressIndicator(
             value: progress,
             minHeight: 10,
             backgroundColor: AppColors.inputBorder,
-            valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
+            valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
           ),
         ),
       ],

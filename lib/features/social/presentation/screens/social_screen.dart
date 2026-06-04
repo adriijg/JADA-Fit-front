@@ -15,7 +15,7 @@ import 'my_social_profile_screen.dart';
 import 'story_viewer_screen.dart';
 
 class SocialScreen extends StatefulWidget {
-  const SocialScreen({super.key});
+  SocialScreen({super.key});
 
   @override
   State<SocialScreen> createState() => _SocialScreenState();
@@ -47,7 +47,7 @@ class _SocialScreenState extends State<SocialScreen> {
             index: _currentTab,
             children: [
               const _FeedTab(),
-              const ExploreScreen(),
+              ExploreScreen(),
               const _PiquesTab(),
               MySocialProfileScreen(refreshVersion: _profileRefreshVersion),
             ],
@@ -69,7 +69,7 @@ class _SocialTopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
+      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 4),
       decoration: BoxDecoration(
         color: AppColors.surface.withOpacity(0.7),
         borderRadius: BorderRadius.circular(16),
@@ -130,9 +130,9 @@ class _TabButton extends StatelessWidget {
         onTap: onTap,
         behavior: HitTestBehavior.opaque,
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 250),
+          duration: Duration(milliseconds: 250),
           curve: Curves.easeInOut,
-          padding: const EdgeInsets.symmetric(vertical: 10),
+          padding: EdgeInsets.symmetric(vertical: 10),
           decoration: BoxDecoration(
             color: isSelected
                 ? AppColors.primary.withOpacity(0.15)
@@ -147,7 +147,7 @@ class _TabButton extends StatelessWidget {
                 color: isSelected ? AppColors.primary : AppColors.secondary,
                 size: 22,
               ),
-              const SizedBox(height: 3),
+              SizedBox(height: 3),
               Text(
                 label,
                 style: TextStyle(
@@ -225,7 +225,7 @@ class _FeedTabState extends State<_FeedTab> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const Center(
+      return Center(
         child: CircularProgressIndicator(color: AppColors.primary),
       );
     }
@@ -237,7 +237,6 @@ class _FeedTabState extends State<_FeedTab> {
     return RefreshIndicator(
       onRefresh: _loadFeed,
       color: AppColors.primary,
-      backgroundColor: AppColors.surface,
       child: _posts.isEmpty && _stories.isEmpty
           ? _buildEmptyFeed()
           : _buildFeedContent(),
@@ -260,14 +259,14 @@ class _FeedTabState extends State<_FeedTab> {
                     color: AppColors.primary.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(24),
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.photo_camera_outlined,
                     color: AppColors.primary,
                     size: 36,
                   ),
                 ),
-                const SizedBox(height: 20),
-                const Text(
+                SizedBox(height: 20),
+                Text(
                   'Tu feed está vacío',
                   style: TextStyle(
                     color: AppColors.textMain,
@@ -275,8 +274,8 @@ class _FeedTabState extends State<_FeedTab> {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                const SizedBox(height: 8),
-                const Text(
+                SizedBox(height: 8),
+                Text(
                   'Sigue a otros usuarios para ver sus\npublicaciones e historias aquí.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -295,7 +294,7 @@ class _FeedTabState extends State<_FeedTab> {
 
   Widget _buildFeedContent() {
     return ListView.builder(
-      padding: const EdgeInsets.only(bottom: 24),
+      padding: EdgeInsets.only(bottom: 24),
       itemCount: _posts.length + (_stories.isNotEmpty ? 1 : 0),
       itemBuilder: (context, index) {
         // Stories bar at the top
@@ -346,10 +345,10 @@ class _StoriesBar extends StatelessWidget {
 
     return Container(
       height: 110,
-      margin: const EdgeInsets.only(bottom: 8),
+      margin: EdgeInsets.only(bottom: 8),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 8),
+        padding: EdgeInsets.symmetric(horizontal: 8),
         itemCount: authorStories.length,
         itemBuilder: (context, index) {
           final story = authorStories.values.elementAt(index);
@@ -357,7 +356,7 @@ class _StoriesBar extends StatelessWidget {
             onTap: () => onStoryTap(story),
             child: Container(
               width: 76,
-              margin: const EdgeInsets.symmetric(horizontal: 6),
+              margin: EdgeInsets.symmetric(horizontal: 6),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -366,7 +365,7 @@ class _StoriesBar extends StatelessWidget {
                     height: 66,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      gradient: const LinearGradient(
+                      gradient: LinearGradient(
                         colors: [AppColors.primary, AppColors.secondary],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
@@ -375,19 +374,18 @@ class _StoriesBar extends StatelessWidget {
                         BoxShadow(
                           color: AppColors.primary.withOpacity(0.3),
                           blurRadius: 12,
-                          offset: const Offset(0, 4),
+                          offset: Offset(0, 4),
                         ),
                       ],
                     ),
-                    padding: const EdgeInsets.all(2.5),
+                    padding: EdgeInsets.all(2.5),
                     child: Container(
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: AppColors.background,
                       ),
-                      padding: const EdgeInsets.all(2),
+                      padding: EdgeInsets.all(2),
                       child: CircleAvatar(
-                        backgroundColor: AppColors.surface,
                         backgroundImage: story.author.profilePictureUrl != null
                             ? NetworkImage(
                                 ImageUrlResolver.resolve(
@@ -398,7 +396,7 @@ class _StoriesBar extends StatelessWidget {
                         child: story.author.profilePictureUrl == null
                             ? Text(
                                 story.author.username[0].toUpperCase(),
-                                style: const TextStyle(
+                                style: TextStyle(
                                   color: AppColors.primary,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18,
@@ -408,12 +406,12 @@ class _StoriesBar extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 6),
+                  SizedBox(height: 6),
                   Text(
                     story.author.username,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.textMain,
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
@@ -448,7 +446,7 @@ class _PostCard extends StatelessWidget {
         children: [
           // Author header
           Padding(
-            padding: const EdgeInsets.all(14),
+            padding: EdgeInsets.all(14),
             child: Row(
               children: [
                 CircleAvatar(
@@ -464,7 +462,7 @@ class _PostCard extends StatelessWidget {
                   child: post.author.profilePictureUrl == null
                       ? Text(
                           post.author.username[0].toUpperCase(),
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: AppColors.primary,
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
@@ -472,14 +470,14 @@ class _PostCard extends StatelessWidget {
                         )
                       : null,
                 ),
-                const SizedBox(width: 10),
+                SizedBox(width: 10),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         post.author.username,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.textMain,
                           fontWeight: FontWeight.w700,
                           fontSize: 14,
@@ -513,7 +511,7 @@ class _PostCard extends StatelessWidget {
                   Widget errorPlaceholder() {
                     return Container(
                       color: AppColors.inputBackground,
-                      child: const Center(
+                      child: Center(
                         child: Icon(
                           Icons.image_not_supported_outlined,
                           color: AppColors.secondary,
@@ -531,7 +529,7 @@ class _PostCard extends StatelessWidget {
                     if (loadingProgress == null) return child;
                     return Container(
                       color: AppColors.inputBackground,
-                      child: const Center(
+                      child: Center(
                         child: CircularProgressIndicator(
                           color: AppColors.primary,
                           strokeWidth: 2,
@@ -563,13 +561,13 @@ class _PostCard extends StatelessWidget {
           // Caption
           if (post.caption != null && post.caption!.isNotEmpty)
             Padding(
-              padding: const EdgeInsets.all(14),
+              padding: EdgeInsets.all(14),
               child: RichText(
                 text: TextSpan(
                   children: [
                     TextSpan(
                       text: '${post.author.username} ',
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.textMain,
                         fontWeight: FontWeight.w700,
                         fontSize: 13,
@@ -577,7 +575,7 @@ class _PostCard extends StatelessWidget {
                     ),
                     TextSpan(
                       text: post.caption!,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.textMain,
                         fontSize: 13,
                         height: 1.4,
@@ -590,15 +588,15 @@ class _PostCard extends StatelessWidget {
 
           // Bottom actions bar
           Padding(
-            padding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
+            padding: EdgeInsets.fromLTRB(14, 0, 14, 14),
             child: Row(
               children: [
                 _ActionIcon(icon: Icons.favorite_border_rounded),
-                const SizedBox(width: 16),
+                SizedBox(width: 16),
                 _ActionIcon(icon: Icons.chat_bubble_outline_rounded),
-                const SizedBox(width: 16),
+                SizedBox(width: 16),
                 _ActionIcon(icon: Icons.send_outlined),
-                const Spacer(),
+                Spacer(),
                 _ActionIcon(icon: Icons.bookmark_border_rounded),
               ],
             ),
@@ -643,26 +641,26 @@ class _ErrorView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(32),
+        padding: EdgeInsets.all(32),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
+            Icon(
               Icons.cloud_off_rounded,
               color: AppColors.error,
               size: 48,
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             Text(
               message,
               textAlign: TextAlign.center,
-              style: const TextStyle(color: AppColors.secondary, fontSize: 14),
+              style: TextStyle(color: AppColors.secondary, fontSize: 14),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
             TextButton.icon(
               onPressed: onRetry,
-              icon: const Icon(Icons.refresh, color: AppColors.primary),
-              label: const Text(
+              icon: Icon(Icons.refresh, color: AppColors.primary),
+              label: Text(
                 'Reintentar',
                 style: TextStyle(color: AppColors.primary),
               ),
@@ -724,7 +722,7 @@ class _PiquesTabState extends State<_PiquesTab> {
   @override
   Widget build(BuildContext context) {
     if (_isLoadingChallenges) {
-      return const Center(
+      return Center(
         child: CircularProgressIndicator(color: AppColors.primary),
       );
     }
@@ -734,13 +732,13 @@ class _PiquesTabState extends State<_PiquesTab> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
+            Icon(
               Icons.emoji_events_outlined,
               size: 64,
               color: AppColors.secondary,
             ),
-            const SizedBox(height: 16),
-            const Text(
+            SizedBox(height: 16),
+            Text(
               'No tienes piques activos.',
               style: TextStyle(
                 color: AppColors.textMain,
@@ -748,13 +746,13 @@ class _PiquesTabState extends State<_PiquesTab> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 8),
-            const Text(
+            SizedBox(height: 8),
+            Text(
               '¡Desafía a tus amigos para ver quién levanta más!',
               style: TextStyle(color: AppColors.secondary),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
             ElevatedButton(
               onPressed: _showUpdateRecordDialog,
               style: ElevatedButton.styleFrom(
@@ -763,7 +761,7 @@ class _PiquesTabState extends State<_PiquesTab> {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: const Text('Actualizar mis marcas'),
+              child: Text('Actualizar mis marcas'),
             ),
           ],
         ),
@@ -774,16 +772,16 @@ class _PiquesTabState extends State<_PiquesTab> {
       onRefresh: _loadChallenges,
       color: AppColors.primary,
       child: ListView.builder(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16),
         itemCount: _myChallenges.length + 1,
         itemBuilder: (context, index) {
           if (index == 0) {
             return Padding(
-              padding: const EdgeInsets.only(bottom: 16.0),
+              padding: EdgeInsets.only(bottom: 16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     'Tus Piques',
                     style: TextStyle(
                       color: AppColors.textMain,
@@ -793,8 +791,8 @@ class _PiquesTabState extends State<_PiquesTab> {
                   ),
                   TextButton.icon(
                     onPressed: _showUpdateRecordDialog,
-                    icon: const Icon(Icons.add, color: AppColors.primary),
-                    label: const Text(
+                    icon: Icon(Icons.add, color: AppColors.primary),
+                    label: Text(
                       'Mis Marcas',
                       style: TextStyle(color: AppColors.primary),
                     ),
@@ -815,9 +813,9 @@ class _PiquesTabState extends State<_PiquesTab> {
     return Card(
       color: AppColors.surface,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      margin: const EdgeInsets.only(bottom: 16),
+      margin: EdgeInsets.only(bottom: 16),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -827,45 +825,45 @@ class _PiquesTabState extends State<_PiquesTab> {
                   backgroundColor: AppColors.primary.withOpacity(0.1),
                   child: Text(
                     challenge.challenger.username[0].toUpperCase(),
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.primary,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-                const SizedBox(width: 12),
-                const Text(
+                SizedBox(width: 12),
+                Text(
                   'vs',
                   style: TextStyle(
                     color: AppColors.secondary,
                     fontStyle: FontStyle.italic,
                   ),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12),
                 CircleAvatar(
                   backgroundColor: AppColors.primary.withOpacity(0.1),
                   child: Text(
                     challenge.challenged.username[0].toUpperCase(),
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.primary,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-                const Spacer(),
+                Spacer(),
                 _buildStatusBadge(challenge.status),
               ],
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             Text(
               challenge.exerciseName,
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.textMain,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -873,7 +871,7 @@ class _PiquesTabState extends State<_PiquesTab> {
                   challenge.challenger.username,
                   challenge.challengerWeight,
                 ),
-                const Icon(Icons.bolt, color: Colors.orange),
+                Icon(Icons.bolt, color: Colors.orange),
                 _buildWeightInfo(
                   challenge.challenged.username,
                   challenge.challengedWeight,
@@ -881,25 +879,25 @@ class _PiquesTabState extends State<_PiquesTab> {
               ],
             ),
             if (challenge.status == ChallengeStatus.PENDING) ...[
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               Row(
                 children: [
                   Expanded(
                     child: OutlinedButton(
                       onPressed: () => _rejectChallenge(challenge.id),
                       style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: Colors.red),
+                        side: BorderSide(color: Colors.red),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      child: const Text(
+                      child: Text(
                         'Rechazar',
                         style: TextStyle(color: Colors.red),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12),
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () => _acceptChallenge(challenge.id),
@@ -909,7 +907,7 @@ class _PiquesTabState extends State<_PiquesTab> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      child: const Text('Aceptar'),
+                      child: Text('Aceptar'),
                     ),
                   ),
                 ],
@@ -926,13 +924,13 @@ class _PiquesTabState extends State<_PiquesTab> {
       children: [
         Text(
           username,
-          style: const TextStyle(color: AppColors.secondary, fontSize: 12),
+          style: TextStyle(color: AppColors.secondary, fontSize: 12),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
         Text(
           '${weight.toStringAsFixed(1)} kg',
-          style: const TextStyle(
+          style: TextStyle(
             color: AppColors.textMain,
             fontSize: 18,
             fontWeight: FontWeight.bold,
@@ -965,7 +963,7 @@ class _PiquesTabState extends State<_PiquesTab> {
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(8),
@@ -1011,8 +1009,7 @@ class _PiquesTabState extends State<_PiquesTab> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: AppColors.surface,
-        title: const Text(
+        title: Text(
           'Actualizar Marca Personal',
           style: TextStyle(color: AppColors.textMain),
         ),
@@ -1021,28 +1018,28 @@ class _PiquesTabState extends State<_PiquesTab> {
           children: [
             TextField(
               controller: exerciseController,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Ejercicio (ej: Press Banca)',
                 labelStyle: TextStyle(color: AppColors.secondary),
               ),
-              style: const TextStyle(color: AppColors.textMain),
+              style: TextStyle(color: AppColors.textMain),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             TextField(
               controller: weightController,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Peso (kg)',
                 labelStyle: TextStyle(color: AppColors.secondary),
               ),
               keyboardType: TextInputType.number,
-              style: const TextStyle(color: AppColors.textMain),
+              style: TextStyle(color: AppColors.textMain),
             ),
           ],
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text(
+            child: Text(
               'Cancelar',
               style: TextStyle(color: AppColors.secondary),
             ),
@@ -1058,7 +1055,7 @@ class _PiquesTabState extends State<_PiquesTab> {
                     Navigator.pop(context);
                     _loadChallenges();
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Marca actualizada')),
+                      SnackBar(content: Text('Marca actualizada')),
                     );
                   }
                 } catch (e) {
@@ -1069,7 +1066,7 @@ class _PiquesTabState extends State<_PiquesTab> {
               }
             },
             style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
-            child: const Text('Guardar'),
+            child: Text('Guardar'),
           ),
         ],
       ),

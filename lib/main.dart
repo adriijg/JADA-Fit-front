@@ -12,7 +12,7 @@ void main() async {
   final prefs = PreferencesService.instance;
   await prefs.init();
 
-  final notificationService = NotificationService();
+  final notificationService = NotificationService.instance;
   await notificationService.init();
   await notificationService.requestPermission();
 

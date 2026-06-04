@@ -6,7 +6,7 @@ import '../../data/models/catalog_food_model.dart';
 import '../../data/services/catalog_food_service.dart';
 
 class MyFoodsScreen extends StatefulWidget {
-  const MyFoodsScreen({super.key});
+  MyFoodsScreen({super.key});
 
   @override
   State<MyFoodsScreen> createState() => _MyFoodsScreenState();
@@ -40,23 +40,22 @@ class _MyFoodsScreenState extends State<MyFoodsScreen> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.surface,
-        title: const Text(
+        title: Text(
           'Eliminar alimento',
           style: TextStyle(color: AppColors.textMain),
         ),
         content: Text(
           'Se eliminará "${food.name}" de tus alimentos.\n¿Continuar?',
-          style: const TextStyle(color: AppColors.textMain),
+          style: TextStyle(color: AppColors.textMain),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Cancelar'),
+            child: Text('Cancelar'),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text(
+            child: Text(
               'Eliminar',
               style: TextStyle(color: AppColors.error),
             ),
@@ -74,14 +73,13 @@ class _MyFoodsScreenState extends State<MyFoodsScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('"${food.name}" eliminado'),
-            backgroundColor: AppColors.surface,
           ),
         );
       }
     } catch (_) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text('No se pudo eliminar'),
           backgroundColor: AppColors.error,
         ),
@@ -93,8 +91,7 @@ class _MyFoodsScreenState extends State<MyFoodsScreen> {
     final result = await showModalBottomSheet<bool>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppColors.surface,
-      shape: const RoundedRectangleBorder(
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (_) => const _CreateFoodSheet(),
@@ -105,12 +102,10 @@ class _MyFoodsScreenState extends State<MyFoodsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.surface,
         elevation: 0,
-        iconTheme: const IconThemeData(color: AppColors.textMain),
-        title: const Text(
+        iconTheme: IconThemeData(color: AppColors.textMain),
+        title: Text(
           'Mis Alimentos',
           style: TextStyle(
             color: AppColors.textMain,
@@ -120,7 +115,7 @@ class _MyFoodsScreenState extends State<MyFoodsScreen> {
         ),
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator(color: AppColors.primary))
+          ? Center(child: CircularProgressIndicator(color: AppColors.primary))
           : _foods.isEmpty
               ? Center(
                   child: Text(
@@ -132,13 +127,13 @@ class _MyFoodsScreenState extends State<MyFoodsScreen> {
                   ),
                 )
               : ListView.separated(
-                  padding: const EdgeInsets.all(20),
+                  padding: EdgeInsets.all(20),
                   itemCount: _foods.length,
-                  separatorBuilder: (_, _) => const SizedBox(height: 10),
+                  separatorBuilder: (_, _) => SizedBox(height: 10),
                   itemBuilder: (context, index) {
                     final food = _foods[index];
                     return Container(
-                      padding: const EdgeInsets.all(16),
+                      padding: EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: AppColors.surface,
                         borderRadius: BorderRadius.circular(18),
@@ -156,32 +151,32 @@ class _MyFoodsScreenState extends State<MyFoodsScreen> {
                               color: AppColors.primary.withOpacity(0.15),
                               borderRadius: BorderRadius.circular(14),
                             ),
-                            child: const Icon(
+                            child: Icon(
                               Icons.restaurant,
                               color: AppColors.primary,
                               size: 20,
                             ),
                           ),
-                          const SizedBox(width: 12),
+                          SizedBox(width: 12),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   food.name,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     color: AppColors.textMain,
                                     fontSize: 14,
                                     fontWeight: FontWeight.w800,
                                   ),
                                 ),
-                                const SizedBox(height: 3),
+                                SizedBox(height: 3),
                                 Text(
                                   '${food.caloriesPer100g.toInt()} kcal \u00b7 '
                                   'P ${food.proteinPer100g.toInt()}g \u00b7 '
                                   'C ${food.carbsPer100g.toInt()}g \u00b7 '
                                   'G ${food.fatsPer100g.toInt()}g / 100g',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     color: AppColors.secondary,
                                     fontSize: 11,
                                   ),
@@ -191,7 +186,7 @@ class _MyFoodsScreenState extends State<MyFoodsScreen> {
                           ),
                           IconButton(
                             onPressed: () => _deleteFood(food),
-                            icon: const Icon(Icons.delete_outline, size: 20),
+                            icon: Icon(Icons.delete_outline, size: 20),
                             color: AppColors.error,
                           ),
                         ],
@@ -206,7 +201,7 @@ class _MyFoodsScreenState extends State<MyFoodsScreen> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
-        child: const Icon(Icons.add),
+        child: Icon(Icons.add),
       ),
     );
   }
@@ -247,7 +242,7 @@ class _CreateFoodSheetState extends State<_CreateFoodSheet> {
 
     if (name.isEmpty || cal == null || prot == null || carb == null || fat == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text('Completa todos los campos'),
           backgroundColor: AppColors.error,
         ),
@@ -297,8 +292,8 @@ class _CreateFoodSheetState extends State<_CreateFoodSheet> {
               ),
             ),
           ),
-          const SizedBox(height: 20),
-          const Text(
+          SizedBox(height: 20),
+          Text(
             'NUEVO ALIMENTO',
             style: TextStyle(
               color: AppColors.secondary,
@@ -307,25 +302,25 @@ class _CreateFoodSheetState extends State<_CreateFoodSheet> {
               letterSpacing: 1.2,
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           _SheetField(ctrl: nameCtrl, label: 'Nombre', hint: 'Ej: Pan integral'),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           Row(
             children: [
               Expanded(child: _SheetField(ctrl: calCtrl, label: 'Kcal /100g', hint: 'Ej: 250', numeric: true)),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Expanded(child: _SheetField(ctrl: protCtrl, label: 'Proteína /100g', hint: 'Ej: 9', numeric: true)),
             ],
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           Row(
             children: [
               Expanded(child: _SheetField(ctrl: carbCtrl, label: 'Hidratos /100g', hint: 'Ej: 45', numeric: true)),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Expanded(child: _SheetField(ctrl: fatCtrl, label: 'Grasas /100g', hint: 'Ej: 3', numeric: true)),
             ],
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           SizedBox(
             width: double.infinity,
             height: 52,
@@ -339,7 +334,7 @@ class _CreateFoodSheetState extends State<_CreateFoodSheet> {
                 ),
               ),
               child: _saving
-                  ? const SizedBox(
+                  ? SizedBox(
                       width: 20,
                       height: 20,
                       child: CircularProgressIndicator(
@@ -347,7 +342,7 @@ class _CreateFoodSheetState extends State<_CreateFoodSheet> {
                         color: AppColors.background,
                       ),
                     )
-                  : const Text(
+                  : Text(
                       'CREAR ALIMENTO',
                       style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1),
                     ),
@@ -376,23 +371,23 @@ class _SheetField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       controller: ctrl,
-      keyboardType: numeric ? const TextInputType.numberWithOptions(decimal: true) : TextInputType.text,
-      style: const TextStyle(color: AppColors.textMain, fontSize: 14),
+      keyboardType: numeric ? TextInputType.numberWithOptions(decimal: true) : TextInputType.text,
+      style: TextStyle(color: AppColors.textMain, fontSize: 14),
       decoration: InputDecoration(
         filled: true,
         fillColor: AppColors.inputBackground,
         labelText: label,
-        labelStyle: const TextStyle(color: AppColors.secondary, fontWeight: FontWeight.w600),
+        labelStyle: TextStyle(color: AppColors.secondary, fontWeight: FontWeight.w600),
         hintText: hint,
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: AppColors.inputBorder),
+          borderSide: BorderSide(color: AppColors.inputBorder),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: AppColors.primary, width: 1.4),
+          borderSide: BorderSide(color: AppColors.primary, width: 1.4),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       ),
     );
   }

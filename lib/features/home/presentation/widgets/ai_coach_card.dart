@@ -4,7 +4,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_card.dart';
 
 class AiCoachCard extends StatelessWidget {
-  const AiCoachCard({
+  AiCoachCard({
     super.key,
     required this.onTap,
     this.message,
@@ -29,8 +29,8 @@ class AiCoachCard extends StatelessWidget {
             backgroundColor: AppColors.inputBackground,
             borderColor: AppColors.tertiary.withOpacity(0.5),
           ),
-          const SizedBox(width: 16),
-          const Expanded(
+          SizedBox(width: 16),
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -54,7 +54,7 @@ class AiCoachCard extends StatelessWidget {
               ],
             ),
           ),
-          const Icon(Icons.chevron_right, color: AppColors.secondary),
+          Icon(Icons.chevron_right, color: AppColors.secondary),
         ],
       ),
     );

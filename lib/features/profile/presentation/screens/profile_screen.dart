@@ -13,7 +13,7 @@ import '../../../fitness_profile/presentation/screens/fitness_profile_screen.dar
 import '../../../settings/presentation/screens/settings_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  ProfileScreen({super.key});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -70,7 +70,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
-        builder: (_) => const LoginScreen(),
+        builder: (_) => LoginScreen(),
       ),
       (route) => false,
     );
@@ -80,7 +80,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: AppColors.surface,
       ),
     );
   }
@@ -98,14 +97,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.surface,
         elevation: 0,
-        iconTheme: const IconThemeData(
+        iconTheme: IconThemeData(
           color: AppColors.textMain,
         ),
-        title: const Text(
+        title: Text(
           AppStrings.profileTitle,
           style: TextStyle(
             color: AppColors.textMain,
@@ -116,7 +113,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(
+          padding: EdgeInsets.symmetric(
             horizontal: 24,
             vertical: 20,
           ),
@@ -128,7 +125,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildBody() {
     if (isLoading) {
-      return const Center(
+      return Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -172,26 +169,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Column(
         children: [
           _AccountHeaderCard(user: currentUser),
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
           _AccountInfoCard(
             username: currentUser.username,
             email: currentUser.email,
             createdAt: _formatCreatedAt(currentUser.createdAt),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
           _AccountOptionsCard(
             user: currentUser,
             onSettings: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const SettingsScreen()),
+                MaterialPageRoute(builder: (_) => SettingsScreen()),
               );
             },
             onFitnessProfile: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => const FitnessProfileScreen(),
+                  builder: (_) => FitnessProfileScreen(),
                 ),
               );
             },
@@ -218,7 +215,7 @@ class _AccountHeaderCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard.elevated(
       borderRadius: 28,
-      padding: const EdgeInsets.all(26),
+      padding: EdgeInsets.all(26),
       child: Column(
         children: [
           Container(
@@ -232,16 +229,16 @@ class _AccountHeaderCard extends StatelessWidget {
                 width: 2,
               ),
             ),
-            child: const Icon(
+            child: Icon(
               Icons.person,
               color: AppColors.primary,
               size: 48,
             ),
           ),
-          const SizedBox(height: 18),
+          SizedBox(height: 18),
           Text(
             user.username,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.textMain,
               fontSize: 23,
               fontWeight: FontWeight.w800,
@@ -249,10 +246,10 @@ class _AccountHeaderCard extends StatelessWidget {
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Text(
             user.email,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.secondary,
               fontSize: 14,
               letterSpacing: 0.4,
@@ -280,7 +277,7 @@ class _AccountInfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard.elevated(
       borderRadius: 24,
-      padding: const EdgeInsets.all(22),
+      padding: EdgeInsets.all(22),
       child: Column(
         children: [
           _AccountInfoRow(
@@ -311,7 +308,7 @@ class _AccountDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
+    return Padding(
       padding: EdgeInsets.symmetric(vertical: 18),
       child: Divider(
         color: AppColors.divider,
@@ -341,24 +338,24 @@ class _AccountInfoRow extends StatelessWidget {
           size: 44,
           borderRadius: 16,
         ),
-        const SizedBox(width: 16),
+        SizedBox(width: 16),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 label.toUpperCase(),
-                style: const TextStyle(
+                style: TextStyle(
                   color: AppColors.secondary,
                   fontSize: 11,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 1,
                 ),
               ),
-              const SizedBox(height: 5),
+              SizedBox(height: 5),
               Text(
                 value,
-                style: const TextStyle(
+                style: TextStyle(
                   color: AppColors.textMain,
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
@@ -442,7 +439,7 @@ class _AccountOptionsCardState extends State<_AccountOptionsCard> {
   Widget build(BuildContext context) {
     return AppCard.elevated(
       borderRadius: 24,
-      padding: const EdgeInsets.all(18),
+      padding: EdgeInsets.all(18),
       child: Column(
         children: [
           _AccountOptionTile(
@@ -451,7 +448,7 @@ class _AccountOptionsCardState extends State<_AccountOptionsCard> {
             subtitle: 'Preferencias de la aplicación',
             onTap: widget.onSettings,
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           _PrivacyToggleTile(
             icon: Icons.lock_outline,
             title: 'Compartir progreso',
@@ -460,21 +457,21 @@ class _AccountOptionsCardState extends State<_AccountOptionsCard> {
             isLoading: _isUpdatingPrivacy,
             onChanged: _togglePrivacy,
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           _AccountOptionTile(
             icon: Icons.favorite_border,
             title: 'Integraciones',
             subtitle: 'Apple Health, Google Fit y wearables',
             onTap: widget.onIntegrations,
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           _AccountOptionTile(
             icon: Icons.monitor_heart_outlined,
             title: 'Datos físicos',
             subtitle: 'Peso, altura, composición corporal y más',
             onTap: widget.onFitnessProfile,
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           _AccountOptionTile(
             icon: Icons.logout,
             title: 'Cerrar sesión',
@@ -508,7 +505,7 @@ class _PrivacyToggleTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppCard.input(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       child: Row(
         children: [
           Icon(
@@ -516,23 +513,23 @@ class _PrivacyToggleTile extends StatelessWidget {
             color: AppColors.primary,
             size: 24,
           ),
-          const SizedBox(width: 14),
+          SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.textMain,
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   subtitle,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.secondary,
                     fontSize: 12,
                     height: 1.3,
@@ -542,7 +539,7 @@ class _PrivacyToggleTile extends StatelessWidget {
             ),
           ),
           if (isLoading)
-            const Padding(
+            Padding(
               padding: EdgeInsets.all(12.0),
               child: SizedBox(
                 width: 24, height: 24,
@@ -583,7 +580,7 @@ class _AccountOptionTile extends StatelessWidget {
 
     return AppCard.input(
       onTap: onTap,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
       child: Row(
         children: [
           Icon(
@@ -591,7 +588,7 @@ class _AccountOptionTile extends StatelessWidget {
             color: iconColor,
             size: 24,
           ),
-          const SizedBox(width: 14),
+          SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -604,10 +601,10 @@ class _AccountOptionTile extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   subtitle,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.secondary,
                     fontSize: 12,
                     height: 1.3,
@@ -639,26 +636,26 @@ class _ErrorCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard(
       borderRadius: 24,
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(24),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(
+          Icon(
             Icons.error_outline,
             color: AppColors.error,
             size: 42,
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
             message,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.textMain,
               fontSize: 15,
               height: 1.5,
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           ElevatedButton(
             onPressed: onRetry,
             style: ElevatedButton.styleFrom(
@@ -668,7 +665,7 @@ class _ErrorCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(18),
               ),
             ),
-            child: const Text(
+            child: Text(
               'Reintentar',
               style: TextStyle(
                 fontWeight: FontWeight.bold,

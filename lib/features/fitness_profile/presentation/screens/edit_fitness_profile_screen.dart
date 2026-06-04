@@ -11,7 +11,7 @@ import '../../data/models/fitness_profile_model.dart';
 import '../../data/services/fitness_profile_service.dart';
 
 class EditFitnessProfileScreen extends StatefulWidget {
-  const EditFitnessProfileScreen({
+  EditFitnessProfileScreen({
     super.key,
     required this.currentProfile,
   });
@@ -156,9 +156,8 @@ class _EditFitnessProfileScreenState extends State<EditFitnessProfileScreen> {
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text('Datos físicos actualizados correctamente'),
-          backgroundColor: AppColors.surface,
         ),
       );
 
@@ -233,14 +232,12 @@ class _EditFitnessProfileScreenState extends State<EditFitnessProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.surface,
         elevation: 0,
-        iconTheme: const IconThemeData(
+        iconTheme: IconThemeData(
           color: AppColors.textMain,
         ),
-        title: const Text(
+        title: Text(
           'Editar datos físicos',
           style: TextStyle(
             color: AppColors.textMain,
@@ -251,7 +248,7 @@ class _EditFitnessProfileScreenState extends State<EditFitnessProfileScreen> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(
+          padding: EdgeInsets.symmetric(
             horizontal: 24,
             vertical: 20,
           ),
@@ -259,12 +256,12 @@ class _EditFitnessProfileScreenState extends State<EditFitnessProfileScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const _IntroCard(),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
               _FormCard(
                 heightController: heightController,
                 ageController: ageController,
               ),
-              const SizedBox(height: 18),
+              SizedBox(height: 18),
               _SelectorCard(
                 title: 'Género',
                 subtitle: 'Selecciona una opción',
@@ -277,7 +274,7 @@ class _EditFitnessProfileScreenState extends State<EditFitnessProfileScreen> {
                   });
                 },
               ),
-              const SizedBox(height: 18),
+              SizedBox(height: 18),
               _SelectorCard(
                 title: 'Objetivo',
                 subtitle: 'Esto ayudará a personalizar la app',
@@ -296,13 +293,13 @@ class _EditFitnessProfileScreenState extends State<EditFitnessProfileScreen> {
                   });
                 },
               ),
-              const SizedBox(height: 18),
+              SizedBox(height: 18),
               if (errorMessage != null)
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
+                  padding: EdgeInsets.only(bottom: 16),
                   child: Text(
                     errorMessage!,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.error,
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -325,7 +322,7 @@ class _EditFitnessProfileScreenState extends State<EditFitnessProfileScreen> {
                     ),
                   ),
                   child: isLoading
-                      ? const SizedBox(
+                      ? SizedBox(
                           width: 22,
                           height: 22,
                           child: CircularProgressIndicator(
@@ -333,7 +330,7 @@ class _EditFitnessProfileScreenState extends State<EditFitnessProfileScreen> {
                             color: AppColors.background,
                           ),
                         )
-                      : const Row(
+                      : Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
@@ -350,7 +347,7 @@ class _EditFitnessProfileScreenState extends State<EditFitnessProfileScreen> {
                         ),
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
             ],
           ),
         ),
@@ -366,8 +363,8 @@ class _IntroCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard.primary(
         borderRadius: 28,
-        padding: const EdgeInsets.all(24),
-        child: const Column(
+        padding: EdgeInsets.all(24),
+        child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(
@@ -413,7 +410,7 @@ class _FormCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard.elevated(
         borderRadius: 28,
-        padding: const EdgeInsets.all(22),
+        padding: EdgeInsets.all(22),
         child: Column(
         children: [
           _FitnessTextField(
@@ -424,7 +421,7 @@ class _FormCard extends StatelessWidget {
             icon: Icons.height,
             keyboardType: TextInputType.number,
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           _FitnessTextField(
             controller: ageController,
             label: 'Edad',
@@ -461,7 +458,7 @@ class _FitnessTextField extends StatelessWidget {
     return TextField(
       controller: controller,
       keyboardType: keyboardType,
-      style: const TextStyle(
+      style: TextStyle(
         color: AppColors.textMain,
         fontSize: 15,
       ),
@@ -469,7 +466,7 @@ class _FitnessTextField extends StatelessWidget {
         filled: true,
         fillColor: AppColors.inputBackground,
         labelText: label,
-        labelStyle: const TextStyle(
+        labelStyle: TextStyle(
           color: AppColors.secondary,
           fontWeight: FontWeight.w600,
         ),
@@ -482,19 +479,19 @@ class _FitnessTextField extends StatelessWidget {
           color: AppColors.primary,
         ),
         suffixText: suffix,
-        suffixStyle: const TextStyle(
+        suffixStyle: TextStyle(
           color: AppColors.secondary,
           fontWeight: FontWeight.w700,
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
-          borderSide: const BorderSide(
+          borderSide: BorderSide(
             color: AppColors.inputBorder,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
-          borderSide: const BorderSide(
+          borderSide: BorderSide(
             color: AppColors.primary,
             width: 1.4,
           ),
@@ -525,42 +522,42 @@ class _SelectorCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard.elevated(
         borderRadius: 28,
-        padding: const EdgeInsets.all(22),
+        padding: EdgeInsets.all(22),
         child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title.toUpperCase(),
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.secondary,
               fontSize: 11,
               fontWeight: FontWeight.w800,
               letterSpacing: 1,
             ),
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6),
           Text(
             subtitle,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.secondary,
               fontSize: 12,
               height: 1.4,
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           ...values.map(
             (value) {
               final isSelected = value == selectedValue;
 
               return Padding(
-                padding: const EdgeInsets.only(bottom: 10),
+                padding: EdgeInsets.only(bottom: 10),
                 child: InkWell(
                   onTap: () => onSelected(value),
                   borderRadius: BorderRadius.circular(18),
                   child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 180),
+                    duration: Duration(milliseconds: 180),
                     width: double.infinity,
-                    padding: const EdgeInsets.symmetric(
+                    padding: EdgeInsets.symmetric(
                       horizontal: 16,
                       vertical: 15,
                     ),
@@ -587,7 +584,7 @@ class _SelectorCard extends StatelessWidget {
                               : AppColors.secondary,
                           size: 21,
                         ),
-                        const SizedBox(width: 12),
+                        SizedBox(width: 12),
                         Expanded(
                           child: Text(
                             labelBuilder(value),

@@ -7,7 +7,7 @@ import '../../data/models/exercise_catalog.dart';
 class ExerciseDetailScreen extends StatefulWidget {
   final CatalogExerciseModel exercise;
 
-  const ExerciseDetailScreen({super.key, required this.exercise});
+  ExerciseDetailScreen({super.key, required this.exercise});
 
   @override
   State<ExerciseDetailScreen> createState() => _ExerciseDetailScreenState();
@@ -56,43 +56,41 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            backgroundColor: AppColors.surface,
             expandedHeight: 250,
             pinned: true,
-            iconTheme: const IconThemeData(color: AppColors.textMain),
+            iconTheme: IconThemeData(color: AppColors.textMain),
             flexibleSpace: FlexibleSpaceBar(
               background: _buildVideoPlayer(),
             ),
           ),
           SliverToBoxAdapter(
             child: Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: AppColors.background,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(32),
                   topRight: Radius.circular(32),
                 ),
               ),
-              padding: const EdgeInsets.all(24.0),
+              padding: EdgeInsets.all(24.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     widget.exercise.name,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.textMain,
                       fontSize: 28,
                       fontWeight: FontWeight.w900,
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24),
                   
                   _buildSectionTitle('¿Para qué sirve?', Icons.info_outline_rounded),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
                   Text(
                     widget.exercise.description,
                     style: TextStyle(
@@ -102,12 +100,12 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
                     ),
                   ),
                   
-                  const SizedBox(height: 32),
+                  SizedBox(height: 32),
                   
                   _buildSectionTitle('Beneficios Principales', Icons.star_border_rounded),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
                   Container(
-                    padding: const EdgeInsets.all(20),
+                    padding: EdgeInsets.all(20),
                     decoration: BoxDecoration(
                       color: AppColors.primary.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(20),
@@ -116,16 +114,16 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.check_circle_rounded,
                           color: AppColors.primary,
                           size: 24,
                         ),
-                        const SizedBox(width: 16),
+                        SizedBox(width: 16),
                         Expanded(
                           child: Text(
                             widget.exercise.benefits,
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: AppColors.textMain,
                               fontSize: 15,
                               height: 1.5,
@@ -137,7 +135,7 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
                     ),
                   ),
                   
-                  const SizedBox(height: 40),
+                  SizedBox(height: 40),
                 ],
               ),
             ),
@@ -165,10 +163,10 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
     return Row(
       children: [
         Icon(icon, color: AppColors.secondary, size: 24),
-        const SizedBox(width: 8),
+        SizedBox(width: 8),
         Text(
           title,
-          style: const TextStyle(
+          style: TextStyle(
             color: AppColors.textMain,
             fontSize: 20,
             fontWeight: FontWeight.w800,
@@ -185,8 +183,8 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline_rounded, color: AppColors.error, size: 48),
-            const SizedBox(height: 16),
+            Icon(Icons.error_outline_rounded, color: AppColors.error, size: 48),
+            SizedBox(height: 16),
             Text(
               'No se pudo cargar el video.',
               style: TextStyle(color: AppColors.textMain.withOpacity(0.5)),
@@ -228,7 +226,7 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
 
     return Container(
       color: AppColors.surface,
-      child: const Center(
+      child: Center(
         child: CircularProgressIndicator(color: AppColors.primary),
       ),
     );

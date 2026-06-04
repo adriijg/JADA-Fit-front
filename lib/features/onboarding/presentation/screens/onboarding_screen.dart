@@ -10,7 +10,7 @@ import '../../data/services/onboarding_service.dart';
 import '../../../settings/presentation/providers/settings_provider.dart';
 
 class OnboardingScreen extends StatefulWidget {
-  const OnboardingScreen({super.key});
+  OnboardingScreen({super.key});
 
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();
@@ -103,7 +103,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (_) => const HomeScreen(),
+          builder: (_) => HomeScreen(),
         ),
         (route) => false,
       );
@@ -153,15 +153,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       body: SafeArea(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 28),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const _OnboardingHeader(),
-                  const SizedBox(height: 28),
+                  SizedBox(height: 28),
                   _OnboardingCard(
                     weightController: weightController,
                     heightController: heightController,
@@ -181,13 +180,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       });
                     },
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
                   if (errorMessage != null)
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
+                      padding: EdgeInsets.only(bottom: 16),
                       child: Text(
                         errorMessage!,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.error,
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
@@ -210,7 +209,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         ),
                       ),
                       child: isLoading
-                          ? const SizedBox(
+                          ? SizedBox(
                               width: 22,
                               height: 22,
                               child: CircularProgressIndicator(
@@ -218,7 +217,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                 strokeWidth: 2.4,
                               ),
                             )
-                          : const Row(
+                          : Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
@@ -248,7 +247,7 @@ class _OnboardingHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Icon(
@@ -310,7 +309,7 @@ class _OnboardingCard extends StatelessWidget {
 
     return AppCard.elevated(
       borderRadius: 28,
-      padding: const EdgeInsets.all(22),
+      padding: EdgeInsets.all(22),
       child: Column(
         children: [
           _OnboardingTextField(
@@ -319,11 +318,11 @@ class _OnboardingCard extends StatelessWidget {
             hintText: imperial ? 'Ej: 154' : 'Ej: 70',
             suffix: imperial ? 'lbs' : 'kg',
             icon: Icons.monitor_weight_outlined,
-            keyboardType: const TextInputType.numberWithOptions(
+            keyboardType: TextInputType.numberWithOptions(
               decimal: true,
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           _OnboardingTextField(
             controller: heightController,
             label: 'Altura',
@@ -332,7 +331,7 @@ class _OnboardingCard extends StatelessWidget {
             icon: Icons.height,
             keyboardType: TextInputType.number,
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           _OnboardingTextField(
             controller: ageController,
             label: 'Edad',
@@ -341,35 +340,35 @@ class _OnboardingCard extends StatelessWidget {
             icon: Icons.cake_outlined,
             keyboardType: TextInputType.number,
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           _GenderDropdown(
             value: selectedGender,
             onChanged: onGenderChanged,
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           _GoalDropdown(
             value: selectedGoal,
             onChanged: onGoalChanged,
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           _OnboardingTextField(
             controller: bodyFatController,
             label: 'Grasa corporal',
             hintText: 'Opcional · Ej: 15',
             suffix: '%',
             icon: Icons.percent,
-            keyboardType: const TextInputType.numberWithOptions(
+            keyboardType: TextInputType.numberWithOptions(
               decimal: true,
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           _OnboardingTextField(
             controller: muscleMassController,
             label: 'Masa muscular',
             hintText: 'Opcional · Ej: 58',
             suffix: 'kg',
             icon: Icons.fitness_center,
-            keyboardType: const TextInputType.numberWithOptions(
+            keyboardType: TextInputType.numberWithOptions(
               decimal: true,
             ),
           ),
@@ -393,7 +392,7 @@ class _GenderDropdown extends StatelessWidget {
     return DropdownButtonFormField<String>(
       initialValue: value,
       dropdownColor: AppColors.surface,
-      style: const TextStyle(
+      style: TextStyle(
         color: AppColors.textMain,
         fontSize: 15,
       ),
@@ -431,7 +430,7 @@ class _GoalDropdown extends StatelessWidget {
     return DropdownButtonFormField<String>(
       initialValue: value,
       dropdownColor: AppColors.surface,
-      style: const TextStyle(
+      style: TextStyle(
         color: AppColors.textMain,
         fontSize: 15,
       ),
@@ -481,7 +480,7 @@ class _OnboardingTextField extends StatelessWidget {
     return TextField(
       controller: controller,
       keyboardType: keyboardType,
-      style: const TextStyle(
+      style: TextStyle(
         color: AppColors.textMain,
         fontSize: 15,
       ),
@@ -505,7 +504,7 @@ InputDecoration _inputDecoration({
     filled: true,
     fillColor: AppColors.inputBackground,
     labelText: label,
-    labelStyle: const TextStyle(
+    labelStyle: TextStyle(
       color: AppColors.secondary,
       fontWeight: FontWeight.w600,
     ),
@@ -518,19 +517,19 @@ InputDecoration _inputDecoration({
       color: AppColors.primary,
     ),
     suffixText: suffix,
-    suffixStyle: const TextStyle(
+    suffixStyle: TextStyle(
       color: AppColors.secondary,
       fontWeight: FontWeight.w700,
     ),
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(18),
-      borderSide: const BorderSide(
+      borderSide: BorderSide(
         color: AppColors.inputBorder,
       ),
     ),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(18),
-      borderSide: const BorderSide(
+      borderSide: BorderSide(
         color: AppColors.primary,
         width: 1.4,
       ),

@@ -12,7 +12,7 @@ import 'exercise_library_screen.dart';
 import '../widgets/routine_skeleton.dart';
 
 class RoutinesScreen extends StatefulWidget {
-  const RoutinesScreen({super.key});
+  RoutinesScreen({super.key});
 
   @override
   State<RoutinesScreen> createState() => _RoutinesScreenState();
@@ -90,7 +90,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
   Future<void> _openCreateRoutine() async {
     final created = await Navigator.push<RoutineModel?>(
       context,
-      MaterialPageRoute(builder: (_) => const CreateRoutineScreen()),
+      MaterialPageRoute(builder: (_) => CreateRoutineScreen()),
     );
 
     if (created != null) {
@@ -116,10 +116,9 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
     return RefreshIndicator(
       onRefresh: _loadRoutines,
       color: AppColors.primary,
-      backgroundColor: AppColors.surface,
       child: SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.only(bottom: 32),
+        physics: AlwaysScrollableScrollPhysics(),
+        padding: EdgeInsets.only(bottom: 32),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -152,41 +151,41 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (_) => const ExerciseLibraryScreen()));
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => ExerciseLibraryScreen()));
                       },
                       child: Container(
-                        padding: const EdgeInsets.all(12),
-                        margin: const EdgeInsets.only(right: 12),
+                        padding: EdgeInsets.all(12),
+                        margin: EdgeInsets.only(right: 12),
                         decoration: BoxDecoration(
                           color: AppColors.surface,
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(color: AppColors.divider.withOpacity(0.1)),
                         ),
-                        child: const Icon(Icons.menu_book_rounded, color: AppColors.primary, size: 24),
+                        child: Icon(Icons.menu_book_rounded, color: AppColors.primary, size: 24),
                       ),
                     ),
                     GestureDetector(
                       onTap: _openCreateRoutine,
                       child: Container(
-                        padding: const EdgeInsets.all(12),
+                        padding: EdgeInsets.all(12),
                         decoration: BoxDecoration(
                           color: AppColors.primary,
                           borderRadius: BorderRadius.circular(16),
 
                         ),
-                        child: const Icon(Icons.add_rounded, color: Colors.black, size: 24),
+                        child: Icon(Icons.add_rounded, color: Colors.black, size: 24),
                       ),
                     ),
                   ],
                 ),
               ],
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
             _buildStats(),
-            const SizedBox(height: 18),
+            SizedBox(height: 18),
             _buildSearchBar(),
             if (_routines.isNotEmpty) _buildFilters(),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             _buildBody(),
           ],
         ),
@@ -199,11 +198,11 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
     final completedCount = _routines.where((r) => r.isCompleted).length;
 
     return AppCard.elevated(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16),
       child: Row(
         children: [
           _buildStatItem('RUTINAS', totalRoutines.toString(), Icons.fitness_center_rounded),
-          const SizedBox(width: 16),
+          SizedBox(width: 16),
           _buildStatItem('COMPLETADAS', completedCount.toString(), Icons.check_circle_rounded),
         ],
       ),
@@ -215,13 +214,13 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
       child: Row(
         children: [
           AppCardIcon(icon: icon, size: 32, borderRadius: 10, iconSize: 16),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 value,
-                style: const TextStyle(
+                style: TextStyle(
                   color: AppColors.textMain,
                   fontSize: 16,
                   fontWeight: FontWeight.w900,
@@ -255,16 +254,16 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
       ),
       child: TextField(
         controller: _searchController,
-        style: const TextStyle(color: AppColors.textMain, fontWeight: FontWeight.w500),
+        style: TextStyle(color: AppColors.textMain, fontWeight: FontWeight.w500),
         decoration: InputDecoration(
           hintText: 'Buscar rutinas...',
           hintStyle: TextStyle(color: AppColors.textMain.withOpacity(0.3)),
-          prefixIcon: const Icon(Icons.search_rounded, color: AppColors.secondary),
+          prefixIcon: Icon(Icons.search_rounded, color: AppColors.secondary),
           border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
           suffixIcon: _searchQuery.isNotEmpty 
               ? IconButton(
-                  icon: const Icon(Icons.close_rounded, color: AppColors.textMain),
+                  icon: Icon(Icons.close_rounded, color: AppColors.textMain),
                   onPressed: () => _searchController.clear(),
                 )
               : null,
@@ -277,13 +276,13 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
     final allGoals = [null, ...RoutineGoal.values];
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.symmetric(vertical: 16),
+      padding: EdgeInsets.symmetric(vertical: 16),
       child: Row(
         children: allGoals.map((goal) {
           final label = goal == null ? 'TODOS' : goal.displayName;
           final isSelected = _selectedGoal == goal;
           return Padding(
-            padding: const EdgeInsets.only(right: 10),
+            padding: EdgeInsets.only(right: 10),
             child: ChoiceChip(
               label: Text(label),
               selected: isSelected,
@@ -304,7 +303,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
                 ),
               ),
               showCheckmark: false,
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
             ),
           );
         }).toList(),
@@ -315,7 +314,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
   Widget _buildBody() {
     if (_isLoading && _routines.isEmpty) {
       return Column(
-        children: List.generate(3, (index) => const RoutineSkeleton()),
+        children: List.generate(3, (index) => RoutineSkeleton()),
       );
     }
 
@@ -327,30 +326,29 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                padding: const EdgeInsets.all(20),
+                padding: EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   color: AppColors.error.withOpacity(0.1),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.error_outline, color: AppColors.error, size: 48),
+                child: Icon(Icons.error_outline, color: AppColors.error, size: 48),
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
               Text(
                 _errorMessage!,
-                style: const TextStyle(color: AppColors.textMain, fontSize: 16),
+                style: TextStyle(color: AppColors.textMain, fontSize: 16),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
               ElevatedButton(
                 onPressed: _loadRoutines,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.surface,
                   foregroundColor: AppColors.textMain,
                   side: BorderSide(color: AppColors.divider.withOpacity(0.5)),
-                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 14),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                 ),
-                child: const Text('Reintentar', style: TextStyle(fontWeight: FontWeight.w800)),
+                child: Text('Reintentar', style: TextStyle(fontWeight: FontWeight.w800)),
               ),
             ],
           ),
@@ -364,8 +362,8 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
     if (inProgress.isEmpty && completed.isEmpty) {
       return Container(
         width: double.infinity,
-        margin: const EdgeInsets.symmetric(vertical: 20),
-        padding: const EdgeInsets.all(40),
+        margin: EdgeInsets.symmetric(vertical: 20),
+        padding: EdgeInsets.all(40),
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(32),
@@ -383,18 +381,18 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
               color: AppColors.primary.withOpacity(0.5),
               size: 64,
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
             Text(
               _searchQuery.isNotEmpty || _selectedGoal != null
                   ? 'Sin resultados'
                   : 'Aún no hay rutinas',
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.textMain,
                 fontSize: 22,
                 fontWeight: FontWeight.w800,
               ),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             Text(
               _searchQuery.isNotEmpty || _selectedGoal != null
                   ? 'No encontramos rutinas que coincidan con tus filtros.'
@@ -416,27 +414,27 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
       children: [
         if (inProgress.isNotEmpty) ...[
           Padding(
-            padding: const EdgeInsets.only(bottom: 8),
+            padding: EdgeInsets.only(bottom: 8),
             child: Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(6),
+                  padding: EdgeInsets.all(6),
                   decoration: BoxDecoration(
                     color: AppColors.primary.withOpacity(0.15),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Icon(Icons.play_circle_rounded, color: AppColors.primary, size: 18),
+                  child: Icon(Icons.play_circle_rounded, color: AppColors.primary, size: 18),
                 ),
-                const SizedBox(width: 10),
+                SizedBox(width: 10),
                 Text(
                   'En progreso',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.textMain,
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
-                const Spacer(),
+                Spacer(),
                 Text(
                   '${inProgress.length}',
                   style: TextStyle(
@@ -449,7 +447,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
             ),
           ),
           ...inProgress.map((routine) => Padding(
-            padding: const EdgeInsets.only(bottom: 16),
+            padding: EdgeInsets.only(bottom: 16),
             child: _PremiumRoutineCard(
               routine: routine,
               onTap: () => _openDetail(routine),
@@ -457,15 +455,15 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
           )),
         ],
         if (completed.isNotEmpty) ...[
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           GestureDetector(
             onTap: () => setState(() => _showCompleted = !_showCompleted),
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 8),
+              padding: EdgeInsets.only(bottom: 8),
               child: Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(6),
+                    padding: EdgeInsets.all(6),
                     decoration: BoxDecoration(
                       color: AppColors.success.withOpacity(0.15),
                       borderRadius: BorderRadius.circular(8),
@@ -476,7 +474,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
                       size: 18,
                     ),
                   ),
-                  const SizedBox(width: 10),
+                  SizedBox(width: 10),
                   Text(
                     'Completadas',
                     style: TextStyle(
@@ -485,7 +483,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
                       fontWeight: FontWeight.w800,
                     ),
                   ),
-                  const Spacer(),
+                  Spacer(),
                   Text(
                     '${completed.length}',
                     style: TextStyle(
@@ -500,7 +498,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
           ),
           if (_showCompleted)
             ...completed.map((routine) => Padding(
-              padding: const EdgeInsets.only(bottom: 16),
+              padding: EdgeInsets.only(bottom: 16),
               child: _PremiumRoutineCard(
                 routine: routine,
                 onTap: () => _openDetail(routine),
@@ -521,12 +519,12 @@ class _PremiumRoutineCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
+      padding: EdgeInsets.only(bottom: 20),
       child: AppCard(
         borderRadius: 32,
         borderColor: AppColors.divider.withOpacity(0.1),
         borderWidth: 1.5,
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(24),
         onTap: onTap,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -537,42 +535,42 @@ class _PremiumRoutineCard extends StatelessWidget {
                   width: 56,
                   height: 56,
                   decoration: BoxDecoration(
-                    gradient: const LinearGradient(
+                    gradient: LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [AppColors.tertiary, AppColors.secondary],
                     ),
                     borderRadius: BorderRadius.circular(18),
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.bolt_rounded,
                     color: Colors.white,
                     size: 28,
                   ),
                 ),
-                const SizedBox(width: 16),
+                SizedBox(width: 16),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         routine.name,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.textMain,
                           fontSize: 18,
                           fontWeight: FontWeight.w900,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                         decoration: BoxDecoration(
                           color: AppColors.primary.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
                           routine.targetGoal.toUpperCase(),
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: AppColors.primary,
                             fontSize: 10,
                             fontWeight: FontWeight.w900,
@@ -582,7 +580,7 @@ class _PremiumRoutineCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                const Icon(
+                Icon(
                   Icons.chevron_right_rounded,
                   color: AppColors.divider,
                   size: 24,
@@ -590,7 +588,7 @@ class _PremiumRoutineCard extends StatelessWidget {
               ],
             ),
             if (routine.description.isNotEmpty) ...[
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               Text(
                 routine.description,
                 maxLines: 2,
@@ -602,9 +600,9 @@ class _PremiumRoutineCard extends StatelessWidget {
                 ),
               ),
             ],
-            const SizedBox(height: 16),
-            const Divider(height: 1, color: AppColors.divider),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
+            Divider(height: 1, color: AppColors.divider),
+            SizedBox(height: 16),
             Row(
               children: [
                 Icon(
@@ -612,7 +610,7 @@ class _PremiumRoutineCard extends StatelessWidget {
                   color: AppColors.textMain.withOpacity(0.3),
                   size: 14,
                 ),
-                const SizedBox(width: 4),
+                SizedBox(width: 4),
                 Text(
                   '${routine.exercises.length} ejercicios',
                   style: TextStyle(
@@ -622,7 +620,7 @@ class _PremiumRoutineCard extends StatelessWidget {
                   ),
                 ),
                 if (routine.exercises.isNotEmpty) ...[
-                  const SizedBox(width: 16),
+                  SizedBox(width: 16),
                   Expanded(
                     child: Text(
                       routine.exercises.map((e) => e.name).join(', '),

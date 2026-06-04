@@ -9,7 +9,7 @@ import '../../data/services/completed_storage_service.dart';
 import 'create_routine_screen.dart';
 
 class RoutineDetailScreen extends StatefulWidget {
-  const RoutineDetailScreen({super.key, required this.routine});
+  RoutineDetailScreen({super.key, required this.routine});
 
   final RoutineModel routine;
 
@@ -47,12 +47,11 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.surface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(28),
           side: BorderSide(color: AppColors.error.withOpacity(0.3), width: 1),
         ),
-        title: const Row(
+        title: Row(
           children: [
             Icon(Icons.warning_rounded, color: AppColors.error),
             SizedBox(width: 12),
@@ -75,7 +74,7 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text(
+            child: Text(
               'Cancelar',
               style: TextStyle(color: AppColors.secondary, fontWeight: FontWeight.w700),
             ),
@@ -88,7 +87,7 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
               elevation: 0,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             ),
-            child: const Text(
+            child: Text(
               'Eliminar',
               style: TextStyle(fontWeight: FontWeight.w900),
             ),
@@ -209,34 +208,32 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
     final allExercisesCompleted = hasExercises && _completedExercises.length == routine.exercises.length;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            backgroundColor: AppColors.background,
             expandedHeight: 280,
             pinned: true,
             leading: IconButton(
               onPressed: () => Navigator.pop(context),
               icon: Container(
-                padding: const EdgeInsets.all(8),
+                padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: AppColors.background.withOpacity(0.5),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.arrow_back_ios_new, color: AppColors.textMain, size: 18),
+                child: Icon(Icons.arrow_back_ios_new, color: AppColors.textMain, size: 18),
               ),
             ),
             actions: [
               if (_routineCompleted)
                 Container(
-                  margin: const EdgeInsets.only(right: 12),
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  margin: EdgeInsets.only(right: 12),
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
                     color: AppColors.success.withOpacity(0.15),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Row(
+                  child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(Icons.check_circle, color: AppColors.success, size: 16),
@@ -253,7 +250,7 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
                   ),
                 ),
               if (_deleting)
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(right: 20),
                   child: Center(
                     child: SizedBox(
@@ -271,25 +268,25 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
                   IconButton(
                     onPressed: () => _openEdit(),
                     icon: Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         color: AppColors.primary.withOpacity(0.1),
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(Icons.edit_outlined, color: AppColors.primary, size: 20),
+                      child: Icon(Icons.edit_outlined, color: AppColors.primary, size: 20),
                     ),
                     tooltip: 'Editar rutina',
                   ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 IconButton(
                   onPressed: routine.id != null ? _confirmDelete : null,
                   icon: Container(
-                    padding: const EdgeInsets.all(8),
+                    padding: EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       color: AppColors.error.withOpacity(0.1),
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(Icons.delete_outline, color: AppColors.error, size: 20),
+                    child: Icon(Icons.delete_outline, color: AppColors.error, size: 20),
                   ),
                   tooltip: 'Eliminar rutina',
                 ),
@@ -308,13 +305,13 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
                 ),
                 child: SafeArea(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    padding: EdgeInsets.symmetric(horizontal: 24),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                           decoration: BoxDecoration(
                             color: AppColors.tertiary.withOpacity(0.2),
                             borderRadius: BorderRadius.circular(12),
@@ -322,7 +319,7 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
                           ),
                           child: Text(
                             routine.targetGoal.toUpperCase(),
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: AppColors.tertiary,
                               fontSize: 11,
                               fontWeight: FontWeight.w900,
@@ -330,17 +327,17 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 12),
+                        SizedBox(height: 12),
                         Text(
                           routine.name,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: AppColors.textMain,
                             fontSize: 36,
                             fontWeight: FontWeight.w900,
                             height: 1.1,
                           ),
                         ),
-                        const SizedBox(height: 16),
+                        SizedBox(height: 16),
                         if (routine.description.isNotEmpty) ...[
                           Text(
                             routine.description,
@@ -350,7 +347,7 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
                               height: 1.5,
                             ),
                           ),
-                          const SizedBox(height: 24),
+                          SizedBox(height: 24),
                         ],
                       ],
                     ),
@@ -361,17 +358,17 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
           ),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     children: [
-                      const Icon(Icons.fitness_center_rounded, color: AppColors.secondary, size: 20),
-                      const SizedBox(width: 8),
+                      Icon(Icons.fitness_center_rounded, color: AppColors.secondary, size: 20),
+                      SizedBox(width: 8),
                       Text(
                         'Ejercicios (${routine.exercises.length})',
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.textMain,
                           fontSize: 20,
                           fontWeight: FontWeight.w900,
@@ -379,11 +376,11 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
                   if (!hasExercises)
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.symmetric(vertical: 40),
+                      padding: EdgeInsets.symmetric(vertical: 40),
                       decoration: BoxDecoration(
                         color: AppColors.surface,
                         borderRadius: BorderRadius.circular(28),
@@ -396,7 +393,7 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
                             color: AppColors.textMain.withOpacity(0.2),
                             size: 48,
                           ),
-                          const SizedBox(height: 16),
+                          SizedBox(height: 16),
                           Text(
                             'Esta rutina no tiene ejercicios',
                             style: TextStyle(
@@ -413,7 +410,7 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
                       final exercise = entry.value;
                       final isCompleted = _routineCompleted || _completedExercises.contains(index);
                       return Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
+                        padding: EdgeInsets.only(bottom: 16),
                         child: _PremiumExerciseCard(
                           index: index + 1,
                           exercise: exercise,
@@ -425,17 +422,17 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
                         ),
                       );
                     }),
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24),
                   if (_routineCompleted)
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.all(20),
+                      padding: EdgeInsets.all(20),
                       decoration: BoxDecoration(
                         color: AppColors.success.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(color: AppColors.success.withOpacity(0.3)),
                       ),
-                      child: const Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(Icons.celebration_rounded, color: AppColors.success, size: 24),
@@ -456,22 +453,22 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
                       width: double.infinity,
                       child: ElevatedButton.icon(
                         onPressed: _markRoutineCompleted,
-                        icon: const Icon(Icons.check_circle_outline, size: 22),
-                        label: const Text(
+                        icon: Icon(Icons.check_circle_outline, size: 22),
+                        label: Text(
                           'Completar rutina',
                           style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
                         ),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.success,
                           foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          padding: EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18),
                           ),
                         ),
                       ),
                     ),
-                  const SizedBox(height: 40),
+                  SizedBox(height: 40),
                 ],
               ),
             ),
@@ -518,17 +515,17 @@ class _PremiumExerciseCard extends StatelessWidget {
                   color: isCompleted
                       ? AppColors.success.withOpacity(0.15)
                       : AppColors.primary.withOpacity(0.1),
-                  borderRadius: const BorderRadius.only(
+                  borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(24),
                     bottomLeft: Radius.circular(24),
                   ),
                 ),
                 child: Center(
                   child: isCompleted
-                      ? const Icon(Icons.check_circle, color: AppColors.success, size: 22)
+                      ? Icon(Icons.check_circle, color: AppColors.success, size: 22)
                       : Text(
                           '$index',
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: AppColors.primary,
                             fontWeight: FontWeight.w900,
                             fontSize: 18,
@@ -538,7 +535,7 @@ class _PremiumExerciseCard extends StatelessWidget {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(20),
+                  padding: EdgeInsets.all(20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -572,7 +569,7 @@ class _PremiumExerciseCard extends StatelessWidget {
                         ],
                       ),
                       if (exercise.description.isNotEmpty) ...[
-                        const SizedBox(height: 6),
+                        SizedBox(height: 6),
                         Text(
                           exercise.description,
                           style: TextStyle(
@@ -582,7 +579,7 @@ class _PremiumExerciseCard extends StatelessWidget {
                           ),
                         ),
                       ],
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
                       Row(
                         children: [
                           _StatPill(
@@ -590,14 +587,14 @@ class _PremiumExerciseCard extends StatelessWidget {
                             value: '${exercise.sets} series',
                             color: AppColors.secondary,
                           ),
-                          const SizedBox(width: 8),
+                          SizedBox(width: 8),
                           _StatPill(
                             icon: Icons.unfold_more_rounded,
                             value: '${exercise.reps} reps',
                             color: AppColors.secondary,
                           ),
                           if (exercise.durationSeconds > 0) ...[
-                            const SizedBox(width: 8),
+                            SizedBox(width: 8),
                             _StatPill(
                               icon: Icons.timer_outlined,
                               value: formatDuration(exercise.durationSeconds),
@@ -628,7 +625,7 @@ class _StatPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(8),
@@ -638,7 +635,7 @@ class _StatPill extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, color: color, size: 14),
-          const SizedBox(width: 4),
+          SizedBox(width: 4),
           Text(
             value,
             style: TextStyle(

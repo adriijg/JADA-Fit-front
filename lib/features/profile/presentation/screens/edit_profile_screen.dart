@@ -6,7 +6,7 @@ import '../../data/models/profile_model.dart';
 import '../../data/services/profile_service.dart';
 
 class EditProfileScreen extends StatefulWidget {
-  const EditProfileScreen({
+  EditProfileScreen({
     super.key,
     required this.profile,
   });
@@ -166,12 +166,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.surface,
         elevation: 0,
-        iconTheme: const IconThemeData(color: AppColors.textMain),
-        title: const Text(
+        iconTheme: IconThemeData(color: AppColors.textMain),
+        title: Text(
           'Editar datos físicos',
           style: TextStyle(
             color: AppColors.textMain,
@@ -182,14 +180,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
           child: Column(
             children: [
               _HeaderCard(
                 name: widget.profile.name,
                 email: widget.profile.email,
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
               _EditFormCard(
                 weightController: weightController,
                 heightController: heightController,
@@ -205,13 +203,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 },
                 onClearGender: _clearGender,
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               if (errorMessage != null)
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
+                  padding: EdgeInsets.only(bottom: 16),
                   child: Text(
                     errorMessage!,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.error,
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -232,7 +230,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                   ),
                   child: isLoading
-                      ? const SizedBox(
+                      ? SizedBox(
                           width: 22,
                           height: 22,
                           child: CircularProgressIndicator(
@@ -240,7 +238,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             strokeWidth: 2.4,
                           ),
                         )
-                      : const Text(
+                      : Text(
                           'GUARDAR CAMBIOS',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
@@ -270,7 +268,7 @@ class _HeaderCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(22),
+      padding: EdgeInsets.all(22),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(24),
@@ -292,29 +290,29 @@ class _HeaderCard extends StatelessWidget {
                 width: 1.5,
               ),
             ),
-            child: const Icon(
+            child: Icon(
               Icons.person,
               color: AppColors.primary,
               size: 30,
             ),
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   name,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.textMain,
                     fontSize: 18,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
-                const SizedBox(height: 5),
+                SizedBox(height: 5),
                 Text(
                   email,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.secondary,
                     fontSize: 13,
                   ),
@@ -355,7 +353,7 @@ class _EditFormCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(22),
+      padding: EdgeInsets.all(22),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(24),
@@ -372,11 +370,11 @@ class _EditFormCard extends StatelessWidget {
             hintText: 'Ej: 78.5',
             suffix: 'kg',
             icon: Icons.monitor_weight_outlined,
-            keyboardType: const TextInputType.numberWithOptions(
+            keyboardType: TextInputType.numberWithOptions(
               decimal: true,
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           _EditProfileField(
             controller: heightController,
             label: 'Altura',
@@ -385,7 +383,7 @@ class _EditFormCard extends StatelessWidget {
             icon: Icons.height,
             keyboardType: TextInputType.number,
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           _EditProfileField(
             controller: ageController,
             label: 'Edad',
@@ -394,38 +392,38 @@ class _EditFormCard extends StatelessWidget {
             icon: Icons.cake_outlined,
             keyboardType: TextInputType.number,
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           _GenderDropdownField(
             value: selectedGender,
             onChanged: onGenderChanged,
             onClear: onClearGender,
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           _EditProfileField(
             controller: goalController,
             label: 'Objetivo',
             hintText: 'Ej: ganar masa muscular',
             icon: Icons.flag_outlined,
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           _EditProfileField(
             controller: bodyFatController,
             label: 'Grasa corporal',
             hintText: 'Ej: 15.2',
             suffix: '%',
             icon: Icons.percent,
-            keyboardType: const TextInputType.numberWithOptions(
+            keyboardType: TextInputType.numberWithOptions(
               decimal: true,
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           _EditProfileField(
             controller: muscleMassController,
             label: 'Masa muscular',
             hintText: 'Ej: 62',
             suffix: 'kg',
             icon: Icons.fitness_center,
-            keyboardType: const TextInputType.numberWithOptions(
+            keyboardType: TextInputType.numberWithOptions(
               decimal: true,
             ),
           ),
@@ -451,7 +449,7 @@ class _GenderDropdownField extends StatelessWidget {
     return DropdownButtonFormField<String>(
       initialValue: value,
       dropdownColor: AppColors.surface,
-      style: const TextStyle(
+      style: TextStyle(
         color: AppColors.textMain,
         fontSize: 15,
       ),
@@ -460,11 +458,11 @@ class _GenderDropdownField extends StatelessWidget {
         filled: true,
         fillColor: AppColors.inputBackground,
         labelText: 'Género',
-        labelStyle: const TextStyle(
+        labelStyle: TextStyle(
           color: AppColors.secondary,
           fontWeight: FontWeight.w600,
         ),
-        prefixIcon: const Icon(
+        prefixIcon: Icon(
           Icons.wc,
           color: AppColors.primary,
         ),
@@ -472,20 +470,20 @@ class _GenderDropdownField extends StatelessWidget {
             ? null
             : IconButton(
                 onPressed: onClear,
-                icon: const Icon(
+                icon: Icon(
                   Icons.close,
                   color: AppColors.secondary,
                 ),
               ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
-          borderSide: const BorderSide(
+          borderSide: BorderSide(
             color: AppColors.inputBorder,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
-          borderSide: const BorderSide(
+          borderSide: BorderSide(
             color: AppColors.primary,
             width: 1.4,
           ),
@@ -528,7 +526,7 @@ class _EditProfileField extends StatelessWidget {
     return TextField(
       controller: controller,
       keyboardType: keyboardType,
-      style: const TextStyle(
+      style: TextStyle(
         color: AppColors.textMain,
         fontSize: 15,
       ),
@@ -536,7 +534,7 @@ class _EditProfileField extends StatelessWidget {
         filled: true,
         fillColor: AppColors.inputBackground,
         labelText: label,
-        labelStyle: const TextStyle(
+        labelStyle: TextStyle(
           color: AppColors.secondary,
           fontWeight: FontWeight.w600,
         ),
@@ -549,19 +547,19 @@ class _EditProfileField extends StatelessWidget {
           color: AppColors.primary,
         ),
         suffixText: suffix,
-        suffixStyle: const TextStyle(
+        suffixStyle: TextStyle(
           color: AppColors.secondary,
           fontWeight: FontWeight.w700,
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
-          borderSide: const BorderSide(
+          borderSide: BorderSide(
             color: AppColors.inputBorder,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
-          borderSide: const BorderSide(
+          borderSide: BorderSide(
             color: AppColors.primary,
             width: 1.4,
           ),

@@ -13,7 +13,7 @@ import '../../data/services/routine_service.dart';
 class CreateRoutineScreen extends StatefulWidget {
   final RoutineModel? existingRoutine;
 
-  const CreateRoutineScreen({super.key, this.existingRoutine});
+  CreateRoutineScreen({super.key, this.existingRoutine});
 
   bool get isEditing => existingRoutine != null;
 
@@ -162,18 +162,16 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.textMain, size: 22),
+          icon: Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.textMain, size: 22),
         ),
         title: Text(
           widget.isEditing ? 'Editar Rutina' : 'Nueva Rutina',
-          style: const TextStyle(
+          style: TextStyle(
             color: AppColors.textMain,
             fontSize: 20,
             fontWeight: FontWeight.w900,
@@ -186,19 +184,19 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const _SectionHeader(title: 'Detalles', icon: Icons.auto_awesome_rounded),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20),
                     _PremiumTextField(
                       controller: _nameController,
                       label: 'Nombre',
                       hint: 'Ej. Push Day / Pierna / Full Body',
                       validator: (v) => (v == null || v.trim().isEmpty) ? 'Requerido' : null,
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
                     _GoalSelector(
                       selectedGoal: _selectedGoal,
                       onChanged: (goal) {
@@ -209,10 +207,10 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
                       },
                     ),
                     if (_selectedGoal != null) ...[
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8),
                       _GoalInfoCard(goal: _selectedGoal!),
                     ],
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
                     _SplitSelector(
                       selectedSplit: _selectedSplit,
                       onChanged: (split) {
@@ -222,14 +220,14 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
                         });
                       },
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
                     _PremiumTextField(
                       controller: _descriptionController,
                       label: 'Descripción',
                       hint: 'Notas adicionales...',
                       maxLines: 2,
                     ),
-                    const SizedBox(height: 32),
+                    SizedBox(height: 32),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -247,24 +245,24 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
                                 ),
                                 label: Text(
                                   _showSuggestions ? 'CERRAR' : 'SUGERENCIAS',
-                                  style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 11),
+                                  style: TextStyle(fontWeight: FontWeight.w900, fontSize: 11),
                                 ),
                                 style: TextButton.styleFrom(
                                   foregroundColor: AppColors.tertiary,
                                   backgroundColor: AppColors.tertiary.withOpacity(0.1),
-                                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                                  padding: EdgeInsets.symmetric(horizontal: 12),
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                                 ),
                               ),
-                            const SizedBox(width: 8),
+                            SizedBox(width: 8),
                             TextButton.icon(
                               onPressed: _addExercise,
-                              icon: const Icon(Icons.add_circle_outline_rounded, size: 20),
-                              label: const Text('AÑADIR', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 11)),
+                              icon: Icon(Icons.add_circle_outline_rounded, size: 20),
+                              label: Text('AÑADIR', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 11)),
                               style: TextButton.styleFrom(
                                 foregroundColor: AppColors.primary,
                                 backgroundColor: AppColors.primary.withOpacity(0.1),
-                                padding: const EdgeInsets.symmetric(horizontal: 12),
+                                padding: EdgeInsets.symmetric(horizontal: 12),
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                               ),
                             ),
@@ -272,14 +270,14 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
                     if (_showSuggestions && _selectedGoal != null) _buildSuggestions(),
                     if (_exercises.isEmpty && !_showSuggestions)
                       _buildEmptyState()
                     else
                       ...List.generate(_exercises.length, (i) {
                         return Padding(
-                          padding: const EdgeInsets.only(bottom: 20),
+                          padding: EdgeInsets.only(bottom: 20),
                           child: _PremiumExerciseForm(
                             index: i + 1,
                             entry: _exercises[i],
@@ -287,7 +285,7 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
                           ),
                         );
                       }),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20),
                   ],
                 ),
               ),
@@ -305,8 +303,8 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
       _selectedSplit,
     );
     return Container(
-      margin: const EdgeInsets.only(bottom: 20),
-      padding: const EdgeInsets.all(16),
+      margin: EdgeInsets.only(bottom: 20),
+      padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.tertiary.withOpacity(0.05),
         borderRadius: BorderRadius.circular(20),
@@ -317,13 +315,13 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
         children: [
           Row(
             children: [
-              const Icon(Icons.auto_awesome_rounded, color: AppColors.tertiary, size: 18),
-              const SizedBox(width: 8),
+              Icon(Icons.auto_awesome_rounded, color: AppColors.tertiary, size: 18),
+              SizedBox(width: 8),
               Text(
                 _selectedSplit != null
                     ? 'Ejercicios sugeridos para ${_selectedGoal!.displayName} - ${_selectedSplit!.displayName}'
                     : 'Ejercicios sugeridos para ${_selectedGoal!.displayName}',
-                style: const TextStyle(
+                style: TextStyle(
                   color: AppColors.tertiary,
                   fontSize: 14,
                   fontWeight: FontWeight.w800,
@@ -331,7 +329,7 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           Text(
             'Toca un ejercicio para añadirlo a tu rutina',
             style: TextStyle(
@@ -339,13 +337,13 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
               fontSize: 12,
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           ...suggestions.map((s) => Padding(
-                padding: const EdgeInsets.only(bottom: 6),
+                padding: EdgeInsets.only(bottom: 6),
                 child: GestureDetector(
                   onTap: () => _addSuggestedExercise(s),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                    padding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                     decoration: BoxDecoration(
                       color: AppColors.surface,
                       borderRadius: BorderRadius.circular(12),
@@ -354,18 +352,18 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
                     child: Row(
                       children: [
                         Container(
-                          padding: const EdgeInsets.all(6),
+                          padding: EdgeInsets.all(6),
                           decoration: BoxDecoration(
                             color: AppColors.tertiary.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: const Icon(Icons.add_rounded, color: AppColors.tertiary, size: 16),
+                          child: Icon(Icons.add_rounded, color: AppColors.tertiary, size: 16),
                         ),
-                        const SizedBox(width: 12),
+                        SizedBox(width: 12),
                         Expanded(
                           child: Text(
                             s.name,
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: AppColors.textMain,
                               fontSize: 14,
                               fontWeight: FontWeight.w700,
@@ -393,7 +391,7 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
   Widget _buildEmptyState() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(40),
+      padding: EdgeInsets.all(40),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(32),
@@ -402,7 +400,7 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
       child: Column(
         children: [
           Icon(Icons.add_task_rounded, color: AppColors.textMain.withOpacity(0.2), size: 48),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
             '¡Empieza a añadir ejercicios!',
             style: TextStyle(
@@ -412,7 +410,7 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
             ),
           ),
           if (_selectedGoal != null) ...[
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             GestureDetector(
               onTap: () => setState(() => _showSuggestions = true),
               child: Text(
@@ -434,7 +432,7 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
   Widget _buildBottomBar() {
     return Container(
       padding: EdgeInsets.fromLTRB(24, 16, 24, 16 + MediaQuery.of(context).padding.bottom),
-      decoration: const BoxDecoration(color: AppColors.background),
+      decoration: BoxDecoration(color: AppColors.background),
       child: SizedBox(
         width: double.infinity,
         height: 56,
@@ -447,14 +445,14 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           ),
           child: _saving
-              ? const SizedBox(
+              ? SizedBox(
                   width: 24,
                   height: 24,
                   child: CircularProgressIndicator(color: Colors.white, strokeWidth: 3),
                 )
               : Text(
                   widget.isEditing ? 'GUARDAR CAMBIOS' : 'GUARDAR RUTINA',
-                  style: const TextStyle(fontWeight: FontWeight.w900, letterSpacing: 1.0),
+                  style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 1.0),
                 ),
         ),
       ),
@@ -474,7 +472,7 @@ class _GoalSelector extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 4, bottom: 8),
+          padding: EdgeInsets.only(left: 4, bottom: 8),
           child: Text(
             'Objetivo',
             style: TextStyle(
@@ -500,9 +498,9 @@ class _GoalSelector extends StatelessWidget {
               ),
             ),
             dropdownColor: AppColors.surface,
-            icon: const Icon(Icons.expand_more_rounded, color: AppColors.secondary),
-            style: const TextStyle(color: AppColors.textMain, fontSize: 16, fontWeight: FontWeight.w600),
-            decoration: const InputDecoration(
+            icon: Icon(Icons.expand_more_rounded, color: AppColors.secondary),
+            style: TextStyle(color: AppColors.textMain, fontSize: 16, fontWeight: FontWeight.w600),
+            decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
             ),
@@ -516,7 +514,7 @@ class _GoalSelector extends StatelessWidget {
                       color: AppColors.primary,
                       size: 20,
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12),
                     Text(goal.displayName),
                   ],
                 ),
@@ -553,7 +551,7 @@ class _GoalInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.primary.withOpacity(0.05),
         borderRadius: BorderRadius.circular(16),
@@ -576,22 +574,22 @@ class _GoalInfoCard extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: 16),
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
                 'Series: ${goal.suggestedSets}',
-                style: const TextStyle(
+                style: TextStyle(
                   color: AppColors.primary,
                   fontSize: 12,
                   fontWeight: FontWeight.w800,
                 ),
               ),
-              const SizedBox(height: 2),
+              SizedBox(height: 2),
               Text(
                 'Reps: ${goal.repRange}',
-                style: const TextStyle(
+                style: TextStyle(
                   color: AppColors.primary,
                   fontSize: 12,
                   fontWeight: FontWeight.w800,
@@ -617,7 +615,7 @@ class _SplitSelector extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 4, bottom: 8),
+          padding: EdgeInsets.only(left: 4, bottom: 8),
           child: Text(
             'Tipo de rutina',
             style: TextStyle(
@@ -643,9 +641,9 @@ class _SplitSelector extends StatelessWidget {
               ),
             ),
             dropdownColor: AppColors.surface,
-            icon: const Icon(Icons.expand_more_rounded, color: AppColors.secondary),
-            style: const TextStyle(color: AppColors.textMain, fontSize: 16, fontWeight: FontWeight.w600),
-            decoration: const InputDecoration(
+            icon: Icon(Icons.expand_more_rounded, color: AppColors.secondary),
+            style: TextStyle(color: AppColors.textMain, fontSize: 16, fontWeight: FontWeight.w600),
+            decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
             ),
@@ -659,9 +657,9 @@ class _SplitSelector extends StatelessWidget {
                       color: AppColors.tertiary,
                       size: 20,
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12),
                     Text(split.displayName),
-                    const SizedBox(width: 8),
+                    SizedBox(width: 8),
                     Text(
                       split.description,
                       style: TextStyle(
@@ -727,10 +725,10 @@ class _SectionHeader extends StatelessWidget {
     return Row(
       children: [
         Icon(icon, color: AppColors.primary, size: 22),
-        const SizedBox(width: 8),
+        SizedBox(width: 8),
         Text(
           title,
-          style: const TextStyle(
+          style: TextStyle(
             color: AppColors.textMain,
             fontSize: 22,
             fontWeight: FontWeight.w900,
@@ -767,7 +765,7 @@ class _PremiumTextField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 4, bottom: 8),
+          padding: EdgeInsets.only(left: 4, bottom: 8),
           child: Text(
             label,
             style: TextStyle(
@@ -783,7 +781,7 @@ class _PremiumTextField extends StatelessWidget {
           keyboardType: keyboardType,
           inputFormatters: inputFormatters,
           validator: validator,
-          style: const TextStyle(color: AppColors.textMain, fontSize: 16, fontWeight: FontWeight.w600),
+          style: TextStyle(color: AppColors.textMain, fontSize: 16, fontWeight: FontWeight.w600),
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: TextStyle(
@@ -799,17 +797,17 @@ class _PremiumTextField extends StatelessWidget {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
-              borderSide: const BorderSide(color: AppColors.primary, width: 2),
+              borderSide: BorderSide(color: AppColors.primary, width: 2),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
-              borderSide: const BorderSide(color: AppColors.error, width: 1),
+              borderSide: BorderSide(color: AppColors.error, width: 1),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
-              borderSide: const BorderSide(color: AppColors.error, width: 2),
+              borderSide: BorderSide(color: AppColors.error, width: 2),
             ),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           ),
         ),
       ],
@@ -840,10 +838,10 @@ class _PremiumExerciseForm extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
             decoration: BoxDecoration(
               color: AppColors.primary.withOpacity(0.05),
-              borderRadius: const BorderRadius.only(
+              borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(28),
                 topRight: Radius.circular(28),
               ),
@@ -855,11 +853,11 @@ class _PremiumExerciseForm extends StatelessWidget {
                   backgroundColor: AppColors.primary,
                   child: Text(
                     '$index',
-                    style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w900),
+                    style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w900),
                   ),
                 ),
-                const SizedBox(width: 12),
-                const Text(
+                SizedBox(width: 12),
+                Text(
                   'Ejercicio',
                   style: TextStyle(
                     color: AppColors.primary,
@@ -867,16 +865,16 @@ class _PremiumExerciseForm extends StatelessWidget {
                     fontSize: 15,
                   ),
                 ),
-                const Spacer(),
+                Spacer(),
                 GestureDetector(
                   onTap: onRemove,
-                  child: const Icon(Icons.remove_circle_outline_rounded, color: AppColors.error, size: 24),
+                  child: Icon(Icons.remove_circle_outline_rounded, color: AppColors.error, size: 24),
                 ),
               ],
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(20),
             child: Column(
               children: [
                 _PremiumTextField(
@@ -885,7 +883,7 @@ class _PremiumExerciseForm extends StatelessWidget {
                   hint: 'Ej. Press de Banca',
                   validator: (v) => (v == null || v.trim().isEmpty) ? 'Requerido' : null,
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16),
                 Row(
                   children: [
                     Expanded(
@@ -897,7 +895,7 @@ class _PremiumExerciseForm extends StatelessWidget {
                         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12),
                     Expanded(
                       child: _PremiumTextField(
                         controller: entry.repsController,
@@ -907,7 +905,7 @@ class _PremiumExerciseForm extends StatelessWidget {
                         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12),
                     Expanded(
                       child: _PremiumTextField(
                         controller: entry.durationController,

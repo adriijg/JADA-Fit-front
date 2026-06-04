@@ -9,7 +9,7 @@ import 'auth_gate.dart';
 import 'login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+  RegisterScreen({super.key});
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -129,7 +129,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (_) => const LoginScreen(),
+        builder: (_) => LoginScreen(),
       ),
     );
   }
@@ -138,7 +138,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
-        builder: (_) => const AuthGate(),
+        builder: (_) => AuthGate(),
       ),
       (route) => false,
     );
@@ -148,7 +148,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: AppColors.surface,
       ),
     );
   }
@@ -156,12 +155,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
             return SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 30,
                 vertical: 28,
               ),
@@ -172,13 +170,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.fitness_center,
                       size: 72,
                       color: AppColors.primary,
                     ),
-                    const SizedBox(height: 16),
-                    const Text(
+                    SizedBox(height: 16),
+                    Text(
                       AppStrings.appName,
                       style: TextStyle(
                         color: AppColors.primary,
@@ -188,7 +186,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         letterSpacing: 2.8,
                       ),
                     ),
-                    const SizedBox(height: 40),
+                    SizedBox(height: 40),
                     _RegisterCard(
                       nameController: nameController,
                       emailController: emailController,
@@ -203,7 +201,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       repeatPasswordError: repeatPasswordError,
                       errorMessage: errorMessage,
                     ),
-                    const SizedBox(height: 30),
+                    SizedBox(height: 30),
                   ],
                 ),
               ),
@@ -247,7 +245,7 @@ class _RegisterCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(26),
+      padding: EdgeInsets.all(26),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(28),
@@ -255,7 +253,7 @@ class _RegisterCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Center(
+          Center(
             child: Text(
               AppStrings.registerTitle,
               style: TextStyle(
@@ -266,8 +264,8 @@ class _RegisterCard extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 32),
-          const Text(
+          SizedBox(height: 32),
+          Text(
             AppStrings.registerNameLabel,
             style: TextStyle(
               color: AppColors.secondary,
@@ -275,15 +273,15 @@ class _RegisterCard extends StatelessWidget {
               letterSpacing: 1,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           AuthTextField(
             controller: nameController,
             hintText: AppStrings.registerNameHint,
             icon: Icons.person_outline,
             errorText: nameError,
           ),
-          const SizedBox(height: 22),
-          const Text(
+          SizedBox(height: 22),
+          Text(
             AppStrings.registerEmailLabel,
             style: TextStyle(
               color: AppColors.secondary,
@@ -291,7 +289,7 @@ class _RegisterCard extends StatelessWidget {
               letterSpacing: 1,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           AuthTextField(
             controller: emailController,
             hintText: AppStrings.registerEmailHint,
@@ -299,8 +297,8 @@ class _RegisterCard extends StatelessWidget {
             keyboardType: TextInputType.emailAddress,
             errorText: emailError,
           ),
-          const SizedBox(height: 22),
-          const Text(
+          SizedBox(height: 22),
+          Text(
             AppStrings.registerPasswordLabel,
             style: TextStyle(
               color: AppColors.secondary,
@@ -308,7 +306,7 @@ class _RegisterCard extends StatelessWidget {
               letterSpacing: 1,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           AuthTextField(
             controller: passwordController,
             hintText: AppStrings.registerPasswordHint,
@@ -316,8 +314,8 @@ class _RegisterCard extends StatelessWidget {
             obscureText: true,
             errorText: passwordError,
           ),
-          const SizedBox(height: 22),
-          const Text(
+          SizedBox(height: 22),
+          Text(
             AppStrings.registerRepeatPasswordLabel,
             style: TextStyle(
               color: AppColors.secondary,
@@ -325,7 +323,7 @@ class _RegisterCard extends StatelessWidget {
               letterSpacing: 1,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           AuthTextField(
             controller: repeatPasswordController,
             hintText: AppStrings.registerRepeatPasswordHint,
@@ -333,14 +331,14 @@ class _RegisterCard extends StatelessWidget {
             obscureText: true,
             errorText: repeatPasswordError,
           ),
-          const SizedBox(height: 28),
+          SizedBox(height: 28),
           if (errorMessage != null)
             Padding(
-              padding: const EdgeInsets.only(bottom: 16),
+              padding: EdgeInsets.only(bottom: 16),
               child: Center(
                 child: Text(
                   errorMessage!,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.error,
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
@@ -362,7 +360,7 @@ class _RegisterCard extends StatelessWidget {
                 ),
               ),
               child: isLoading
-                  ? const SizedBox(
+                  ? SizedBox(
                       width: 22,
                       height: 22,
                       child: CircularProgressIndicator(
@@ -370,7 +368,7 @@ class _RegisterCard extends StatelessWidget {
                         color: AppColors.background,
                       ),
                     )
-                  : const Row(
+                  : Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
@@ -387,14 +385,14 @@ class _RegisterCard extends StatelessWidget {
                     ),
             ),
           ),
-          const SizedBox(height: 22),
+          SizedBox(height: 22),
           Center(
             child: TextButton(
               onPressed: onGoToLogin,
               style: TextButton.styleFrom(
                 foregroundColor: AppColors.secondary,
               ),
-              child: const Text(AppStrings.alreadyHaveAccountPrompt),
+              child: Text(AppStrings.alreadyHaveAccountPrompt),
             ),
           ),
         ],

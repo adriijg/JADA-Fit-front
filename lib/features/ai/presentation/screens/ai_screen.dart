@@ -7,11 +7,11 @@ import '../../../../core/theme/app_colors.dart';
 import '../../data/models/chat_message_model.dart';
 import '../providers/ai_provider.dart';
 
-const String _limitReachedMessage =
+String _limitReachedMessage =
     'Limite de historial de chat alcanzado. Elimina un chat existente para crear uno nuevo.';
 
 class AiScreen extends StatefulWidget {
-  const AiScreen({super.key});
+  AiScreen({super.key});
 
   @override
   State<AiScreen> createState() => _AiScreenState();
@@ -33,7 +33,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
     _lastMessageCount = aiProvider.messages.length;
     _pulseController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1200),
+      duration: Duration(milliseconds: 1200),
     )..repeat(reverse: true);
     _pulseAnimation = Tween<double>(begin: 0.6, end: 1.0).animate(
       CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
@@ -69,7 +69,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
       if (_scrollController.hasClients) {
         _scrollController.animateTo(
           _scrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 300),
+          duration: Duration(milliseconds: 300),
           curve: Curves.easeOut,
         );
       }
@@ -80,7 +80,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
     Clipboard.setData(ClipboardData(text: text));
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text('Copiado al portapapeles'),
           duration: Duration(seconds: 2),
           behavior: SnackBarBehavior.floating,
@@ -92,8 +92,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
   void _showHistory() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: AppColors.surface,
-      shape: const RoundedRectangleBorder(
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (_) => _ChatHistorySheet(
@@ -139,15 +138,15 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
 
   Widget _buildHeader(AiProvider aiProvider) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(20, 8, 16, 8),
+      padding: EdgeInsets.fromLTRB(20, 8, 16, 8),
       child: Row(
         children: [
-          const Icon(Icons.auto_awesome, color: AppColors.primary, size: 20),
-          const SizedBox(width: 10),
+          Icon(Icons.auto_awesome, color: AppColors.primary, size: 20),
+          SizedBox(width: 10),
           Expanded(
             child: Text(
               aiProvider.currentSessionTitle ?? 'Asistente IA',
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.textMain,
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
@@ -159,16 +158,15 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
             icon: Icons.history_rounded,
             onTap: _showHistory,
           ),
-          const SizedBox(width: 6),
+          SizedBox(width: 6),
           _HeaderButton(
             icon: Icons.add_rounded,
             onTap: () {
               if (!aiProvider.newChat()) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: const Text(_limitReachedMessage),
-                    backgroundColor: AppColors.surface,
-                    duration: const Duration(seconds: 3),
+                    content: Text(_limitReachedMessage),
+                    duration: Duration(seconds: 3),
                   ),
                 );
               }
@@ -181,7 +179,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
 
   Widget _buildEmptyState(List<String> suggestions) {
     return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+      padding: EdgeInsets.fromLTRB(20, 8, 20, 8),
       children: [
         Center(
           child: Container(
@@ -191,15 +189,15 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
               color: AppColors.primary.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
-            child: const Icon(
+            child: Icon(
               Icons.auto_awesome,
               size: 36,
               color: AppColors.primary,
             ),
           ),
         ),
-        const SizedBox(height: 16),
-        const Center(
+        SizedBox(height: 16),
+        Center(
           child: Text(
             'Asistente IA',
             style: TextStyle(
@@ -209,7 +207,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
             ),
           ),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
         Center(
           child: Text(
             'Pregúntame sobre rutinas, nutrición o cualquier duda fitness.',
@@ -221,7 +219,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
             textAlign: TextAlign.center,
           ),
         ),
-        const SizedBox(height: 28),
+        SizedBox(height: 28),
         ...suggestions.map((s) => _buildSuggestionChip(s)),
       ],
     );
@@ -229,7 +227,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
 
   Widget _buildSuggestionChip(String text) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: EdgeInsets.only(bottom: 10),
       child: Material(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
@@ -238,7 +236,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
           onTap: () => context.read<AiProvider>().useSuggestion(text),
           child: Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
@@ -253,11 +251,11 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
                   size: 18,
                   color: AppColors.primary.withValues(alpha: 0.7),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12),
                 Expanded(
                   child: Text(
                     text,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.textMain,
                       fontSize: 13,
                       height: 1.4,
@@ -279,7 +277,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
   ) {
     return ListView.builder(
       controller: _scrollController,
-      padding: const EdgeInsets.fromLTRB(12, 0, 12, 4),
+      padding: EdgeInsets.fromLTRB(12, 0, 12, 4),
       itemCount: messages.length + (isLoading ? 1 : 0) + (suggestions.isNotEmpty ? 1 : 0),
       itemBuilder: (context, index) {
         if (index == messages.length && isLoading) {
@@ -296,18 +294,18 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
 
   Widget _buildTypingIndicator() {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: EdgeInsets.symmetric(vertical: 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           _buildAvatar(),
-          const SizedBox(width: 10),
+          SizedBox(width: 10),
           Flexible(
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               decoration: BoxDecoration(
                 color: AppColors.surface,
-                borderRadius: const BorderRadius.only(
+                borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(18),
                   topRight: Radius.circular(18),
                   bottomRight: Radius.circular(18),
@@ -348,9 +346,9 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildSuggestedQuestions(List<String> suggestions) {
-    if (suggestions.isEmpty) return const SizedBox.shrink();
+    if (suggestions.isEmpty) return SizedBox.shrink();
     return Padding(
-      padding: const EdgeInsets.only(top: 12, bottom: 8),
+      padding: EdgeInsets.only(top: 12, bottom: 8),
       child: Wrap(
         spacing: 8,
         runSpacing: 8,
@@ -358,7 +356,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
           return ActionChip(
             label: Text(
               s,
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.primary,
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
@@ -382,24 +380,24 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
   Widget _buildMessageBubble(ChatMessageModel message) {
     final isUser = message.role == ChatMessageRole.user;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
+      padding: EdgeInsets.symmetric(vertical: 5),
       child: Row(
         mainAxisAlignment: isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           if (!isUser) _buildAvatar(),
-          if (!isUser) const SizedBox(width: 10),
+          if (!isUser) SizedBox(width: 10),
           Flexible(
             child: Container(
               constraints: BoxConstraints(
                 maxWidth: MediaQuery.of(context).size.width * 0.78,
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
                 color: isUser ? AppColors.primary : AppColors.surface,
                 borderRadius: BorderRadius.only(
-                  topLeft: const Radius.circular(18),
-                  topRight: const Radius.circular(18),
+                  topLeft: Radius.circular(18),
+                  topRight: Radius.circular(18),
                   bottomLeft: Radius.circular(isUser ? 18 : 4),
                   bottomRight: Radius.circular(isUser ? 4 : 18),
                 ),
@@ -416,7 +414,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
                   isUser
                       ? Text(
                           message.text,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: AppColors.background,
                             fontSize: 14,
                             height: 1.5,
@@ -425,22 +423,22 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
                       : MarkdownBody(
                           data: message.text,
                           styleSheet: MarkdownStyleSheet(
-                            p: const TextStyle(
+                            p: TextStyle(
                               color: AppColors.textMain,
                               fontSize: 14,
                               height: 1.5,
                             ),
-                            strong: const TextStyle(
+                            strong: TextStyle(
                               color: AppColors.textMain,
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                             ),
-                            em: const TextStyle(
+                            em: TextStyle(
                               color: AppColors.textMain,
                               fontSize: 14,
                               fontStyle: FontStyle.italic,
                             ),
-                            code: const TextStyle(
+                            code: TextStyle(
                               color: AppColors.secondary,
                               fontSize: 13,
                               backgroundColor: Color(0x3300E5FF),
@@ -461,21 +459,21 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
                               ),
                               color: AppColors.inputBackground,
                             ),
-                            listBullet: const TextStyle(
+                            listBullet: TextStyle(
                               color: AppColors.textMain,
                               fontSize: 14,
                             ),
-                            h1: const TextStyle(
+                            h1: TextStyle(
                               color: AppColors.textMain,
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
-                            h2: const TextStyle(
+                            h2: TextStyle(
                               color: AppColors.textMain,
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
-                            h3: const TextStyle(
+                            h3: TextStyle(
                               color: AppColors.textMain,
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
@@ -484,7 +482,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
                         ),
                   if (!isUser)
                     Padding(
-                      padding: const EdgeInsets.only(top: 6),
+                      padding: EdgeInsets.only(top: 6),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -499,7 +497,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
               ),
             ),
           ),
-          if (isUser) const SizedBox(width: 10),
+          if (isUser) SizedBox(width: 10),
           if (isUser) _buildAvatar(isUser: true),
         ],
       ),
@@ -516,7 +514,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
         borderRadius: BorderRadius.circular(12),
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.all(4),
+          padding: EdgeInsets.all(4),
           child: Icon(
             icon,
             size: 14,
@@ -546,7 +544,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
   Widget _buildInputBar(bool isLoading, double bottomInset) {
     return Container(
       padding: EdgeInsets.fromLTRB(0, 8, 0, bottomInset),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: AppColors.surface,
         border: Border(
           top: BorderSide(color: AppColors.divider, width: 0.5),
@@ -572,7 +570,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
                 onSubmitted: (_) => _sendMessage(),
                 maxLines: 4,
                 minLines: 1,
-                style: const TextStyle(
+                style: TextStyle(
                   color: AppColors.textMain,
                   fontSize: 14,
                 ),
@@ -583,7 +581,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
                     fontSize: 13,
                   ),
                   border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(
+                  contentPadding: EdgeInsets.symmetric(
                     horizontal: 20,
                     vertical: 14,
                   ),
@@ -591,7 +589,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
               ),
             ),
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: 10),
           Container(
             decoration: BoxDecoration(
               color: isLoading ? AppColors.divider : AppColors.primary,
@@ -599,7 +597,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
             ),
             child: IconButton(
               onPressed: isLoading ? null : _sendMessage,
-              icon: const Icon(Icons.send_rounded),
+              icon: Icon(Icons.send_rounded),
               color: AppColors.background,
               iconSize: 20,
               splashRadius: 22,
@@ -659,7 +657,7 @@ class _ChatHistorySheet extends StatelessWidget {
 
     return Container(
       height: MediaQuery.of(context).size.height * 0.6,
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+      padding: EdgeInsets.fromLTRB(20, 16, 20, 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -673,8 +671,8 @@ class _ChatHistorySheet extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 20),
-          const Text(
+          SizedBox(height: 20),
+          Text(
             'HISTORIAL',
             style: TextStyle(
               color: AppColors.secondary,
@@ -683,10 +681,10 @@ class _ChatHistorySheet extends StatelessWidget {
               letterSpacing: 1.2,
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Expanded(
             child: sessions.isEmpty
-                ? const Center(
+                ? Center(
                     child: Text(
                       'No hay conversaciones guardadas',
                       style: TextStyle(color: AppColors.textMain),
@@ -694,7 +692,7 @@ class _ChatHistorySheet extends StatelessWidget {
                   )
                 : ListView.separated(
                     itemCount: sessions.length,
-                    separatorBuilder: (_, _) => const Divider(
+                    separatorBuilder: (_, _) => Divider(
                       color: AppColors.divider,
                       height: 1,
                     ),
@@ -702,7 +700,7 @@ class _ChatHistorySheet extends StatelessWidget {
                       final session = sessions[index];
                       final isCurrent = index == currentIndex;
                       return ListTile(
-                        contentPadding: const EdgeInsets.symmetric(
+                        contentPadding: EdgeInsets.symmetric(
                           horizontal: 8,
                           vertical: 4,
                         ),

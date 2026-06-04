@@ -1,46 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/services/notification_service.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../presentation/providers/settings_provider.dart';
 import 'about_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({super.key});
+  SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Configuraci\u00f3n'),
+        title: Text('Configuraci\u00f3n'),
         backgroundColor: Colors.transparent,
         foregroundColor: AppColors.textMain,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
+        padding: EdgeInsets.fromLTRB(20, 8, 20, 32),
         child: Consumer<SettingsProvider>(
           builder: (context, settings, _) {
             return Column(
               children: [
                 _SectionTitle(title: 'Apariencia'),
-                const SizedBox(height: 10),
+                SizedBox(height: 10),
                 AppCard.elevated(
                   borderRadius: 20,
-                  padding: const EdgeInsets.all(4),
+                  padding: EdgeInsets.all(4),
                   child: Column(
                     children: [
                       _ThemeSelector(settings: settings),
                     ],
                   ),
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: 24),
                 _SectionTitle(title: 'Unidades'),
-                const SizedBox(height: 10),
+                SizedBox(height: 10),
                 AppCard.elevated(
                   borderRadius: 20,
-                  padding: const EdgeInsets.all(4),
+                  padding: EdgeInsets.all(4),
                   child: Column(
                     children: [
                       _SettingsToggleTile(
@@ -53,12 +53,12 @@ class SettingsScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: 24),
                 _SectionTitle(title: 'Notificaciones'),
-                const SizedBox(height: 10),
+                SizedBox(height: 10),
                 AppCard.elevated(
                   borderRadius: 20,
-                  padding: const EdgeInsets.all(4),
+                  padding: EdgeInsets.all(4),
                   child: Column(
                     children: [
                       _SettingsToggleTile(
@@ -74,17 +74,25 @@ class SettingsScreen extends StatelessWidget {
                         title: 'Recordatorio de entrenos',
                         subtitle: 'Recordar entrenar cada d\u00eda',
                         value: settings.workoutRemindersEnabled,
-                        onChanged: (v) => settings.setWorkoutReminders(v),
+                        onChanged: (v) async {
+                          settings.setWorkoutReminders(v);
+                          final notif = NotificationService.instance;
+                          if (v) {
+                            await notif.scheduleWorkoutReminder();
+                          } else {
+                            await notif.cancelWorkoutReminder();
+                          }
+                        },
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: 24),
                 _SectionTitle(title: 'Informaci\u00f3n'),
-                const SizedBox(height: 10),
+                SizedBox(height: 10),
                 AppCard.elevated(
                   borderRadius: 20,
-                  padding: const EdgeInsets.all(4),
+                  padding: EdgeInsets.all(4),
                   child: Column(
                     children: [
                       _SettingsOptionTile(
@@ -93,7 +101,7 @@ class SettingsScreen extends StatelessWidget {
                         subtitle: 'Versi\u00f3n 1.0.0',
                         onTap: () => Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (_) => const AboutScreen()),
+                          MaterialPageRoute(builder: (_) => AboutScreen()),
                         ),
                       ),
                     ],
@@ -117,7 +125,7 @@ class _SectionTitle extends StatelessWidget {
     return Align(
       alignment: Alignment.centerLeft,
       child: Padding(
-        padding: const EdgeInsets.only(left: 4),
+        padding: EdgeInsets.only(left: 4),
         child: Text(
           title,
           style: TextStyle(
@@ -139,11 +147,11 @@ class _ThemeSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+      padding: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
       child: Row(
         children: [
           Icon(Icons.brightness_6_outlined, color: AppColors.primary, size: 24),
-          const SizedBox(width: 14),
+          SizedBox(width: 14),
           Expanded(
             child: Text(
               'Tema',
@@ -160,14 +168,14 @@ class _ThemeSelector extends StatelessWidget {
             selected: settings.themeMode == ThemeMode.dark,
             onTap: () => settings.setThemeMode(ThemeMode.dark),
           ),
-          const SizedBox(width: 6),
+          SizedBox(width: 6),
           _ThemeChip(
             label: 'Claro',
             icon: Icons.light_mode,
             selected: settings.themeMode == ThemeMode.light,
             onTap: () => settings.setThemeMode(ThemeMode.light),
           ),
-          const SizedBox(width: 6),
+          SizedBox(width: 6),
           _ThemeChip(
             label: 'Auto',
             icon: Icons.brightness_auto,
@@ -197,8 +205,8 @@ class _ThemeChip extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        duration: Duration(milliseconds: 200),
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(
           color: selected ? AppColors.primary.withOpacity(0.15) : Colors.transparent,
           borderRadius: BorderRadius.circular(10),
@@ -210,7 +218,7 @@ class _ThemeChip extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(icon, size: 14, color: selected ? AppColors.primary : AppColors.textMain.withOpacity(0.5)),
-            const SizedBox(width: 4),
+            SizedBox(width: 4),
             Text(
               label,
               style: TextStyle(
@@ -244,24 +252,24 @@ class _SettingsToggleTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppCard.input(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       child: Row(
         children: [
           Icon(icon, color: AppColors.primary, size: 24),
-          const SizedBox(width: 14),
+          SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.textMain,
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   subtitle,
                   style: TextStyle(
@@ -275,9 +283,13 @@ class _SettingsToggleTile extends StatelessWidget {
           ),
           SizedBox(
             height: 28,
-            child: Switch.adaptive(
+            child: Switch(
               value: value,
-              activeColor: AppColors.primary,
+              activeThumbColor: AppColors.background,
+              activeTrackColor: AppColors.primary,
+              inactiveThumbColor: AppColors.textMain.withOpacity(0.25),
+              inactiveTrackColor: AppColors.divider,
+              trackOutlineColor: WidgetStateProperty.resolveWith((_) => Colors.transparent),
               onChanged: onChanged,
             ),
           ),
@@ -304,24 +316,24 @@ class _SettingsOptionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard.input(
       onTap: onTap,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
       child: Row(
         children: [
           Icon(icon, color: AppColors.primary, size: 24),
-          const SizedBox(width: 14),
+          SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.textMain,
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   subtitle,
                   style: TextStyle(
@@ -344,7 +356,7 @@ class _SettingsDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 14),
+      padding: EdgeInsets.symmetric(horizontal: 14),
       child: Divider(
         color: AppColors.divider.withOpacity(0.3),
         height: 1,

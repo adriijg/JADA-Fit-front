@@ -4,7 +4,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_card.dart';
 
 class SocialSummaryCard extends StatelessWidget {
-  const SocialSummaryCard({
+  SocialSummaryCard({
     super.key,
     required this.onTap,
     this.activeChallenges,
@@ -42,12 +42,12 @@ class SocialSummaryCard extends StatelessWidget {
             borderRadius: 18,
             iconSize: 27,
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Actividad social',
                   style: TextStyle(
                     color: AppColors.textMain,
@@ -55,10 +55,10 @@ class SocialSummaryCard extends StatelessWidget {
                     fontWeight: FontWeight.w800,
                   ),
                 ),
-                const SizedBox(height: 5),
+                SizedBox(height: 5),
                 Text(
                   subtitle,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.secondary,
                     fontSize: 12,
                     height: 1.4,
@@ -67,7 +67,7 @@ class SocialSummaryCard extends StatelessWidget {
               ],
             ),
           ),
-          const Icon(Icons.chevron_right, color: AppColors.secondary),
+          Icon(Icons.chevron_right, color: AppColors.secondary),
         ],
       ),
     );

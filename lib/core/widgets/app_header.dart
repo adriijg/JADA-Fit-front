@@ -4,7 +4,7 @@ import '../constants/app_strings.dart';
 import '../theme/app_colors.dart';
 
 class AppHeader extends StatelessWidget {
-  const AppHeader({
+  AppHeader({
     super.key,
     required this.onProfileTap,
   });
@@ -16,8 +16,8 @@ class AppHeader extends StatelessWidget {
     return SafeArea(
       bottom: false,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
-        decoration: const BoxDecoration(
+        padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+        decoration: BoxDecoration(
           color: AppColors.surface,
           border: Border(
             bottom: BorderSide(color: AppColors.divider, width: 0.5),
@@ -28,7 +28,7 @@ class AppHeader extends StatelessWidget {
           children: [
             Text(
               AppStrings.appName,
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.primary,
                 fontWeight: FontWeight.bold,
                 fontSize: 24,
@@ -37,7 +37,7 @@ class AppHeader extends StatelessWidget {
             ),
             IconButton(
               onPressed: onProfileTap,
-              icon: const Icon(
+              icon: Icon(
                 Icons.person,
                 color: AppColors.textMain,
               ),

@@ -4,7 +4,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_card.dart';
 
 class SmartQuickActionsCard extends StatelessWidget {
-  const SmartQuickActionsCard({
+  SmartQuickActionsCard({
     super.key,
     required this.onScanFood,
     required this.onRegisterMeal,
@@ -22,11 +22,11 @@ class SmartQuickActionsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppCard.elevated(
-      padding: const EdgeInsets.all(18),
+      padding: EdgeInsets.all(18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
+          Padding(
             padding: EdgeInsets.only(left: 4, bottom: 14),
             child: Text(
               'Accesos rápidos',
@@ -43,28 +43,28 @@ class SmartQuickActionsCard extends StatelessWidget {
             subtitle: 'Lee un código de barras y busca el alimento',
             onTap: onScanFood,
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           QuickActionTile(
             icon: Icons.restaurant_menu,
             title: 'Registrar comida',
             subtitle: 'Añade una comida al día actual',
             onTap: onRegisterMeal,
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           QuickActionTile(
             icon: Icons.add_chart,
             title: 'Añadir datos físicos',
             subtitle: 'Registra peso, grasa corporal y masa muscular',
             onTap: onAddPhysicalData,
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           QuickActionTile(
             icon: Icons.calendar_month_outlined,
             title: 'Ver rutina',
             subtitle: 'Consulta tu entrenamiento actual',
             onTap: onViewWorkout,
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           QuickActionTile(
             icon: Icons.auto_awesome,
             title: 'Preguntar a la IA',
@@ -78,7 +78,7 @@ class SmartQuickActionsCard extends StatelessWidget {
 }
 
 class QuickActionTile extends StatelessWidget {
-  const QuickActionTile({
+  QuickActionTile({
     super.key,
     required this.icon,
     required this.title,
@@ -95,27 +95,27 @@ class QuickActionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard.input(
       onTap: onTap,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
       child: Row(
         children: [
           Icon(icon, color: AppColors.primary, size: 24),
-          const SizedBox(width: 14),
+          SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.textMain,
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   subtitle,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.secondary,
                     fontSize: 12,
                     height: 1.3,
@@ -124,7 +124,7 @@ class QuickActionTile extends StatelessWidget {
               ],
             ),
           ),
-          const Icon(Icons.chevron_right, color: AppColors.secondary),
+          Icon(Icons.chevron_right, color: AppColors.secondary),
         ],
       ),
     );

@@ -25,7 +25,7 @@ import '../widgets/quick_actions_card.dart';
 import '../widgets/social_summary_card.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -46,14 +46,14 @@ class _HomeScreenState extends State<HomeScreen> {
   void _openProfile() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => const ProfileScreen()),
+      MaterialPageRoute(builder: (_) => ProfileScreen()),
     );
   }
 
   void _openFitnessProfile() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => const FitnessProfileScreen()),
+      MaterialPageRoute(builder: (_) => FitnessProfileScreen()),
     ).then((_) {
       _dashboardKey.currentState?.refreshNutrition();
     });
@@ -69,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
     switch (_selectedItem) {
       case AppBottomNavigationItem.home:
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           child: _HomeDashboardSection(
             key: _dashboardKey,
             onOpenFitnessProfile: _openFitnessProfile,
@@ -89,22 +89,22 @@ class _HomeScreenState extends State<HomeScreen> {
         );
 
       case AppBottomNavigationItem.nutrition:
-        return const Padding(
+        return Padding(
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           child: NutritionScreen(),
         );
 
       case AppBottomNavigationItem.ai:
-        return const AiScreen();
+        return AiScreen();
 
       case AppBottomNavigationItem.routines:
-        return const Padding(
+        return Padding(
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           child: RoutinesScreen(),
         );
 
       case AppBottomNavigationItem.social:
-        return const Padding(
+        return Padding(
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           child: SocialScreen(),
         );
@@ -114,9 +114,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(72),
+        preferredSize: Size.fromHeight(72),
         child: AppHeader(onProfileTap: _openProfile),
       ),
       body: _buildSection(),
@@ -256,16 +255,15 @@ class _HomeDashboardSectionState extends State<_HomeDashboardSection> {
     return RefreshIndicator(
       onRefresh: _loadDaySummary,
       color: AppColors.primary,
-      backgroundColor: AppColors.surface,
       child: SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
+        physics: AlwaysScrollableScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AiCoachCard(onTap: widget.onOpenAi),
-            const SizedBox(height: 18),
+            SizedBox(height: 18),
             if (_isLoading)
-              const SizedBox(
+              SizedBox(
                 height: 250,
                 child: Center(
                   child: CircularProgressIndicator(
@@ -292,7 +290,7 @@ class _HomeDashboardSectionState extends State<_HomeDashboardSection> {
                 fatsGoal: fatsGoal,
                 onTap: widget.onOpenNutrition,
               ),
-            const SizedBox(height: 18),
+            SizedBox(height: 18),
             Row(
               children: [
                 Expanded(
@@ -302,7 +300,7 @@ class _HomeDashboardSectionState extends State<_HomeDashboardSection> {
                     pendingExercises: currentRoutine?.exercises.length,
                   ),
                 ),
-                const SizedBox(width: 14),
+                SizedBox(width: 14),
                 Expanded(
                   child: PhysicalProgressCard(
                     onTap: widget.onOpenFitnessProfile,
@@ -312,9 +310,9 @@ class _HomeDashboardSectionState extends State<_HomeDashboardSection> {
                 ),
               ],
             ),
-            const SizedBox(height: 18),
+            SizedBox(height: 18),
             SocialSummaryCard(onTap: widget.onOpenSocial),
-            const SizedBox(height: 18),
+            SizedBox(height: 18),
             SmartQuickActionsCard(
               onScanFood: widget.onOpenNutrition,
               onRegisterMeal: widget.onOpenNutrition,
@@ -322,7 +320,7 @@ class _HomeDashboardSectionState extends State<_HomeDashboardSection> {
               onViewWorkout: widget.onOpenWorkout,
               onAskAi: widget.onOpenAi,
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
           ],
         ),
       ),

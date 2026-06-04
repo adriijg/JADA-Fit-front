@@ -12,7 +12,7 @@ import '../../data/services/challenge_service.dart';
 class UserProfileScreen extends StatefulWidget {
   final String userId;
 
-  const UserProfileScreen({super.key, required this.userId});
+  UserProfileScreen({super.key, required this.userId});
 
   @override
   State<UserProfileScreen> createState() => _UserProfileScreenState();
@@ -115,18 +115,16 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text(
           _profile?.username ?? 'Perfil',
-          style: const TextStyle(
+          style: TextStyle(
             color: AppColors.textMain,
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: AppColors.background,
         elevation: 0,
-        iconTheme: const IconThemeData(color: AppColors.textMain),
+        iconTheme: IconThemeData(color: AppColors.textMain),
       ),
       body: _buildBody(),
     );
@@ -134,7 +132,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   Widget _buildBody() {
     if (_isLoading) {
-      return const Center(
+      return Center(
         child: CircularProgressIndicator(color: AppColors.primary),
       );
     }
@@ -142,22 +140,22 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     if (_error != null && _profile == null) {
       return Center(
         child: Padding(
-          padding: const EdgeInsets.all(32),
+          padding: EdgeInsets.all(32),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
+              Icon(
                 Icons.cloud_off_rounded,
                 color: AppColors.error,
                 size: 48,
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               Text(
                 _error!,
                 textAlign: TextAlign.center,
-                style: const TextStyle(color: AppColors.secondary),
+                style: TextStyle(color: AppColors.secondary),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               ElevatedButton.icon(
                 onPressed: _loadProfile,
                 style: ElevatedButton.styleFrom(
@@ -167,8 +165,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                icon: const Icon(Icons.refresh, size: 18),
-                label: const Text('Reintentar'),
+                icon: Icon(Icons.refresh, size: 18),
+                label: Text('Reintentar'),
               ),
             ],
           ),
@@ -176,20 +174,19 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       );
     }
 
-    if (_profile == null) return const SizedBox.shrink();
+    if (_profile == null) return SizedBox.shrink();
 
     return RefreshIndicator(
       onRefresh: _loadProfile,
       color: AppColors.primary,
-      backgroundColor: AppColors.surface,
       child: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
+              padding: EdgeInsets.symmetric(horizontal: 24),
               child: Column(
                 children: [
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24),
 
                   // Profile picture
                   Container(
@@ -206,10 +203,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         end: Alignment.bottomRight,
                       ),
                     ),
-                    padding: const EdgeInsets.all(3),
+                    padding: EdgeInsets.all(3),
                     child: CircleAvatar(
                       radius: 42,
-                      backgroundColor: AppColors.surface,
                       backgroundImage:
                           _profile!.profilePictureUrl != null &&
                                   _profile!.profilePictureUrl!.isNotEmpty
@@ -219,7 +215,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               _profile!.profilePictureUrl!.isEmpty
                           ? Text(
                               _profile!.username[0].toUpperCase(),
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: AppColors.primary,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 32,
@@ -228,12 +224,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           : null,
                     ),
                   ),
-                  const SizedBox(height: 14),
+                  SizedBox(height: 14),
 
                   // Username
                   Text(
                     '@${_profile!.username}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.textMain,
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
@@ -243,7 +239,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   // Bio
                   if (_profile!.bio != null &&
                       _profile!.bio!.isNotEmpty) ...[
-                    const SizedBox(height: 6),
+                    SizedBox(height: 6),
                     Text(
                       _profile!.bio!,
                       textAlign: TextAlign.center,
@@ -255,11 +251,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     ),
                   ],
 
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
 
                   // Stats row
                   Container(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    padding: EdgeInsets.symmetric(vertical: 16),
                     decoration: BoxDecoration(
                       color: AppColors.surface,
                       borderRadius: BorderRadius.circular(16),
@@ -296,7 +292,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 18),
+                  SizedBox(height: 18),
 
                   // Follow button
                   SizedBox(
@@ -324,7 +320,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         elevation: 0,
                       ),
                       child: _isProcessingFollow
-                          ? const SizedBox(
+                          ? SizedBox(
                               width: 20,
                               height: 20,
                               child: CircularProgressIndicator(
@@ -341,12 +337,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                       : Icons.person_add_outlined,
                                   size: 18,
                                 ),
-                                const SizedBox(width: 8),
+                                SizedBox(width: 8),
                                 Text(
                                   _profile!.isFollowing
                                       ? 'Dejar de seguir'
                                       : 'Seguir',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w700,
                                   ),
@@ -356,14 +352,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     ),
                   ),
                   if (_profile!.isFollowing) ...[
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12),
                     SizedBox(
                       width: double.infinity,
                       height: 48,
                       child: OutlinedButton.icon(
                         onPressed: _showChallengeDialog,
-                        icon: const Icon(Icons.emoji_events_outlined, color: AppColors.primary, size: 18),
-                        label: const Text(
+                        icon: Icon(Icons.emoji_events_outlined, color: AppColors.primary, size: 18),
+                        label: Text(
                           '¡Desafiar a un pique!',
                           style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
                         ),
@@ -379,11 +375,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       ),
                     ),
                   ],
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
 
                   // Progress visibility indicator
                   Container(
-                    padding: const EdgeInsets.all(14),
+                    padding: EdgeInsets.all(14),
                     decoration: BoxDecoration(
                       color: AppColors.surface,
                       borderRadius: BorderRadius.circular(14),
@@ -402,7 +398,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               : AppColors.secondary,
                           size: 20,
                         ),
-                        const SizedBox(width: 12),
+                        SizedBox(width: 12),
                         Expanded(
                           child: Text(
                             _profile!.shareProgress
@@ -419,14 +415,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
 
                   // Posts section header
                   if (_posts.isNotEmpty)
                     Row(
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(
+                          padding: EdgeInsets.symmetric(
                             horizontal: 14,
                             vertical: 6,
                           ),
@@ -435,7 +431,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                 AppColors.primary.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: const Row(
+                          child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Icon(
@@ -457,7 +453,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         ),
                       ],
                     ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
                 ],
               ),
             ),
@@ -478,8 +474,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               AppColors.secondary.withValues(alpha: 0.4),
                           size: 36,
                         ),
-                        const SizedBox(height: 8),
-                        const Text(
+                        SizedBox(height: 8),
+                        Text(
                           'Aún no hay publicaciones',
                           style: TextStyle(
                             color: AppColors.secondary,
@@ -491,10 +487,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   ),
                 )
               : SliverPadding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  padding: EdgeInsets.symmetric(horizontal: 24),
                   sliver: SliverGrid(
                     gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
+                        SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 3,
                       crossAxisSpacing: 3,
                       mainAxisSpacing: 3,
@@ -504,10 +500,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         final post = _posts[index];
                         return ClipRRect(
                           borderRadius: index == 0
-                              ? const BorderRadius.only(
+                              ? BorderRadius.only(
                                   topLeft: Radius.circular(8))
                               : index == 2
-                                  ? const BorderRadius.only(
+                                  ? BorderRadius.only(
                                       topRight: Radius.circular(8))
                                   : BorderRadius.zero,
                           child: Builder(
@@ -515,7 +511,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               Widget errorPlaceholder() {
                                 return Container(
                                   color: AppColors.inputBackground,
-                                  child: const Center(
+                                  child: Center(
                                     child: Icon(
                                       Icons.image_not_supported_outlined,
                                       color: AppColors.secondary,
@@ -546,7 +542,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   ),
                 ),
 
-          const SliverToBoxAdapter(child: SizedBox(height: 32)),
+          SliverToBoxAdapter(child: SizedBox(height: 32)),
         ],
       ),
     );
@@ -558,34 +554,33 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: AppColors.surface,
-        title: Text('Desafiar a ${_profile!.username}', style: const TextStyle(color: AppColors.textMain)),
+        title: Text('Desafiar a ${_profile!.username}', style: TextStyle(color: AppColors.textMain)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               '¿En qué ejercicio quieres competir?',
               style: TextStyle(color: AppColors.secondary, fontSize: 14),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             TextField(
               controller: exerciseController,
               autofocus: true,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 hintText: 'Ej: Press Banca, Sentadilla...',
                 hintStyle: TextStyle(color: AppColors.secondary),
                 enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.divider)),
                 focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.primary)),
               ),
-              style: const TextStyle(color: AppColors.textMain),
+              style: TextStyle(color: AppColors.textMain),
             ),
           ],
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancelar', style: TextStyle(color: AppColors.secondary)),
+            child: Text('Cancelar', style: TextStyle(color: AppColors.secondary)),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -596,7 +591,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   if (mounted) {
                     Navigator.pop(context);
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('¡Desafío enviado con éxito!')),
+                      SnackBar(content: Text('¡Desafío enviado con éxito!')),
                     );
                   }
                 } catch (e) {
@@ -609,7 +604,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               }
             },
             style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
-            child: const Text('Enviar Desafío'),
+            child: Text('Enviar Desafío'),
           ),
         ],
       ),
@@ -631,13 +626,13 @@ class _StatColumn extends StatelessWidget {
       children: [
         Text(
           value,
-          style: const TextStyle(
+          style: TextStyle(
             color: AppColors.textMain,
             fontSize: 18,
             fontWeight: FontWeight.w800,
           ),
         ),
-        const SizedBox(height: 3),
+        SizedBox(height: 3),
         Text(
           label,
           style: TextStyle(

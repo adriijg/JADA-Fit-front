@@ -7,7 +7,7 @@ import '../../data/services/recipe_service.dart';
 import 'create_recipe_screen.dart';
 
 class RecipeDetailScreen extends StatefulWidget {
-  const RecipeDetailScreen({
+  RecipeDetailScreen({
     super.key,
     required this.recipe,
   });
@@ -57,23 +57,21 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.surface,
         title: Text(
           _recipe.name,
-          style: const TextStyle(
+          style: TextStyle(
             color: AppColors.textMain,
             fontWeight: FontWeight.w800,
           ),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.textMain),
+          icon: Icon(Icons.arrow_back, color: AppColors.textMain),
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
           if (_isLoading)
-            const Padding(
+            Padding(
               padding: EdgeInsets.all(16),
               child: SizedBox(
                 width: 20,
@@ -86,21 +84,21 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
             )
           else
             IconButton(
-              icon: const Icon(Icons.edit_outlined, color: AppColors.primary),
+              icon: Icon(Icons.edit_outlined, color: AppColors.primary),
               onPressed: _editRecipe,
             ),
         ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _MacroTotalCard(recipe: _recipe),
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
             Row(
               children: [
-                const Text(
+                Text(
                   'INGREDIENTES',
                   style: TextStyle(
                     color: AppColors.secondary,
@@ -109,20 +107,20 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                     letterSpacing: 1.2,
                   ),
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 Text(
                   '${_recipe.ingredients.length}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.secondary,
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 if (_recipe.servings != null) ...[
-                  const Spacer(),
+                  Spacer(),
                   Text(
                     '${_recipe.servings} porciones',
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.secondary,
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
@@ -131,9 +129,9 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                 ],
               ],
             ),
-            const SizedBox(height: 14),
+            SizedBox(height: 14),
             ..._recipe.ingredients.map((ingredient) => Padding(
-              padding: const EdgeInsets.only(bottom: 10),
+              padding: EdgeInsets.only(bottom: 10),
               child: _IngredientDetailCard(ingredient: ingredient),
             )),
           ],
@@ -159,35 +157,35 @@ class _MacroTotalCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard.primary(
       borderRadius: 24,
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(20),
       child: Column(
         children: [
           Row(
             children: [
-              const AppCardIcon(
+              AppCardIcon(
                 icon: Icons.menu_book,
                 size: 48,
                 borderRadius: 16,
                 borderColor: AppColors.primary,
               ),
-              const SizedBox(width: 14),
+              SizedBox(width: 14),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       recipe.name,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.textMain,
                         fontSize: 20,
                         fontWeight: FontWeight.w900,
                       ),
                     ),
                     if (recipe.servings != null) ...[
-                      const SizedBox(height: 3),
+                      SizedBox(height: 3),
                       Text(
                         '${recipe.servings} porciones',
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.secondary,
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
@@ -199,24 +197,24 @@ class _MacroTotalCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           Row(
             children: [
               _MacroBlock(
                 label: 'Calorías',
                 value: '${_f(recipe.totalCalories)} kcal',
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               _MacroBlock(
                 label: 'Proteína',
                 value: '${_f(recipe.totalProtein)} g',
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               _MacroBlock(
                 label: 'Hidratos',
                 value: '${_f(recipe.totalCarbs)} g',
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               _MacroBlock(
                 label: 'Grasas',
                 value: '${_f(recipe.totalFats)} g',
@@ -243,22 +241,22 @@ class _MacroBlock extends StatelessWidget {
     return Expanded(
       child: AppCard.input(
         borderRadius: 14,
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 10),
+        padding: EdgeInsets.symmetric(horizontal: 6, vertical: 10),
         child: Column(
           children: [
             Text(
               value,
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.textMain,
                 fontSize: 13,
                 fontWeight: FontWeight.w900,
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 3),
+            SizedBox(height: 3),
             Text(
               label.toUpperCase(),
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.secondary,
                 fontSize: 9,
                 fontWeight: FontWeight.w800,
@@ -289,35 +287,35 @@ class _IngredientDetailCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard.elevated(
       borderRadius: 18,
-      padding: const EdgeInsets.all(14),
+      padding: EdgeInsets.all(14),
       child: Row(
         children: [
-          const AppCardIcon(
+          AppCardIcon(
             icon: Icons.restaurant,
             size: 40,
             borderRadius: 14,
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   ingredient.foodName,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.textMain,
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   '${_f(ingredient.quantityGrams)} g · '
                   '${_f(ingredient.calories)} kcal · '
                   'P ${_f(ingredient.protein)}g · '
                   'C ${_f(ingredient.carbs)}g · '
                   'G ${_f(ingredient.fats)}g',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.secondary,
                     fontSize: 11,
                   ),

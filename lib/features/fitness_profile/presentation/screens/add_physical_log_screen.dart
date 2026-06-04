@@ -7,7 +7,7 @@ import '../../data/models/fitness_profile_model.dart';
 import '../../data/services/fitness_progress_service.dart';
 
 class AddPhysicalLogScreen extends StatefulWidget {
-  const AddPhysicalLogScreen({
+  AddPhysicalLogScreen({
     super.key,
     this.currentProfile,
     this.initialDate,
@@ -110,13 +110,12 @@ class _AddPhysicalLogScreenState extends State<AddPhysicalLogScreen> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.dark(
+            colorScheme: ColorScheme.dark(
               primary: AppColors.primary,
               surface: AppColors.surface,
               onSurface: AppColors.textMain,
             ),
-            dialogTheme: const DialogThemeData(
-              backgroundColor: AppColors.surface,
+            dialogTheme: DialogThemeData(
             ),
           ),
           child: child!,
@@ -195,9 +194,8 @@ class _AddPhysicalLogScreenState extends State<AddPhysicalLogScreen> {
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text('Registro físico guardado correctamente'),
-          backgroundColor: AppColors.surface,
         ),
       );
 
@@ -243,14 +241,12 @@ class _AddPhysicalLogScreenState extends State<AddPhysicalLogScreen> {
     final profile = widget.currentProfile;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.surface,
         elevation: 0,
-        iconTheme: const IconThemeData(
+        iconTheme: IconThemeData(
           color: AppColors.textMain,
         ),
-        title: const Text(
+        title: Text(
           'Añadir datos físicos',
           style: TextStyle(
             color: AppColors.textMain,
@@ -261,7 +257,7 @@ class _AddPhysicalLogScreenState extends State<AddPhysicalLogScreen> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(
+          padding: EdgeInsets.symmetric(
             horizontal: 24,
             vertical: 20,
           ),
@@ -271,24 +267,24 @@ class _AddPhysicalLogScreenState extends State<AddPhysicalLogScreen> {
               _IntroCard(
                 goal: _formatGoal(profile?.goal),
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
               _DateCard(
                 selectedDate: _formatSelectedDate(),
                 onPickDate: _pickDate,
               ),
-              const SizedBox(height: 18),
+              SizedBox(height: 18),
               _PhysicalLogFormCard(
                 weightController: weightController,
                 bodyFatController: bodyFatController,
                 muscleMassController: muscleMassController,
               ),
-              const SizedBox(height: 18),
+              SizedBox(height: 18),
               if (errorMessage != null)
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
+                  padding: EdgeInsets.only(bottom: 16),
                   child: Text(
                     errorMessage!,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.error,
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -311,7 +307,7 @@ class _AddPhysicalLogScreenState extends State<AddPhysicalLogScreen> {
                     ),
                   ),
                   child: isLoading
-                      ? const SizedBox(
+                      ? SizedBox(
                           width: 22,
                           height: 22,
                           child: CircularProgressIndicator(
@@ -319,7 +315,7 @@ class _AddPhysicalLogScreenState extends State<AddPhysicalLogScreen> {
                             color: AppColors.background,
                           ),
                         )
-                      : const Row(
+                      : Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
@@ -336,7 +332,7 @@ class _AddPhysicalLogScreenState extends State<AddPhysicalLogScreen> {
                         ),
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
             ],
           ),
         ),
@@ -358,17 +354,17 @@ class _IntroCard extends StatelessWidget {
 
     return AppCard.primary(
       borderRadius: 28,
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(
+          Icon(
             Icons.add_chart,
             color: AppColors.primary,
             size: 42,
           ),
-          const SizedBox(height: 18),
-          const Text(
+          SizedBox(height: 18),
+          Text(
             'Nuevo registro físico',
             style: TextStyle(
               color: AppColors.textMain,
@@ -377,8 +373,8 @@ class _IntroCard extends StatelessWidget {
               height: 1.15,
             ),
           ),
-          const SizedBox(height: 10),
-          const Text(
+          SizedBox(height: 10),
+          Text(
             'Puedes registrar datos de hoy o de una fecha anterior si se te olvidó apuntarlos.',
             style: TextStyle(
               color: AppColors.secondary,
@@ -386,9 +382,9 @@ class _IntroCard extends StatelessWidget {
               height: 1.5,
             ),
           ),
-          const SizedBox(height: 18),
+          SizedBox(height: 18),
           Container(
-            padding: const EdgeInsets.symmetric(
+            padding: EdgeInsets.symmetric(
               horizontal: 16,
               vertical: 9,
             ),
@@ -403,12 +399,12 @@ class _IntroCard extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(
+                Icon(
                   Icons.flag_outlined,
                   color: AppColors.primary,
                   size: 18,
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 Text(
                   hasGoal ? goal : 'Sin objetivo configurado',
                   style: TextStyle(
@@ -442,12 +438,12 @@ class _DateCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard.elevated(
       borderRadius: 28,
-      padding: const EdgeInsets.all(22),
+      padding: EdgeInsets.all(22),
       child: InkWell(
         onTap: onPickDate,
         borderRadius: BorderRadius.circular(18),
         child: Container(
-          padding: const EdgeInsets.symmetric(
+          padding: EdgeInsets.symmetric(
             horizontal: 14,
             vertical: 14,
           ),
@@ -461,17 +457,17 @@ class _DateCard extends StatelessWidget {
           ),
           child: Row(
             children: [
-              const Icon(
+              Icon(
                 Icons.calendar_month_outlined,
                 color: AppColors.primary,
                 size: 24,
               ),
-              const SizedBox(width: 14),
+              SizedBox(width: 14),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'FECHA DEL REGISTRO',
                       style: TextStyle(
                         color: AppColors.secondary,
@@ -480,16 +476,16 @@ class _DateCard extends StatelessWidget {
                         letterSpacing: 1,
                       ),
                     ),
-                    const SizedBox(height: 5),
+                    SizedBox(height: 5),
                     Text(
                       selectedDate,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.textMain,
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4),
                     Text(
                       'La hora se guardará automáticamente',
                       style: TextStyle(
@@ -500,7 +496,7 @@ class _DateCard extends StatelessWidget {
                   ],
                 ),
               ),
-              const Icon(
+              Icon(
                 Icons.edit_calendar,
                 color: AppColors.secondary,
               ),
@@ -527,7 +523,7 @@ class _PhysicalLogFormCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard.elevated(
       borderRadius: 28,
-      padding: const EdgeInsets.all(22),
+      padding: EdgeInsets.all(22),
       child: Column(
         children: [
           _PhysicalLogTextField(
@@ -536,25 +532,25 @@ class _PhysicalLogFormCard extends StatelessWidget {
             hintText: 'Ej: 70',
             suffix: 'kg',
             icon: Icons.monitor_weight_outlined,
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           _PhysicalLogTextField(
             controller: bodyFatController,
             label: 'Grasa corporal',
             hintText: 'Opcional · Ej: 15',
             suffix: '%',
             icon: Icons.percent,
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           _PhysicalLogTextField(
             controller: muscleMassController,
             label: 'Masa muscular',
             hintText: 'Opcional · Ej: 58',
             suffix: 'kg',
             icon: Icons.fitness_center,
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
           ),
         ],
       ),
@@ -584,7 +580,7 @@ class _PhysicalLogTextField extends StatelessWidget {
     return TextField(
       controller: controller,
       keyboardType: keyboardType,
-      style: const TextStyle(
+      style: TextStyle(
         color: AppColors.textMain,
         fontSize: 15,
       ),
@@ -592,7 +588,7 @@ class _PhysicalLogTextField extends StatelessWidget {
         filled: true,
         fillColor: AppColors.inputBackground,
         labelText: label,
-        labelStyle: const TextStyle(
+        labelStyle: TextStyle(
           color: AppColors.secondary,
           fontWeight: FontWeight.w600,
         ),
@@ -605,19 +601,19 @@ class _PhysicalLogTextField extends StatelessWidget {
           color: AppColors.primary,
         ),
         suffixText: suffix,
-        suffixStyle: const TextStyle(
+        suffixStyle: TextStyle(
           color: AppColors.secondary,
           fontWeight: FontWeight.w700,
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
-          borderSide: const BorderSide(
+          borderSide: BorderSide(
             color: AppColors.inputBorder,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
-          borderSide: const BorderSide(
+          borderSide: BorderSide(
             color: AppColors.primary,
             width: 1.4,
           ),

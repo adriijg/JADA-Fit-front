@@ -12,8 +12,23 @@ import '../../../settings/presentation/providers/settings_provider.dart';
 import '../screens/add_physical_log_screen.dart';
 import 'fitness_monthly_calendar_screen.dart';
 
+const _months = [
+  'Enero',
+  'Febrero',
+  'Marzo',
+  'Abril',
+  'Mayo',
+  'Junio',
+  'Julio',
+  'Agosto',
+  'Septiembre',
+  'Octubre',
+  'Noviembre',
+  'Diciembre',
+];
+
 class FitnessProgressScreen extends StatefulWidget {
-  const FitnessProgressScreen({super.key});
+  FitnessProgressScreen({super.key});
 
   @override
   State<FitnessProgressScreen> createState() => _FitnessProgressScreenState();
@@ -255,22 +270,7 @@ class _FitnessProgressScreenState extends State<FitnessProgressScreen> {
   }
 
   String _monthTitle(DateTime date) {
-    const months = [
-      'Enero',
-      'Febrero',
-      'Marzo',
-      'Abril',
-      'Mayo',
-      'Junio',
-      'Julio',
-      'Agosto',
-      'Septiembre',
-      'Octubre',
-      'Noviembre',
-      'Diciembre',
-    ];
-
-    return '${months[date.month - 1]} ${date.year}';
+    return '${_months[date.month - 1]} ${date.year}';
   }
 
   String _formatDate(DateTime date) {
@@ -287,14 +287,12 @@ class _FitnessProgressScreenState extends State<FitnessProgressScreen> {
     final weightChange = _overallChange(_ProgressMetric.weight);
 
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.surface,
         elevation: 0,
-        iconTheme: const IconThemeData(
+        iconTheme: IconThemeData(
           color: AppColors.textMain,
         ),
-        title: const Text(
+        title: Text(
           'Estadísticas físicas',
           style: TextStyle(
             color: AppColors.textMain,
@@ -307,16 +305,15 @@ class _FitnessProgressScreenState extends State<FitnessProgressScreen> {
         onPressed: () => _openAddLog(),
         backgroundColor: AppColors.primary,
         foregroundColor: AppColors.background,
-        child: const Icon(Icons.add),
+        child: Icon(Icons.add),
       ),
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: _loadProgress,
           color: AppColors.primary,
-          backgroundColor: AppColors.surface,
           child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.symmetric(
+            physics: AlwaysScrollableScrollPhysics(),
+            padding: EdgeInsets.symmetric(
               horizontal: 24,
               vertical: 20,
             ),
@@ -335,7 +332,7 @@ class _FitnessProgressScreenState extends State<FitnessProgressScreen> {
     required double? weightChange,
   }) {
     if (isLoading) {
-      return const SizedBox(
+      return SizedBox(
         height: 500,
         child: Center(
           child: CircularProgressIndicator(
@@ -375,14 +372,14 @@ class _FitnessProgressScreenState extends State<FitnessProgressScreen> {
           totalRecords: progress.length,
           onAddRecord: () => _openAddLog(),
         ),
-        const SizedBox(height: 18),
+        SizedBox(height: 18),
         _MonthSelectorCard(
           title: _monthTitle(visibleMonth),
           canGoNext: _canGoNextMonth,
           onPrevious: _previousMonth,
           onNext: _nextMonth,
         ),
-        const SizedBox(height: 18),
+        SizedBox(height: 18),
         _MetricSelectorCard(
           selectedMetric: selectedMetric,
           onMetricSelected: (metric) {
@@ -391,7 +388,7 @@ class _FitnessProgressScreenState extends State<FitnessProgressScreen> {
             });
           },
         ),
-        const SizedBox(height: 18),
+        SizedBox(height: 18),
         GestureDetector(
           onHorizontalDragEnd: (details) {
             final velocity = details.primaryVelocity ?? 0;
@@ -410,14 +407,14 @@ class _FitnessProgressScreenState extends State<FitnessProgressScreen> {
             chartPoints: chartPoints,
           ),
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: 24),
         _WeeklyCalendarCard(
           progress: progress,
           referenceDate: _referenceWeekDate(),
           formatDate: _formatDate,
           onAddRecordForDay: (day) => _openAddLog(initialDate: day),
         ),
-        const SizedBox(height: 18),
+        SizedBox(height: 18),
         SizedBox(
           width: double.infinity,
           height: 54,
@@ -430,8 +427,8 @@ class _FitnessProgressScreenState extends State<FitnessProgressScreen> {
                 borderRadius: BorderRadius.circular(20),
               ),
             ),
-            icon: const Icon(Icons.calendar_month),
-            label: const Text(
+            icon: Icon(Icons.calendar_month),
+            label: Text(
               'VER CALENDARIO MENSUAL',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -440,7 +437,7 @@ class _FitnessProgressScreenState extends State<FitnessProgressScreen> {
             ),
           ),
         ),
-        const SizedBox(height: 80),
+        SizedBox(height: 80),
       ],
     );
   }
@@ -536,7 +533,7 @@ class _ProgressHeroCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard.primary(
       borderRadius: 28,
-      padding: const EdgeInsets.all(26),
+      padding: EdgeInsets.all(26),
       child: Column(
         children: [
           Row(
@@ -552,18 +549,18 @@ class _ProgressHeroCard extends StatelessWidget {
                     width: 2,
                   ),
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.show_chart,
                   color: AppColors.primary,
                   size: 42,
                 ),
               ),
-              const SizedBox(width: 20),
+              SizedBox(width: 20),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Progreso físico',
                       style: TextStyle(
                         color: AppColors.textMain,
@@ -571,25 +568,25 @@ class _ProgressHeroCard extends StatelessWidget {
                         fontWeight: FontWeight.w900,
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8),
                     Text(
                       latestWeight,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.primary,
                         fontSize: 26,
                         fontWeight: FontWeight.w900,
                       ),
                     ),
-                    const SizedBox(height: 6),
+                    SizedBox(height: 6),
                     Text(
                       'Cambio total: $weightChange',
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.secondary,
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4),
                     Text(
                       '$totalRecords registros guardados',
                       style: TextStyle(
@@ -602,7 +599,7 @@ class _ProgressHeroCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           SizedBox(
             width: double.infinity,
             height: 50,
@@ -615,8 +612,8 @@ class _ProgressHeroCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(18),
                 ),
               ),
-              icon: const Icon(Icons.add),
-              label: const Text(
+              icon: Icon(Icons.add),
+              label: Text(
                 'AÑADIR REGISTRO FÍSICO',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -649,7 +646,7 @@ class _MonthSelectorCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard.elevated(
       borderRadius: 24,
-      padding: const EdgeInsets.symmetric(
+      padding: EdgeInsets.symmetric(
         horizontal: 14,
         vertical: 14,
       ),
@@ -657,7 +654,7 @@ class _MonthSelectorCard extends StatelessWidget {
         children: [
           IconButton(
             onPressed: onPrevious,
-            icon: const Icon(
+            icon: Icon(
               Icons.chevron_left,
               color: AppColors.secondary,
             ),
@@ -667,15 +664,15 @@ class _MonthSelectorCard extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.textMain,
                     fontSize: 18,
                     fontWeight: FontWeight.w900,
                   ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 4),
-                const Text(
+                SizedBox(height: 4),
+                Text(
                   'Desliza la gráfica para cambiar de mes',
                   style: TextStyle(
                     color: AppColors.secondary,
@@ -715,20 +712,20 @@ class _MetricSelectorCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard.elevated(
       borderRadius: 24,
-      padding: const EdgeInsets.all(10),
+      padding: EdgeInsets.all(10),
       child: Row(
         children: _ProgressMetric.values.map((metric) {
           final isSelected = metric == selectedMetric;
 
           return Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
+              padding: EdgeInsets.symmetric(horizontal: 4),
               child: InkWell(
                 onTap: () => onMetricSelected(metric),
                 borderRadius: BorderRadius.circular(18),
                 child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 180),
-                  padding: const EdgeInsets.symmetric(
+                  duration: Duration(milliseconds: 180),
+                  padding: EdgeInsets.symmetric(
                     horizontal: 10,
                     vertical: 14,
                   ),
@@ -753,7 +750,7 @@ class _MetricSelectorCard extends StatelessWidget {
                             : AppColors.primary,
                         size: 22,
                       ),
-                      const SizedBox(height: 7),
+                      SizedBox(height: 7),
                       Text(
                         metric.title,
                         style: TextStyle(
@@ -849,7 +846,7 @@ class _SingleProgressChartCard extends StatelessWidget {
 
     return AppCard.elevated(
       borderRadius: 26,
-      padding: const EdgeInsets.all(22),
+      padding: EdgeInsets.all(22),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -860,11 +857,11 @@ class _SingleProgressChartCard extends StatelessWidget {
                 color: AppColors.primary,
                 size: 25,
               ),
-              const SizedBox(width: 10),
+              SizedBox(width: 10),
               Expanded(
                 child: Text(
                   metric.fullTitle,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.textMain,
                     fontSize: 18,
                     fontWeight: FontWeight.w900,
@@ -873,44 +870,44 @@ class _SingleProgressChartCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6),
           Text(
             '$monthTitle · ${metric.subtitle}',
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.secondary,
               fontSize: 12,
               height: 1.4,
             ),
           ),
-          const SizedBox(height: 18),
+          SizedBox(height: 18),
           Row(
             children: [
               _ChartMiniValue(
                 label: 'Actual',
                 value: _formatDouble(_latestValue, metric.unit, imperial: imperial),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               _ChartMiniValue(
                 label: 'Cambio',
                 value: _formatChange(_changeValue, metric.unit, imperial: imperial),
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           Row(
             children: [
               _ChartMiniValue(
                 label: 'Mínimo',
                 value: _formatDouble(_minValue, metric.unit, imperial: imperial),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               _ChartMiniValue(
                 label: 'Máximo',
                 value: _formatDouble(_maxValue, metric.unit, imperial: imperial),
               ),
             ],
           ),
-          const SizedBox(height: 22),
+          SizedBox(height: 22),
           if (hasEnoughData)
             SizedBox(
               height: 230,
@@ -936,7 +933,7 @@ class _SingleProgressChartCard extends StatelessWidget {
                 chartPoints.isEmpty
                     ? 'No hay registros para este mes'
                     : 'Necesitas al menos 2 registros para ver la gráfica',
-                style: const TextStyle(
+                style: TextStyle(
                   color: AppColors.secondary,
                   fontSize: 13,
                 ),
@@ -985,10 +982,10 @@ class _SingleProgressChartCard extends StatelessWidget {
       ),
       borderData: FlBorderData(show: false),
       titlesData: FlTitlesData(
-        topTitles: const AxisTitles(
+        topTitles: AxisTitles(
           sideTitles: SideTitles(showTitles: false),
         ),
-        rightTitles: const AxisTitles(
+        rightTitles: AxisTitles(
           sideTitles: SideTitles(showTitles: false),
         ),
         bottomTitles: AxisTitles(
@@ -1001,13 +998,13 @@ class _SingleProgressChartCard extends StatelessWidget {
               final index = value.toInt();
 
               if (index < 0 || index >= points.length) {
-                return const SizedBox.shrink();
+                return SizedBox.shrink();
               }
 
               final date = points[index].date;
 
               return Padding(
-                padding: const EdgeInsets.only(top: 8),
+                padding: EdgeInsets.only(top: 8),
                 child: Text(
                   date.day.toString(),
                   style: TextStyle(
@@ -1054,7 +1051,7 @@ class _SingleProgressChartCard extends StatelessWidget {
 
               return LineTooltipItem(
                 '${date.day}/${date.month}\n${spot.y.toStringAsFixed(spot.y % 1 == 0 ? 0 : 1)} $unit',
-                const TextStyle(
+                TextStyle(
                   color: AppColors.primary,
                   fontWeight: FontWeight.w800,
                 ),
@@ -1106,7 +1103,7 @@ class _ChartMiniValue extends StatelessWidget {
 
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.all(14),
+        padding: EdgeInsets.all(14),
         decoration: BoxDecoration(
           color: AppColors.inputBackground,
           borderRadius: BorderRadius.circular(18),
@@ -1129,10 +1126,10 @@ class _ChartMiniValue extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 5),
+            SizedBox(height: 5),
             Text(
               label.toUpperCase(),
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.secondary,
                 fontSize: 10,
                 fontWeight: FontWeight.w800,
@@ -1224,11 +1221,11 @@ class _WeeklyCalendarCard extends StatelessWidget {
 
     return AppCard.elevated(
       borderRadius: 26,
-      padding: const EdgeInsets.all(22),
+      padding: EdgeInsets.all(22),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
+          Row(
             children: [
               Icon(
                 Icons.calendar_view_week,
@@ -1248,16 +1245,16 @@ class _WeeklyCalendarCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6),
           Text(
             'Semana del ${formatDate(days.first)} al ${formatDate(days.last)}',
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.secondary,
               fontSize: 12,
               height: 1.4,
             ),
           ),
-          const SizedBox(height: 18),
+          SizedBox(height: 18),
           SizedBox(
             width: double.infinity,
             height: 48,
@@ -1267,7 +1264,7 @@ class _WeeklyCalendarCard extends StatelessWidget {
               },
               style: OutlinedButton.styleFrom(
                 foregroundColor: AppColors.primary,
-                side: const BorderSide(
+                side: BorderSide(
                   color: AppColors.primary,
                   width: 1,
                 ),
@@ -1275,8 +1272,8 @@ class _WeeklyCalendarCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(18),
                 ),
               ),
-              icon: const Icon(Icons.add),
-              label: const Text(
+              icon: Icon(Icons.add),
+              label: Text(
                 'AÑADIR REGISTRO',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -1286,7 +1283,7 @@ class _WeeklyCalendarCard extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 18),
+          SizedBox(height: 18),
           Row(
             children: days.map((day) {
               final records = _recordsForDay(day);
@@ -1295,13 +1292,12 @@ class _WeeklyCalendarCard extends StatelessWidget {
 
               return Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 3),
+                  padding: EdgeInsets.symmetric(horizontal: 3),
                   child: InkWell(
                     onTap: () {
                       showModalBottomSheet(
                         context: context,
-                        backgroundColor: AppColors.surface,
-                        shape: const RoundedRectangleBorder(
+                        shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.vertical(
                             top: Radius.circular(28),
                           ),
@@ -1321,7 +1317,7 @@ class _WeeklyCalendarCard extends StatelessWidget {
                     },
                     borderRadius: BorderRadius.circular(18),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(
+                      padding: EdgeInsets.symmetric(
                         vertical: 14,
                         horizontal: 6,
                       ),
@@ -1349,7 +1345,7 @@ class _WeeklyCalendarCard extends StatelessWidget {
                               fontWeight: FontWeight.w900,
                             ),
                           ),
-                          const SizedBox(height: 8),
+                          SizedBox(height: 8),
                           Text(
                             day.day.toString(),
                             style: TextStyle(
@@ -1360,7 +1356,7 @@ class _WeeklyCalendarCard extends StatelessWidget {
                               fontWeight: FontWeight.w900,
                             ),
                           ),
-                          const SizedBox(height: 8),
+                          SizedBox(height: 8),
                           Icon(
                             hasRecords
                                 ? Icons.check_circle
@@ -1371,10 +1367,10 @@ class _WeeklyCalendarCard extends StatelessWidget {
                                 : AppColors.secondary,
                           ),
                           if (latest != null) ...[
-                            const SizedBox(height: 8),
+                            SizedBox(height: 8),
                             Text(
                               _formatValue(latest.weight, 'kg'),
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: AppColors.background,
                                 fontSize: 9,
                                 fontWeight: FontWeight.w800,
@@ -1438,19 +1434,19 @@ class _DayRecordsBottomSheet extends StatelessWidget {
 
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               formatDate(day),
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.textMain,
                 fontSize: 20,
                 fontWeight: FontWeight.w900,
               ),
             ),
-            const SizedBox(height: 18),
+            SizedBox(height: 18),
             SizedBox(
               width: double.infinity,
               height: 48,
@@ -1463,8 +1459,8 @@ class _DayRecordsBottomSheet extends StatelessWidget {
                     borderRadius: BorderRadius.circular(18),
                   ),
                 ),
-                icon: const Icon(Icons.add),
-                label: const Text(
+                icon: Icon(Icons.add),
+                label: Text(
                   'AÑADIR REGISTRO PARA ESTE DÍA',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -1474,9 +1470,9 @@ class _DayRecordsBottomSheet extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 18),
+            SizedBox(height: 18),
             if (sortedRecords.isEmpty)
-              const Text(
+              Text(
                 'No hay registros para este día.',
                 style: TextStyle(
                   color: AppColors.secondary,
@@ -1487,8 +1483,8 @@ class _DayRecordsBottomSheet extends StatelessWidget {
               ...sortedRecords.map(
                 (item) => Container(
                   width: double.infinity,
-                  margin: const EdgeInsets.only(bottom: 12),
-                  padding: const EdgeInsets.all(16),
+                  margin: EdgeInsets.only(bottom: 12),
+                  padding: EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: AppColors.inputBackground,
                     borderRadius: BorderRadius.circular(18),
@@ -1499,7 +1495,7 @@ class _DayRecordsBottomSheet extends StatelessWidget {
                   ),
                   child: Text(
                     '${_formatTime(item.loggedAt)} · ${_formatDouble(item.weight, 'kg', imperial: imperial)} · ${_formatDouble(item.bodyFat, '%')} grasa · ${_formatDouble(item.muscleMass, 'kg', imperial: imperial)} músculo',
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.textMain,
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
@@ -1528,17 +1524,17 @@ class _EmptyProgressCard extends StatelessWidget {
       child: Center(
         child: AppCard.elevated(
           borderRadius: 26,
-          padding: const EdgeInsets.all(26),
+          padding: EdgeInsets.all(26),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
+              Icon(
                 Icons.show_chart,
                 color: AppColors.primary,
                 size: 48,
               ),
-              const SizedBox(height: 18),
-              const Text(
+              SizedBox(height: 18),
+              Text(
                 'Todavía no hay datos de progreso',
                 style: TextStyle(
                   color: AppColors.textMain,
@@ -1547,8 +1543,8 @@ class _EmptyProgressCard extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 8),
-              const Text(
+              SizedBox(height: 8),
+              Text(
                 'Añade tus primeros datos físicos para empezar a ver tu evolución.',
                 style: TextStyle(
                   color: AppColors.secondary,
@@ -1557,7 +1553,7 @@ class _EmptyProgressCard extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               SizedBox(
                 width: double.infinity,
                 height: 50,
@@ -1570,8 +1566,8 @@ class _EmptyProgressCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(18),
                     ),
                   ),
-                  icon: const Icon(Icons.add),
-                  label: const Text(
+                  icon: Icon(Icons.add),
+                  label: Text(
                     'AÑADIR PRIMER REGISTRO',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -1602,26 +1598,26 @@ class _ErrorCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard(
       borderRadius: 24,
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(24),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(
+          Icon(
             Icons.error_outline,
             color: AppColors.error,
             size: 42,
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
             message,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.textMain,
               fontSize: 15,
               height: 1.5,
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           ElevatedButton(
             onPressed: onRetry,
             style: ElevatedButton.styleFrom(
@@ -1631,7 +1627,7 @@ class _ErrorCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(18),
               ),
             ),
-            child: const Text(
+            child: Text(
               'Reintentar',
               style: TextStyle(
                 fontWeight: FontWeight.bold,

@@ -9,7 +9,7 @@ import '../../data/services/social_service.dart';
 import 'user_profile_screen.dart';
 
 class ExploreScreen extends StatefulWidget {
-  const ExploreScreen({super.key});
+  ExploreScreen({super.key});
 
   @override
   State<ExploreScreen> createState() => _ExploreScreenState();
@@ -93,7 +93,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Error al buscar: $e'),
-            backgroundColor: AppColors.surface,
           ),
         );
       }
@@ -129,7 +128,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
       children: [
         // Search bar
         Padding(
-          padding: const EdgeInsets.fromLTRB(0, 12, 0, 8),
+          padding: EdgeInsets.fromLTRB(0, 12, 0, 8),
           child: Container(
             decoration: BoxDecoration(
               color: AppColors.inputBackground,
@@ -147,14 +146,14 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   color: AppColors.secondary.withValues(alpha: 0.6),
                   fontSize: 14,
                 ),
-                prefixIcon: const Icon(
+                prefixIcon: Icon(
                   Icons.search_rounded,
                   color: AppColors.secondary,
                   size: 20,
                 ),
                 suffixIcon: _showSearchResults
                     ? IconButton(
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.close_rounded,
                           color: AppColors.secondary,
                           size: 18,
@@ -163,12 +162,12 @@ class _ExploreScreenState extends State<ExploreScreen> {
                       )
                     : null,
                 border: InputBorder.none,
-                contentPadding: const EdgeInsets.symmetric(
+                contentPadding: EdgeInsets.symmetric(
                   horizontal: 16,
                   vertical: 12,
                 ),
               ),
-              style: const TextStyle(color: AppColors.textMain, fontSize: 14),
+              style: TextStyle(color: AppColors.textMain, fontSize: 14),
               onSubmitted: _searchUsers,
               onChanged: (value) {
                 if (value.isEmpty) _clearSearch();
@@ -189,7 +188,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   Widget _buildSearchResults() {
     if (_isSearching) {
-      return const Center(
+      return Center(
         child: CircularProgressIndicator(color: AppColors.primary),
       );
     }
@@ -204,8 +203,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
               color: AppColors.secondary.withValues(alpha: 0.5),
               size: 48,
             ),
-            const SizedBox(height: 12),
-            const Text(
+            SizedBox(height: 12),
+            Text(
               'No se encontraron usuarios',
               style: TextStyle(color: AppColors.secondary, fontSize: 14),
             ),
@@ -215,7 +214,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
     }
 
     return ListView.builder(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: EdgeInsets.symmetric(vertical: 8),
       itemCount: _searchResults.length,
       itemBuilder: (context, index) {
         final user = _searchResults[index];
@@ -229,7 +228,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   Widget _buildExploreGrid() {
     if (_isLoadingPosts) {
-      return const Center(
+      return Center(
         child: CircularProgressIndicator(color: AppColors.primary),
       );
     }
@@ -239,18 +238,18 @@ class _ExploreScreenState extends State<ExploreScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.cloud_off_rounded, color: AppColors.error, size: 48),
-            const SizedBox(height: 16),
+            Icon(Icons.cloud_off_rounded, color: AppColors.error, size: 48),
+            SizedBox(height: 16),
             Text(
               _error!,
               textAlign: TextAlign.center,
-              style: const TextStyle(color: AppColors.secondary),
+              style: TextStyle(color: AppColors.secondary),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             TextButton.icon(
               onPressed: _loadExplore,
-              icon: const Icon(Icons.refresh, color: AppColors.primary),
-              label: const Text('Reintentar', style: TextStyle(color: AppColors.primary)),
+              icon: Icon(Icons.refresh, color: AppColors.primary),
+              label: Text('Reintentar', style: TextStyle(color: AppColors.primary)),
             ),
           ],
         ),
@@ -269,14 +268,14 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 color: AppColors.secondary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.explore_rounded,
                 color: AppColors.secondary,
                 size: 32,
               ),
             ),
-            const SizedBox(height: 16),
-            const Text(
+            SizedBox(height: 16),
+            Text(
               'Nada que explorar aún',
               style: TextStyle(
                 color: AppColors.textMain,
@@ -284,8 +283,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 fontWeight: FontWeight.w700,
               ),
             ),
-            const SizedBox(height: 6),
-            const Text(
+            SizedBox(height: 6),
+            Text(
               'Las publicaciones públicas aparecerán aquí',
               style: TextStyle(color: AppColors.secondary, fontSize: 13),
             ),
@@ -297,10 +296,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
     return RefreshIndicator(
       onRefresh: _loadExplore,
       color: AppColors.primary,
-      backgroundColor: AppColors.surface,
       child: GridView.builder(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        padding: EdgeInsets.symmetric(vertical: 8),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
           crossAxisSpacing: 3,
           mainAxisSpacing: 3,
@@ -339,7 +337,7 @@ class _UserSearchTile extends StatelessWidget {
         child: user.profilePictureUrl == null
             ? Text(
                 user.username[0].toUpperCase(),
-                style: const TextStyle(
+                style: TextStyle(
                   color: AppColors.primary,
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
@@ -349,7 +347,7 @@ class _UserSearchTile extends StatelessWidget {
       ),
       title: Text(
         user.username,
-        style: const TextStyle(
+        style: TextStyle(
           color: AppColors.textMain,
           fontWeight: FontWeight.w600,
           fontSize: 15,
@@ -382,7 +380,7 @@ class _ExploreGridTile extends StatelessWidget {
         errorBuilder: (context, error, stackTrace) {
           return Container(
             color: AppColors.inputBackground,
-            child: const Center(
+            child: Center(
               child: Icon(
                 Icons.image_not_supported_outlined,
                 color: AppColors.secondary,
@@ -395,7 +393,7 @@ class _ExploreGridTile extends StatelessWidget {
           if (loadingProgress == null) return child;
           return Container(
             color: AppColors.inputBackground,
-            child: const Center(
+            child: Center(
               child: SizedBox(
                 width: 20,
                 height: 20,

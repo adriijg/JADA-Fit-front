@@ -10,7 +10,7 @@ import '../../data/services/recipe_service.dart';
 import 'food_search_screen.dart';
 
 class CreateRecipeScreen extends StatefulWidget {
-  const CreateRecipeScreen({super.key, this.recipe});
+  CreateRecipeScreen({super.key, this.recipe});
 
   final RecipeModel? recipe;
 
@@ -93,12 +93,11 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
   void _showAddIngredientSheet() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: AppColors.surface,
-      shape: const RoundedRectangleBorder(
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (_) => Padding(
-        padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+        padding: EdgeInsets.fromLTRB(20, 16, 20, 24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -112,15 +111,15 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
-            const Text(
+            SizedBox(height: 20),
+            Text(
               'AÑADIR INGREDIENTE',
               style: TextStyle(
                 color: AppColors.secondary,
                 fontSize: 12, fontWeight: FontWeight.w800, letterSpacing: 1.2,
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             _OptionRow(
               icon: Icons.search,
               label: 'Buscar alimento',
@@ -195,9 +194,8 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
 
     if (_ingredients.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text('Añade al menos un ingrediente'),
-          backgroundColor: AppColors.surface,
         ),
       );
       return;
@@ -224,9 +222,8 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Text('Receta actualizada correctamente'),
-            backgroundColor: AppColors.surface,
           ),
         );
       } else {
@@ -234,9 +231,8 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Text('Receta creada correctamente'),
-            backgroundColor: AppColors.surface,
           ),
         );
       }
@@ -248,16 +244,14 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(error.message),
-          backgroundColor: AppColors.surface,
         ),
       );
     } catch (_) {
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text('Error al guardar la receta'),
-          backgroundColor: AppColors.surface,
         ),
       );
     } finally {
@@ -268,25 +262,23 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.surface,
         title: Text(
           _isEditing ? 'Editar receta' : 'Nueva receta',
-          style: const TextStyle(
+          style: TextStyle(
             color: AppColors.textMain,
             fontWeight: FontWeight.w800,
           ),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.textMain),
+          icon: Icon(Icons.arrow_back, color: AppColors.textMain),
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
           TextButton(
             onPressed: _isSaving ? null : _saveRecipe,
             child: _isSaving
-                ? const SizedBox(
+                ? SizedBox(
                     width: 20,
                     height: 20,
                     child: CircularProgressIndicator(
@@ -294,7 +286,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                       color: AppColors.primary,
                     ),
                   )
-                : const Text(
+                : Text(
                     'Guardar',
                     style: TextStyle(
                       color: AppColors.primary,
@@ -308,17 +300,17 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
+          padding: EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildNameField(),
-              const SizedBox(height: 14),
+              SizedBox(height: 14),
               _buildServingsField(),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
               Row(
                 children: [
-                  const Text(
+                  Text(
                     'INGREDIENTES',
                     style: TextStyle(
                       color: AppColors.secondary,
@@ -327,10 +319,10 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                       letterSpacing: 1.2,
                     ),
                   ),
-                  const Spacer(),
+                  Spacer(),
                   Text(
                     '${_ingredients.length} alimento${_ingredients.length == 1 ? '' : 's'}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.secondary,
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
@@ -338,10 +330,10 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
               ...List.generate(_ingredients.length, (index) {
                 return Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
+                  padding: EdgeInsets.only(bottom: 12),
                   child: _IngredientCard(
                     ingredient: _ingredients[index],
                     index: index,
@@ -349,13 +341,13 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                   ),
                 );
               }),
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               SizedBox(
                 width: double.infinity,
                 child: OutlinedButton.icon(
                   onPressed: _showAddIngredientSheet,
-                  icon: const Icon(Icons.add, size: 18),
-                  label: const Text('Añadir ingrediente'),
+                  icon: Icon(Icons.add, size: 18),
+                  label: Text('Añadir ingrediente'),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: AppColors.primary,
                     side: BorderSide(
@@ -364,15 +356,15 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    padding: EdgeInsets.symmetric(vertical: 14),
                   ),
                 ),
               ),
               if (_ingredients.isNotEmpty) ...[
-                const SizedBox(height: 24),
+                SizedBox(height: 24),
                 _buildMacroPreview(),
               ],
-              const SizedBox(height: 40),
+              SizedBox(height: 40),
             ],
           ),
         ),
@@ -383,11 +375,11 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
   Widget _buildNameField() {
     return AppCard.elevated(
       borderRadius: 20,
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'NOMBRE DE LA RECETA',
             style: TextStyle(
               color: AppColors.secondary,
@@ -396,15 +388,15 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
               letterSpacing: 0.8,
             ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           TextFormField(
             controller: _nameController,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.textMain,
               fontSize: 16,
               fontWeight: FontWeight.w700,
             ),
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               hintText: 'Ej: Sandwich Vegetal',
               hintStyle: TextStyle(
                 color: AppColors.secondary,
@@ -430,11 +422,11 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
   Widget _buildServingsField() {
     return AppCard.elevated(
       borderRadius: 20,
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'PORCIONES',
             style: TextStyle(
               color: AppColors.secondary,
@@ -443,16 +435,16 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
               letterSpacing: 0.8,
             ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           TextFormField(
             controller: _servingsController,
             keyboardType: TextInputType.number,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.textMain,
               fontSize: 16,
               fontWeight: FontWeight.w700,
             ),
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               hintText: '1',
               hintStyle: TextStyle(
                 color: AppColors.secondary,
@@ -472,11 +464,11 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
   Widget _buildMacroPreview() {
     return AppCard.primary(
       borderRadius: 24,
-      padding: const EdgeInsets.all(18),
+      padding: EdgeInsets.all(18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
+          Row(
             children: [
               Icon(Icons.bar_chart, color: AppColors.primary, size: 20),
               SizedBox(width: 8),
@@ -491,24 +483,24 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 14),
+          SizedBox(height: 14),
           Row(
             children: [
               _MacroBadge(
                 label: 'Calorías',
                 value: '${_totalCalories.toStringAsFixed(0)} kcal',
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               _MacroBadge(
                 label: 'Proteína',
                 value: '${_totalProtein.toStringAsFixed(1)} g',
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               _MacroBadge(
                 label: 'Hidratos',
                 value: '${_totalCarbs.toStringAsFixed(1)} g',
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               _MacroBadge(
                 label: 'Grasas',
                 value: '${_totalFats.toStringAsFixed(1)} g',
@@ -536,7 +528,7 @@ class _IngredientCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard.elevated(
       borderRadius: 20,
-      padding: const EdgeInsets.all(14),
+      padding: EdgeInsets.all(14),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -550,8 +542,8 @@ class _IngredientCard extends StatelessWidget {
                 color: AppColors.primary,
                 backgroundColor: AppColors.inputBackground,
               ),
-              const SizedBox(width: 10),
-              const Text(
+              SizedBox(width: 10),
+              Text(
                 'ALIMENTO',
                 style: TextStyle(
                   color: AppColors.secondary,
@@ -560,7 +552,7 @@ class _IngredientCard extends StatelessWidget {
                   letterSpacing: 0.8,
                 ),
               ),
-              const Spacer(),
+              Spacer(),
               InkWell(
                 onTap: onRemove,
                 borderRadius: BorderRadius.circular(12),
@@ -571,7 +563,7 @@ class _IngredientCard extends StatelessWidget {
                     color: AppColors.inputBackground,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.delete_outline,
                     color: AppColors.secondary,
                     size: 18,
@@ -580,15 +572,15 @@ class _IngredientCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           TextFormField(
             initialValue: ingredient.foodName,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.textMain,
               fontSize: 14,
               fontWeight: FontWeight.w700,
             ),
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: 'Nombre del alimento',
               labelStyle: TextStyle(
                 color: AppColors.secondary,
@@ -621,7 +613,7 @@ class _IngredientCard extends StatelessWidget {
               return null;
             },
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           Row(
             children: [
               Expanded(
@@ -631,7 +623,7 @@ class _IngredientCard extends StatelessWidget {
                   onChanged: (v) => ingredient.quantityGrams = v,
                 ),
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Expanded(
                 child: _MacroField(
                   label: 'Kcal/100g',
@@ -641,7 +633,7 @@ class _IngredientCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Row(
             children: [
               Expanded(
@@ -651,7 +643,7 @@ class _IngredientCard extends StatelessWidget {
                   onChanged: (v) => ingredient.proteinPer100g = v,
                 ),
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Expanded(
                 child: _MacroField(
                   label: 'Carb/100g',
@@ -659,7 +651,7 @@ class _IngredientCard extends StatelessWidget {
                   onChanged: (v) => ingredient.carbsPer100g = v,
                 ),
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Expanded(
                 child: _MacroField(
                   label: 'Gras/100g',
@@ -669,18 +661,18 @@ class _IngredientCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           AppCard.input(
-            padding: const EdgeInsets.all(10),
+            padding: EdgeInsets.all(10),
             borderRadius: 12,
             child: Row(
               children: [
                 _MiniMacro('${ingredient.calories.toStringAsFixed(0)} kcal'),
-                const SizedBox(width: 10),
+                SizedBox(width: 10),
                 _MiniMacro('P ${ingredient.protein.toStringAsFixed(1)}g'),
-                const SizedBox(width: 10),
+                SizedBox(width: 10),
                 _MiniMacro('C ${ingredient.carbs.toStringAsFixed(1)}g'),
-                const SizedBox(width: 10),
+                SizedBox(width: 10),
                 _MiniMacro('G ${ingredient.fats.toStringAsFixed(1)}g'),
               ],
             ),
@@ -693,7 +685,7 @@ class _IngredientCard extends StatelessWidget {
   Widget _MiniMacro(String text) {
     return Text(
       text,
-      style: const TextStyle(
+      style: TextStyle(
         color: AppColors.secondary,
         fontSize: 11,
         fontWeight: FontWeight.w700,
@@ -718,31 +710,31 @@ class _MacroField extends StatelessWidget {
     return TextFormField(
       initialValue: initialValue,
       keyboardType: TextInputType.number,
-      style: const TextStyle(
+      style: TextStyle(
         color: AppColors.textMain,
         fontSize: 13,
         fontWeight: FontWeight.w700,
       ),
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: const TextStyle(
+        labelStyle: TextStyle(
           color: AppColors.secondary,
           fontSize: 11,
           fontWeight: FontWeight.w600,
         ),
-        border: const OutlineInputBorder(
+        border: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
           borderSide: BorderSide(color: AppColors.inputBorder, width: 0.7),
         ),
-        enabledBorder: const OutlineInputBorder(
+        enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
           borderSide: BorderSide(color: AppColors.inputBorder, width: 0.7),
         ),
-        focusedBorder: const OutlineInputBorder(
+        focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
           borderSide: BorderSide(color: AppColors.primary, width: 1.2),
         ),
-        contentPadding: const EdgeInsets.symmetric(
+        contentPadding: EdgeInsets.symmetric(
           horizontal: 12,
           vertical: 12,
         ),

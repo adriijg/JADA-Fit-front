@@ -7,7 +7,7 @@ import '../../../../core/widgets/app_card.dart';
 import '../../../settings/presentation/providers/settings_provider.dart';
 
 class WorkoutSummaryCard extends StatelessWidget {
-  const WorkoutSummaryCard({
+  WorkoutSummaryCard({
     super.key,
     required this.onTap,
     this.workoutName,
@@ -33,7 +33,7 @@ class WorkoutSummaryCard extends StatelessWidget {
 }
 
 class PhysicalProgressCard extends StatelessWidget {
-  const PhysicalProgressCard({
+  PhysicalProgressCard({
     super.key,
     required this.onTap,
     this.currentWeight,
@@ -70,7 +70,7 @@ class PhysicalProgressCard extends StatelessWidget {
 }
 
 class SmallDashboardCard extends StatelessWidget {
-  const SmallDashboardCard({
+  SmallDashboardCard({
     super.key,
     required this.icon,
     required this.title,
@@ -89,32 +89,32 @@ class SmallDashboardCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard.elevated(
       onTap: onTap,
-      padding: const EdgeInsets.all(18),
+      padding: EdgeInsets.all(18),
       borderRadius: 24,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppCardIcon(icon: icon, size: 46, borderRadius: 16, iconSize: 24),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
             title.toUpperCase(),
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.secondary,
               fontSize: 10,
               fontWeight: FontWeight.w800,
               letterSpacing: 1,
             ),
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6),
           Text(
             value,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.textMain,
               fontSize: 17,
               fontWeight: FontWeight.w800,
             ),
           ),
-          const SizedBox(height: 5),
+          SizedBox(height: 5),
           Text(
             subtitle,
             style: TextStyle(

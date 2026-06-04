@@ -17,7 +17,7 @@ import '../../data/services/social_service.dart';
 import '../../data/services/story_service.dart';
 
 class MySocialProfileScreen extends StatefulWidget {
-  const MySocialProfileScreen({super.key, this.refreshVersion = 0});
+  MySocialProfileScreen({super.key, this.refreshVersion = 0});
 
   final int refreshVersion;
 
@@ -136,8 +136,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppColors.surface,
-      shape: const RoundedRectangleBorder(
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (context) {
@@ -164,8 +163,8 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  const Text(
+                  SizedBox(height: 20),
+                  Text(
                     'Nueva publicación',
                     style: TextStyle(
                       color: AppColors.textMain,
@@ -173,7 +172,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                       fontWeight: FontWeight.w800,
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
                   GestureDetector(
                     onTap: () async {
                       final path = await _pickImageFromGallery();
@@ -206,12 +205,12 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                           : Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Icon(
+                                Icon(
                                   Icons.add_photo_alternate_outlined,
                                   color: AppColors.secondary,
                                   size: 40,
                                 ),
-                                const SizedBox(height: 8),
+                                SizedBox(height: 8),
                                 Text(
                                   'Seleccionar de la galería',
                                   style: TextStyle(
@@ -225,14 +224,14 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                             ),
                     ),
                   ),
-                  const SizedBox(height: 14),
+                  SizedBox(height: 14),
                   _buildInputField(
                     controller: captionController,
                     label: 'Descripción (opcional)',
                     icon: Icons.edit_outlined,
                     maxLines: 3,
                   ),
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24),
                   SizedBox(
                     width: double.infinity,
                     height: 50,
@@ -240,7 +239,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                       onPressed: () async {
                         if (selectedImagePath == null) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
+                            SnackBar(
                               content: Text('Selecciona una imagen primero'),
                             ),
                           );
@@ -258,9 +257,8 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                             Navigator.pop(context);
                             _loadProfile();
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
+                              SnackBar(
                                 content: Text('¡Publicación creada!'),
-                                backgroundColor: AppColors.surface,
                               ),
                             );
                           }
@@ -282,7 +280,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                           borderRadius: BorderRadius.circular(14),
                         ),
                       ),
-                      child: const Text(
+                      child: Text(
                         'Publicar',
                         style: TextStyle(
                           fontWeight: FontWeight.w800,
@@ -306,8 +304,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppColors.surface,
-      shape: const RoundedRectangleBorder(
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (context) {
@@ -334,8 +331,8 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  const Text(
+                  SizedBox(height: 20),
+                  Text(
                     'Nueva historia',
                     style: TextStyle(
                       color: AppColors.textMain,
@@ -343,7 +340,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                       fontWeight: FontWeight.w800,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   Text(
                     'Las historias desaparecen en 24 horas',
                     style: TextStyle(
@@ -351,7 +348,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                       fontSize: 13,
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
                   GestureDetector(
                     onTap: () async {
                       final path = await _pickImageFromGallery();
@@ -384,12 +381,12 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                           : Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Icon(
+                                Icon(
                                   Icons.add_photo_alternate_outlined,
                                   color: AppColors.secondary,
                                   size: 40,
                                 ),
-                                const SizedBox(height: 8),
+                                SizedBox(height: 8),
                                 Text(
                                   'Seleccionar de la galería',
                                   style: TextStyle(
@@ -403,7 +400,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                             ),
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24),
                   SizedBox(
                     width: double.infinity,
                     height: 50,
@@ -411,7 +408,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                       onPressed: () async {
                         if (selectedImagePath == null) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
+                            SnackBar(
                               content: Text('Selecciona una imagen primero'),
                             ),
                           );
@@ -427,9 +424,8 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                           if (mounted) {
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
+                              SnackBar(
                                 content: Text('¡Historia creada!'),
-                                backgroundColor: AppColors.surface,
                               ),
                             );
                           }
@@ -452,7 +448,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                           borderRadius: BorderRadius.circular(14),
                         ),
                       ),
-                      child: const Text(
+                      child: Text(
                         'Subir historia',
                         style: TextStyle(
                           fontWeight: FontWeight.w800,
@@ -480,8 +476,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppColors.surface,
-      shape: const RoundedRectangleBorder(
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (context) {
@@ -508,8 +503,8 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  const Text(
+                  SizedBox(height: 20),
+                  Text(
                     'Editar perfil',
                     style: TextStyle(
                       color: AppColors.textMain,
@@ -517,7 +512,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                       fontWeight: FontWeight.w800,
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
                   GestureDetector(
                     onTap: () async {
                       final path = await _pickImageFromGallery();
@@ -554,7 +549,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                                             File(selectedImagePath!),
                                             fit: BoxFit.cover,
                                             errorBuilder: (_, _, _) =>
-                                                const Icon(
+                                                Icon(
                                                   Icons.person,
                                                   size: 50,
                                                   color: AppColors.secondary,
@@ -566,13 +561,13 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                                             ),
                                             fit: BoxFit.cover,
                                             errorBuilder: (_, _, _) =>
-                                                const Icon(
+                                                Icon(
                                                   Icons.person,
                                                   size: 50,
                                                   color: AppColors.secondary,
                                                 ),
                                           ))
-                                  : const Icon(
+                                  : Icon(
                                       Icons.person,
                                       color: AppColors.secondary,
                                       size: 50,
@@ -590,7 +585,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                                 width: 2,
                               ),
                             ),
-                            child: const Icon(
+                            child: Icon(
                               Icons.camera_alt,
                               size: 16,
                               color: AppColors.background,
@@ -600,14 +595,14 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24),
                   _buildInputField(
                     controller: bioController,
                     label: 'Biografía',
                     icon: Icons.info_outline,
                     maxLines: 3,
                   ),
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24),
                   SizedBox(
                     width: double.infinity,
                     height: 50,
@@ -622,9 +617,8 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                             Navigator.pop(context);
                             _loadProfile();
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
+                              SnackBar(
                                 content: Text('¡Perfil actualizado!'),
-                                backgroundColor: AppColors.surface,
                               ),
                             );
                           }
@@ -646,7 +640,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                           borderRadius: BorderRadius.circular(14),
                         ),
                       ),
-                      child: const Text(
+                      child: Text(
                         'Guardar',
                         style: TextStyle(
                           fontWeight: FontWeight.w800,
@@ -682,7 +676,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
       child: TextField(
         controller: controller,
         maxLines: maxLines,
-        style: const TextStyle(color: AppColors.textMain, fontSize: 14),
+        style: TextStyle(color: AppColors.textMain, fontSize: 14),
         decoration: InputDecoration(
           hintText: label,
           hintStyle: TextStyle(
@@ -691,7 +685,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
           ),
           prefixIcon: Icon(icon, color: AppColors.secondary, size: 20),
           border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(
+          contentPadding: EdgeInsets.symmetric(
             horizontal: 16,
             vertical: 14,
           ),
@@ -703,7 +697,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const Center(
+      return Center(
         child: CircularProgressIndicator(color: AppColors.primary),
       );
     }
@@ -713,22 +707,22 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
+            Icon(
               Icons.cloud_off_rounded,
               color: AppColors.error,
               size: 48,
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             Text(
               _error!,
               textAlign: TextAlign.center,
-              style: const TextStyle(color: AppColors.secondary),
+              style: TextStyle(color: AppColors.secondary),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             TextButton.icon(
               onPressed: _loadProfile,
-              icon: const Icon(Icons.refresh, color: AppColors.primary),
-              label: const Text(
+              icon: Icon(Icons.refresh, color: AppColors.primary),
+              label: Text(
                 'Reintentar',
                 style: TextStyle(color: AppColors.primary),
               ),
@@ -738,7 +732,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
       );
     }
 
-    if (_currentUser == null) return const SizedBox.shrink();
+    if (_currentUser == null) return SizedBox.shrink();
 
     final username = _currentUser!['username'] ?? 'Usuario';
     final bio = _currentUser!['bio'] as String?;
@@ -749,13 +743,12 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
     return RefreshIndicator(
       onRefresh: _loadProfile,
       color: AppColors.primary,
-      backgroundColor: AppColors.surface,
       child: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
             child: Column(
               children: [
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
 
                 // Profile picture
                 Stack(
@@ -775,10 +768,9 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                           end: Alignment.bottomRight,
                         ),
                       ),
-                      padding: const EdgeInsets.all(3),
+                      padding: EdgeInsets.all(3),
                       child: CircleAvatar(
                         radius: 42,
-                        backgroundColor: AppColors.surface,
                         backgroundImage:
                             profilePicUrl != null && profilePicUrl.isNotEmpty
                             ? NetworkImage(
@@ -788,7 +780,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                         child: profilePicUrl == null || profilePicUrl.isEmpty
                             ? Text(
                                 username[0].toUpperCase(),
-                                style: const TextStyle(
+                                style: TextStyle(
                                   color: AppColors.primary,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 32,
@@ -808,7 +800,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                           width: 2,
                         ),
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.edit,
                         size: 14,
                         color: AppColors.background,
@@ -816,12 +808,12 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 14),
+                SizedBox(height: 14),
 
                 // Username
                 Text(
                   '@$username',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.textMain,
                     fontSize: 20,
                     fontWeight: FontWeight.w800,
@@ -830,9 +822,9 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
 
                 // Bio
                 if (bio != null && bio.isNotEmpty) ...[
-                  const SizedBox(height: 6),
+                  SizedBox(height: 6),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                    padding: EdgeInsets.symmetric(horizontal: 40),
                     child: Text(
                       bio,
                       textAlign: TextAlign.center,
@@ -845,12 +837,12 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                   ),
                 ],
 
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
 
                 // Stats row
                 Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 0),
-                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  margin: EdgeInsets.symmetric(horizontal: 0),
+                  padding: EdgeInsets.symmetric(vertical: 16),
                   decoration: BoxDecoration(
                     color: AppColors.surface,
                     borderRadius: BorderRadius.circular(16),
@@ -879,7 +871,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                   ),
                 ),
 
-                const SizedBox(height: 16),
+                SizedBox(height: 16),
 
                 // Action buttons
                 Row(
@@ -892,7 +884,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                         onTap: _showEditProfileDialog,
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    SizedBox(width: 10),
                     Expanded(
                       child: _ActionButton(
                         label: 'Nuevo post',
@@ -901,7 +893,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                         onTap: _showCreatePostDialog,
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    SizedBox(width: 10),
                     Expanded(
                       child: _ActionButton(
                         label: 'Historia',
@@ -913,13 +905,13 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                   ],
                 ),
 
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
 
                 // Section header
                 Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(
+                      padding: EdgeInsets.symmetric(
                         horizontal: 14,
                         vertical: 6,
                       ),
@@ -927,7 +919,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                         color: AppColors.primary.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: const Row(
+                      child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(
@@ -949,7 +941,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: 12),
               ],
             ),
           ),
@@ -968,16 +960,16 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                           color: AppColors.secondary.withValues(alpha: 0.4),
                           size: 40,
                         ),
-                        const SizedBox(height: 10),
-                        const Text(
+                        SizedBox(height: 10),
+                        Text(
                           'Aún no tienes publicaciones',
                           style: TextStyle(
                             color: AppColors.secondary,
                             fontSize: 14,
                           ),
                         ),
-                        const SizedBox(height: 4),
-                        const Text(
+                        SizedBox(height: 4),
+                        Text(
                           'Comparte tu progreso con la comunidad',
                           style: TextStyle(
                             color: AppColors.secondary,
@@ -989,7 +981,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                   ),
                 )
               : SliverGrid(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
                     crossAxisSpacing: 3,
                     mainAxisSpacing: 3,
@@ -999,7 +991,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                     Widget errorPlaceholder() {
                       return Container(
                         color: AppColors.inputBackground,
-                        child: const Center(
+                        child: Center(
                           child: Icon(
                             Icons.image_not_supported_outlined,
                             color: AppColors.secondary,
@@ -1026,7 +1018,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                   }, childCount: _myPosts.length),
                 ),
 
-          const SliverToBoxAdapter(child: SizedBox(height: 24)),
+          SliverToBoxAdapter(child: SizedBox(height: 24)),
         ],
       ),
     );
@@ -1047,13 +1039,13 @@ class _StatItem extends StatelessWidget {
       children: [
         Text(
           value,
-          style: const TextStyle(
+          style: TextStyle(
             color: AppColors.textMain,
             fontSize: 18,
             fontWeight: FontWeight.w800,
           ),
         ),
-        const SizedBox(height: 3),
+        SizedBox(height: 3),
         Text(
           label,
           style: TextStyle(
@@ -1087,7 +1079,7 @@ class _ActionButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10),
+        padding: EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
           color: color.withValues(alpha: 0.12),
           borderRadius: BorderRadius.circular(12),
@@ -1096,7 +1088,7 @@ class _ActionButton extends StatelessWidget {
         child: Column(
           children: [
             Icon(icon, color: color, size: 20),
-            const SizedBox(height: 4),
+            SizedBox(height: 4),
             Text(
               label,
               style: TextStyle(

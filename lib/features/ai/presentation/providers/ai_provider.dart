@@ -48,7 +48,7 @@ class ChatSession {
 
 class AiProvider extends ChangeNotifier {
   final AiService _aiService = AiService();
-  final NotificationService _notificationService = NotificationService();
+  final NotificationService _notificationService = NotificationService.instance;
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
   static const String _storageKey = 'ai_chat_sessions';

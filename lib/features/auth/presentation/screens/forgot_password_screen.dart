@@ -9,7 +9,7 @@ import 'login_screen.dart';
 import 'reset_password_screen.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
-  const ForgotPasswordScreen({super.key});
+  ForgotPasswordScreen({super.key});
 
   @override
   State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
@@ -48,7 +48,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (_) => const ResetPasswordScreen(),
+          builder: (_) => ResetPasswordScreen(),
         ),
       );
     } on ApiException catch (error) {
@@ -68,7 +68,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: AppColors.surface,
       ),
     );
   }
@@ -76,12 +75,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
             return SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 30,
                 vertical: 28,
               ),
@@ -92,13 +90,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.lock_outline,
                       size: 82,
                       color: AppColors.primary,
                     ),
-                    const SizedBox(height: 16),
-                    const Text(
+                    SizedBox(height: 16),
+                    Text(
                       AppStrings.forgotPasswordTitle,
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -109,9 +107,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         letterSpacing: 2.4,
                       ),
                     ),
-                    const SizedBox(height: 48),
+                    SizedBox(height: 48),
                     Container(
-                      padding: const EdgeInsets.all(26),
+                      padding: EdgeInsets.all(26),
                       decoration: BoxDecoration(
                         color: AppColors.surface,
                         borderRadius: BorderRadius.circular(28),
@@ -119,7 +117,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                          Text(
                             AppStrings.forgotPasswordEmailLabel,
                             style: TextStyle(
                               color: AppColors.secondary,
@@ -127,21 +125,21 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                               letterSpacing: 1,
                             ),
                           ),
-                          const SizedBox(height: 8),
+                          SizedBox(height: 8),
                           AuthTextField(
                             controller: _emailController,
                             hintText: AppStrings.forgotPasswordEmailHint,
                             icon: Icons.email_outlined,
                             keyboardType: TextInputType.emailAddress,
                           ),
-                          const SizedBox(height: 22),
+                          SizedBox(height: 22),
                           if (errorMessage != null)
                             Padding(
-                              padding: const EdgeInsets.only(bottom: 16),
+                              padding: EdgeInsets.only(bottom: 16),
                               child: Center(
                                 child: Text(
                                   errorMessage!,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     color: AppColors.error,
                                     fontSize: 13,
                                     fontWeight: FontWeight.w500,
@@ -163,7 +161,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                 ),
                               ),
                               child: isLoading
-                                  ? const SizedBox(
+                                  ? SizedBox(
                                       width: 22,
                                       height: 22,
                                       child: CircularProgressIndicator(
@@ -171,7 +169,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                         color: AppColors.background,
                                       ),
                                     )
-                                  : const Text(
+                                  : Text(
                                       AppStrings.forgotPasswordButton,
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -184,19 +182,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24),
                     TextButton(
                       onPressed: () => Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => const LoginScreen(),
+                          builder: (_) => LoginScreen(),
                         ),
                         (route) => false,
                       ),
                       style: TextButton.styleFrom(
                         foregroundColor: AppColors.secondary,
                       ),
-                      child: const Text(AppStrings.backToLogin),
+                      child: Text(AppStrings.backToLogin),
                     ),
                   ],
                 ),

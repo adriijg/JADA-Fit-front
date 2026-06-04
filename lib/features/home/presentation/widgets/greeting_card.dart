@@ -4,14 +4,14 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_card.dart';
 
 class GreetingCard extends StatelessWidget {
-  const GreetingCard({super.key});
+  GreetingCard({super.key});
 
   @override
   Widget build(BuildContext context) {
     return AppCard.primary(
       borderRadius: 28,
-      padding: const EdgeInsets.all(24),
-      child: const Column(
+      padding: EdgeInsets.all(24),
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(

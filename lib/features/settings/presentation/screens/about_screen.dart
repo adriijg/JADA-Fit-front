@@ -5,22 +5,21 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_card.dart';
 
 class AboutScreen extends StatelessWidget {
-  const AboutScreen({super.key});
+  AboutScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Acerca de'),
+        title: Text('Acerca de'),
         backgroundColor: Colors.transparent,
         foregroundColor: AppColors.textMain,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
+        padding: EdgeInsets.fromLTRB(20, 16, 20, 32),
         child: Column(
           children: [
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
             Container(
               width: 80,
               height: 80,
@@ -28,14 +27,14 @@ class AboutScreen extends StatelessWidget {
                 color: AppColors.primary.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.fitness_center,
                 color: AppColors.primary,
                 size: 40,
               ),
             ),
-            const SizedBox(height: 16),
-            const Text(
+            SizedBox(height: 16),
+            Text(
               AppStrings.appName,
               style: TextStyle(
                 color: AppColors.textMain,
@@ -43,7 +42,7 @@ class AboutScreen extends StatelessWidget {
                 fontWeight: FontWeight.w800,
               ),
             ),
-            const SizedBox(height: 4),
+            SizedBox(height: 4),
             Text(
               'Versión 1.0.0',
               style: TextStyle(
@@ -51,14 +50,14 @@ class AboutScreen extends StatelessWidget {
                 fontSize: 14,
               ),
             ),
-            const SizedBox(height: 32),
+            SizedBox(height: 32),
             AppCard.elevated(
               borderRadius: 20,
-              padding: const EdgeInsets.all(20),
+              padding: EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Descripción',
                     style: TextStyle(
                       color: AppColors.textMain,
@@ -66,7 +65,7 @@ class AboutScreen extends StatelessWidget {
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   Text(
                     'JADA Fit es tu compañero de fitness inteligente. '
                     'Crea rutinas personalizadas, sigue tu progreso físico, '
@@ -80,10 +79,10 @@ class AboutScreen extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             AppCard.elevated(
               borderRadius: 20,
-              padding: const EdgeInsets.all(20),
+              padding: EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -95,17 +94,17 @@ class AboutScreen extends StatelessWidget {
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   _ContactRow(icon: Icons.email_outlined, text: 'soporte@jadafit.com'),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   _ContactRow(icon: Icons.language_outlined, text: 'www.jadafit.com'),
                 ],
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             AppCard.elevated(
               borderRadius: 20,
-              padding: const EdgeInsets.all(20),
+              padding: EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -117,7 +116,7 @@ class AboutScreen extends StatelessWidget {
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   Text(
                     'Términos y condiciones',
                     style: TextStyle(
@@ -125,7 +124,7 @@ class AboutScreen extends StatelessWidget {
                       fontSize: 14,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   Text(
                     'Política de privacidad',
                     style: TextStyle(
@@ -153,7 +152,7 @@ class _ContactRow extends StatelessWidget {
     return Row(
       children: [
         Icon(icon, color: AppColors.secondary, size: 18),
-        const SizedBox(width: 10),
+        SizedBox(width: 10),
         Text(
           text,
           style: TextStyle(

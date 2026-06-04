@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 
 class AuthTextField extends StatelessWidget {
-  const AuthTextField({
+  AuthTextField({
     super.key,
     required this.controller,
     required this.hintText,
@@ -38,7 +38,7 @@ class AuthTextField extends StatelessWidget {
         obscureText: obscureText,
         keyboardType: keyboardType,
         cursorColor: AppColors.primary,
-        style: const TextStyle(
+        style: TextStyle(
           color: AppColors.textMain,
           fontSize: 14,
           letterSpacing: 1,
@@ -51,19 +51,19 @@ class AuthTextField extends StatelessWidget {
             letterSpacing: 1,
           ),
           prefixIcon: Padding(
-            padding: const EdgeInsets.only(left: 12, right: 10),
+            padding: EdgeInsets.only(left: 12, right: 10),
             child: Icon(
               icon,
               color: AppColors.secondary,
               size: 20,
             ),
           ),
-          prefixIconConstraints: const BoxConstraints(
+          prefixIconConstraints: BoxConstraints(
             minWidth: 44,
           ),
           suffixIcon: suffixIcon,
           border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(
+          contentPadding: EdgeInsets.symmetric(
             horizontal: 12,
             vertical: 18,
           ),

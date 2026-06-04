@@ -4,7 +4,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import '../../../../core/theme/app_colors.dart';
 
 class BarcodeScannerScreen extends StatefulWidget {
-  const BarcodeScannerScreen({super.key});
+  BarcodeScannerScreen({super.key});
 
   @override
   State<BarcodeScannerScreen> createState() => _BarcodeScannerScreenState();
@@ -102,7 +102,6 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: AppColors.surface,
       ),
     );
   }
@@ -110,14 +109,12 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.surface,
         elevation: 0,
-        iconTheme: const IconThemeData(
+        iconTheme: IconThemeData(
           color: AppColors.textMain,
         ),
-        title: const Text(
+        title: Text(
           'Escanear alimento',
           style: TextStyle(
             color: AppColors.textMain,
@@ -155,10 +152,10 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
           else
             Center(
               child: Padding(
-                padding: const EdgeInsets.all(24),
+                padding: EdgeInsets.all(24),
                 child: Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.all(22),
+                  padding: EdgeInsets.all(22),
                   decoration: BoxDecoration(
                     color: AppColors.surface,
                     borderRadius: BorderRadius.circular(24),
@@ -170,22 +167,22 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.videocam_off_outlined,
                         color: AppColors.error,
                         size: 42,
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
                       Text(
                         _cameraError!,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.textMain,
                           fontSize: 14,
                           height: 1.5,
                         ),
                         textAlign: TextAlign.center,
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: _startScanner,
                         style: ElevatedButton.styleFrom(
@@ -195,7 +192,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
                             borderRadius: BorderRadius.circular(18),
                           ),
                         ),
-                        child: const Text(
+                        child: Text(
                           'REINTENTAR',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
@@ -229,7 +226,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
               right: 24,
               bottom: 40,
               child: Container(
-                padding: const EdgeInsets.all(18),
+                padding: EdgeInsets.all(18),
                 decoration: BoxDecoration(
                   color: AppColors.surface.withOpacity(0.92),
                   borderRadius: BorderRadius.circular(22),
@@ -242,7 +239,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
                   _isScannerReady
                       ? 'Apunta la cámara al código de barras del producto.'
                       : 'Iniciando cámara...',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.textMain,
                     fontSize: 14,
                     height: 1.5,

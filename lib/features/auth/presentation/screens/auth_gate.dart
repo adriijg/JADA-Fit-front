@@ -55,7 +55,7 @@ class _AuthGateState extends State<AuthGate> {
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
-        builder: (_) => const LoginScreen(),
+        builder: (_) => LoginScreen(),
       ),
       (route) => false,
     );
@@ -65,7 +65,7 @@ class _AuthGateState extends State<AuthGate> {
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
-        builder: (_) => const HomeScreen(),
+        builder: (_) => HomeScreen(),
       ),
       (route) => false,
     );
@@ -75,7 +75,7 @@ class _AuthGateState extends State<AuthGate> {
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
-        builder: (_) => const OnboardingScreen(),
+        builder: (_) => OnboardingScreen(),
       ),
       (route) => false,
     );
@@ -83,8 +83,7 @@ class _AuthGateState extends State<AuthGate> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: AppColors.background,
+    return Scaffold(
       body: Center(
         child: CircularProgressIndicator(
           color: AppColors.primary,

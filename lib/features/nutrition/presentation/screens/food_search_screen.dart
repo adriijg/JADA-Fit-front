@@ -14,7 +14,7 @@ import 'my_recipes_screen.dart';
 import 'register_meal_screen.dart';
 
 class FoodSearchScreen extends StatefulWidget {
-  const FoodSearchScreen({
+  FoodSearchScreen({
     super.key,
     required this.initialMealType,
     required this.initialDate,
@@ -129,7 +129,7 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
   Future<void> _openViewAllRecipes() async {
     await Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => const MyRecipesScreen()),
+      MaterialPageRoute(builder: (_) => MyRecipesScreen()),
     );
     if (!mounted) return;
     _loadRecipes();
@@ -139,23 +139,22 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.surface,
-        title: const Text(
+        title: Text(
           'Eliminar alimento',
           style: TextStyle(color: AppColors.textMain),
         ),
         content: Text(
           '¿Eliminar "${food.foodName}" del historial?',
-          style: const TextStyle(color: AppColors.textMain),
+          style: TextStyle(color: AppColors.textMain),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Cancelar'),
+            child: Text('Cancelar'),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text(
+            child: Text(
               'Eliminar',
               style: TextStyle(color: AppColors.error),
             ),
@@ -171,16 +170,15 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
       setState(() => _recentFoods.removeWhere((f) => f.id == food.id));
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Text('Alimento eliminado del historial'),
-            backgroundColor: AppColors.surface,
           ),
         );
       }
     } catch (_) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text('No se pudo eliminar el alimento'),
           backgroundColor: AppColors.error,
         ),
@@ -237,7 +235,7 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
     final scannedCode = await Navigator.push<String>(
       context,
       MaterialPageRoute(
-        builder: (_) => const BarcodeScannerScreen(),
+        builder: (_) => BarcodeScannerScreen(),
       ),
     );
 
@@ -323,18 +321,16 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
     final recentRecipes = _recipes.take(5).toList();
 
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.surface,
         elevation: 0,
-        iconTheme: const IconThemeData(
+        iconTheme: IconThemeData(
           color: AppColors.textMain,
         ),
         title: Text(
           widget.pickerMode
               ? 'Seleccionar alimento'
               : 'Añadir a ${widget.initialMealType.label.toLowerCase()}',
-          style: const TextStyle(
+          style: TextStyle(
             color: AppColors.textMain,
             fontWeight: FontWeight.w700,
             letterSpacing: 1,
@@ -343,7 +339,7 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(
+          padding: EdgeInsets.symmetric(
             horizontal: 24,
             vertical: 20,
           ),
@@ -357,13 +353,13 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
                 onScan: _scanFood,
                 onCreateFood: _openCreateFood,
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               if (errorMessage != null)
                 _ErrorCard(
                   message: errorMessage!,
                 ),
               if (isLoading)
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(top: 28),
                   child: CircularProgressIndicator(
                     color: AppColors.primary,
@@ -371,7 +367,7 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
                 ),
               if (!isLoading && foods.isEmpty && errorMessage == null) ...[
                 if (!_isRecentFoodsLoading && _recentFoods.isNotEmpty) ...[
-                  const Text(
+                  Text(
                     'Registrados recientemente',
                     style: TextStyle(
                       color: AppColors.secondary,
@@ -380,9 +376,9 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
                       letterSpacing: 0.5,
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
                   ..._recentFoods.take(5).map((food) => Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
+                    padding: EdgeInsets.only(bottom: 8),
                     child: _RecentFoodTile(
                       food: food,
                       onTap: () {
@@ -410,7 +406,7 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
                           : null,
                     ),
                   )),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16),
                 ],
                 if (!_isRecipesLoading && recentRecipes.isNotEmpty) ...[
                   Row(
@@ -418,7 +414,7 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
                       Expanded(
                         child: Text(
                           'Tus recetas',
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: AppColors.secondary,
                             fontSize: 13,
                             fontWeight: FontWeight.w800,
@@ -430,11 +426,11 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
                         onPressed: _openViewAllRecipes,
                         style: TextButton.styleFrom(
                           foregroundColor: AppColors.primary,
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          padding: EdgeInsets.symmetric(horizontal: 8),
                           minimumSize: Size.zero,
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         ),
-                        child: const Text(
+                        child: Text(
                           'Ver todas',
                           style: TextStyle(
                             fontSize: 12,
@@ -444,9 +440,9 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
                   ...recentRecipes.map((recipe) => Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
+                    padding: EdgeInsets.only(bottom: 8),
                     child: _RecentRecipeTile(
                       recipe: recipe,
                       onTap: () => _addRecipeToMeal(recipe),
@@ -457,9 +453,9 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
               if (!isLoading && foods.isNotEmpty)
                 ListView.separated(
                   shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
+                  physics: NeverScrollableScrollPhysics(),
                   itemCount: foods.length,
-                  separatorBuilder: (_, _) => const SizedBox(height: 12),
+                  separatorBuilder: (_, _) => SizedBox(height: 12),
                   itemBuilder: (context, index) {
                     final food = foods[index];
 
@@ -472,7 +468,7 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
                       onTap: () => _openRegisterMeal(food),
                       borderRadius: BorderRadius.circular(22),
                       child: Container(
-                        padding: const EdgeInsets.all(18),
+                        padding: EdgeInsets.all(18),
                         decoration: BoxDecoration(
                           color: AppColors.surface,
                           borderRadius: BorderRadius.circular(22),
@@ -490,33 +486,33 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
                                 color: AppColors.inputBackground,
                                 borderRadius: BorderRadius.circular(16),
                               ),
-                              child: const Icon(
+                              child: Icon(
                                 Icons.restaurant_menu,
                                 color: AppColors.primary,
                               ),
                             ),
-                            const SizedBox(width: 14),
+                            SizedBox(width: 14),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     food.name,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       color: AppColors.textMain,
                                       fontSize: 15,
                                       fontWeight: FontWeight.w800,
                                     ),
                                   ),
-                                  const SizedBox(height: 5),
+                                  SizedBox(height: 5),
                                   Text(
                                     '$brand · ${_sourceLabel(food.source)}',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       color: AppColors.secondary,
                                       fontSize: 12,
                                     ),
                                   ),
-                                  const SizedBox(height: 6),
+                                  SizedBox(height: 6),
                                   Text(
                                     '${_formatDouble(food.caloriesPer100g, 'kcal')} / 100g · '
                                     'P ${_formatDouble(food.proteinPer100g, 'g')} · '
@@ -532,7 +528,7 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
                                 ],
                               ),
                             ),
-                            const Icon(
+                            Icon(
                               Icons.chevron_right,
                               color: AppColors.secondary,
                             ),
@@ -567,7 +563,7 @@ class _RecentFoodTile extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(22),
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(22),
@@ -585,13 +581,13 @@ class _RecentFoodTile extends StatelessWidget {
                 color: AppColors.inputBackground,
                 borderRadius: BorderRadius.circular(14),
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.restaurant,
                 color: AppColors.primary,
                 size: 20,
               ),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -603,7 +599,7 @@ class _RecentFoodTile extends StatelessWidget {
                           food.foodName,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: AppColors.textMain,
                             fontSize: 14,
                             fontWeight: FontWeight.w800,
@@ -611,9 +607,9 @@ class _RecentFoodTile extends StatelessWidget {
                         ),
                       ),
                       if (food.isUserCreated) ...[
-                        const SizedBox(width: 6),
+                        SizedBox(width: 6),
                         Container(
-                          padding: const EdgeInsets.symmetric(
+                          padding: EdgeInsets.symmetric(
                             horizontal: 6,
                             vertical: 2,
                           ),
@@ -621,7 +617,7 @@ class _RecentFoodTile extends StatelessWidget {
                             color: AppColors.primary.withOpacity(0.12),
                             borderRadius: BorderRadius.circular(6),
                           ),
-                          child: const Text(
+                          child: Text(
                             'TUYO',
                             style: TextStyle(
                               color: AppColors.primary,
@@ -634,10 +630,10 @@ class _RecentFoodTile extends StatelessWidget {
                       ],
                     ],
                   ),
-                  const SizedBox(height: 3),
+                  SizedBox(height: 3),
                   Text(
                     '${food.caloriesPer100g.toInt()} kcal / 100g',
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.secondary,
                       fontSize: 11,
                     ),
@@ -648,15 +644,15 @@ class _RecentFoodTile extends StatelessWidget {
             if (food.isUserCreated && onDelete != null)
               IconButton(
                 onPressed: onDelete,
-                icon: const Icon(Icons.delete_outline, size: 20),
+                icon: Icon(Icons.delete_outline, size: 20),
                 color: AppColors.error,
                 padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
+                constraints: BoxConstraints(),
                 visualDensity: VisualDensity.compact,
               ),
-            const SizedBox(width: 8),
+            SizedBox(width: 8),
             Container(
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 10,
                 vertical: 6,
               ),
@@ -664,7 +660,7 @@ class _RecentFoodTile extends StatelessWidget {
                 color: AppColors.primary.withOpacity(0.12),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Text(
+              child: Text(
                 'AÑADIR',
                 style: TextStyle(
                   color: AppColors.primary,
@@ -696,7 +692,7 @@ class _RecentRecipeTile extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(22),
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(22),
@@ -714,13 +710,13 @@ class _RecentRecipeTile extends StatelessWidget {
                 color: AppColors.inputBackground,
                 borderRadius: BorderRadius.circular(14),
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.menu_book,
                 color: AppColors.primary,
                 size: 20,
               ),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -729,17 +725,17 @@ class _RecentRecipeTile extends StatelessWidget {
                     recipe.name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.textMain,
                       fontSize: 14,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
-                  const SizedBox(height: 3),
+                  SizedBox(height: 3),
                   Text(
                     '${recipe.totalCalories.toInt()} kcal · '
                     '${recipe.ingredients.length} ingr.',
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.secondary,
                       fontSize: 11,
                     ),
@@ -748,7 +744,7 @@ class _RecentRecipeTile extends StatelessWidget {
               ),
             ),
             Container(
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 10,
                 vertical: 6,
               ),
@@ -756,7 +752,7 @@ class _RecentRecipeTile extends StatelessWidget {
                 color: AppColors.primary.withOpacity(0.12),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Text(
+              child: Text(
                 'AÑADIR',
                 style: TextStyle(
                   color: AppColors.primary,
@@ -792,7 +788,7 @@ class _SearchCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(22),
+      padding: EdgeInsets.all(22),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(28),
@@ -807,7 +803,7 @@ class _SearchCard extends StatelessWidget {
             controller: controller,
             textInputAction: TextInputAction.search,
             onSubmitted: (_) => onSearch(),
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.textMain,
               fontSize: 15,
             ),
@@ -818,26 +814,26 @@ class _SearchCard extends StatelessWidget {
               hintStyle: TextStyle(
                 color: AppColors.textMain.withOpacity(0.45),
               ),
-              prefixIcon: const Icon(
+              prefixIcon: Icon(
                 Icons.search,
                 color: AppColors.secondary,
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(18),
-                borderSide: const BorderSide(
+                borderSide: BorderSide(
                   color: AppColors.inputBorder,
                 ),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(18),
-                borderSide: const BorderSide(
+                borderSide: BorderSide(
                   color: AppColors.primary,
                   width: 1.4,
                 ),
               ),
             ),
           ),
-          const SizedBox(height: 14),
+          SizedBox(height: 14),
           Row(
             children: [
               Expanded(
@@ -852,8 +848,8 @@ class _SearchCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20),
                       ),
                     ),
-                    icon: const Icon(Icons.search),
-                    label: const Text(
+                    icon: Icon(Icons.search),
+                    label: Text(
                       'BUSCAR',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -862,7 +858,7 @@ class _SearchCard extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               SizedBox(
                 height: 52,
                 width: 52,
@@ -876,10 +872,10 @@ class _SearchCard extends StatelessWidget {
                     ),
                     padding: EdgeInsets.zero,
                   ),
-                  child: const Icon(Icons.camera_alt, size: 22),
+                  child: Icon(Icons.camera_alt, size: 22),
                 ),
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               SizedBox(
                 height: 52,
                 width: 52,
@@ -893,7 +889,7 @@ class _SearchCard extends StatelessWidget {
                     ),
                     padding: EdgeInsets.zero,
                   ),
-                  child: const Icon(Icons.add, size: 22),
+                  child: Icon(Icons.add, size: 22),
                 ),
               ),
             ],
@@ -915,7 +911,7 @@ class _ErrorCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(18),
+      padding: EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(20),
@@ -925,7 +921,7 @@ class _ErrorCard extends StatelessWidget {
       ),
       child: Text(
         message,
-        style: const TextStyle(
+        style: TextStyle(
           color: AppColors.textMain,
           fontSize: 14,
           height: 1.5,

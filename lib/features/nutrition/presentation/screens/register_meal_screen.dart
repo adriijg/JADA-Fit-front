@@ -8,7 +8,7 @@ import '../../data/services/catalog_food_service.dart';
 import '../../data/services/nutrition_meal_service.dart';
 
 class RegisterMealScreen extends StatefulWidget {
-  const RegisterMealScreen({
+  RegisterMealScreen({
     super.key,
     required this.food,
     required this.initialMealType,
@@ -166,13 +166,12 @@ class _RegisterMealScreenState extends State<RegisterMealScreen> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.dark(
+            colorScheme: ColorScheme.dark(
               primary: AppColors.primary,
               surface: AppColors.surface,
               onSurface: AppColors.textMain,
             ),
-            dialogTheme: const DialogThemeData(
-              backgroundColor: AppColors.surface,
+            dialogTheme: DialogThemeData(
             ),
           ),
           child: child!,
@@ -259,9 +258,8 @@ class _RegisterMealScreenState extends State<RegisterMealScreen> {
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text('Comida registrada correctamente'),
-          backgroundColor: AppColors.surface,
         ),
       );
 
@@ -320,14 +318,12 @@ class _RegisterMealScreenState extends State<RegisterMealScreen> {
     );
 
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.surface,
         elevation: 0,
-        iconTheme: const IconThemeData(
+        iconTheme: IconThemeData(
           color: AppColors.textMain,
         ),
-        title: const Text(
+        title: Text(
           'Registrar comida',
           style: TextStyle(
             color: AppColors.textMain,
@@ -338,7 +334,7 @@ class _RegisterMealScreenState extends State<RegisterMealScreen> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(
+          padding: EdgeInsets.symmetric(
             horizontal: 24,
             vertical: 20,
           ),
@@ -353,12 +349,12 @@ class _RegisterMealScreenState extends State<RegisterMealScreen> {
                       fatsController: fatsController,
                     )
                   : _FoodHeaderCard(food: widget.food),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               _QuantityCard(
                 controller: quantityController,
                 onChanged: (_) => setState(() {}),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               _MealTypeCard(
                 selectedMealType: selectedMealType,
                 onSelected: (mealType) {
@@ -367,25 +363,25 @@ class _RegisterMealScreenState extends State<RegisterMealScreen> {
                   });
                 },
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               _DateCard(
                 selectedDate: _formatSelectedDate(),
                 onPickDate: _pickDate,
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               _MacroPreviewCard(
                 calories: _formatDouble(calories, 'kcal'),
                 protein: _formatDouble(protein, 'g'),
                 carbs: _formatDouble(carbs, 'g'),
                 fats: _formatDouble(fats, 'g'),
               ),
-              const SizedBox(height: 18),
+              SizedBox(height: 18),
               if (errorMessage != null)
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
+                  padding: EdgeInsets.only(bottom: 16),
                   child: Text(
                     errorMessage!,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.error,
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -408,7 +404,7 @@ class _RegisterMealScreenState extends State<RegisterMealScreen> {
                     ),
                   ),
                   child: isLoading
-                      ? const SizedBox(
+                      ? SizedBox(
                           width: 22,
                           height: 22,
                           child: CircularProgressIndicator(
@@ -416,7 +412,7 @@ class _RegisterMealScreenState extends State<RegisterMealScreen> {
                             color: AppColors.background,
                           ),
                         )
-                      : const Row(
+                      : Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
@@ -460,7 +456,7 @@ class _ManualFoodCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(28),
@@ -472,7 +468,7 @@ class _ManualFoodCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
+          Row(
             children: [
               Icon(Icons.create, color: AppColors.primary, size: 22),
               SizedBox(width: 10),
@@ -487,13 +483,13 @@ class _ManualFoodCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 18),
+          SizedBox(height: 18),
           _ManualField(
             controller: foodNameController,
             label: 'Nombre del alimento',
             hint: 'Ej: Arroz integral',
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           Row(
             children: [
               Expanded(
@@ -504,7 +500,7 @@ class _ManualFoodCard extends StatelessWidget {
                   keyboardType: TextInputType.numberWithOptions(decimal: true),
                 ),
               ),
-              const SizedBox(width: 10),
+              SizedBox(width: 10),
               Expanded(
                 child: _ManualField(
                   controller: proteinController,
@@ -515,7 +511,7 @@ class _ManualFoodCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           Row(
             children: [
               Expanded(
@@ -526,7 +522,7 @@ class _ManualFoodCard extends StatelessWidget {
                   keyboardType: TextInputType.numberWithOptions(decimal: true),
                 ),
               ),
-              const SizedBox(width: 10),
+              SizedBox(width: 10),
               Expanded(
                 child: _ManualField(
                   controller: fatsController,
@@ -561,7 +557,7 @@ class _ManualField extends StatelessWidget {
     return TextField(
       controller: controller,
       keyboardType: keyboardType ?? TextInputType.text,
-      style: const TextStyle(
+      style: TextStyle(
         color: AppColors.textMain,
         fontSize: 15,
       ),
@@ -569,25 +565,25 @@ class _ManualField extends StatelessWidget {
         filled: true,
         fillColor: AppColors.inputBackground,
         labelText: label,
-        labelStyle: const TextStyle(
+        labelStyle: TextStyle(
           color: AppColors.secondary,
           fontWeight: FontWeight.w600,
         ),
         hintText: hint,
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
-          borderSide: const BorderSide(
+          borderSide: BorderSide(
             color: AppColors.inputBorder,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
-          borderSide: const BorderSide(
+          borderSide: BorderSide(
             color: AppColors.primary,
             width: 1.4,
           ),
         ),
-        contentPadding: const EdgeInsets.symmetric(
+        contentPadding: EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 14,
         ),
@@ -622,7 +618,7 @@ class _FoodHeaderCard extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(28),
@@ -634,25 +630,25 @@ class _FoodHeaderCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(
+          Icon(
             Icons.restaurant_menu,
             color: AppColors.primary,
             size: 42,
           ),
-          const SizedBox(height: 18),
+          SizedBox(height: 18),
           Text(
             food.name,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.textMain,
               fontSize: 23,
               fontWeight: FontWeight.w900,
               height: 1.18,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Text(
             '$brand · ${_sourceLabel(food.source)}',
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.secondary,
               fontSize: 13,
             ),
@@ -677,9 +673,9 @@ class _QuantityCard extends StatelessWidget {
     return _Card(
       child: TextField(
         controller: controller,
-        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        keyboardType: TextInputType.numberWithOptions(decimal: true),
         onChanged: onChanged,
-        style: const TextStyle(
+        style: TextStyle(
           color: AppColors.textMain,
           fontSize: 15,
         ),
@@ -687,29 +683,29 @@ class _QuantityCard extends StatelessWidget {
           filled: true,
           fillColor: AppColors.inputBackground,
           labelText: 'Cantidad',
-          labelStyle: const TextStyle(
+          labelStyle: TextStyle(
             color: AppColors.secondary,
             fontWeight: FontWeight.w600,
           ),
           hintText: 'Ej: 150',
-          prefixIcon: const Icon(
+          prefixIcon: Icon(
             Icons.scale_outlined,
             color: AppColors.primary,
           ),
           suffixText: 'g',
-          suffixStyle: const TextStyle(
+          suffixStyle: TextStyle(
             color: AppColors.secondary,
             fontWeight: FontWeight.w700,
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(18),
-            borderSide: const BorderSide(
+            borderSide: BorderSide(
               color: AppColors.inputBorder,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(18),
-            borderSide: const BorderSide(
+            borderSide: BorderSide(
               color: AppColors.primary,
               width: 1.4,
             ),
@@ -735,7 +731,7 @@ class _MealTypeCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'TIPO DE COMIDA',
             style: TextStyle(
               color: AppColors.secondary,
@@ -744,7 +740,7 @@ class _MealTypeCard extends StatelessWidget {
               letterSpacing: 1,
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Wrap(
             spacing: 10,
             runSpacing: 10,
@@ -755,8 +751,8 @@ class _MealTypeCard extends StatelessWidget {
                 onTap: () => onSelected(mealType),
                 borderRadius: BorderRadius.circular(18),
                 child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 180),
-                  padding: const EdgeInsets.symmetric(
+                  duration: Duration(milliseconds: 180),
+                  padding: EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 12,
                   ),
@@ -808,7 +804,7 @@ class _DateCard extends StatelessWidget {
         onTap: onPickDate,
         borderRadius: BorderRadius.circular(18),
         child: Container(
-          padding: const EdgeInsets.all(14),
+          padding: EdgeInsets.all(14),
           decoration: BoxDecoration(
             color: AppColors.inputBackground,
             borderRadius: BorderRadius.circular(18),
@@ -819,21 +815,21 @@ class _DateCard extends StatelessWidget {
           ),
           child: Row(
             children: [
-              const Icon(
+              Icon(
                 Icons.calendar_month_outlined,
                 color: AppColors.primary,
               ),
-              const SizedBox(width: 14),
+              SizedBox(width: 14),
               Expanded(
                 child: Text(
                   selectedDate,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.textMain,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
-              const Icon(
+              Icon(
                 Icons.edit_calendar,
                 color: AppColors.secondary,
               ),
@@ -865,7 +861,7 @@ class _MacroPreviewCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'RESUMEN CALCULADO',
             style: TextStyle(
               color: AppColors.secondary,
@@ -874,7 +870,7 @@ class _MacroPreviewCard extends StatelessWidget {
               letterSpacing: 1,
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Row(
             children: [
               Expanded(
@@ -884,7 +880,7 @@ class _MacroPreviewCard extends StatelessWidget {
                   icon: Icons.local_fire_department,
                 ),
               ),
-              const SizedBox(width: 10),
+              SizedBox(width: 10),
               Expanded(
                 child: _MacroBox(
                   label: 'Proteína',
@@ -894,7 +890,7 @@ class _MacroPreviewCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           Row(
             children: [
               Expanded(
@@ -904,7 +900,7 @@ class _MacroPreviewCard extends StatelessWidget {
                   icon: Icons.grain,
                 ),
               ),
-              const SizedBox(width: 10),
+              SizedBox(width: 10),
               Expanded(
                 child: _MacroBox(
                   label: 'Grasas',
@@ -934,7 +930,7 @@ class _MacroBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: AppColors.inputBackground,
         borderRadius: BorderRadius.circular(18),
@@ -950,20 +946,20 @@ class _MacroBox extends StatelessWidget {
             color: AppColors.primary,
             size: 23,
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           Text(
             value,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.textMain,
               fontSize: 16,
               fontWeight: FontWeight.w900,
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 5),
+          SizedBox(height: 5),
           Text(
             label.toUpperCase(),
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.secondary,
               fontSize: 10,
               fontWeight: FontWeight.w800,
@@ -990,7 +986,7 @@ class _Card extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(22),
+      padding: EdgeInsets.all(22),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(28),

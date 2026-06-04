@@ -5,8 +5,23 @@ import '../../../../core/widgets/app_card.dart';
 import '../../data/models/fitness_progress_model.dart';
 import 'add_physical_log_screen.dart';
 
+const _months = [
+  'Enero',
+  'Febrero',
+  'Marzo',
+  'Abril',
+  'Mayo',
+  'Junio',
+  'Julio',
+  'Agosto',
+  'Septiembre',
+  'Octubre',
+  'Noviembre',
+  'Diciembre',
+];
+
 class FitnessMonthlyCalendarScreen extends StatefulWidget {
-  const FitnessMonthlyCalendarScreen({
+  FitnessMonthlyCalendarScreen({
     super.key,
     required this.progress,
     required this.initialMonth,
@@ -112,22 +127,7 @@ class _FitnessMonthlyCalendarScreenState
   }
 
   String _monthTitle() {
-    const months = [
-      'Enero',
-      'Febrero',
-      'Marzo',
-      'Abril',
-      'Mayo',
-      'Junio',
-      'Julio',
-      'Agosto',
-      'Septiembre',
-      'Octubre',
-      'Noviembre',
-      'Diciembre',
-    ];
-
-    return '${months[visibleMonth.month - 1]} ${visibleMonth.year}';
+    return '${_months[visibleMonth.month - 1]} ${visibleMonth.year}';
   }
 
   String _formatDouble(double? value, String unit) {
@@ -155,14 +155,12 @@ class _FitnessMonthlyCalendarScreenState
         : _recordsForDay(selectedDay!);
 
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.surface,
         elevation: 0,
-        iconTheme: const IconThemeData(
+        iconTheme: IconThemeData(
           color: AppColors.textMain,
         ),
-        title: const Text(
+        title: Text(
           'Calendario mensual',
           style: TextStyle(
             color: AppColors.textMain,
@@ -177,11 +175,11 @@ class _FitnessMonthlyCalendarScreenState
         },
         backgroundColor: AppColors.primary,
         foregroundColor: AppColors.background,
-        child: const Icon(Icons.add),
+        child: Icon(Icons.add),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(
+          padding: EdgeInsets.symmetric(
             horizontal: 24,
             vertical: 20,
           ),
@@ -202,7 +200,7 @@ class _FitnessMonthlyCalendarScreenState
                   });
                 },
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               if (selectedDay != null)
                 _MonthlySelectedDayCard(
                   selectedDay: selectedDay!,
@@ -214,7 +212,7 @@ class _FitnessMonthlyCalendarScreenState
                 _NoDaySelectedCard(
                   onAddToday: () => _openAddLogForDay(DateTime.now()),
                 ),
-              const SizedBox(height: 80),
+              SizedBox(height: 80),
             ],
           ),
         ),
@@ -250,14 +248,14 @@ class _MonthlyCalendarCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard.elevated(
       borderRadius: 26,
-      padding: const EdgeInsets.all(22),
+      padding: EdgeInsets.all(22),
       child: Column(
         children: [
           Row(
             children: [
               IconButton(
                 onPressed: onPreviousMonth,
-                icon: const Icon(
+                icon: Icon(
                   Icons.chevron_left,
                   color: AppColors.secondary,
                 ),
@@ -265,7 +263,7 @@ class _MonthlyCalendarCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.textMain,
                     fontSize: 20,
                     fontWeight: FontWeight.w900,
@@ -284,8 +282,8 @@ class _MonthlyCalendarCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 18),
-          const Row(
+          SizedBox(height: 18),
+          Row(
             children: [
               _WeekdayHeader(label: 'L'),
               _WeekdayHeader(label: 'M'),
@@ -296,12 +294,12 @@ class _MonthlyCalendarCard extends StatelessWidget {
               _WeekdayHeader(label: 'D'),
             ],
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           GridView.builder(
             shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
+            physics: NeverScrollableScrollPhysics(),
             itemCount: cells.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 7,
               mainAxisSpacing: 8,
               crossAxisSpacing: 8,
@@ -310,7 +308,7 @@ class _MonthlyCalendarCard extends StatelessWidget {
               final day = cells[index];
 
               if (day == null) {
-                return const SizedBox.shrink();
+                return SizedBox.shrink();
               }
 
               final records = recordsForDay(day);
@@ -387,7 +385,7 @@ class _WeekdayHeader extends StatelessWidget {
     return Expanded(
       child: Text(
         label,
-        style: const TextStyle(
+        style: TextStyle(
           color: AppColors.secondary,
           fontSize: 12,
           fontWeight: FontWeight.w900,
@@ -433,36 +431,36 @@ class _MonthlySelectedDayCard extends StatelessWidget {
 
     return AppCard.elevated(
       borderRadius: 28,
-      padding: const EdgeInsets.all(22),
+      padding: EdgeInsets.all(22),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              const AppCardIcon(
+              AppCardIcon(
                 icon: Icons.event_available,
                 size: 46,
                 borderRadius: 16,
               ),
-              const SizedBox(width: 14),
+              SizedBox(width: 14),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       _formatDate(selectedDay),
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.textMain,
                         fontSize: 20,
                         fontWeight: FontWeight.w900,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4),
                     Text(
                       records.isEmpty
                           ? 'Sin registros físicos'
                           : '${records.length} registro${records.length == 1 ? '' : 's'} guardado${records.length == 1 ? '' : 's'}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.secondary,
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
@@ -473,7 +471,7 @@ class _MonthlySelectedDayCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 18),
+          SizedBox(height: 18),
           SizedBox(
             width: double.infinity,
             height: 50,
@@ -486,8 +484,8 @@ class _MonthlySelectedDayCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(18),
                 ),
               ),
-              icon: const Icon(Icons.add),
-              label: const Text(
+              icon: Icon(Icons.add),
+              label: Text(
                 'AÑADIR REGISTRO PARA ESTE DÍA',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -497,13 +495,13 @@ class _MonthlySelectedDayCard extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 18),
+          SizedBox(height: 18),
           if (records.isEmpty)
             const _EmptySelectedDay()
           else
             ...sortedRecords.map(
               (item) => Padding(
-                padding: const EdgeInsets.only(bottom: 12),
+                padding: EdgeInsets.only(bottom: 12),
                 child: _MonthlyRecordCard(
                   record: item,
                   formatDouble: formatDouble,
@@ -532,18 +530,18 @@ class _MonthlyRecordCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard.primary(
       borderRadius: 22,
-      padding: const EdgeInsets.all(18),
+      padding: EdgeInsets.all(18),
       child: Column(
         children: [
           Row(
             children: [
-              const Icon(
+              Icon(
                 Icons.show_chart,
                 color: AppColors.primary,
                 size: 22,
               ),
-              const SizedBox(width: 10),
-              const Expanded(
+              SizedBox(width: 10),
+              Expanded(
                 child: Text(
                   'Registro físico',
                   style: TextStyle(
@@ -554,7 +552,7 @@ class _MonthlyRecordCard extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(
+                padding: EdgeInsets.symmetric(
                   horizontal: 10,
                   vertical: 6,
                 ),
@@ -568,15 +566,15 @@ class _MonthlyRecordCard extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.schedule,
                       color: AppColors.secondary,
                       size: 14,
                     ),
-                    const SizedBox(width: 5),
+                    SizedBox(width: 5),
                     Text(
                       formatTime(record.loggedAt),
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.secondary,
                         fontSize: 11,
                         fontWeight: FontWeight.w700,
@@ -587,7 +585,7 @@ class _MonthlyRecordCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 18),
+          SizedBox(height: 18),
           Row(
             children: [
               Expanded(
@@ -597,7 +595,7 @@ class _MonthlyRecordCard extends StatelessWidget {
                   value: formatDouble(record.weight, 'kg'),
                 ),
               ),
-              const SizedBox(width: 10),
+              SizedBox(width: 10),
               Expanded(
                 child: _MonthlyMetricBox(
                   icon: Icons.percent,
@@ -607,7 +605,7 @@ class _MonthlyRecordCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           _MonthlyMetricBox(
             icon: Icons.fitness_center,
             label: 'Masa muscular',
@@ -639,7 +637,7 @@ class _MonthlyMetricBox extends StatelessWidget {
 
     return Container(
       width: fullWidth ? double.infinity : null,
-      padding: const EdgeInsets.all(14),
+      padding: EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(18),
@@ -655,21 +653,21 @@ class _MonthlyMetricBox extends StatelessWidget {
             color: AppColors.primary,
             size: 21,
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   label.toUpperCase(),
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.secondary,
                     fontSize: 9,
                     fontWeight: FontWeight.w800,
                     letterSpacing: 1,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   value,
                   style: TextStyle(
@@ -701,16 +699,16 @@ class _NoDaySelectedCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard.elevated(
       borderRadius: 24,
-      padding: const EdgeInsets.all(22),
+      padding: EdgeInsets.all(22),
       child: Column(
         children: [
-          const Icon(
+          Icon(
             Icons.touch_app,
             color: AppColors.primary,
             size: 34,
           ),
-          const SizedBox(height: 14),
-          const Text(
+          SizedBox(height: 14),
+          Text(
             'Selecciona un día',
             style: TextStyle(
               color: AppColors.textMain,
@@ -718,8 +716,8 @@ class _NoDaySelectedCard extends StatelessWidget {
               fontWeight: FontWeight.w900,
             ),
           ),
-          const SizedBox(height: 8),
-          const Text(
+          SizedBox(height: 8),
+          Text(
             'Pulsa un día del calendario para ver o añadir registros físicos.',
             style: TextStyle(
               color: AppColors.secondary,
@@ -728,7 +726,7 @@ class _NoDaySelectedCard extends StatelessWidget {
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 18),
+          SizedBox(height: 18),
           SizedBox(
             width: double.infinity,
             height: 48,
@@ -736,7 +734,7 @@ class _NoDaySelectedCard extends StatelessWidget {
               onPressed: onAddToday,
               style: OutlinedButton.styleFrom(
                 foregroundColor: AppColors.primary,
-                side: const BorderSide(
+                side: BorderSide(
                   color: AppColors.primary,
                   width: 1,
                 ),
@@ -744,8 +742,8 @@ class _NoDaySelectedCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(18),
                 ),
               ),
-              icon: const Icon(Icons.add),
-              label: const Text(
+              icon: Icon(Icons.add),
+              label: Text(
                 'AÑADIR REGISTRO DE HOY',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -768,7 +766,7 @@ class _EmptySelectedDay extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(18),
+      padding: EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: AppColors.inputBackground,
         borderRadius: BorderRadius.circular(20),
@@ -777,7 +775,7 @@ class _EmptySelectedDay extends StatelessWidget {
           width: 0.7,
         ),
       ),
-      child: const Column(
+      child: Column(
         children: [
           Icon(
             Icons.calendar_today_outlined,

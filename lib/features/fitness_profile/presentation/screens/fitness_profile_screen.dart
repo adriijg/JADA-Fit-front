@@ -13,7 +13,7 @@ import 'edit_fitness_profile_screen.dart';
 import 'fitness_progress_screen.dart';
 
 class FitnessProfileScreen extends StatefulWidget {
-  const FitnessProfileScreen({super.key});
+  FitnessProfileScreen({super.key});
 
   @override
   State<FitnessProfileScreen> createState() => _FitnessProfileScreenState();
@@ -109,7 +109,7 @@ class _FitnessProfileScreenState extends State<FitnessProfileScreen> {
     await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => const FitnessProgressScreen(),
+        builder: (_) => FitnessProgressScreen(),
       ),
     );
 
@@ -166,14 +166,12 @@ class _FitnessProfileScreenState extends State<FitnessProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.surface,
         elevation: 0,
-        iconTheme: const IconThemeData(
+        iconTheme: IconThemeData(
           color: AppColors.textMain,
         ),
-        title: const Text(
+        title: Text(
           'Perfil físico',
           style: TextStyle(
             color: AppColors.textMain,
@@ -186,10 +184,9 @@ class _FitnessProfileScreenState extends State<FitnessProfileScreen> {
         child: RefreshIndicator(
           onRefresh: _loadFitnessProfile,
           color: AppColors.primary,
-          backgroundColor: AppColors.surface,
           child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.symmetric(
+            physics: AlwaysScrollableScrollPhysics(),
+            padding: EdgeInsets.symmetric(
               horizontal: 24,
               vertical: 20,
             ),
@@ -202,7 +199,7 @@ class _FitnessProfileScreenState extends State<FitnessProfileScreen> {
 
   Widget _buildBody() {
     if (isLoading) {
-      return const SizedBox(
+      return SizedBox(
         height: 500,
         child: Center(
           child: CircularProgressIndicator(
@@ -248,19 +245,19 @@ class _FitnessProfileScreenState extends State<FitnessProfileScreen> {
           goal: _formatGoal(currentProfile.goal),
           updatedAt: _formatUpdatedAt(currentProfile.updatedAt),
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: 24),
         _MainStatsCard(
           weight: UnitConverter.formatWeight(currentProfile.weight, imperial),
           height: UnitConverter.formatHeight(currentProfile.height, imperial),
           age: _formatInt(currentProfile.age, 'a\u00f1os'),
         ),
-        const SizedBox(height: 18),
+        SizedBox(height: 18),
         _BodyCompositionCard(
           gender: _formatGender(currentProfile.gender),
           bodyFat: UnitConverter.formatBodyFat(currentProfile.bodyFat),
           muscleMass: UnitConverter.formatMuscleMass(currentProfile.muscleMass, imperial),
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: 24),
         _FitnessActionsCard(
           onEditPhysicalData: _openEditFitnessProfile,
           onAddPhysicalLog: _openAddPhysicalLog,
@@ -288,7 +285,7 @@ class _FitnessHeaderCard extends StatelessWidget {
 
     return AppCard.elevated(
       borderRadius: 28,
-      padding: const EdgeInsets.all(26),
+      padding: EdgeInsets.all(26),
       child: Column(
         children: [
           Container(
@@ -302,14 +299,14 @@ class _FitnessHeaderCard extends StatelessWidget {
                 width: 2,
               ),
             ),
-            child: const Icon(
+            child: Icon(
               Icons.fitness_center,
               color: AppColors.primary,
               size: 42,
             ),
           ),
-          const SizedBox(height: 18),
-          const Text(
+          SizedBox(height: 18),
+          Text(
             'Datos físicos',
             style: TextStyle(
               color: AppColors.textMain,
@@ -319,19 +316,19 @@ class _FitnessHeaderCard extends StatelessWidget {
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Text(
             username,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.secondary,
               fontSize: 14,
               letterSpacing: 0.4,
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Container(
-            padding: const EdgeInsets.symmetric(
+            padding: EdgeInsets.symmetric(
               horizontal: 16,
               vertical: 9,
             ),
@@ -358,7 +355,7 @@ class _FitnessHeaderCard extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           ),
-          const SizedBox(height: 14),
+          SizedBox(height: 14),
           Text(
             'Actualizado: $updatedAt',
             style: TextStyle(
@@ -388,7 +385,7 @@ class _MainStatsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard.elevated(
       borderRadius: 24,
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(20),
       child: Row(
         children: [
           Expanded(
@@ -442,7 +439,7 @@ class _StatItem extends StatelessWidget {
           color: AppColors.primary,
           size: 26,
         ),
-        const SizedBox(height: 10),
+        SizedBox(height: 10),
         Text(
           value,
           style: TextStyle(
@@ -455,10 +452,10 @@ class _StatItem extends StatelessWidget {
           ),
           textAlign: TextAlign.center,
         ),
-        const SizedBox(height: 5),
+        SizedBox(height: 5),
         Text(
           label.toUpperCase(),
-          style: const TextStyle(
+          style: TextStyle(
             color: AppColors.secondary,
             fontSize: 10,
             fontWeight: FontWeight.w700,
@@ -480,7 +477,7 @@ class _VerticalDivider extends StatelessWidget {
       width: 1,
       height: 72,
       color: AppColors.divider.withOpacity(0.7),
-      margin: const EdgeInsets.symmetric(horizontal: 10),
+      margin: EdgeInsets.symmetric(horizontal: 10),
     );
   }
 }
@@ -500,7 +497,7 @@ class _BodyCompositionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard.elevated(
       borderRadius: 24,
-      padding: const EdgeInsets.all(22),
+      padding: EdgeInsets.all(22),
       child: Column(
         children: [
           Row(
@@ -512,7 +509,7 @@ class _BodyCompositionCard extends StatelessWidget {
                   value: gender,
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Expanded(
                 child: _DetailBox(
                   icon: Icons.percent,
@@ -522,7 +519,7 @@ class _BodyCompositionCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           _DetailBox(
             icon: Icons.fitness_center,
             label: 'Masa muscular',
@@ -554,7 +551,7 @@ class _DetailBox extends StatelessWidget {
 
     return Container(
       width: fullWidth ? double.infinity : null,
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.inputBackground,
         borderRadius: BorderRadius.circular(18),
@@ -570,21 +567,21 @@ class _DetailBox extends StatelessWidget {
             color: AppColors.primary,
             size: 23,
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   label.toUpperCase(),
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.secondary,
                     fontSize: 10,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 1,
                   ),
                 ),
-                const SizedBox(height: 5),
+                SizedBox(height: 5),
                 Text(
                   value,
                   style: TextStyle(
@@ -620,7 +617,7 @@ class _FitnessActionsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard.elevated(
       borderRadius: 24,
-      padding: const EdgeInsets.all(18),
+      padding: EdgeInsets.all(18),
       child: Column(
         children: [
           _ActionTile(
@@ -629,14 +626,14 @@ class _FitnessActionsCard extends StatelessWidget {
             subtitle: 'Altura, edad, género y objetivo',
             onTap: onEditPhysicalData,
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           _ActionTile(
             icon: Icons.add_chart,
             title: 'Añadir registro físico',
             subtitle: 'Registra peso, grasa corporal y masa muscular',
             onTap: onAddPhysicalLog,
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           _ActionTile(
             icon: Icons.show_chart,
             title: 'Ver estadísticas',
@@ -666,7 +663,7 @@ class _ActionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard.input(
       onTap: onTap,
-      padding: const EdgeInsets.symmetric(
+      padding: EdgeInsets.symmetric(
         horizontal: 14,
         vertical: 14,
       ),
@@ -677,23 +674,23 @@ class _ActionTile extends StatelessWidget {
               color: AppColors.primary,
               size: 24,
             ),
-            const SizedBox(width: 14),
+            SizedBox(width: 14),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.textMain,
                       fontSize: 15,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   Text(
                     subtitle,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.secondary,
                       fontSize: 12,
                       height: 1.3,
@@ -702,7 +699,7 @@ class _ActionTile extends StatelessWidget {
                 ],
               ),
             ),
-            const Icon(
+            Icon(
               Icons.chevron_right,
               color: AppColors.secondary,
             ),
@@ -725,7 +722,7 @@ class _ErrorCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(24),
@@ -737,22 +734,22 @@ class _ErrorCard extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(
+          Icon(
             Icons.error_outline,
             color: AppColors.error,
             size: 42,
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
             message,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.textMain,
               fontSize: 15,
               height: 1.5,
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           ElevatedButton(
             onPressed: onRetry,
             style: ElevatedButton.styleFrom(
@@ -762,7 +759,7 @@ class _ErrorCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(18),
               ),
             ),
-            child: const Text(
+            child: Text(
               'Reintentar',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
