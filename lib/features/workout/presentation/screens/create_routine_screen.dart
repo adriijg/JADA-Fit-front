@@ -26,6 +26,8 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
   final RoutineService _service = RoutineService();
+  final ScrollController _scrollController = ScrollController();
+  final GlobalKey _suggestionsKey = GlobalKey();
 
   RoutineGoal? _selectedGoal;
   RoutineSplit? _selectedSplit;
@@ -58,6 +60,7 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
   void dispose() {
     _nameController.dispose();
     _descriptionController.dispose();
+    _scrollController.dispose();
     for (final e in _exercises) {
       e.dispose();
     }
@@ -67,6 +70,13 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
   void _addExercise() {
     setState(() {
       _exercises.add(_ExerciseEntry());
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
     });
   }
 
@@ -78,6 +88,13 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
     entry.durationController.text = (suggestion.durationSeconds ?? 0).toString();
     setState(() {
       _exercises.add(entry);
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
     });
   }
 
@@ -186,6 +203,7 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
           children: [
             Expanded(
               child: SingleChildScrollView(
+                controller: _scrollController,
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -240,6 +258,20 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
                               TextButton.icon(
                                 onPressed: () {
                                   setState(() => _showSuggestions = !_showSuggestions);
+                                  if (_showSuggestions) {
+                                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                                      Future.delayed(const Duration(milliseconds: 200), () {
+                                        if (_suggestionsKey.currentContext != null) {
+                                          Scrollable.ensureVisible(
+                                            _suggestionsKey.currentContext!,
+                                            alignment: 0.0,
+                                            duration: const Duration(milliseconds: 400),
+                                            curve: Curves.easeInOut,
+                                          );
+                                        }
+                                      });
+                                    });
+                                  }
                                 },
                                 icon: Icon(
                                   _showSuggestions ? Icons.close_rounded : Icons.auto_awesome_rounded,
@@ -305,6 +337,7 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
       _selectedSplit,
     );
     return Container(
+      key: _suggestionsKey,
       margin: const EdgeInsets.only(bottom: 20),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
