@@ -24,12 +24,12 @@ class AppCard extends StatelessWidget {
   }) {
     return AppCard(
       key: key,
-      child: child,
       onTap: onTap,
       padding: padding,
       borderRadius: borderRadius,
       borderColor: AppColors.primary.withOpacity(0.28),
       backgroundColor: AppColors.surface,
+      child: child,
     );
   }
 
@@ -42,12 +42,12 @@ class AppCard extends StatelessWidget {
   }) {
     return AppCard(
       key: key,
-      child: child,
       onTap: onTap,
       padding: padding,
       borderRadius: borderRadius,
       borderColor: AppColors.tertiary.withOpacity(0.45),
       backgroundColor: AppColors.surface,
+      child: child,
     );
   }
 
@@ -60,12 +60,12 @@ class AppCard extends StatelessWidget {
   }) {
     return AppCard(
       key: key,
-      child: child,
       onTap: onTap,
       padding: padding,
       borderRadius: borderRadius,
       borderColor: AppColors.error.withOpacity(0.5),
       backgroundColor: AppColors.surface,
+      child: child,
     );
   }
 
@@ -80,7 +80,6 @@ class AppCard extends StatelessWidget {
   }) {
     return AppCard(
       key: key,
-      child: child,
       onTap: onTap,
       padding: padding,
       borderRadius: borderRadius,
@@ -93,6 +92,7 @@ class AppCard extends StatelessWidget {
           offset: const Offset(0, 6),
         ),
       ],
+      child: child,
     );
   }
 
@@ -105,13 +105,13 @@ class AppCard extends StatelessWidget {
   }) {
     return AppCard(
       key: key,
-      child: child,
       onTap: onTap,
       padding: padding,
       borderRadius: borderRadius,
       borderColor: AppColors.inputBorder,
       borderWidth: 0.7,
       backgroundColor: AppColors.inputBackground,
+      child: child,
     );
   }
 

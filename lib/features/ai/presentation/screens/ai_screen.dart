@@ -694,7 +694,7 @@ class _ChatHistorySheet extends StatelessWidget {
                   )
                 : ListView.separated(
                     itemCount: sessions.length,
-                    separatorBuilder: (_, __) => const Divider(
+                    separatorBuilder: (_, _) => const Divider(
                       color: AppColors.divider,
                       height: 1,
                     ),

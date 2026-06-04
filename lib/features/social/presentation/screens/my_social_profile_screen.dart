@@ -519,7 +519,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                                       ? Image.file(
                                           File(selectedImagePath!),
                                           fit: BoxFit.cover,
-                                          errorBuilder: (_, __, ___) => const Icon(
+                                          errorBuilder: (_, _, _) => const Icon(
                                             Icons.person,
                                             size: 50,
                                             color: AppColors.secondary,
@@ -528,7 +528,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                                       : Image.network(
                                           ImageUrlResolver.resolve(selectedImagePath!),
                                           fit: BoxFit.cover,
-                                          errorBuilder: (_, __, ___) => const Icon(
+                                          errorBuilder: (_, _, _) => const Icon(
                                             Icons.person,
                                             size: 50,
                                             color: AppColors.secondary,
