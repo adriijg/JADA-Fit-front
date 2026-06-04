@@ -78,6 +78,37 @@ class RoutineService {
     );
   }
 
+  Future<RoutineModel> updateRoutine(RoutineModel routine) async {
+    if (routine.id == null) throw ApiException('La rutina no tiene ID');
+
+    final token = await _getTokenOrThrow();
+
+    final response = await _client
+        .put(
+          Uri.parse(ApiEndpoints.routineById(routine.id!)),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+          body: jsonEncode(routine.toUpdateJson()),
+        )
+        .timeout(_timeout);
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      return RoutineModel.fromJson(data);
+    }
+
+    throw ApiException(
+      _parseErrorMessage(
+        response.body,
+        fallback: 'No se pudo actualizar la rutina',
+        statusCode: response.statusCode,
+      ),
+      statusCode: response.statusCode,
+    );
+  }
+
   Future<void> deleteRoutine(int id) async {
     final token = await _getTokenOrThrow();
 

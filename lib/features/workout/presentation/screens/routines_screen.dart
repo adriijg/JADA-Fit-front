@@ -3,6 +3,7 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/widgets/app_card.dart';
+import '../../data/models/routine_goal.dart';
 import '../../data/models/routine_model.dart';
 import '../../data/services/routine_service.dart';
 import 'create_routine_screen.dart';
@@ -25,17 +26,15 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
   String? _errorMessage;
   List<RoutineModel> _routines = [];
   String _searchQuery = '';
-  String _selectedGoal = 'TODOS';
+  RoutineGoal? _selectedGoal;
   bool _showCompleted = false;
-
-  final List<String> _goals = ['TODOS', 'FUERZA', 'VOLUMEN', 'RESISTENCIA', 'DEFINICIÓN'];
 
   List<RoutineModel> get _filteredRoutines {
     return _routines.where((routine) {
       final matchesSearch = routine.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
           routine.description.toLowerCase().contains(_searchQuery.toLowerCase());
-      final matchesGoal = _selectedGoal == 'TODOS' || 
-          routine.targetGoal.toUpperCase() == _selectedGoal;
+      final matchesGoal = _selectedGoal == null || 
+          routine.targetGoal.toUpperCase() == _selectedGoal!.displayName;
       return matchesSearch && matchesGoal;
     }).toList();
   }
@@ -100,14 +99,14 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
   }
 
   Future<void> _openDetail(RoutineModel routine) async {
-    final deleted = await Navigator.push<bool>(
+    final changed = await Navigator.push<bool>(
       context,
       MaterialPageRoute(
         builder: (_) => RoutineDetailScreen(routine: routine),
       ),
     );
 
-    if (deleted == true) {
+    if (changed == true) {
       _loadRoutines();
     }
   }
@@ -275,16 +274,18 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
   }
 
   Widget _buildFilters() {
+    final allGoals = [null, ...RoutineGoal.values];
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Row(
-        children: _goals.map((goal) {
+        children: allGoals.map((goal) {
+          final label = goal == null ? 'TODOS' : goal.displayName;
           final isSelected = _selectedGoal == goal;
           return Padding(
             padding: const EdgeInsets.only(right: 10),
             child: ChoiceChip(
-              label: Text(goal),
+              label: Text(label),
               selected: isSelected,
               onSelected: (selected) {
                 if (selected) setState(() => _selectedGoal = goal);
@@ -376,7 +377,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
-              _searchQuery.isNotEmpty || _selectedGoal != 'TODOS'
+              _searchQuery.isNotEmpty || _selectedGoal != null
                   ? Icons.search_off_rounded
                   : Icons.sports_gymnastics,
               color: AppColors.primary.withOpacity(0.5),
@@ -384,7 +385,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
             ),
             const SizedBox(height: 24),
             Text(
-              _searchQuery.isNotEmpty || _selectedGoal != 'TODOS'
+              _searchQuery.isNotEmpty || _selectedGoal != null
                   ? 'Sin resultados'
                   : 'Aún no hay rutinas',
               style: const TextStyle(
@@ -395,7 +396,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
             ),
             const SizedBox(height: 12),
             Text(
-              _searchQuery.isNotEmpty || _selectedGoal != 'TODOS'
+              _searchQuery.isNotEmpty || _selectedGoal != null
                   ? 'No encontramos rutinas que coincidan con tus filtros.'
                   : 'Diseña tu primera rutina de entrenamiento para empezar a registrar tus progresos.',
               style: TextStyle(

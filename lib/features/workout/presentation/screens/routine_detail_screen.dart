@@ -6,6 +6,7 @@ import '../../../../core/widgets/app_card.dart';
 import '../../data/models/routine_model.dart';
 import '../../data/services/routine_service.dart';
 import '../../data/services/completed_storage_service.dart';
+import 'create_routine_screen.dart';
 
 class RoutineDetailScreen extends StatefulWidget {
   const RoutineDetailScreen({super.key, required this.routine});
@@ -103,7 +104,9 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
     try {
       await _service.deleteRoutine(widget.routine.id!);
       if (!mounted) return;
-      Navigator.pop(context, true);
+      if (Navigator.of(context).canPop()) {
+        Navigator.pop(context, true);
+      }
     } on ApiException catch (e) {
       if (!mounted) return;
       _showError(e.message);
@@ -156,6 +159,19 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
       _showError('No se pudo completar la rutina');
     } finally {
       if (mounted) setState(() => _completing = false);
+    }
+  }
+
+  Future<void> _openEdit() async {
+    final updated = await Navigator.push<RoutineModel?>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => CreateRoutineScreen(existingRoutine: widget.routine),
+      ),
+    );
+
+    if (updated != null && mounted) {
+      Navigator.pop(context, true);
     }
   }
 
@@ -241,6 +257,20 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
                   ),
                 )
               else
+                if (!_routineCompleted)
+                  IconButton(
+                    onPressed: () => _openEdit(),
+                    icon: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withOpacity(0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.edit_outlined, color: AppColors.primary, size: 20),
+                    ),
+                    tooltip: 'Editar rutina',
+                  ),
+                const SizedBox(width: 8),
                 IconButton(
                   onPressed: routine.id != null ? _confirmDelete : null,
                   icon: Container(

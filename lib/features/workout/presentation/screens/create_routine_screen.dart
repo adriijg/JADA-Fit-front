@@ -3,12 +3,19 @@ import 'package:flutter/services.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../data/models/exercise_catalog.dart';
 import '../../data/models/exercise_model.dart';
+import '../../data/models/routine_goal.dart';
 import '../../data/models/routine_model.dart';
+import '../../data/models/routine_split.dart';
 import '../../data/services/routine_service.dart';
 
 class CreateRoutineScreen extends StatefulWidget {
-  const CreateRoutineScreen({super.key});
+  final RoutineModel? existingRoutine;
+
+  const CreateRoutineScreen({super.key, this.existingRoutine});
+
+  bool get isEditing => existingRoutine != null;
 
   @override
   State<CreateRoutineScreen> createState() => _CreateRoutineScreenState();
@@ -18,23 +25,59 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
-  final _targetGoalController = TextEditingController();
   final RoutineService _service = RoutineService();
 
+  RoutineGoal? _selectedGoal;
+  RoutineSplit? _selectedSplit;
   final List<_ExerciseEntry> _exercises = [];
   bool _saving = false;
+  bool _showSuggestions = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isEditing) {
+      final r = widget.existingRoutine!;
+      _nameController.text = r.name;
+      _descriptionController.text = r.description;
+      _selectedGoal = RoutineGoal.fromString(r.targetGoal);
+      _selectedSplit = RoutineSplit.fromString(r.routineSplit);
+      for (final ex in r.exercises) {
+        final entry = _ExerciseEntry();
+        entry.nameController.text = ex.name;
+        entry.descriptionController.text = ex.description;
+        entry.setsController.text = ex.sets.toString();
+        entry.repsController.text = ex.reps.toString();
+        entry.durationController.text = ex.durationSeconds.toString();
+        _exercises.add(entry);
+      }
+    }
+  }
 
   @override
   void dispose() {
     _nameController.dispose();
     _descriptionController.dispose();
-    _targetGoalController.dispose();
+    for (final e in _exercises) {
+      e.dispose();
+    }
     super.dispose();
   }
 
   void _addExercise() {
     setState(() {
       _exercises.add(_ExerciseEntry());
+    });
+  }
+
+  void _addSuggestedExercise(ExerciseSuggestion suggestion) {
+    final entry = _ExerciseEntry();
+    entry.nameController.text = suggestion.name;
+    entry.setsController.text = suggestion.suggestedSets.toString();
+    entry.repsController.text = suggestion.suggestedReps.toString();
+    entry.durationController.text = (suggestion.durationSeconds ?? 0).toString();
+    setState(() {
+      _exercises.add(entry);
     });
   }
 
@@ -47,42 +90,59 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
 
   Future<void> _save() async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
+    if (_selectedGoal == null) {
+      _showError('Selecciona un objetivo para la rutina');
+      return;
+    }
+    if (_selectedSplit == null) {
+      _showError('Selecciona el tipo de rutina');
+      return;
+    }
 
     setState(() => _saving = true);
 
     try {
-      final exercises = _exercises.map((e) => ExerciseModel(
-            name: e.nameController.text.trim(),
-            description: e.descriptionController.text.trim(),
-            sets: int.tryParse(e.setsController.text) ?? 1,
-            reps: int.tryParse(e.repsController.text) ?? 1,
-            durationSeconds: int.tryParse(e.durationController.text) ?? 0,
-          )).toList();
+      final exercises = _exercises
+          .map((e) => ExerciseModel(
+                name: e.nameController.text.trim(),
+                description: e.descriptionController.text.trim(),
+                sets: int.tryParse(e.setsController.text) ?? 1,
+                reps: int.tryParse(e.repsController.text) ?? 1,
+                durationSeconds: int.tryParse(e.durationController.text) ?? 0,
+              ))
+          .toList();
 
       final routine = RoutineModel(
+        id: widget.existingRoutine?.id,
         name: _nameController.text.trim(),
         description: _descriptionController.text.trim(),
-        targetGoal: _targetGoalController.text.trim(),
+        targetGoal: _selectedGoal!.displayName,
+        routineSplit: _selectedSplit!.displayName,
         exercises: exercises,
       );
 
-      final created = await _service.createRoutine(routine);
+      if (widget.isEditing) {
+        await _service.updateRoutine(routine);
+      } else {
+        await _service.createRoutine(routine);
+      }
+
       if (!mounted) return;
-      
+
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('¡Rutina creada con éxito!'),
+        SnackBar(
+          content: Text(widget.isEditing ? '¡Rutina actualizada!' : '¡Rutina creada con éxito!'),
           backgroundColor: Colors.green,
         ),
       );
-      
-      Navigator.pop(context, created);
+
+      Navigator.pop(context, routine);
     } on ApiException catch (e) {
       if (!mounted) return;
       _showError(e.message);
     } catch (_) {
       if (!mounted) return;
-      _showError('No se pudo crear la rutina');
+      _showError(widget.isEditing ? 'No se pudo actualizar la rutina' : 'No se pudo crear la rutina');
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -111,9 +171,9 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
           onPressed: () => Navigator.pop(context),
           icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.textMain, size: 22),
         ),
-        title: const Text(
-          'Nueva Rutina',
-          style: TextStyle(
+        title: Text(
+          widget.isEditing ? 'Editar Rutina' : 'Nueva Rutina',
+          style: const TextStyle(
             color: AppColors.textMain,
             fontSize: 20,
             fontWeight: FontWeight.w900,
@@ -130,23 +190,37 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const _SectionHeader(
-                      title: 'Detalles',
-                      icon: Icons.auto_awesome_rounded,
-                    ),
+                    const _SectionHeader(title: 'Detalles', icon: Icons.auto_awesome_rounded),
                     const SizedBox(height: 20),
                     _PremiumTextField(
                       controller: _nameController,
                       label: 'Nombre',
-                      hint: 'Ej. Push Day / Pierna',
+                      hint: 'Ej. Push Day / Pierna / Full Body',
                       validator: (v) => (v == null || v.trim().isEmpty) ? 'Requerido' : null,
                     ),
                     const SizedBox(height: 16),
-                    _PremiumTextField(
-                      controller: _targetGoalController,
-                      label: 'Objetivo',
-                      hint: 'Ej. Hipertrofia, Fuerza...',
-                      validator: (v) => (v == null || v.trim().isEmpty) ? 'Requerido' : null,
+                    _GoalSelector(
+                      selectedGoal: _selectedGoal,
+                      onChanged: (goal) {
+                        setState(() {
+                          _selectedGoal = goal;
+                          _showSuggestions = false;
+                        });
+                      },
+                    ),
+                    if (_selectedGoal != null) ...[
+                      const SizedBox(height: 8),
+                      _GoalInfoCard(goal: _selectedGoal!),
+                    ],
+                    const SizedBox(height: 16),
+                    _SplitSelector(
+                      selectedSplit: _selectedSplit,
+                      onChanged: (split) {
+                        setState(() {
+                          _selectedSplit = split;
+                          _showSuggestions = false;
+                        });
+                      },
                     ),
                     const SizedBox(height: 16),
                     _PremiumTextField(
@@ -159,25 +233,48 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const _SectionHeader(
-                          title: 'Ejercicios',
-                          icon: Icons.fitness_center_rounded,
-                        ),
-                        TextButton.icon(
-                          onPressed: _addExercise,
-                          icon: const Icon(Icons.add_circle_outline_rounded, size: 20),
-                          label: const Text('AÑADIR', style: TextStyle(fontWeight: FontWeight.w900)),
-                          style: TextButton.styleFrom(
-                            foregroundColor: AppColors.primary,
-                            backgroundColor: AppColors.primary.withOpacity(0.1),
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                          ),
+                        const _SectionHeader(title: 'Ejercicios', icon: Icons.fitness_center_rounded),
+                        Row(
+                          children: [
+                            if (_selectedGoal != null)
+                              TextButton.icon(
+                                onPressed: () {
+                                  setState(() => _showSuggestions = !_showSuggestions);
+                                },
+                                icon: Icon(
+                                  _showSuggestions ? Icons.close_rounded : Icons.auto_awesome_rounded,
+                                  size: 18,
+                                ),
+                                label: Text(
+                                  _showSuggestions ? 'CERRAR' : 'SUGERENCIAS',
+                                  style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 11),
+                                ),
+                                style: TextButton.styleFrom(
+                                  foregroundColor: AppColors.tertiary,
+                                  backgroundColor: AppColors.tertiary.withOpacity(0.1),
+                                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                ),
+                              ),
+                            const SizedBox(width: 8),
+                            TextButton.icon(
+                              onPressed: _addExercise,
+                              icon: const Icon(Icons.add_circle_outline_rounded, size: 20),
+                              label: const Text('AÑADIR', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 11)),
+                              style: TextButton.styleFrom(
+                                foregroundColor: AppColors.primary,
+                                backgroundColor: AppColors.primary.withOpacity(0.1),
+                                padding: const EdgeInsets.symmetric(horizontal: 12),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                     const SizedBox(height: 16),
-                    if (_exercises.isEmpty)
+                    if (_showSuggestions && _selectedGoal != null) _buildSuggestions(),
+                    if (_exercises.isEmpty && !_showSuggestions)
                       _buildEmptyState()
                     else
                       ...List.generate(_exercises.length, (i) {
@@ -198,6 +295,103 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
             _buildBottomBar(),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildSuggestions() {
+    final byGoal = ExerciseCatalog.suggestionsForGoal(_selectedGoal!);
+    final bySplit = _selectedSplit != null
+        ? ExerciseCatalog.bySplit(_selectedSplit!).map((e) => ExerciseSuggestion(
+              name: e.name,
+              suggestedSets: 3,
+              suggestedReps: 10,
+            ))
+        : <ExerciseSuggestion>[];
+    final suggestions = [
+      ...byGoal,
+      ...bySplit.where((s) => !byGoal.any((g) => g.name == s.name)),
+    ];
+    return Container(
+      margin: const EdgeInsets.only(bottom: 20),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.tertiary.withOpacity(0.05),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.tertiary.withOpacity(0.15)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.auto_awesome_rounded, color: AppColors.tertiary, size: 18),
+              const SizedBox(width: 8),
+              Text(
+                'Ejercicios sugeridos para ${_selectedGoal!.displayName}',
+                style: const TextStyle(
+                  color: AppColors.tertiary,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'Toca un ejercicio para añadirlo a tu rutina',
+            style: TextStyle(
+              color: AppColors.tertiary.withOpacity(0.6),
+              fontSize: 12,
+            ),
+          ),
+          const SizedBox(height: 12),
+          ...suggestions.map((s) => Padding(
+                padding: const EdgeInsets.only(bottom: 6),
+                child: GestureDetector(
+                  onTap: () => _addSuggestedExercise(s),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: AppColors.surface,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: AppColors.divider.withOpacity(0.1)),
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: AppColors.tertiary.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Icon(Icons.add_rounded, color: AppColors.tertiary, size: 16),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            s.name,
+                            style: const TextStyle(
+                              color: AppColors.textMain,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          '${s.suggestedSets}x${s.suggestedReps}',
+                          style: TextStyle(
+                            color: AppColors.textMain.withOpacity(0.4),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )),
+        ],
       ),
     );
   }
@@ -223,6 +417,21 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
               fontWeight: FontWeight.w600,
             ),
           ),
+          if (_selectedGoal != null) ...[
+            const SizedBox(height: 8),
+            GestureDetector(
+              onTap: () => setState(() => _showSuggestions = true),
+              child: Text(
+                'o prueba ejercicios sugeridos para tu objetivo',
+                style: TextStyle(
+                  color: AppColors.tertiary.withOpacity(0.7),
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -231,10 +440,7 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
   Widget _buildBottomBar() {
     return Container(
       padding: EdgeInsets.fromLTRB(24, 16, 24, 16 + MediaQuery.of(context).padding.bottom),
-      decoration: BoxDecoration(
-        color: AppColors.background,
-
-      ),
+      decoration: const BoxDecoration(color: AppColors.background),
       child: SizedBox(
         width: double.infinity,
         height: 56,
@@ -242,7 +448,7 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
           onPressed: _saving ? null : _save,
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.primary,
-            foregroundColor: Colors.white,
+            foregroundColor: Colors.black,
             elevation: 0,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           ),
@@ -252,13 +458,251 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
                   height: 24,
                   child: CircularProgressIndicator(color: Colors.white, strokeWidth: 3),
                 )
-              : const Text(
-                  'GUARDAR RUTINA',
-                  style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 1.0),
+              : Text(
+                  widget.isEditing ? 'GUARDAR CAMBIOS' : 'GUARDAR RUTINA',
+                  style: const TextStyle(fontWeight: FontWeight.w900, letterSpacing: 1.0),
                 ),
         ),
       ),
     );
+  }
+}
+
+class _GoalSelector extends StatelessWidget {
+  final RoutineGoal? selectedGoal;
+  final ValueChanged<RoutineGoal> onChanged;
+
+  const _GoalSelector({required this.selectedGoal, required this.onChanged});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 4, bottom: 8),
+          child: Text(
+            'Objetivo',
+            style: TextStyle(
+              color: AppColors.textMain.withOpacity(0.5),
+              fontSize: 13,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+        ),
+        Container(
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: AppColors.divider.withOpacity(0.1)),
+          ),
+          child: DropdownButtonFormField<RoutineGoal>(
+            value: selectedGoal,
+            hint: Text(
+              'Selecciona un objetivo',
+              style: TextStyle(
+                color: AppColors.textMain.withOpacity(0.2),
+                fontSize: 16,
+              ),
+            ),
+            dropdownColor: AppColors.surface,
+            icon: const Icon(Icons.expand_more_rounded, color: AppColors.secondary),
+            style: const TextStyle(color: AppColors.textMain, fontSize: 16, fontWeight: FontWeight.w600),
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            ),
+            items: RoutineGoal.values.map((goal) {
+              return DropdownMenuItem(
+                value: goal,
+                child: Row(
+                  children: [
+                    Icon(
+                      _iconForGoal(goal),
+                      color: AppColors.primary,
+                      size: 20,
+                    ),
+                    const SizedBox(width: 12),
+                    Text(goal.displayName),
+                  ],
+                ),
+              );
+            }).toList(),
+            onChanged: (value) {
+              if (value != null) onChanged(value);
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  IconData _iconForGoal(RoutineGoal goal) {
+    switch (goal) {
+      case RoutineGoal.fuerza:
+        return Icons.fitness_center_rounded;
+      case RoutineGoal.volumen:
+        return Icons.trending_up_rounded;
+      case RoutineGoal.resistencia:
+        return Icons.directions_run_rounded;
+      case RoutineGoal.definicion:
+        return Icons.auto_awesome_rounded;
+    }
+  }
+}
+
+class _GoalInfoCard extends StatelessWidget {
+  final RoutineGoal goal;
+
+  const _GoalInfoCard({required this.goal});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.primary.withOpacity(0.05),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.primary.withOpacity(0.1)),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  goal.description,
+                  style: TextStyle(
+                    color: AppColors.textMain.withOpacity(0.7),
+                    fontSize: 12,
+                    height: 1.4,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 16),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                'Series: ${goal.suggestedSets}',
+                style: const TextStyle(
+                  color: AppColors.primary,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                'Reps: ${goal.repRange}',
+                style: const TextStyle(
+                  color: AppColors.primary,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SplitSelector extends StatelessWidget {
+  final RoutineSplit? selectedSplit;
+  final ValueChanged<RoutineSplit> onChanged;
+
+  const _SplitSelector({required this.selectedSplit, required this.onChanged});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 4, bottom: 8),
+          child: Text(
+            'Tipo de rutina',
+            style: TextStyle(
+              color: AppColors.textMain.withOpacity(0.5),
+              fontSize: 13,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+        ),
+        Container(
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: AppColors.divider.withOpacity(0.1)),
+          ),
+          child: DropdownButtonFormField<RoutineSplit>(
+            value: selectedSplit,
+            hint: Text(
+              'Ej. Empuje, Piernas, Full Body...',
+              style: TextStyle(
+                color: AppColors.textMain.withOpacity(0.2),
+                fontSize: 16,
+              ),
+            ),
+            dropdownColor: AppColors.surface,
+            icon: const Icon(Icons.expand_more_rounded, color: AppColors.secondary),
+            style: const TextStyle(color: AppColors.textMain, fontSize: 16, fontWeight: FontWeight.w600),
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            ),
+            items: RoutineSplit.values.map((split) {
+              return DropdownMenuItem(
+                value: split,
+                child: Row(
+                  children: [
+                    Icon(
+                      _iconForSplit(split),
+                      color: AppColors.tertiary,
+                      size: 20,
+                    ),
+                    const SizedBox(width: 12),
+                    Text(split.displayName),
+                    const SizedBox(width: 8),
+                    Text(
+                      split.description,
+                      style: TextStyle(
+                        color: AppColors.textMain.withOpacity(0.3),
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
+            onChanged: (value) {
+              if (value != null) onChanged(value);
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  IconData _iconForSplit(RoutineSplit split) {
+    switch (split) {
+      case RoutineSplit.fullBody:
+        return Icons.accessibility_new_rounded;
+      case RoutineSplit.push:
+        return Icons.arrow_upward_rounded;
+      case RoutineSplit.pull:
+        return Icons.arrow_downward_rounded;
+      case RoutineSplit.legs:
+        return Icons.directions_walk_rounded;
+      case RoutineSplit.upper:
+        return Icons.pan_tool_alt_rounded;
+      case RoutineSplit.lower:
+        return Icons.south_rounded;
+    }
   }
 }
 
@@ -397,7 +841,6 @@ class _PremiumExerciseForm extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(color: AppColors.divider.withOpacity(0.1)),
-
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

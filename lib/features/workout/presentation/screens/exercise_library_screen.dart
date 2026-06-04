@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_card.dart';
-import '../../data/models/catalog_exercise_model.dart';
-import '../../data/services/catalog_exercise_service.dart';
-import 'exercise_detail_screen.dart';
+import '../../data/models/exercise_catalog.dart';
+import 'exercise_detail_screen.dart' as detail;
 
 class ExerciseLibraryScreen extends StatefulWidget {
   const ExerciseLibraryScreen({super.key});
@@ -13,53 +12,42 @@ class ExerciseLibraryScreen extends StatefulWidget {
 }
 
 class _ExerciseLibraryScreenState extends State<ExerciseLibraryScreen> {
-  final CatalogExerciseService _service = CatalogExerciseService();
   final TextEditingController _searchController = TextEditingController();
-  
-  bool _isLoading = true;
-  String? _errorMessage;
-  List<CatalogExerciseModel> _exercises = [];
-  
+  String _searchQuery = '';
+  String? _selectedMuscleGroup;
+  bool _showBodyweightOnly = false;
+
+  List<String> get _muscleGroups => ExerciseCatalog.muscleGroups;
+
+  List<CatalogExercise> get _filtered {
+    var list = ExerciseCatalog.all;
+    if (_searchQuery.isNotEmpty) {
+      list = list.where((e) =>
+          e.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+          e.description.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+          e.muscleGroup.toLowerCase().contains(_searchQuery.toLowerCase())).toList();
+    }
+    if (_selectedMuscleGroup != null) {
+      list = list.where((e) => e.muscleGroup == _selectedMuscleGroup).toList();
+    }
+    if (_showBodyweightOnly) {
+      list = list.where((e) => e.isBodyweight).toList();
+    }
+    return list;
+  }
+
   @override
   void initState() {
     super.initState();
-    _loadExercises();
+    _searchController.addListener(() {
+      setState(() => _searchQuery = _searchController.text);
+    });
   }
-  
+
   @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
-  }
-
-  Future<void> _loadExercises([String query = '']) async {
-    try {
-      setState(() {
-        _isLoading = true;
-        _errorMessage = null;
-      });
-
-      final exercises = query.isEmpty 
-          ? await _service.getAllExercises()
-          : await _service.searchExercises(query);
-
-      if (!mounted) return;
-
-      setState(() {
-        _exercises = exercises;
-      });
-    } catch (e) {
-      if (!mounted) return;
-      setState(() => _errorMessage = e.toString());
-    } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
-    }
-  }
-
-  void _onSearchSubmit(String query) {
-    _loadExercises(query);
   }
 
   @override
@@ -86,76 +74,118 @@ class _ExerciseLibraryScreenState extends State<ExerciseLibraryScreen> {
               decoration: BoxDecoration(
                 color: AppColors.inputBackground,
                 borderRadius: BorderRadius.circular(18),
-                border: Border.all(
-                  color: AppColors.inputBorder,
-                  width: 0.7,
-                ),
+                border: Border.all(color: AppColors.inputBorder, width: 0.7),
               ),
               child: TextField(
                 controller: _searchController,
                 style: const TextStyle(color: AppColors.textMain, fontWeight: FontWeight.w500),
-                onSubmitted: _onSearchSubmit,
                 decoration: InputDecoration(
-                  hintText: 'Buscar ejercicio (ej. Sentadillas)...',
+                  hintText: 'Buscar ejercicio...',
                   hintStyle: TextStyle(color: AppColors.textMain.withOpacity(0.3)),
                   prefixIcon: const Icon(Icons.search_rounded, color: AppColors.secondary),
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.close_rounded, color: AppColors.textMain),
-                    onPressed: () {
-                      _searchController.clear();
-                      _loadExercises();
-                    },
-                  ),
+                  suffixIcon: _searchQuery.isNotEmpty
+                      ? IconButton(
+                          icon: const Icon(Icons.close_rounded, color: AppColors.textMain),
+                          onPressed: () => _searchController.clear(),
+                        )
+                      : null,
                 ),
               ),
             ),
           ),
-          Expanded(
-            child: _buildBody(),
-          ),
+          _buildFilterChips(),
+          Expanded(child: _buildBody()),
         ],
       ),
     );
   }
 
-  Widget _buildBody() {
-    if (_isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(color: AppColors.primary),
-      );
-    }
+  Widget _buildFilterChips() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
+      child: Row(
+        children: [
+          _filterChip('Todas', null, _selectedMuscleGroup == null && !_showBodyweightOnly,
+              () => setState(() { _selectedMuscleGroup = null; _showBodyweightOnly = false; })),
+          _filterChip('Sin peso', null, _showBodyweightOnly,
+              () => setState(() { _showBodyweightOnly = true; _selectedMuscleGroup = null; }),
+              icon: Icons.accessibility_new_rounded),
+          ..._muscleGroups.map((group) => _filterChip(
+                group,
+                group,
+                _selectedMuscleGroup == group && !_showBodyweightOnly,
+                () => setState(() { _selectedMuscleGroup = group; _showBodyweightOnly = false; }),
+              )),
+        ],
+      ),
+    );
+  }
 
-    if (_errorMessage != null) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Text(
-            'Error: $_errorMessage',
-            style: const TextStyle(color: AppColors.error),
-            textAlign: TextAlign.center,
+  Widget _filterChip(String label, String? group, bool isSelected, VoidCallback onTap, {IconData? icon}) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 8, bottom: 8),
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+          decoration: BoxDecoration(
+            color: isSelected ? AppColors.primary : AppColors.inputBackground,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              color: isSelected ? AppColors.primary : AppColors.inputBorder,
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (icon != null) ...[
+                Icon(icon, color: isSelected ? Colors.black : AppColors.textMain.withOpacity(0.5), size: 16),
+                const SizedBox(width: 4),
+              ],
+              Text(
+                label,
+                style: TextStyle(
+                  color: isSelected ? Colors.black : AppColors.textMain.withOpacity(0.5),
+                  fontWeight: FontWeight.w800,
+                  fontSize: 11,
+                ),
+              ),
+            ],
           ),
         ),
-      );
-    }
+      ),
+    );
+  }
 
-    if (_exercises.isEmpty) {
+  Widget _buildBody() {
+    final exercises = _filtered;
+
+    if (exercises.isEmpty) {
       return Center(
-        child: Text(
-          'No se encontraron ejercicios.',
-          style: TextStyle(color: AppColors.textMain.withOpacity(0.5)),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.search_off_rounded, color: AppColors.textMain.withOpacity(0.2), size: 64),
+            const SizedBox(height: 16),
+            Text(
+              'No se encontraron ejercicios',
+              style: TextStyle(color: AppColors.textMain.withOpacity(0.5), fontSize: 16),
+            ),
+          ],
         ),
       );
     }
 
     return ListView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-      itemCount: _exercises.length,
+      itemCount: exercises.length,
       itemBuilder: (context, index) {
-        final exercise = _exercises[index];
+        final exercise = exercises[index];
         return Padding(
-          padding: const EdgeInsets.only(bottom: 16),
+          padding: const EdgeInsets.only(bottom: 12),
           child: AppCard(
             borderRadius: 24,
             borderColor: AppColors.divider.withOpacity(0.1),
@@ -164,7 +194,9 @@ class _ExerciseLibraryScreenState extends State<ExerciseLibraryScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => ExerciseDetailScreen(exercise: exercise),
+                  builder: (_) => detail.ExerciseDetailScreen(
+                    exercise: detail.toCatalogModel(exercise),
+                  ),
                 ),
               );
             },
@@ -177,9 +209,10 @@ class _ExerciseLibraryScreenState extends State<ExerciseLibraryScreen> {
                     color: AppColors.surface,
                     borderRadius: BorderRadius.circular(14),
                   ),
-                  child: const Icon(
-                    Icons.fitness_center_rounded,
+                  child: Icon(
+                    exercise.isBodyweight ? Icons.accessibility_new_rounded : Icons.fitness_center_rounded,
                     color: AppColors.primary,
+                    size: 24,
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -187,13 +220,34 @@ class _ExerciseLibraryScreenState extends State<ExerciseLibraryScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        exercise.name,
-                        style: const TextStyle(
-                          color: AppColors.textMain,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
-                        ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              exercise.name,
+                              style: const TextStyle(
+                                color: AppColors.textMain,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                            decoration: BoxDecoration(
+                              color: AppColors.tertiary.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              exercise.muscleGroup,
+                              style: const TextStyle(
+                                color: AppColors.tertiary,
+                                fontSize: 9,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 4),
                       Text(
@@ -208,10 +262,7 @@ class _ExerciseLibraryScreenState extends State<ExerciseLibraryScreen> {
                     ],
                   ),
                 ),
-                const Icon(
-                  Icons.chevron_right_rounded,
-                  color: AppColors.divider,
-                ),
+                const Icon(Icons.chevron_right_rounded, color: AppColors.divider),
               ],
             ),
           ),

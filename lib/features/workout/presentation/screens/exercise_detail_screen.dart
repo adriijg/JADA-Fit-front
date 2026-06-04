@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../data/models/catalog_exercise_model.dart';
+import '../../data/models/exercise_catalog.dart';
 
 class ExerciseDetailScreen extends StatefulWidget {
   final CatalogExerciseModel exercise;
@@ -232,4 +233,14 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
       ),
     );
   }
+}
+
+CatalogExerciseModel toCatalogModel(CatalogExercise ex) {
+  return CatalogExerciseModel(
+    id: 0,
+    name: ex.name,
+    description: ex.description,
+    benefits: 'Fortalece y desarrolla los ${ex.muscleGroup.toLowerCase()}. Ideal para mejorar el rendimiento y la estética muscular.',
+    videoUrl: null,
+  );
 }
