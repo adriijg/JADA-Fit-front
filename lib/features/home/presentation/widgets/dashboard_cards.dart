@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/utils/unit_converter.dart';
 import '../../../../core/widgets/app_card.dart';
+import '../../../settings/presentation/providers/settings_provider.dart';
 
 class WorkoutSummaryCard extends StatelessWidget {
   const WorkoutSummaryCard({
@@ -43,16 +46,17 @@ class PhysicalProgressCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final imperial = context.watch<SettingsProvider>().isImperial;
+
     final weightStr = currentWeight != null
-        ? '${currentWeight!.toStringAsFixed(0)} kg'
+        ? UnitConverter.formatWeight(currentWeight, imperial)
         : 'Sin datos';
 
     String deltaStr;
     if (weightDelta == null) {
-      deltaStr = 'Añade tu primer registro';
+      deltaStr = 'A\u00f1ade tu primer registro';
     } else {
-      final sign = weightDelta! >= 0 ? '+' : '';
-      deltaStr = '$sign${weightDelta!.toStringAsFixed(1)} kg desde inicio';
+      deltaStr = '${UnitConverter.formatWeightChange(weightDelta, imperial)} desde inicio';
     }
 
     return SmallDashboardCard(

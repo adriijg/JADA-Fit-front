@@ -10,6 +10,7 @@ import '../../../auth/presentation/screens/login_screen.dart';
 import '../../../social/data/services/social_service.dart' as es_jadafit_social_service;
 import '../../../../core/widgets/app_card.dart';
 import '../../../fitness_profile/presentation/screens/fitness_profile_screen.dart';
+import '../../../settings/presentation/screens/settings_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -181,7 +182,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _AccountOptionsCard(
             user: currentUser,
             onSettings: () {
-              _showComingSoonMessage('Configuración próximamente');
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const SettingsScreen()),
+              );
             },
             onFitnessProfile: () {
               Navigator.push(

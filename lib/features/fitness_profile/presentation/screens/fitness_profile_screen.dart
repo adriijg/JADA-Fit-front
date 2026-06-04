@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../core/widgets/app_card.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/utils/unit_converter.dart';
 import '../../data/models/fitness_profile_model.dart';
 import '../../data/services/fitness_profile_service.dart';
+import '../../../settings/presentation/providers/settings_provider.dart';
 import 'add_physical_log_screen.dart';
 import 'edit_fitness_profile_screen.dart';
 import 'fitness_progress_screen.dart';
@@ -113,16 +116,6 @@ class _FitnessProfileScreenState extends State<FitnessProfileScreen> {
     if (mounted) {
       await _loadFitnessProfile();
     }
-  }
-
-  String _formatDouble(double? value, String unit) {
-    if (value == null) return '--';
-
-    if (value % 1 == 0) {
-      return '${value.toInt()} $unit';
-    }
-
-    return '${value.toStringAsFixed(1)} $unit';
   }
 
   String _formatInt(int? value, String unit) {
@@ -245,6 +238,9 @@ class _FitnessProfileScreenState extends State<FitnessProfileScreen> {
       );
     }
 
+    final settings = context.watch<SettingsProvider>();
+    final imperial = settings.isImperial;
+
     return Column(
       children: [
         _FitnessHeaderCard(
@@ -254,15 +250,15 @@ class _FitnessProfileScreenState extends State<FitnessProfileScreen> {
         ),
         const SizedBox(height: 24),
         _MainStatsCard(
-          weight: _formatDouble(currentProfile.weight, 'kg'),
-          height: _formatInt(currentProfile.height, 'cm'),
-          age: _formatInt(currentProfile.age, 'años'),
+          weight: UnitConverter.formatWeight(currentProfile.weight, imperial),
+          height: UnitConverter.formatHeight(currentProfile.height, imperial),
+          age: _formatInt(currentProfile.age, 'a\u00f1os'),
         ),
         const SizedBox(height: 18),
         _BodyCompositionCard(
           gender: _formatGender(currentProfile.gender),
-          bodyFat: _formatDouble(currentProfile.bodyFat, '%'),
-          muscleMass: _formatDouble(currentProfile.muscleMass, 'kg'),
+          bodyFat: UnitConverter.formatBodyFat(currentProfile.bodyFat),
+          muscleMass: UnitConverter.formatMuscleMass(currentProfile.muscleMass, imperial),
         ),
         const SizedBox(height: 24),
         _FitnessActionsCard(

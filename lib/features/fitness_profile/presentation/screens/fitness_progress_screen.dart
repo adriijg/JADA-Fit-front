@@ -1,11 +1,14 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/utils/unit_converter.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../data/models/fitness_progress_model.dart';
 import '../../data/services/fitness_progress_service.dart';
+import '../../../settings/presentation/providers/settings_provider.dart';
 import '../screens/add_physical_log_screen.dart';
 import 'fitness_monthly_calendar_screen.dart';
 
@@ -220,8 +223,12 @@ class _FitnessProgressScreenState extends State<FitnessProgressScreen> {
     });
   }
 
-  String _formatDouble(double? value, String unit) {
+  String _formatDouble(double? value, String unit, {bool imperial = false}) {
     if (value == null) return '--';
+    if (unit == 'kg') {
+      return UnitConverter.formatWeight(value, imperial);
+    }
+    if (unit == '%') return UnitConverter.formatBodyFat(value);
 
     if (value % 1 == 0) {
       return '${value.toInt()} $unit';
@@ -230,8 +237,13 @@ class _FitnessProgressScreenState extends State<FitnessProgressScreen> {
     return '${value.toStringAsFixed(1)} $unit';
   }
 
-  String _formatChange(double? value, String unit) {
+  bool get _imperial => context.read<SettingsProvider>().isImperial;
+
+  String _formatChange(double? value, String unit, {bool imperial = false}) {
     if (value == null) return '--';
+    if (unit == 'kg') {
+      return UnitConverter.formatWeightChange(value, imperial);
+    }
 
     final sign = value > 0 ? '+' : '';
 
@@ -358,8 +370,8 @@ class _FitnessProgressScreenState extends State<FitnessProgressScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _ProgressHeroCard(
-          latestWeight: _formatDouble(latestWeight, 'kg'),
-          weightChange: _formatChange(weightChange, 'kg'),
+          latestWeight: _formatDouble(latestWeight, 'kg', imperial: _imperial),
+          weightChange: _formatChange(weightChange, 'kg', imperial: _imperial),
           totalRecords: progress.length,
           onAddRecord: () => _openAddLog(),
         ),
@@ -801,8 +813,12 @@ class _SingleProgressChartCard extends StatelessWidget {
         .reduce((a, b) => a > b ? a : b);
   }
 
-  String _formatDouble(double? value, String unit) {
+  String _formatDouble(double? value, String unit, {bool imperial = false}) {
     if (value == null) return '--';
+    if (unit == 'kg') {
+      return UnitConverter.formatWeight(value, imperial);
+    }
+    if (unit == '%') return UnitConverter.formatBodyFat(value);
 
     if (value % 1 == 0) {
       return '${value.toInt()} $unit';
@@ -811,8 +827,11 @@ class _SingleProgressChartCard extends StatelessWidget {
     return '${value.toStringAsFixed(1)} $unit';
   }
 
-  String _formatChange(double? value, String unit) {
+  String _formatChange(double? value, String unit, {bool imperial = false}) {
     if (value == null) return '--';
+    if (unit == 'kg') {
+      return UnitConverter.formatWeightChange(value, imperial);
+    }
 
     final sign = value > 0 ? '+' : '';
 
@@ -826,6 +845,7 @@ class _SingleProgressChartCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hasEnoughData = chartPoints.length >= 2;
+    final imperial = context.watch<SettingsProvider>().isImperial;
 
     return AppCard.elevated(
       borderRadius: 26,
@@ -867,12 +887,12 @@ class _SingleProgressChartCard extends StatelessWidget {
             children: [
               _ChartMiniValue(
                 label: 'Actual',
-                value: _formatDouble(_latestValue, metric.unit),
+                value: _formatDouble(_latestValue, metric.unit, imperial: imperial),
               ),
               const SizedBox(width: 12),
               _ChartMiniValue(
                 label: 'Cambio',
-                value: _formatChange(_changeValue, metric.unit),
+                value: _formatChange(_changeValue, metric.unit, imperial: imperial),
               ),
             ],
           ),
@@ -881,12 +901,12 @@ class _SingleProgressChartCard extends StatelessWidget {
             children: [
               _ChartMiniValue(
                 label: 'Mínimo',
-                value: _formatDouble(_minValue, metric.unit),
+                value: _formatDouble(_minValue, metric.unit, imperial: imperial),
               ),
               const SizedBox(width: 12),
               _ChartMiniValue(
                 label: 'Máximo',
-                value: _formatDouble(_maxValue, metric.unit),
+                value: _formatDouble(_maxValue, metric.unit, imperial: imperial),
               ),
             ],
           ),
@@ -1389,8 +1409,12 @@ class _DayRecordsBottomSheet extends StatelessWidget {
   final String Function(DateTime) formatDate;
   final VoidCallback onAddRecord;
 
-  String _formatDouble(double? value, String unit) {
+  String _formatDouble(double? value, String unit, {bool imperial = false}) {
     if (value == null) return '--';
+    if (unit == 'kg') {
+      return UnitConverter.formatWeight(value, imperial);
+    }
+    if (unit == '%') return UnitConverter.formatBodyFat(value);
 
     if (value % 1 == 0) {
       return '${value.toInt()} $unit';
@@ -1410,6 +1434,7 @@ class _DayRecordsBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final sortedRecords = [...records]
       ..sort((a, b) => b.loggedAt.compareTo(a.loggedAt));
+    final imperial = context.watch<SettingsProvider>().isImperial;
 
     return SafeArea(
       child: Padding(
@@ -1473,7 +1498,7 @@ class _DayRecordsBottomSheet extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    '${_formatTime(item.loggedAt)} · ${_formatDouble(item.weight, 'kg')} · ${_formatDouble(item.bodyFat, '%')} grasa · ${_formatDouble(item.muscleMass, 'kg')} músculo',
+                    '${_formatTime(item.loggedAt)} · ${_formatDouble(item.weight, 'kg', imperial: imperial)} · ${_formatDouble(item.bodyFat, '%')} grasa · ${_formatDouble(item.muscleMass, 'kg', imperial: imperial)} músculo',
                     style: const TextStyle(
                       color: AppColors.textMain,
                       fontSize: 14,

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/utils/unit_converter.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../home/presentation/screens/home_screen.dart';
 import '../../data/services/onboarding_service.dart';
+import '../../../settings/presentation/providers/settings_provider.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -39,11 +42,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   Future<void> _completeOnboarding() async {
-    final weight = _parseDouble(weightController.text);
-    final height = _parseInt(heightController.text);
+    final settings = context.read<SettingsProvider>();
+    final imperial = settings.isImperial;
+
+    var weight = _parseDouble(weightController.text);
+    var height = _parseInt(heightController.text);
     final age = _parseInt(ageController.text);
     final bodyFat = _parseDouble(bodyFatController.text);
-    final muscleMass = _parseDouble(muscleMassController.text);
+    var muscleMass = _parseDouble(muscleMassController.text);
+
+    if (imperial) {
+      if (weight != null) weight = UnitConverter.lbsToKg(weight);
+      if (height != null) height = UnitConverter.feetToCm(height.toDouble()).round();
+      if (muscleMass != null) muscleMass = UnitConverter.lbsToKg(muscleMass);
+    }
 
     if (weight == null) {
       _setError('Introduce tu peso');
@@ -293,6 +305,9 @@ class _OnboardingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final settings = context.watch<SettingsProvider>();
+    final imperial = settings.isImperial;
+
     return AppCard.elevated(
       borderRadius: 28,
       padding: const EdgeInsets.all(22),
@@ -301,8 +316,8 @@ class _OnboardingCard extends StatelessWidget {
           _OnboardingTextField(
             controller: weightController,
             label: 'Peso actual',
-            hintText: 'Ej: 70',
-            suffix: 'kg',
+            hintText: imperial ? 'Ej: 154' : 'Ej: 70',
+            suffix: imperial ? 'lbs' : 'kg',
             icon: Icons.monitor_weight_outlined,
             keyboardType: const TextInputType.numberWithOptions(
               decimal: true,
@@ -312,8 +327,8 @@ class _OnboardingCard extends StatelessWidget {
           _OnboardingTextField(
             controller: heightController,
             label: 'Altura',
-            hintText: 'Ej: 180',
-            suffix: 'cm',
+            hintText: imperial ? 'Ej: 5.9' : 'Ej: 180',
+            suffix: imperial ? 'ft' : 'cm',
             icon: Icons.height,
             keyboardType: TextInputType.number,
           ),

@@ -21,4 +21,23 @@ class AppTheme {
       ),
     );
   }
+
+  static ThemeData get lightTheme {
+    return ThemeData(
+      useMaterial3: true,
+      brightness: Brightness.light,
+      scaffoldBackgroundColor: const Color(0xFFF5F5F5),
+      colorScheme: const ColorScheme.light(
+        primary: Color(0xFF7A9F00),
+        secondary: Color(0xFF008397),
+        surface: Colors.white,
+      ),
+      snackBarTheme: const SnackBarThemeData(
+        contentTextStyle: TextStyle(
+          color: Color(0xFF7A9F00),
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+    );
+  }
 }
