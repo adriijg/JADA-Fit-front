@@ -8,6 +8,7 @@ class CatalogExercise {
   final List<RoutineGoal> goals;
   final bool requiresEquipment;
   final String? equipment;
+  final String? videoAsset;
 
   const CatalogExercise({
     required this.name,
@@ -16,6 +17,7 @@ class CatalogExercise {
     required this.goals,
     this.requiresEquipment = true,
     this.equipment,
+    this.videoAsset,
   });
 
   bool get isBodyweight => !requiresEquipment;
@@ -43,6 +45,7 @@ class ExerciseCatalog {
       description: 'Acostado en banco plano, baja la barra al pecho y empuja hacia arriba',
       muscleGroup: 'Pecho',
       goals: [RoutineGoal.fuerza, RoutineGoal.volumen],
+      videoAsset: 'assets/videos/press_de_banca.mp4',
     ),
     CatalogExercise(
       name: 'Press de banca inclinado con barra',
@@ -98,6 +101,7 @@ class ExerciseCatalog {
       muscleGroup: 'Pecho',
       goals: [RoutineGoal.resistencia, RoutineGoal.definicion],
       requiresEquipment: false,
+      videoAsset: 'assets/videos/Flexiones.mp4',
     ),
     CatalogExercise(
       name: 'Flexiones inclinadas',
@@ -152,6 +156,7 @@ class ExerciseCatalog {
       description: 'Cuelga de una barra y sube hasta que la barbilla la sobrepase',
       muscleGroup: 'Espalda',
       goals: [RoutineGoal.fuerza, RoutineGoal.volumen],
+      videoAsset: 'assets/videos/Dominadas.mp4',
     ),
     CatalogExercise(
       name: 'Dominadas supinas (chin-ups)',

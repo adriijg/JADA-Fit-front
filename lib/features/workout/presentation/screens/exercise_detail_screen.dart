@@ -17,6 +17,7 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
   VideoPlayerController? _videoController;
   bool _isVideoInitialized = false;
   bool _isVideoError = false;
+  double _videoHeight = 300;
 
   @override
   void initState() {
@@ -26,15 +27,24 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
     }
   }
 
-  Future<void> _initializeVideo(String url) async {
+  Future<void> _initializeVideo(String source) async {
     try {
-      _videoController = VideoPlayerController.networkUrl(Uri.parse(url));
+      if (source.startsWith('assets/')) {
+        _videoController = VideoPlayerController.asset(source);
+      } else {
+        _videoController = VideoPlayerController.networkUrl(Uri.parse(source));
+      }
       await _videoController!.initialize();
       _videoController!.setLooping(true);
-      _videoController!.play(); // Auto-play by default
+      _videoController!.setVolume(0);
+      _videoController!.play();
       if (mounted) {
+        final screenWidth = MediaQuery.of(context).size.width;
+        final aspectRatio = _videoController!.value.aspectRatio;
+        final calculatedHeight = screenWidth / aspectRatio;
         setState(() {
           _isVideoInitialized = true;
+          _videoHeight = calculatedHeight.clamp(250.0, 500.0);
         });
       }
     } catch (e) {
@@ -59,7 +69,8 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            expandedHeight: 250,
+            backgroundColor: AppColors.surface,
+            expandedHeight: _videoHeight,
             pinned: true,
             iconTheme: IconThemeData(color: AppColors.textMain),
             flexibleSpace: FlexibleSpaceBar(
@@ -70,7 +81,7 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
             child: Container(
               decoration: BoxDecoration(
                 color: AppColors.background,
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(32),
                   topRight: Radius.circular(32),
                 ),
@@ -199,7 +210,7 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
         fit: StackFit.expand,
         children: [
           FittedBox(
-            fit: BoxFit.cover,
+            fit: BoxFit.contain,
             child: SizedBox(
               width: _videoController!.value.size.width,
               height: _videoController!.value.size.height,
@@ -239,6 +250,6 @@ CatalogExerciseModel toCatalogModel(CatalogExercise ex) {
     name: ex.name,
     description: ex.description,
     benefits: 'Fortalece y desarrolla los ${ex.muscleGroup.toLowerCase()}. Ideal para mejorar el rendimiento y la estética muscular.',
-    videoUrl: null,
+    videoUrl: ex.videoAsset,
   );
 }
