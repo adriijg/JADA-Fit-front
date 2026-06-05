@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/unit_converter.dart';
 import '../../../../core/widgets/app_card.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../settings/presentation/providers/settings_provider.dart';
 
 class WorkoutSummaryCard extends StatelessWidget {
@@ -20,13 +21,14 @@ class WorkoutSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return SmallDashboardCard(
       icon: Icons.fitness_center,
-      title: 'Workout',
-      value: workoutName ?? 'Sin rutina',
+      title: l10n.homeWorkoutCardTitle,
+      value: workoutName ?? l10n.homeNoRoutine,
       subtitle: pendingExercises != null
-          ? '$pendingExercises ejercicio${pendingExercises == 1 ? '' : 's'} pendiente${pendingExercises == 1 ? '' : 's'}'
-          : 'Sin ejercicios pendientes',
+          ? l10n.homePendingExercises(pendingExercises!)
+          : l10n.homeNoPendingExercises,
       onTap: onTap,
     );
   }
@@ -46,22 +48,25 @@ class PhysicalProgressCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final imperial = context.watch<SettingsProvider>().isImperial;
 
     final weightStr = currentWeight != null
         ? UnitConverter.formatWeight(currentWeight, imperial)
-        : 'Sin datos';
+        : l10n.homeNoProgressData;
 
     String deltaStr;
     if (weightDelta == null) {
-      deltaStr = 'A\u00f1ade tu primer registro';
+      deltaStr = l10n.homeAddFirstRecord;
     } else {
-      deltaStr = '${UnitConverter.formatWeightChange(weightDelta, imperial)} desde inicio';
+      deltaStr = l10n.homeWeightChangeSinceStart(
+        UnitConverter.formatWeightChange(weightDelta, imperial),
+      );
     }
 
     return SmallDashboardCard(
       icon: Icons.show_chart,
-      title: 'Progreso',
+      title: l10n.homeProgressCardTitle,
       value: weightStr,
       subtitle: deltaStr,
       onTap: onTap,

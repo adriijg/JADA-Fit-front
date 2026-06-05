@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_strings.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../data/services/auth_service.dart';
@@ -32,7 +32,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     final email = _emailController.text.trim();
 
     if (email.isEmpty) {
-      setState(() => errorMessage = AppStrings.errorEnterEmail);
+      setState(() => errorMessage = AppLocalizations.of(context)!.errorEnterEmail);
       return;
     }
 
@@ -43,7 +43,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
       if (!mounted) return;
 
-      _showMessage(AppStrings.forgotPasswordSuccess);
+      _showMessage(AppLocalizations.of(context)!.forgotPasswordSuccess);
 
       Navigator.push(
         context,
@@ -57,8 +57,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       _showMessage(error.message);
     } catch (_) {
       if (!mounted) return;
-      setState(() => errorMessage = AppStrings.errorLoginFailed);
-      _showMessage(AppStrings.errorLoginFailed);
+      setState(() => errorMessage = AppLocalizations.of(context)!.errorLoginFailed);
+      _showMessage(AppLocalizations.of(context)!.errorLoginFailed);
     } finally {
       if (mounted) setState(() => isLoading = false);
     }
@@ -97,7 +97,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     ),
                     SizedBox(height: 16),
                     Text(
-                      AppStrings.forgotPasswordTitle,
+                      AppLocalizations.of(context)!.forgotPasswordTitle,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: context.colors.primary,
@@ -118,7 +118,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            AppStrings.forgotPasswordEmailLabel,
+                            AppLocalizations.of(context)!.forgotPasswordEmailLabel,
                             style: TextStyle(
                               color: context.colors.secondary,
                               fontSize: 14,
@@ -128,7 +128,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           SizedBox(height: 8),
                           AuthTextField(
                             controller: _emailController,
-                            hintText: AppStrings.forgotPasswordEmailHint,
+                            hintText: AppLocalizations.of(context)!.forgotPasswordEmailHint,
                             icon: Icons.email_outlined,
                             keyboardType: TextInputType.emailAddress,
                           ),
@@ -170,7 +170,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                       ),
                                     )
                                   : Text(
-                                      AppStrings.forgotPasswordButton,
+                                      AppLocalizations.of(context)!.forgotPasswordButton,
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 15,
@@ -194,7 +194,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       style: TextButton.styleFrom(
                         foregroundColor: context.colors.secondary,
                       ),
-                      child: Text(AppStrings.backToLogin),
+                      child: Text(AppLocalizations.of(context)!.backToLogin),
                     ),
                   ],
                 ),

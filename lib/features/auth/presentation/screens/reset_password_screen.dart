@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_strings.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../data/services/auth_service.dart';
@@ -40,7 +40,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     }
 
     if (newPassword.length < 6) {
-      setState(() => errorMessage = 'La contraseña debe tener al menos 6 caracteres');
+      setState(() => errorMessage = AppLocalizations.of(context)!.authPasswordMinLength6);
       return;
     }
 
@@ -66,8 +66,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       _showMessage(error.message);
     } catch (_) {
       if (!mounted) return;
-      setState(() => errorMessage = AppStrings.errorLoginFailed);
-      _showMessage(AppStrings.errorLoginFailed);
+      setState(() => errorMessage = AppLocalizations.of(context)!.errorLoginFailed);
+      _showMessage(AppLocalizations.of(context)!.errorLoginFailed);
     } finally {
       if (mounted) setState(() => isLoading = false);
     }
@@ -106,7 +106,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     ),
                     SizedBox(height: 16),
                     Text(
-                      AppStrings.resetPasswordTitle,
+                      AppLocalizations.of(context)!.resetPasswordTitle,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: context.colors.primary,
@@ -127,7 +127,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            AppStrings.resetPasswordTokenLabel,
+                            AppLocalizations.of(context)!.resetPasswordTokenLabel,
                             style: TextStyle(
                               color: context.colors.secondary,
                               fontSize: 14,
@@ -137,12 +137,12 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                           SizedBox(height: 8),
                           AuthTextField(
                             controller: _tokenController,
-                            hintText: AppStrings.resetPasswordTokenHint,
+                            hintText: AppLocalizations.of(context)!.resetPasswordTokenHint,
                             icon: Icons.vpn_key_outlined,
                           ),
                           SizedBox(height: 22),
                           Text(
-                            AppStrings.resetPasswordNewPasswordLabel,
+                            AppLocalizations.of(context)!.resetPasswordNewPasswordLabel,
                             style: TextStyle(
                               color: context.colors.secondary,
                               fontSize: 14,
@@ -152,7 +152,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                           SizedBox(height: 8),
                           AuthTextField(
                             controller: _passwordController,
-                            hintText: AppStrings.resetPasswordNewPasswordHint,
+                            hintText: AppLocalizations.of(context)!.resetPasswordNewPasswordHint,
                             icon: Icons.lock_outline,
                             obscureText: _obscurePassword,
                             suffixIcon: IconButton(
@@ -202,7 +202,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                       ),
                                     )
                                   : Text(
-                                      AppStrings.resetPasswordButton,
+                                      AppLocalizations.of(context)!.resetPasswordButton,
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 15,
@@ -226,7 +226,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       style: TextButton.styleFrom(
                         foregroundColor: context.colors.secondary,
                       ),
-                      child: Text(AppStrings.backToLogin),
+                      child: Text(AppLocalizations.of(context)!.backToLogin),
                     ),
                   ],
                 ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../core/constants/app_strings.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../ai/presentation/providers/ai_provider.dart';
 import '../../../auth/data/models/user_account_model.dart';
@@ -50,7 +50,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       if (!mounted) return;
 
       setState(() {
-        errorMessage = 'No se pudo cargar tu cuenta.';
+        errorMessage = AppLocalizations.of(context)!.profileError;
       });
     } finally {
       if (mounted) {
@@ -103,7 +103,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           color: context.colors.textMain,
         ),
         title: Text(
-          AppStrings.profileTitle,
+          AppLocalizations.of(context)!.profileTitle,
           style: TextStyle(
             color: context.colors.textMain,
             fontWeight: FontWeight.w700,
@@ -134,7 +134,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             SizedBox(height: 16),
             Text(
-              'Cargando cuenta...',
+              AppLocalizations.of(context)!.profileLoading,
               style: TextStyle(
                 color: context.colors.textMain,
                 fontSize: 14,
@@ -194,7 +194,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             },
             onPrivacyChanged: _loadUserAccount,
             onIntegrations: () {
-              _showComingSoonMessage('Integraciones próximamente');
+              _showComingSoonMessage(AppLocalizations.of(context)!.settingsIntegrationsSoon);
             },
             onLogout: _logout,
           ),
@@ -288,7 +288,7 @@ class _AccountInfoCard extends StatelessWidget {
           const _AccountDivider(),
           _AccountInfoRow(
             icon: Icons.email_outlined,
-            label: 'Email',
+            label: AppLocalizations.of(context)!.profileEmailLabel,
             value: email,
           ),
           const _AccountDivider(),
@@ -423,7 +423,7 @@ class _AccountOptionsCardState extends State<_AccountOptionsCard> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error al actualizar privacidad: $e')),
+          SnackBar(content: Text(AppLocalizations.of(context)!.profilePrivacyUpdateError(e.toString()))),
         );
       }
     } finally {
@@ -444,14 +444,14 @@ class _AccountOptionsCardState extends State<_AccountOptionsCard> {
         children: [
           _AccountOptionTile(
             icon: Icons.settings_outlined,
-            title: 'Configuración',
-            subtitle: 'Preferencias de la aplicación',
+            title: AppLocalizations.of(context)!.settingsTitle,
+            subtitle: AppLocalizations.of(context)!.settingsAppPreferences,
             onTap: widget.onSettings,
           ),
           SizedBox(height: 10),
           _PrivacyToggleTile(
             icon: Icons.lock_outline,
-            title: 'Compartir progreso',
+            title: AppLocalizations.of(context)!.settingsShareProgress,
             subtitle: 'Permitir a otros ver tu actividad',
             value: _shareProgress,
             isLoading: _isUpdatingPrivacy,
@@ -460,21 +460,21 @@ class _AccountOptionsCardState extends State<_AccountOptionsCard> {
           SizedBox(height: 10),
           _AccountOptionTile(
             icon: Icons.favorite_border,
-            title: 'Integraciones',
-            subtitle: 'Apple Health, Google Fit y wearables',
+            title: AppLocalizations.of(context)!.settingsIntegrations,
+            subtitle: AppLocalizations.of(context)!.settingsIntegrationsSoon,
             onTap: widget.onIntegrations,
           ),
           SizedBox(height: 10),
           _AccountOptionTile(
             icon: Icons.monitor_heart_outlined,
-            title: 'Datos físicos',
-            subtitle: 'Peso, altura, composición corporal y más',
+            title: AppLocalizations.of(context)!.settingsPhysicalData,
+            subtitle: AppLocalizations.of(context)!.profilePhysicalDataSubtitle,
             onTap: widget.onFitnessProfile,
           ),
           SizedBox(height: 10),
           _AccountOptionTile(
             icon: Icons.logout,
-            title: 'Cerrar sesión',
+            title: AppLocalizations.of(context)!.settingsLogout,
             subtitle: 'Salir de tu cuenta',
             isDestructive: true,
             onTap: widget.onLogout,
@@ -666,7 +666,7 @@ class _ErrorCard extends StatelessWidget {
               ),
             ),
             child: Text(
-              'Reintentar',
+              AppLocalizations.of(context)!.nutritionRetry,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),

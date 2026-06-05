@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../constants/app_strings.dart';
+import '../../l10n/app_localizations.dart';
 import '../theme/app_colors.dart';
 
 enum AppBottomNavigationItem { home, nutrition, ai, routines, social }
@@ -26,36 +26,36 @@ class AppBottomNavigationBar extends StatelessWidget {
       showSelectedLabels: false,
       showUnselectedLabels: false,
       elevation: 16,
-      items: const [
+      items: [
         BottomNavigationBarItem(
           icon: Icon(Icons.home_outlined),
           activeIcon: Icon(Icons.home),
-          label: AppStrings.navigationHome,
-          tooltip: AppStrings.navigationHome,
+          label: AppLocalizations.of(context)!.navigationHome,
+          tooltip: AppLocalizations.of(context)!.navigationHome,
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.restaurant_menu_outlined),
           activeIcon: Icon(Icons.restaurant_menu),
-          label: AppStrings.navigationNutrition,
-          tooltip: AppStrings.navigationNutrition,
+          label: AppLocalizations.of(context)!.navigationNutrition,
+          tooltip: AppLocalizations.of(context)!.navigationNutrition,
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.circle_outlined),
           activeIcon: Icon(Icons.circle),
-          label: AppStrings.navigationAi,
-          tooltip: AppStrings.navigationAi,
+          label: AppLocalizations.of(context)!.navigationAi,
+          tooltip: AppLocalizations.of(context)!.navigationAi,
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.fitness_center_outlined),
           activeIcon: Icon(Icons.fitness_center),
-          label: AppStrings.navigationRoutines,
-          tooltip: AppStrings.navigationRoutines,
+          label: AppLocalizations.of(context)!.navigationRoutines,
+          tooltip: AppLocalizations.of(context)!.navigationRoutines,
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.people_outline),
           activeIcon: Icon(Icons.people),
-          label: AppStrings.navigationSocial,
-          tooltip: AppStrings.navigationSocial,
+          label: AppLocalizations.of(context)!.navigationSocial,
+          tooltip: AppLocalizations.of(context)!.navigationSocial,
         ),
       ],
     );

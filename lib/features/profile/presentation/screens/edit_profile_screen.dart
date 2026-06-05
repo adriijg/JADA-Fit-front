@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../data/models/profile_model.dart';
@@ -165,12 +166,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
         iconTheme: IconThemeData(color: context.colors.textMain),
         title: Text(
-          'Editar datos físicos',
+          l10n.profileEditPhysicalData,
           style: TextStyle(
             color: context.colors.textMain,
             fontWeight: FontWeight.w700,
@@ -239,7 +241,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                         )
                       : Text(
-                          'GUARDAR CAMBIOS',
+                          l10n.fitnessSaveChanges,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             letterSpacing: 1,
@@ -446,6 +448,7 @@ class _GenderDropdownField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return DropdownButtonFormField<String>(
       initialValue: value,
       dropdownColor: context.colors.surface,
@@ -457,7 +460,7 @@ class _GenderDropdownField extends StatelessWidget {
       decoration: InputDecoration(
         filled: true,
         fillColor: context.colors.inputBackground,
-        labelText: 'Género',
+        labelText: l10n.profileGender,
         labelStyle: TextStyle(
           color: context.colors.secondary,
           fontWeight: FontWeight.w600,
@@ -489,14 +492,14 @@ class _GenderDropdownField extends StatelessWidget {
           ),
         ),
       ),
-      items: const [
+      items: [
         DropdownMenuItem(
           value: 'HOMBRE',
-          child: Text('Hombre'),
+          child: Text(l10n.fitnessMale),
         ),
         DropdownMenuItem(
           value: 'MUJER',
-          child: Text('Mujer'),
+          child: Text(l10n.fitnessFemale),
         ),
       ],
       onChanged: onChanged,

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
+import '../../../../l10n/app_localizations.dart';
+
 import '../../../../core/theme/app_colors.dart';
 
 class BarcodeScannerScreen extends StatefulWidget {
@@ -47,7 +49,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
       setState(() {
         _isScannerReady = false;
         _cameraError =
-            'No se pudo iniciar la cámara. Revisa los permisos o la cámara del emulador.';
+            AppLocalizations.of(context)!.nutritionCameraError;
       });
     }
   }
@@ -82,7 +84,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
     try {
       await _scannerController.toggleTorch();
     } catch (_) {
-      _showMessage('No se pudo activar el flash');
+      _showMessage(AppLocalizations.of(context)!.nutritionFlashError);
     }
   }
 
@@ -92,7 +94,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
     try {
       await _scannerController.switchCamera();
     } catch (_) {
-      _showMessage('No se pudo cambiar de cámara');
+      _showMessage(AppLocalizations.of(context)!.nutritionCameraSwitchError);
     }
   }
 
@@ -237,8 +239,8 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
                 ),
                 child: Text(
                   _isScannerReady
-                      ? 'Apunta la cámara al código de barras del producto.'
-                      : 'Iniciando cámara...',
+                      ? AppLocalizations.of(context)!.nutritionCameraHint
+                      : AppLocalizations.of(context)!.nutritionCameraStarting,
                   style: TextStyle(
                     color: context.colors.textMain,
                     fontSize: 14,

@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../../../core/network/api_endpoints.dart';
 import '../../../../core/storage/secure_storage_service.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -58,7 +59,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
 
     try {
       final token = await _storageService.getToken();
-      if (token == null) throw Exception('No hay sesión activa');
+      if (token == null) throw Exception(AppLocalizations.of(context)!.sessionNotActive);
 
       // Get current user info
       final meResponse = await http.get(
@@ -97,7 +98,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
           });
         }
       } else {
-        throw Exception('Error al cargar perfil');
+        throw Exception(AppLocalizations.of(context)!.socialProfileLoadError);
       }
     } catch (e) {
       if (mounted) {
@@ -142,6 +143,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setModalState) {
+            final l10n = AppLocalizations.of(context)!;
             return Padding(
               padding: EdgeInsets.fromLTRB(
                 24,
@@ -165,7 +167,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                   ),
                   SizedBox(height: 20),
                   Text(
-                    'Nueva publicación',
+                    l10n.socialNewPost,
                     style: TextStyle(
                       color: context.colors.textMain,
                       fontSize: 20,
@@ -212,7 +214,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                                 ),
                                 SizedBox(height: 8),
                                 Text(
-                                  'Seleccionar de la galería',
+                                  l10n.socialPickFromGallery,
                                   style: TextStyle(
                                     color: context.colors.secondary.withValues(
                                       alpha: 0.7,
@@ -227,7 +229,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                   SizedBox(height: 14),
                   _buildInputField(
                     controller: captionController,
-                    label: 'Descripción (opcional)',
+                    label: l10n.socialDescriptionOptional,
                     icon: Icons.edit_outlined,
                     maxLines: 3,
                   ),
@@ -240,7 +242,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                         if (selectedImagePath == null) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text('Selecciona una imagen primero'),
+                              content: Text(l10n.socialSelectImageFirst),
                             ),
                           );
                           return;
@@ -258,7 +260,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                             _loadProfile();
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text('¡Publicación creada!'),
+                                content: Text(l10n.socialPostCreated),
                               ),
                             );
                           }
@@ -266,7 +268,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                           if (mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text('Error: $e'),
+                                content: Text(l10n.socialErrorDetails(e.toString())),
                                 backgroundColor: AppColors.error,
                               ),
                             );
@@ -281,7 +283,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                         ),
                       ),
                       child: Text(
-                        'Publicar',
+                        l10n.socialPublish,
                         style: TextStyle(
                           fontWeight: FontWeight.w800,
                           fontSize: 15,
@@ -310,6 +312,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setModalState) {
+            final l10n = AppLocalizations.of(context)!;
             return Padding(
               padding: EdgeInsets.fromLTRB(
                 24,
@@ -333,7 +336,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                   ),
                   SizedBox(height: 20),
                   Text(
-                    'Nueva historia',
+                    l10n.socialNewStory,
                     style: TextStyle(
                       color: context.colors.textMain,
                       fontSize: 20,
@@ -342,7 +345,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    'Las historias desaparecen en 24 horas',
+                    l10n.socialStoryExpires,
                     style: TextStyle(
                       color: context.colors.secondary.withValues(alpha: 0.7),
                       fontSize: 13,
@@ -388,7 +391,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                                 ),
                                 SizedBox(height: 8),
                                 Text(
-                                  'Seleccionar de la galería',
+                                  l10n.socialPickFromGallery,
                                   style: TextStyle(
                                     color: context.colors.secondary.withValues(
                                       alpha: 0.7,
@@ -409,7 +412,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                         if (selectedImagePath == null) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text('Selecciona una imagen primero'),
+                              content: Text(l10n.socialSelectImageFirst),
                             ),
                           );
                           return;
@@ -425,7 +428,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text('¡Historia creada!'),
+                                content: Text(l10n.socialStoryCreated),
                               ),
                             );
                           }
@@ -434,7 +437,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text('Error: $e'),
+                                content: Text(l10n.socialErrorDetails(e.toString())),
                                 backgroundColor: AppColors.error,
                               ),
                             );
@@ -449,7 +452,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                         ),
                       ),
                       child: Text(
-                        'Subir historia',
+                        l10n.socialUploadStory,
                         style: TextStyle(
                           fontWeight: FontWeight.w800,
                           fontSize: 15,
@@ -482,6 +485,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setModalState) {
+            final l10n = AppLocalizations.of(context)!;
             return Padding(
               padding: EdgeInsets.fromLTRB(
                 24,
@@ -505,7 +509,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                   ),
                   SizedBox(height: 20),
                   Text(
-                    'Editar perfil',
+                    l10n.socialEditProfile,
                     style: TextStyle(
                       color: context.colors.textMain,
                       fontSize: 20,
@@ -598,7 +602,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                   SizedBox(height: 24),
                   _buildInputField(
                     controller: bioController,
-                    label: 'Biografía',
+                    label: l10n.socialBio,
                     icon: Icons.info_outline,
                     maxLines: 3,
                   ),
@@ -618,7 +622,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                             _loadProfile();
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text('¡Perfil actualizado!'),
+                                content: Text(l10n.socialProfileUpdated),
                               ),
                             );
                           }
@@ -626,7 +630,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                           if (mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text('Error: $e'),
+                                content: Text(l10n.socialErrorDetails(e.toString())),
                                 backgroundColor: AppColors.error,
                               ),
                             );
@@ -641,7 +645,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                         ),
                       ),
                       child: Text(
-                        'Guardar',
+                        l10n.socialSave,
                         style: TextStyle(
                           fontWeight: FontWeight.w800,
                           fontSize: 15,
@@ -962,7 +966,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                         ),
                         SizedBox(height: 10),
                         Text(
-                          'Aún no tienes publicaciones',
+                          AppLocalizations.of(context)!.socialNoPosts,
                           style: TextStyle(
                             color: context.colors.secondary,
                             fontSize: 14,
@@ -970,7 +974,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                         ),
                         SizedBox(height: 4),
                         Text(
-                          'Comparte tu progreso con la comunidad',
+                          AppLocalizations.of(context)!.socialShareProgressCommunity,
                           style: TextStyle(
                             color: context.colors.secondary,
                             fontSize: 12,

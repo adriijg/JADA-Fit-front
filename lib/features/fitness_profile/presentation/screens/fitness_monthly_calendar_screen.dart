@@ -4,6 +4,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../data/models/fitness_progress_model.dart';
 import 'add_physical_log_screen.dart';
+import '../../../../l10n/app_localizations.dart';
 
 const _months = [
   'Enero',
@@ -458,7 +459,7 @@ class _MonthlySelectedDayCard extends StatelessWidget {
                     SizedBox(height: 4),
                     Text(
                       records.isEmpty
-                          ? 'Sin registros físicos'
+                          ? AppLocalizations.of(context)!.fitnessNoPhysicalRecords
                           : '${records.length} registro${records.length == 1 ? '' : 's'} guardado${records.length == 1 ? '' : 's'}',
                       style: TextStyle(
                         color: context.colors.secondary,
@@ -486,7 +487,7 @@ class _MonthlySelectedDayCard extends StatelessWidget {
               ),
               icon: Icon(Icons.add),
               label: Text(
-                'AÑADIR REGISTRO PARA ESTE DÍA',
+                AppLocalizations.of(context)!.fitnessAddRecordForDay,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 12,
@@ -543,7 +544,7 @@ class _MonthlyRecordCard extends StatelessWidget {
               SizedBox(width: 10),
               Expanded(
                 child: Text(
-                  'Registro físico',
+                  AppLocalizations.of(context)!.fitnessPhysicalRecord,
                   style: TextStyle(
                     color: context.colors.textMain,
                     fontSize: 15,
@@ -608,7 +609,7 @@ class _MonthlyRecordCard extends StatelessWidget {
           SizedBox(height: 10),
           _MonthlyMetricBox(
             icon: Icons.fitness_center,
-            label: 'Masa muscular',
+            label: AppLocalizations.of(context)!.fitnessMuscleMass,
             value: formatDouble(record.muscleMass, 'kg'),
             fullWidth: true,
           ),
@@ -709,7 +710,7 @@ class _NoDaySelectedCard extends StatelessWidget {
           ),
           SizedBox(height: 14),
           Text(
-            'Selecciona un día',
+            AppLocalizations.of(context)!.fitnessSelectDay,
             style: TextStyle(
               color: context.colors.textMain,
               fontSize: 18,
@@ -718,7 +719,7 @@ class _NoDaySelectedCard extends StatelessWidget {
           ),
           SizedBox(height: 8),
           Text(
-            'Pulsa un día del calendario para ver o añadir registros físicos.',
+            AppLocalizations.of(context)!.fitnessCalendarHint,
             style: TextStyle(
               color: context.colors.secondary,
               fontSize: 13,
@@ -744,7 +745,7 @@ class _NoDaySelectedCard extends StatelessWidget {
               ),
               icon: Icon(Icons.add),
               label: Text(
-                'AÑADIR REGISTRO DE HOY',
+                AppLocalizations.of(context)!.fitnessAddTodayRecord,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 12,
@@ -784,7 +785,7 @@ class _EmptySelectedDay extends StatelessWidget {
           ),
           SizedBox(height: 12),
           Text(
-            'No hay registros para este día',
+            AppLocalizations.of(context)!.fitnessNoRecordsThisDay,
             style: TextStyle(
               color: context.colors.textMain,
               fontSize: 15,
@@ -794,7 +795,7 @@ class _EmptySelectedDay extends StatelessWidget {
           ),
           SizedBox(height: 6),
           Text(
-            'Puedes añadir un registro usando el botón superior.',
+            AppLocalizations.of(context)!.fitnessAddRecordUsingButton,
             style: TextStyle(
               color: context.colors.secondary,
               fontSize: 12,

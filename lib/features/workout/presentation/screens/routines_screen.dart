@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/constants/app_strings.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../data/models/routine_goal.dart';
 import '../../data/models/routine_model.dart';
@@ -129,7 +129,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      AppStrings.routinesTitle,
+                      AppLocalizations.of(context)!.navigationRoutines,
                       style: TextStyle(
                         color: context.colors.textMain,
                         fontSize: 24,
@@ -348,7 +348,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
                   padding: EdgeInsets.symmetric(horizontal: 32, vertical: 14),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                 ),
-                child: Text('Reintentar', style: TextStyle(fontWeight: FontWeight.w800)),
+                child: Text(AppLocalizations.of(context)!.nutritionRetry, style: TextStyle(fontWeight: FontWeight.w800)),
               ),
             ],
           ),
@@ -384,8 +384,8 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
             SizedBox(height: 24),
             Text(
               _searchQuery.isNotEmpty || _selectedGoal != null
-                  ? 'Sin resultados'
-                  : 'Aún no hay rutinas',
+                  ? AppLocalizations.of(context)!.workoutNoResults
+                  : AppLocalizations.of(context)!.workoutRoutinesEmpty,
               style: TextStyle(
                 color: context.colors.textMain,
                 fontSize: 22,
@@ -395,8 +395,8 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
             SizedBox(height: 12),
             Text(
               _searchQuery.isNotEmpty || _selectedGoal != null
-                  ? 'No encontramos rutinas que coincidan con tus filtros.'
-                  : 'Diseña tu primera rutina de entrenamiento para empezar a registrar tus progresos.',
+                  ? AppLocalizations.of(context)!.workoutNoRoutinesFound
+                  : AppLocalizations.of(context)!.workoutDesignFirstRoutine,
               style: TextStyle(
                 color: context.colors.textMain.withOpacity(0.5),
                 fontSize: 15,

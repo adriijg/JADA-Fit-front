@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../../../core/constants/app_strings.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../data/services/auth_service.dart';
@@ -48,16 +48,16 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     if (identifier.isEmpty) {
-      identifierError = AppStrings.errorEnterIdentifier;
+      identifierError = AppLocalizations.of(context)!.errorEnterIdentifier;
     }
 
     if (password.isEmpty) {
-      passwordError = AppStrings.errorEnterPassword;
+      passwordError = AppLocalizations.of(context)!.errorEnterPassword;
     }
 
     if (identifierError != null || passwordError != null) {
       setState(() {
-        errorMessage = AppStrings.errorFixErrors;
+        errorMessage = AppLocalizations.of(context)!.errorFixErrors;
       });
       return;
     }
@@ -91,10 +91,10 @@ class _LoginScreenState extends State<LoginScreen> {
       if (!mounted) return;
 
       setState(() {
-        errorMessage = AppStrings.errorLoginFailed;
+        errorMessage = AppLocalizations.of(context)!.errorLoginFailed;
       });
 
-      _showMessage(AppStrings.errorLoginFailed);
+      _showMessage(AppLocalizations.of(context)!.errorLoginFailed);
     } finally {
       if (mounted) {
         setState(() => isLoading = false);
@@ -112,7 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _showComingSoon(String provider) {
-    _showMessage(AppStrings.comingSoonProvider(provider));
+    _showMessage(AppLocalizations.of(context)!.comingSoonProvider(provider));
   }
 
   void _showMessage(String message) {
@@ -148,7 +148,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     SizedBox(height: 16),
                     Text(
-                      AppStrings.appName,
+                      AppLocalizations.of(context)!.appName,
                       style: TextStyle(
                         color: context.colors.primary,
                         fontFamily: 'Orbitron',
@@ -170,11 +170,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       onLogin: _login,
                       onGoToRegister: _goToRegister,
                       onGoogleLogin: () =>
-                          _showComingSoon(AppStrings.googleProvider),
+                          _showComingSoon(AppLocalizations.of(context)!.googleProvider),
                       onAppleLogin: () =>
-                          _showComingSoon(AppStrings.appleProvider),
+                          _showComingSoon(AppLocalizations.of(context)!.appleProvider),
                       onFacebookLogin: () =>
-                          _showComingSoon(AppStrings.facebookProvider),
+                          _showComingSoon(AppLocalizations.of(context)!.facebookProvider),
                     ),
                     SizedBox(height: 30),
                   ],
@@ -232,7 +232,7 @@ class _LoginCard extends StatelessWidget {
         children: [
           Center(
             child: Text(
-              AppStrings.loginTitle,
+              AppLocalizations.of(context)!.loginTitle,
               style: TextStyle(
                 color: context.colors.textMain,
                 fontSize: 18,
@@ -243,7 +243,7 @@ class _LoginCard extends StatelessWidget {
           ),
           SizedBox(height: 32),
           Text(
-            AppStrings.loginUserLabel,
+            AppLocalizations.of(context)!.loginUserLabel,
             style: TextStyle(
               color: context.colors.secondary,
               fontSize: 14,
@@ -253,14 +253,14 @@ class _LoginCard extends StatelessWidget {
           SizedBox(height: 8),
           AuthTextField(
             controller: identifierController,
-            hintText: AppStrings.loginIdentifierHint,
+            hintText: AppLocalizations.of(context)!.loginIdentifierHint,
             icon: Icons.alternate_email,
             keyboardType: TextInputType.text,
             errorText: identifierError,
           ),
           SizedBox(height: 22),
           Text(
-            AppStrings.loginPasswordLabel,
+            AppLocalizations.of(context)!.loginPasswordLabel,
             style: TextStyle(
               color: context.colors.secondary,
               fontSize: 14,
@@ -270,7 +270,7 @@ class _LoginCard extends StatelessWidget {
           SizedBox(height: 8),
           AuthTextField(
             controller: passwordController,
-            hintText: AppStrings.loginPasswordHint,
+            hintText: AppLocalizations.of(context)!.loginPasswordHint,
             icon: Icons.lock_outline,
             obscureText: obscurePassword,
             errorText: passwordError,
@@ -305,7 +305,7 @@ class _LoginCard extends StatelessWidget {
                   letterSpacing: 0.9,
                 ),
               ),
-              child: Text(AppStrings.forgotPasswordPrompt),
+              child: Text(AppLocalizations.of(context)!.forgotPasswordPrompt),
             ),
           ),
           SizedBox(height: 22),
@@ -349,7 +349,7 @@ class _LoginCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          AppStrings.loginButton,
+                          AppLocalizations.of(context)!.loginButton,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 15,
@@ -373,7 +373,7 @@ class _LoginCard extends StatelessWidget {
                   letterSpacing: 0.4,
                 ),
               ),
-              child: Text(AppStrings.noAccountPrompt),
+              child: Text(AppLocalizations.of(context)!.noAccountPrompt),
             ),
           ),
           SizedBox(height: 18),
@@ -388,7 +388,7 @@ class _LoginCard extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 child: Text(
-                  AppStrings.continueWith,
+                  AppLocalizations.of(context)!.continueWith,
                   style: TextStyle(
                     color: context.colors.textMain,
                     fontSize: 12,

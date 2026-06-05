@@ -11,6 +11,7 @@ import '../../data/services/fitness_progress_service.dart';
 import '../../../settings/presentation/providers/settings_provider.dart';
 import '../screens/add_physical_log_screen.dart';
 import 'fitness_monthly_calendar_screen.dart';
+import '../../../../l10n/app_localizations.dart';
 
 const _months = [
   'Enero',
@@ -88,7 +89,7 @@ class _FitnessProgressScreenState extends State<FitnessProgressScreen> {
       if (!mounted) return;
 
       setState(() {
-        errorMessage = 'No se pudo cargar el progreso físico.';
+        errorMessage = AppLocalizations.of(context)!.fitnessLoadError;
       });
     } finally {
       if (mounted) {
@@ -293,7 +294,7 @@ class _FitnessProgressScreenState extends State<FitnessProgressScreen> {
           color: context.colors.textMain,
         ),
         title: Text(
-          'Estadísticas físicas',
+          AppLocalizations.of(context)!.fitnessStats,
           style: TextStyle(
             color: context.colors.textMain,
             fontWeight: FontWeight.w700,
@@ -460,25 +461,25 @@ enum _ProgressMetric {
 }
 
 extension _ProgressMetricExtension on _ProgressMetric {
-  String get title {
+  String title(BuildContext context) {
     switch (this) {
       case _ProgressMetric.weight:
         return 'Peso';
       case _ProgressMetric.bodyFat:
         return 'Grasa';
       case _ProgressMetric.muscleMass:
-        return 'Músculo';
+        return AppLocalizations.of(context)!.fitnessMuscle;
     }
   }
 
-  String get fullTitle {
+  String fullTitle(BuildContext context) {
     switch (this) {
       case _ProgressMetric.weight:
-        return 'Evolución de peso';
+        return AppLocalizations.of(context)!.fitnessWeightEvolution;
       case _ProgressMetric.bodyFat:
-        return 'Grasa corporal';
+        return AppLocalizations.of(context)!.fitnessBodyFat;
       case _ProgressMetric.muscleMass:
-        return 'Masa muscular';
+        return AppLocalizations.of(context)!.fitnessMuscleMass;
     }
   }
 
@@ -561,7 +562,7 @@ class _ProgressHeroCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Progreso físico',
+                      AppLocalizations.of(context)!.fitnessProgress,
                       style: TextStyle(
                         color: context.colors.textMain,
                         fontSize: 20,
@@ -614,7 +615,7 @@ class _ProgressHeroCard extends StatelessWidget {
               ),
               icon: Icon(Icons.add),
               label: Text(
-                'AÑADIR REGISTRO FÍSICO',
+                AppLocalizations.of(context)!.fitnessAddRecord,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 12,
@@ -673,7 +674,7 @@ class _MonthSelectorCard extends StatelessWidget {
                 ),
                 SizedBox(height: 4),
                 Text(
-                  'Desliza la gráfica para cambiar de mes',
+                  AppLocalizations.of(context)!.fitnessSwipeChartHint,
                   style: TextStyle(
                     color: context.colors.secondary,
                     fontSize: 11,
@@ -752,7 +753,7 @@ class _MetricSelectorCard extends StatelessWidget {
                       ),
                       SizedBox(height: 7),
                       Text(
-                        metric.title,
+                        metric.title(context),
                         style: TextStyle(
                           color: isSelected
                               ? context.colors.background
@@ -860,7 +861,7 @@ class _SingleProgressChartCard extends StatelessWidget {
               SizedBox(width: 10),
               Expanded(
                 child: Text(
-                  metric.fullTitle,
+                  metric.fullTitle(context),
                   style: TextStyle(
                     color: context.colors.textMain,
                     fontSize: 18,
@@ -897,12 +898,12 @@ class _SingleProgressChartCard extends StatelessWidget {
           Row(
             children: [
               _ChartMiniValue(
-                label: 'Mínimo',
+                label: AppLocalizations.of(context)!.fitnessMin,
                 value: _formatDouble(_minValue, metric.unit, imperial: imperial),
               ),
               SizedBox(width: 12),
               _ChartMiniValue(
-                label: 'Máximo',
+                label: AppLocalizations.of(context)!.fitnessMax,
                 value: _formatDouble(_maxValue, metric.unit, imperial: imperial),
               ),
             ],
@@ -931,8 +932,8 @@ class _SingleProgressChartCard extends StatelessWidget {
               ),
               child: Text(
                 chartPoints.isEmpty
-                    ? 'No hay registros para este mes'
-                    : 'Necesitas al menos 2 registros para ver la gráfica',
+                    ? AppLocalizations.of(context)!.fitnessNoRecordsThisDay
+                    : AppLocalizations.of(context)!.fitnessNeedTwoRecords,
                 style: TextStyle(
                   color: context.colors.secondary,
                   fontSize: 13,
@@ -1274,7 +1275,7 @@ class _WeeklyCalendarCard extends StatelessWidget {
               ),
               icon: Icon(Icons.add),
               label: Text(
-                'AÑADIR REGISTRO',
+                AppLocalizations.of(context)!.fitnessAddRecord,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 12,
@@ -1461,7 +1462,7 @@ class _DayRecordsBottomSheet extends StatelessWidget {
                 ),
                 icon: Icon(Icons.add),
                 label: Text(
-                  'AÑADIR REGISTRO PARA ESTE DÍA',
+                  AppLocalizations.of(context)!.fitnessAddRecordForDay,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 12,
@@ -1473,7 +1474,7 @@ class _DayRecordsBottomSheet extends StatelessWidget {
             SizedBox(height: 18),
             if (sortedRecords.isEmpty)
               Text(
-                'No hay registros para este día.',
+                AppLocalizations.of(context)!.fitnessNoRecordsThisDay,
                 style: TextStyle(
                   color: context.colors.secondary,
                   fontSize: 13,
@@ -1494,7 +1495,12 @@ class _DayRecordsBottomSheet extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    '${_formatTime(item.loggedAt)} · ${_formatDouble(item.weight, 'kg', imperial: imperial)} · ${_formatDouble(item.bodyFat, '%')} grasa · ${_formatDouble(item.muscleMass, 'kg', imperial: imperial)} músculo',
+                    AppLocalizations.of(context)!.fitnessRecordSummary(
+                      _formatTime(item.loggedAt),
+                      _formatDouble(item.weight, 'kg', imperial: imperial),
+                      _formatDouble(item.bodyFat, '%'),
+                      _formatDouble(item.muscleMass, 'kg', imperial: imperial),
+                    ),
                     style: TextStyle(
                       color: context.colors.textMain,
                       fontSize: 14,
@@ -1535,7 +1541,7 @@ class _EmptyProgressCard extends StatelessWidget {
               ),
               SizedBox(height: 18),
               Text(
-                'Todavía no hay datos de progreso',
+                AppLocalizations.of(context)!.fitnessNoProgressData,
                 style: TextStyle(
                   color: context.colors.textMain,
                   fontSize: 18,
@@ -1545,7 +1551,7 @@ class _EmptyProgressCard extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Text(
-                'Añade tus primeros datos físicos para empezar a ver tu evolución.',
+                AppLocalizations.of(context)!.fitnessAddFirstDataHint,
                 style: TextStyle(
                   color: context.colors.secondary,
                   fontSize: 13,
@@ -1568,7 +1574,7 @@ class _EmptyProgressCard extends StatelessWidget {
                   ),
                   icon: Icon(Icons.add),
                   label: Text(
-                    'AÑADIR PRIMER REGISTRO',
+                    AppLocalizations.of(context)!.fitnessAddFirstRecord,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 12,
@@ -1628,7 +1634,7 @@ class _ErrorCard extends StatelessWidget {
               ),
             ),
             child: Text(
-              'Reintentar',
+              AppLocalizations.of(context)!.nutritionRetry,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_card.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class AiCoachCard extends StatelessWidget {
   AiCoachCard({
@@ -35,7 +36,7 @@ class AiCoachCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Coach IA',
+                  AppLocalizations.of(context)!.homeAICoach,
                   style: TextStyle(
                     color: context.colors.textMain,
                     fontSize: 16,
@@ -44,7 +45,7 @@ class AiCoachCard extends StatelessWidget {
                 ),
                 SizedBox(height: 5),
                 Text(
-                  'Toca para recibir una recomendación personalizada.',
+                  AppLocalizations.of(context)!.homeAICoachSubtitle,
                   style: TextStyle(
                     color: context.colors.secondary,
                     fontSize: 12,

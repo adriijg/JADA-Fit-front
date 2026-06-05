@@ -6,6 +6,7 @@ class PreferencesService {
   static const _keyThemeMode = 'theme_mode';
   static const _keyAiNotifications = 'ai_notifications';
   static const _keyWorkoutReminders = 'workout_reminders';
+  static const _keyLanguage = 'language_code';
 
   static PreferencesService? _instance;
   static PreferencesService get instance => _instance ??= PreferencesService._();
@@ -31,4 +32,13 @@ class PreferencesService {
 
   bool get workoutRemindersEnabled => _prefs.getBool(_keyWorkoutReminders) ?? false;
   set workoutRemindersEnabled(bool value) => _prefs.setBool(_keyWorkoutReminders, value);
+
+  String? get languageCode => _prefs.getString(_keyLanguage);
+  set languageCode(String? value) {
+    if (value == null) {
+      _prefs.remove(_keyLanguage);
+    } else {
+      _prefs.setString(_keyLanguage, value);
+    }
+  }
 }

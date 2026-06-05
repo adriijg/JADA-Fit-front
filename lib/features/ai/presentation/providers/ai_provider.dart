@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../../../core/services/notification_service.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../data/models/chat_message_model.dart';
 import '../../data/services/ai_service.dart';
 
@@ -59,14 +60,12 @@ class AiProvider extends ChangeNotifier {
   bool _isLoading = false;
   bool _isActive = false;
 
-  static const List<String> _initialSuggestions = [
-    '¿Cómo voy con mis macros hoy?',
-    '¿Qué debería cenar para llegar a mis proteínas?',
-    'Analiza mi nutrición de los últimos días',
-    'Dame un consejo para mejorar mi alimentación',
-  ];
+  List<String> _initialSuggestions = [];
+  List<String> _followUpSuggestions = [];
+  String _errorMessage = '';
+  String? _localeCode;
 
-  List<String> _suggestedQuestions = List.of(_initialSuggestions);
+  List<String> _suggestedQuestions = [];
 
   List<ChatMessageModel> get messages => _currentSessionIndex >= 0
       ? List.unmodifiable(_sessions[_currentSessionIndex].messages)
@@ -79,6 +78,39 @@ class AiProvider extends ChangeNotifier {
   String? get currentSessionTitle => _currentSessionIndex >= 0
       ? _sessions[_currentSessionIndex].title
       : null;
+
+  void updateLocalization(AppLocalizations l10n) {
+    if (_localeCode == l10n.localeName && _initialSuggestions.isNotEmpty) return;
+
+    final previousInitial = List<String>.from(_initialSuggestions);
+    final wasShowingInitialSuggestions = _suggestedQuestions.isNotEmpty &&
+        listEquals(_suggestedQuestions, previousInitial);
+
+    _localeCode = l10n.localeName;
+    _initialSuggestions = [
+      l10n.aiSuggestionMacros,
+      l10n.aiSuggestionDinner,
+      l10n.aiSuggestionAnalyze,
+      l10n.aiSuggestionAdvice,
+    ];
+    _followUpSuggestions = [
+      l10n.aiSuggestionDeepDive,
+      l10n.aiWhatElse,
+      l10n.aiSuggestionWorkout,
+      l10n.aiRecoveryTips,
+    ];
+    _errorMessage = l10n.aiErrorMessage;
+
+    var shouldNotify = false;
+    if (_suggestedQuestions.isEmpty || wasShowingInitialSuggestions) {
+      _suggestedQuestions = List.of(_initialSuggestions);
+      shouldNotify = true;
+    }
+
+    if (shouldNotify) {
+      notifyListeners();
+    }
+  }
 
   Future<void> loadSessions() async {
     try {
@@ -185,7 +217,7 @@ class AiProvider extends ChangeNotifier {
     } catch (e) {
       session.messages.add(ChatMessageModel(
         role: ChatMessageRole.ai,
-        text: 'Lo siento, ocurrió un error al conectar con el asistente. Inténtalo de nuevo.',
+        text: _errorMessage.isNotEmpty ? _errorMessage : 'Error',
         timestamp: DateTime.now(),
       ));
     } finally {
@@ -196,12 +228,9 @@ class AiProvider extends ChangeNotifier {
   }
 
   void _generateSuggestions(String response) {
-    _suggestedQuestions = [
-      'Profundiza en ese tema',
-      '¿Qué más puedo hacer hoy?',
-      'Dame una rutina de ejercicios',
-      'Consejos de recuperación',
-    ];
+    _suggestedQuestions = _followUpSuggestions.isNotEmpty
+        ? List.of(_followUpSuggestions)
+        : [];
   }
 
   Future<void> _tryNotify() async {

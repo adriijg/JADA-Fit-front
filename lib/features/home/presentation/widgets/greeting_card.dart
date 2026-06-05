@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_card.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class GreetingCard extends StatelessWidget {
   GreetingCard({super.key});
@@ -15,7 +16,7 @@ class GreetingCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Hola 👋',
+            AppLocalizations.of(context)!.homeGreeting,
             style: TextStyle(
               color: context.colors.textMain,
               fontSize: 27,
@@ -25,7 +26,7 @@ class GreetingCard extends StatelessWidget {
           ),
           SizedBox(height: 10),
           Text(
-            'Este es tu panel principal. Aquí tendrás el resumen de nutrición, entrenamiento, progreso físico y recomendaciones inteligentes.',
+            AppLocalizations.of(context)!.homeMainPanel,
             style: TextStyle(
               color: context.colors.secondary,
               fontSize: 14,

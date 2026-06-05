@@ -1,3 +1,5 @@
+import '../../../../l10n/app_localizations.dart';
+
 enum MealType {
   breakfast,
   lunch,
@@ -42,6 +44,32 @@ extension MealTypeExtension on MealType {
         return 'Cenas';
       case MealType.snack:
         return 'Snacks';
+    }
+  }
+
+  String localizedLabel(AppLocalizations l10n) {
+    switch (this) {
+      case MealType.breakfast:
+        return l10n.nutritionBreakfast;
+      case MealType.lunch:
+        return l10n.nutritionLunch;
+      case MealType.dinner:
+        return l10n.nutritionDinner;
+      case MealType.snack:
+        return l10n.nutritionSnack;
+    }
+  }
+
+  String localizedPluralLabel(AppLocalizations l10n) {
+    switch (this) {
+      case MealType.breakfast:
+        return l10n.nutritionBreakfasts;
+      case MealType.lunch:
+        return l10n.nutritionLunches;
+      case MealType.dinner:
+        return l10n.nutritionDinners;
+      case MealType.snack:
+        return l10n.nutritionSnacks;
     }
   }
 

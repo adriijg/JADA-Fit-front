@@ -9,6 +9,7 @@ import '../../../../core/storage/secure_storage_service.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../data/models/fitness_profile_model.dart';
 import '../../data/services/fitness_profile_service.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class EditFitnessProfileScreen extends StatefulWidget {
   EditFitnessProfileScreen({
@@ -124,7 +125,7 @@ class _EditFitnessProfileScreenState extends State<EditFitnessProfileScreen> {
 
     if (selectedGender == null) {
       setState(() {
-        errorMessage = 'Selecciona tu género';
+        errorMessage = AppLocalizations.of(context)!.fitnessSelectGenderError;
       });
       return;
     }
@@ -157,7 +158,7 @@ class _EditFitnessProfileScreenState extends State<EditFitnessProfileScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Datos físicos actualizados correctamente'),
+          content: Text(AppLocalizations.of(context)!.fitnessDataUpdated),
         ),
       );
 
@@ -172,7 +173,7 @@ class _EditFitnessProfileScreenState extends State<EditFitnessProfileScreen> {
       if (!mounted) return;
 
       setState(() {
-        errorMessage = 'No se pudieron actualizar los datos físicos';
+        errorMessage = AppLocalizations.of(context)!.fitnessUpdateDataError;
       });
     } finally {
       if (mounted) {
@@ -204,9 +205,9 @@ class _EditFitnessProfileScreenState extends State<EditFitnessProfileScreen> {
   String _genderLabel(String value) {
     switch (value) {
       case 'HOMBRE':
-        return 'Hombre';
+        return AppLocalizations.of(context)!.fitnessMale;
       case 'MUJER':
-        return 'Mujer';
+        return AppLocalizations.of(context)!.fitnessFemale;
       default:
         return value;
     }
@@ -215,15 +216,15 @@ class _EditFitnessProfileScreenState extends State<EditFitnessProfileScreen> {
   String _goalLabel(String value) {
     switch (value) {
       case 'GANAR_MUSCULO':
-        return 'Ganar músculo';
+        return AppLocalizations.of(context)!.fitnessGainMuscle;
       case 'PERDER_GRASA':
-        return 'Perder grasa';
+        return AppLocalizations.of(context)!.fitnessLoseFat;
       case 'MANTENERSE_ATLETICO':
-        return 'Mantenerse atlético/a';
+        return AppLocalizations.of(context)!.fitnessStayAthletic;
       case 'MEJORAR_RENDIMIENTO':
         return 'Mejorar rendimiento';
       case 'RECOMPOSICION_CORPORAL':
-        return 'Recomposición corporal';
+        return AppLocalizations.of(context)!.fitnessRecomposition;
       default:
         return value;
     }
@@ -238,7 +239,7 @@ class _EditFitnessProfileScreenState extends State<EditFitnessProfileScreen> {
           color: context.colors.textMain,
         ),
         title: Text(
-          'Editar datos físicos',
+          AppLocalizations.of(context)!.fitnessEditPhysicalData,
           style: TextStyle(
             color: context.colors.textMain,
             fontWeight: FontWeight.w700,
@@ -263,8 +264,8 @@ class _EditFitnessProfileScreenState extends State<EditFitnessProfileScreen> {
               ),
               SizedBox(height: 18),
               _SelectorCard(
-                title: 'Género',
-                subtitle: 'Selecciona una opción',
+                title: AppLocalizations.of(context)!.fitnessGender,
+                subtitle: AppLocalizations.of(context)!.fitnessSelectOption,
                 selectedValue: selectedGender,
                 values: const ['HOMBRE', 'MUJER'],
                 labelBuilder: _genderLabel,
@@ -276,8 +277,8 @@ class _EditFitnessProfileScreenState extends State<EditFitnessProfileScreen> {
               ),
               SizedBox(height: 18),
               _SelectorCard(
-                title: 'Objetivo',
-                subtitle: 'Esto ayudará a personalizar la app',
+                title: AppLocalizations.of(context)!.fitnessGoal,
+                subtitle: AppLocalizations.of(context)!.fitnessPersonalizeHelp,
                 selectedValue: selectedGoal,
                 values: const [
                   'GANAR_MUSCULO',
@@ -334,7 +335,7 @@ class _EditFitnessProfileScreenState extends State<EditFitnessProfileScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'GUARDAR CAMBIOS',
+                              AppLocalizations.of(context)!.fitnessSaveChanges,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15,
@@ -374,7 +375,7 @@ class _IntroCard extends StatelessWidget {
           ),
           SizedBox(height: 18),
           Text(
-            'Configura tu perfil físico',
+            AppLocalizations.of(context)!.fitnessSetupProfile,
             style: TextStyle(
               color: context.colors.textMain,
               fontSize: 24,
@@ -384,7 +385,7 @@ class _IntroCard extends StatelessWidget {
           ),
           SizedBox(height: 10),
           Text(
-            'Estos datos sirven para personalizar tus objetivos, recomendaciones y futuros análisis.',
+            AppLocalizations.of(context)!.fitnessSetupProfileDesc,
             style: TextStyle(
               color: context.colors.secondary,
               fontSize: 14,
@@ -415,7 +416,7 @@ class _FormCard extends StatelessWidget {
         children: [
           _FitnessTextField(
             controller: heightController,
-            label: 'Altura',
+            label: AppLocalizations.of(context)!.fitnessHeight,
             hintText: 'Ej: 180',
             suffix: 'cm',
             icon: Icons.height,
@@ -424,9 +425,9 @@ class _FormCard extends StatelessWidget {
           SizedBox(height: 16),
           _FitnessTextField(
             controller: ageController,
-            label: 'Edad',
+            label: AppLocalizations.of(context)!.fitnessAge,
             hintText: 'Ej: 25',
-            suffix: 'años',
+            suffix: AppLocalizations.of(context)!.fitnessYears,
             icon: Icons.cake_outlined,
             keyboardType: TextInputType.number,
           ),

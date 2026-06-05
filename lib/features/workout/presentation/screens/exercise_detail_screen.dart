@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../data/models/catalog_exercise_model.dart';
 import '../../data/models/exercise_catalog.dart';
@@ -100,7 +101,7 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
                   ),
                   SizedBox(height: 24),
                   
-                  _buildSectionTitle('¿Para qué sirve?', Icons.info_outline_rounded),
+                  _buildSectionTitle(AppLocalizations.of(context)!.workoutWhatIsItFor, Icons.info_outline_rounded),
                   SizedBox(height: 12),
                   Text(
                     widget.exercise.description,
@@ -113,7 +114,7 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
                   
                   SizedBox(height: 32),
                   
-                  _buildSectionTitle('Beneficios Principales', Icons.star_border_rounded),
+                  _buildSectionTitle(AppLocalizations.of(context)!.workoutMainBenefits, Icons.star_border_rounded),
                   SizedBox(height: 12),
                   Container(
                     padding: EdgeInsets.all(20),
@@ -197,7 +198,7 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
             Icon(Icons.error_outline_rounded, color: AppColors.error, size: 48),
             SizedBox(height: 16),
             Text(
-              'No se pudo cargar el video.',
+              AppLocalizations.of(context)!.workoutCouldNotLoadVideo,
               style: TextStyle(color: context.colors.textMain.withOpacity(0.5)),
             )
           ],
@@ -244,12 +245,12 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
   }
 }
 
-CatalogExerciseModel toCatalogModel(CatalogExercise ex) {
+CatalogExerciseModel toCatalogModel(CatalogExercise ex, AppLocalizations l10n) {
   return CatalogExerciseModel(
     id: 0,
     name: ex.name,
     description: ex.description,
-    benefits: 'Fortalece y desarrolla los ${ex.muscleGroup.toLowerCase()}. Ideal para mejorar el rendimiento y la estética muscular.',
+    benefits: l10n.workoutExerciseBenefitsTemplate(ex.muscleGroup.toLowerCase()),
     videoUrl: ex.videoAsset,
   );
 }

@@ -5,6 +5,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../data/models/fitness_profile_model.dart';
 import '../../data/services/fitness_progress_service.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class AddPhysicalLogScreen extends StatefulWidget {
   AddPhysicalLogScreen({
@@ -195,7 +196,7 @@ class _AddPhysicalLogScreenState extends State<AddPhysicalLogScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Registro físico guardado correctamente'),
+          content: Text(AppLocalizations.of(context)!.fitnessRecordSaved),
         ),
       );
 
@@ -210,7 +211,7 @@ class _AddPhysicalLogScreenState extends State<AddPhysicalLogScreen> {
       if (!mounted) return;
 
       setState(() {
-        errorMessage = 'No se pudo guardar el registro físico';
+        errorMessage = AppLocalizations.of(context)!.fitnessRecordSaveError;
       });
     } finally {
       if (mounted) {
@@ -222,15 +223,15 @@ class _AddPhysicalLogScreenState extends State<AddPhysicalLogScreen> {
   }
 
   String _formatGoal(String? value) {
-    if (value == null || value.trim().isEmpty) return 'Sin configurar';
+    if (value == null || value.trim().isEmpty) return AppLocalizations.of(context)!.fitnessNotConfigured;
 
     switch (value.trim().toUpperCase()) {
       case 'GANAR_MUSCULO':
-        return 'Ganar músculo';
+        return AppLocalizations.of(context)!.fitnessGainMuscle;
       case 'PERDER_GRASA':
-        return 'Perder grasa';
+        return AppLocalizations.of(context)!.fitnessLoseFat;
       case 'MANTENERSE_ATLETICO':
-        return 'Mantenerse atlético/a';
+        return AppLocalizations.of(context)!.fitnessStayAthletic;
       default:
         return value;
     }
@@ -247,7 +248,7 @@ class _AddPhysicalLogScreenState extends State<AddPhysicalLogScreen> {
           color: context.colors.textMain,
         ),
         title: Text(
-          'Añadir datos físicos',
+          AppLocalizations.of(context)!.fitnessAddPhysicalDataTitle,
           style: TextStyle(
             color: context.colors.textMain,
             fontWeight: FontWeight.w700,
@@ -319,7 +320,7 @@ class _AddPhysicalLogScreenState extends State<AddPhysicalLogScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'GUARDAR REGISTRO',
+                              AppLocalizations.of(context)!.fitnessSaveRecord,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15,
@@ -350,7 +351,7 @@ class _IntroCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hasGoal = goal != 'Sin configurar';
+    final hasGoal = goal != AppLocalizations.of(context)!.fitnessNotConfigured;
 
     return AppCard.primary(
       borderRadius: 28,
@@ -365,7 +366,7 @@ class _IntroCard extends StatelessWidget {
           ),
           SizedBox(height: 18),
           Text(
-            'Nuevo registro físico',
+            AppLocalizations.of(context)!.fitnessNewRecord,
             style: TextStyle(
               color: context.colors.textMain,
               fontSize: 24,
@@ -375,7 +376,7 @@ class _IntroCard extends StatelessWidget {
           ),
           SizedBox(height: 10),
           Text(
-            'Puedes registrar datos de hoy o de una fecha anterior si se te olvidó apuntarlos.',
+            AppLocalizations.of(context)!.fitnessRecordDateHint,
             style: TextStyle(
               color: context.colors.secondary,
               fontSize: 14,
@@ -468,7 +469,7 @@ class _DateCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'FECHA DEL REGISTRO',
+                      AppLocalizations.of(context)!.fitnessRecordDate,
                       style: TextStyle(
                         color: context.colors.secondary,
                         fontSize: 10,
@@ -487,7 +488,7 @@ class _DateCard extends StatelessWidget {
                     ),
                     SizedBox(height: 4),
                     Text(
-                      'La hora se guardará automáticamente',
+                      AppLocalizations.of(context)!.fitnessAutoSaveTime,
                       style: TextStyle(
                         color: context.colors.textMain.withOpacity(0.55),
                         fontSize: 11,
@@ -528,7 +529,7 @@ class _PhysicalLogFormCard extends StatelessWidget {
         children: [
           _PhysicalLogTextField(
             controller: weightController,
-            label: 'Peso actual',
+            label: AppLocalizations.of(context)!.fitnessCurrentWeight,
             hintText: 'Ej: 70',
             suffix: 'kg',
             icon: Icons.monitor_weight_outlined,
@@ -537,7 +538,7 @@ class _PhysicalLogFormCard extends StatelessWidget {
           SizedBox(height: 16),
           _PhysicalLogTextField(
             controller: bodyFatController,
-            label: 'Grasa corporal',
+            label: AppLocalizations.of(context)!.fitnessBodyFat,
             hintText: 'Opcional · Ej: 15',
             suffix: '%',
             icon: Icons.percent,
@@ -546,7 +547,7 @@ class _PhysicalLogFormCard extends StatelessWidget {
           SizedBox(height: 16),
           _PhysicalLogTextField(
             controller: muscleMassController,
-            label: 'Masa muscular',
+            label: AppLocalizations.of(context)!.fitnessMuscleMass,
             hintText: 'Opcional · Ej: 58',
             suffix: 'kg',
             icon: Icons.fitness_center,

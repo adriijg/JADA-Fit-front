@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../../../../core/constants/app_strings.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../data/models/meal_type.dart';
@@ -108,7 +108,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
       if (!mounted || generation != _summaryGeneration) return;
 
       setState(() {
-        _errorMessage = 'No se pudo cargar el resumen nutricional';
+        _errorMessage = AppLocalizations.of(context)!.homeNutritionLoadError;
       });
     } finally {
       if (mounted && generation == _summaryGeneration) {
@@ -148,7 +148,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
       setState(() => _daySummary = summary);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('No se pudo eliminar la comida'),
+          content: Text(AppLocalizations.of(context)!.nutritionDeleteMealError),
         ),
       );
     }
@@ -187,6 +187,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
   }
 
   void _showAddFoodMenu() {
+    final l10n = AppLocalizations.of(context)!;
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
@@ -209,7 +210,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
             ),
             SizedBox(height: 20),
             Text(
-              'A�ADIR ALIMENTO A...',
+              l10n.nutritionAddFoodTo,
               style: TextStyle(
                 color: context.colors.secondary,
                 fontSize: 12, fontWeight: FontWeight.w800, letterSpacing: 1.2,
@@ -218,7 +219,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
             SizedBox(height: 16),
             _MealOptionRow(
               icon: Icons.free_breakfast,
-              label: MealType.breakfast.label,
+              label: MealType.breakfast.localizedLabel(l10n),
               onTap: () {
                 Navigator.pop(context);
                 _openFoodSearch(MealType.breakfast);
@@ -226,7 +227,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
             ),
             _MealOptionRow(
               icon: Icons.lunch_dining,
-              label: MealType.lunch.label,
+              label: MealType.lunch.localizedLabel(l10n),
               onTap: () {
                 Navigator.pop(context);
                 _openFoodSearch(MealType.lunch);
@@ -234,7 +235,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
             ),
             _MealOptionRow(
               icon: Icons.dinner_dining,
-              label: MealType.dinner.label,
+              label: MealType.dinner.localizedLabel(l10n),
               onTap: () {
                 Navigator.pop(context);
                 _openFoodSearch(MealType.dinner);
@@ -242,7 +243,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
             ),
             _MealOptionRow(
               icon: Icons.cookie_outlined,
-              label: MealType.snack.label,
+              label: MealType.snack.localizedLabel(l10n),
               onTap: () {
                 Navigator.pop(context);
                 _openFoodSearch(MealType.snack);
@@ -289,7 +290,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error al registrar agua'),
+            content: Text(AppLocalizations.of(context)!.nutritionWaterLogError),
           ),
         );
       }
@@ -303,7 +304,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
     } catch (_) {}
   }
 
-  String _formatDayTitle(DateTime date) {
+  String _formatDayTitle(DateTime date, AppLocalizations l10n) {
     final now = DateTime.now();
 
     final today = DateTime(
@@ -319,18 +320,18 @@ class _NutritionScreenState extends State<NutritionScreen> {
     );
 
     if (target == today) {
-      return 'Hoy';
+      return l10n.dateToday;
     }
 
     final yesterday = today.subtract(Duration(days: 1));
     final tomorrow = today.add(Duration(days: 1));
 
     if (target == yesterday) {
-      return 'Ayer';
+      return l10n.dateYesterday;
     }
 
     if (target == tomorrow) {
-      return 'Ma�ana';
+      return l10n.dateTomorrow;
     }
 
     final day = date.day.toString().padLeft(2, '0');
@@ -342,6 +343,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
   @override
   Widget build(BuildContext context) {
     final summary = _daySummary;
+    final l10n = AppLocalizations.of(context)!;
 
     return Stack(
       children: [
@@ -357,7 +359,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  AppStrings.nutritionTitle,
+                  l10n.nutritionTitle,
                   style: TextStyle(
                     color: context.colors.textMain,
                     fontSize: 24,
@@ -366,7 +368,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
                 ),
                 SizedBox(height: 6),
                 Text(
-                  _formatDayTitle(_selectedDate),
+                  _formatDayTitle(_selectedDate, l10n),
                   style: TextStyle(
                     color: context.colors.secondary,
                     fontSize: 14,
@@ -649,6 +651,7 @@ class _DailySummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final caloriesProgress = _safeProgress(
       summary.totalCalories,
       summary.caloriesTarget,
@@ -714,21 +717,21 @@ class _DailySummaryCard extends StatelessWidget {
             child: Column(
               children: [
                 _MacroProgressRow(
-                  label: 'Prote�nas',
+                  label: l10n.homeProtein,
                   current: summary.totalProtein,
                   target: summary.proteinTarget,
                   unit: 'g',
                 ),
                 SizedBox(height: 12),
                 _MacroProgressRow(
-                  label: 'Hidratos',
+                  label: l10n.homeCarbs,
                   current: summary.totalCarbs,
                   target: summary.carbsTarget,
                   unit: 'g',
                 ),
                 SizedBox(height: 12),
                 _MacroProgressRow(
-                  label: 'Grasas',
+                  label: l10n.homeFats,
                   current: summary.totalFats,
                   target: summary.fatsTarget,
                   unit: 'g',
@@ -869,6 +872,7 @@ class _MealSectionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final hasMeals = meals.isNotEmpty;
 
     return Container(
@@ -913,7 +917,7 @@ class _MealSectionCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          mealType.label,
+                          mealType.localizedLabel(l10n),
                           style: TextStyle(
                             color: context.colors.textMain,
                             fontSize: 18,
@@ -923,8 +927,8 @@ class _MealSectionCard extends StatelessWidget {
                         SizedBox(height: 3),
                         Text(
                           hasMeals
-                              ? '${meals.length} alimento${meals.length == 1 ? '' : 's'}'
-                              : 'Sin alimentos',
+                              ? l10n.nutritionFoodCount(meals.length)
+                              : l10n.nutritionNoFoods,
                           style: TextStyle(
                             color: context.colors.secondary,
                             fontSize: 12,
@@ -1044,6 +1048,7 @@ class _EmptyMealSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.fromLTRB(18, 0, 18, 18),
       child: Container(
@@ -1064,7 +1069,7 @@ class _EmptyMealSection extends StatelessWidget {
             SizedBox(width: 10),
             Expanded(
               child: Text(
-                'A�ade alimentos para calcular calor�as y macros.',
+                l10n.nutritionAddFoodsHint,
                 style: TextStyle(
                   color: context.colors.textMain.withOpacity(0.55),
                   fontSize: 13,
@@ -1082,7 +1087,7 @@ class _EmptyMealSection extends StatelessWidget {
                   fontWeight: FontWeight.w800,
                 ),
               ),
-              child: Text('A�ADIR'),
+              child: Text(l10n.nutritionAddUpper),
             ),
           ],
         ),
@@ -1104,25 +1109,26 @@ class _MealMacroSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Row(
       children: [
         Expanded(
           child: _MealMacroChip(
-            label: 'Prote�na',
+            label: l10n.homeProtein,
             value: protein,
           ),
         ),
         SizedBox(width: 8),
         Expanded(
           child: _MealMacroChip(
-            label: 'Hidratos',
+            label: l10n.homeCarbs,
             value: carbs,
           ),
         ),
         SizedBox(width: 8),
         Expanded(
           child: _MealMacroChip(
-            label: 'Grasas',
+            label: l10n.homeFats,
             value: fats,
           ),
         ),
@@ -1451,6 +1457,7 @@ class _ErrorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(22),
@@ -1490,7 +1497,7 @@ class _ErrorCard extends StatelessWidget {
               ),
             ),
             child: Text(
-              'Reintentar',
+              l10n.nutritionRetry,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),
@@ -1550,6 +1557,7 @@ class _WaterTrackerCardBodyState extends State<_WaterTrackerCardBody> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final total = _totalMl;
     final filledGlasses = _getFilledGlasses(total);
     final partialFill = _getPartialFill(total);
@@ -1568,7 +1576,7 @@ class _WaterTrackerCardBodyState extends State<_WaterTrackerCardBody> {
               Icon(Icons.water_drop, color: context.colors.primary, size: 20),
               SizedBox(width: 8),
               Text(
-                'Agua',
+                l10n.nutritionWater,
                 style: TextStyle(
                   color: context.colors.textMain,
                   fontSize: 16,
@@ -1739,6 +1747,7 @@ class _PhysicalTrackingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -1753,7 +1762,7 @@ class _PhysicalTrackingCard extends StatelessWidget {
               Icon(Icons.fitness_center, color: context.colors.primary, size: 20),
               SizedBox(width: 8),
               Text(
-                'Seguimiento F�sico',
+                l10n.nutritionPhysicalTracking,
                 style: TextStyle(
                   color: context.colors.textMain,
                   fontSize: 16,
@@ -1775,7 +1784,7 @@ class _PhysicalTrackingCard extends StatelessWidget {
           SizedBox(height: 12),
           if (logs.isEmpty && !isLoading)
             Text(
-              'A�n no hay registros',
+              l10n.nutritionNoRecordsYet,
               style: TextStyle(
                 color: context.colors.textMain.withValues(alpha: 0.45),
                 fontSize: 13,
@@ -1797,7 +1806,7 @@ class _PhysicalTrackingCard extends StatelessWidget {
                     );
                   },
                   icon: Icon(Icons.add, size: 18),
-                  label: Text('A�adir registro'),
+                  label: Text(l10n.nutritionAddRecord),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: context.colors.primary,
                     foregroundColor: context.colors.background,
@@ -1819,7 +1828,7 @@ class _PhysicalTrackingCard extends StatelessWidget {
                     );
                   },
                   icon: Icon(Icons.show_chart, size: 18),
-                  label: Text('Ver resumen'),
+                  label: Text(l10n.nutritionViewSummary),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: context.colors.primary,
                     side: BorderSide(
@@ -1848,11 +1857,12 @@ class _FitnessBarChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final children = <Widget>[
       if (log.weight != null)
         Expanded(
           child: _MiniMetricChart(
-            label: 'Peso',
+            label: l10n.nutritionWeightLabel,
             value: log.weight!,
             unit: 'kg',
             maxRef: (log.weight! * 1.5).clamp(80, 250),
@@ -1862,7 +1872,7 @@ class _FitnessBarChart extends StatelessWidget {
       if (log.bodyFat != null)
         Expanded(
           child: _MiniMetricChart(
-            label: 'Grasa',
+            label: l10n.nutritionFat,
             value: log.bodyFat!,
             unit: '%',
             maxRef: _bodyFatMaxRef(log.bodyFat!),
@@ -1872,7 +1882,7 @@ class _FitnessBarChart extends StatelessWidget {
       if (log.muscleMass != null)
         Expanded(
           child: _MiniMetricChart(
-            label: 'M�sculo',
+            label: l10n.fitnessMuscle,
             value: log.muscleMass!,
             unit: 'kg',
             maxRef: (log.muscleMass! * 2.0).clamp(30, 120),
@@ -1968,6 +1978,7 @@ class _CreateFoodCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -1994,7 +2005,7 @@ class _CreateFoodCard extends StatelessWidget {
             ),
             SizedBox(height: 10),
             Text(
-              'Mis\nalimentos',
+              l10n.nutritionMyFoodsCard,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.black,
@@ -2019,6 +2030,7 @@ class _RecipesCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -2045,7 +2057,7 @@ class _RecipesCard extends StatelessWidget {
             ),
             SizedBox(height: 10),
             Text(
-              'Mis\nrecetas',
+              l10n.nutritionMyRecipesCard,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.black,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_card.dart';
@@ -56,7 +57,7 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
             Icon(Icons.warning_rounded, color: AppColors.error),
             SizedBox(width: 12),
             Text(
-              '¿Eliminar rutina?',
+              AppLocalizations.of(context)!.workoutDeleteRoutine,
               style: TextStyle(
                 color: context.colors.textMain,
                 fontWeight: FontWeight.w900,
@@ -65,7 +66,7 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
           ],
         ),
         content: Text(
-          'Se eliminará "${widget.routine.name}" y todos sus ejercicios. Esta acción no se puede deshacer.',
+          AppLocalizations.of(context)!.workoutDeleteRoutineConfirm(widget.routine.name),
           style: TextStyle(
             color: context.colors.textMain.withOpacity(0.72),
             height: 1.5,
@@ -75,7 +76,7 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
             child: Text(
-              'Cancelar',
+              AppLocalizations.of(context)!.nutritionCancel,
               style: TextStyle(color: context.colors.secondary, fontWeight: FontWeight.w700),
             ),
           ),
@@ -88,7 +89,7 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             ),
             child: Text(
-              'Eliminar',
+              AppLocalizations.of(context)!.nutritionDelete,
               style: TextStyle(fontWeight: FontWeight.w900),
             ),
           ),
@@ -438,7 +439,7 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
                           Icon(Icons.celebration_rounded, color: AppColors.success, size: 24),
                           SizedBox(width: 12),
                           Text(
-                            '¡Rutina completada!',
+                            AppLocalizations.of(context)!.workoutRoutineCompleted,
                             style: TextStyle(
                               color: AppColors.success,
                               fontSize: 18,

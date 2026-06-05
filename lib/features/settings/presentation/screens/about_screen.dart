@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_strings.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_card.dart';
 
@@ -9,9 +9,10 @@ class AboutScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Acerca de'),
+        title: Text(l10n.aboutTitle),
         backgroundColor: Colors.transparent,
         foregroundColor: context.colors.textMain,
       ),
@@ -35,7 +36,7 @@ class AboutScreen extends StatelessWidget {
             ),
             SizedBox(height: 16),
             Text(
-              AppStrings.appName,
+              l10n.appName,
               style: TextStyle(
                 color: context.colors.textMain,
                 fontSize: 24,
@@ -44,7 +45,7 @@ class AboutScreen extends StatelessWidget {
             ),
             SizedBox(height: 4),
             Text(
-              'Versión 1.0.0',
+              l10n.settingsVersion,
               style: TextStyle(
                 color: context.colors.secondary.withOpacity(0.6),
                 fontSize: 14,
@@ -58,7 +59,7 @@ class AboutScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Descripción',
+                    l10n.settingsDescription,
                     style: TextStyle(
                       color: context.colors.textMain,
                       fontSize: 16,
@@ -67,9 +68,7 @@ class AboutScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    'JADA Fit es tu compañero de fitness inteligente. '
-                    'Crea rutinas personalizadas, sigue tu progreso físico, '
-                    'recibe asistencia con IA y conecta con una comunidad fitness.',
+                    l10n.settingsAppDescription,
                     style: TextStyle(
                       color: context.colors.textMain.withOpacity(0.7),
                       fontSize: 14,
@@ -87,7 +86,7 @@ class AboutScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Contacto',
+                    l10n.settingsContact,
                     style: TextStyle(
                       color: context.colors.textMain,
                       fontSize: 16,
@@ -109,7 +108,7 @@ class AboutScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Legal',
+                    l10n.settingsLegal,
                     style: TextStyle(
                       color: context.colors.textMain,
                       fontSize: 16,
@@ -118,7 +117,7 @@ class AboutScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    'Términos y condiciones',
+                    l10n.settingsTerms,
                     style: TextStyle(
                       color: context.colors.primary.withOpacity(0.8),
                       fontSize: 14,
@@ -126,7 +125,7 @@ class AboutScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 4),
                   Text(
-                    'Política de privacidad',
+                    l10n.settingsPrivacy,
                     style: TextStyle(
                       color: context.colors.primary.withOpacity(0.8),
                       fontSize: 14,

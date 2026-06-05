@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/image_url_resolver.dart';
 import '../../../../core/widgets/app_card.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../data/models/post.dart';
 import '../../data/models/story.dart';
 import '../../data/models/challenge.dart';
@@ -68,6 +69,7 @@ class _SocialTopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 0, vertical: 4),
       decoration: BoxDecoration(
@@ -82,25 +84,25 @@ class _SocialTopBar extends StatelessWidget {
         children: [
           _TabButton(
             icon: Icons.home_rounded,
-            label: 'Inicio',
+            label: l10n.navigationHome,
             isSelected: currentTab == 0,
             onTap: () => onTabSelected(0),
           ),
           _TabButton(
             icon: Icons.explore_rounded,
-            label: 'Explorar',
+            label: l10n.socialExplore,
             isSelected: currentTab == 1,
             onTap: () => onTabSelected(1),
           ),
           _TabButton(
             icon: Icons.emoji_events_outlined,
-            label: 'Piques',
+            label: l10n.socialChallenges,
             isSelected: currentTab == 2,
             onTap: () => onTabSelected(2),
           ),
           _TabButton(
             icon: Icons.person_rounded,
-            label: 'Mi Perfil',
+            label: l10n.socialMyProfile,
             isSelected: currentTab == 3,
             onTap: () => onTabSelected(3),
           ),
@@ -267,7 +269,7 @@ class _FeedTabState extends State<_FeedTab> {
                 ),
                 SizedBox(height: 20),
                 Text(
-                  'Tu feed está vacío',
+                  AppLocalizations.of(context)!.socialFeedEmpty,
                   style: TextStyle(
                     color: context.colors.textMain,
                     fontSize: 18,
@@ -276,7 +278,7 @@ class _FeedTabState extends State<_FeedTab> {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  'Sigue a otros usuarios para ver sus\npublicaciones e historias aquí.',
+                  AppLocalizations.of(context)!.socialFollowOthers,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: context.colors.secondary,
@@ -436,6 +438,7 @@ class _PostCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return AppCard(
       borderRadius: 20,
       borderColor: context.colors.divider.withOpacity(0.3),
@@ -484,7 +487,7 @@ class _PostCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        _timeAgo(post.createdAt),
+                        _timeAgo(post.createdAt, l10n),
                         style: TextStyle(
                           color: context.colors.secondary.withOpacity(0.7),
                           fontSize: 11,
@@ -606,14 +609,14 @@ class _PostCard extends StatelessWidget {
     );
   }
 
-  String _timeAgo(DateTime dateTime) {
+  String _timeAgo(DateTime dateTime, AppLocalizations l10n) {
     final now = DateTime.now();
     final diff = now.difference(dateTime);
 
-    if (diff.inMinutes < 1) return 'ahora';
-    if (diff.inMinutes < 60) return 'hace ${diff.inMinutes} min';
-    if (diff.inHours < 24) return 'hace ${diff.inHours}h';
-    if (diff.inDays < 7) return 'hace ${diff.inDays}d';
+    if (diff.inMinutes < 1) return l10n.socialTimeAgoNow;
+    if (diff.inMinutes < 60) return l10n.socialTimeAgoMinutes(diff.inMinutes);
+    if (diff.inHours < 24) return l10n.socialTimeAgoHours(diff.inHours);
+    if (diff.inDays < 7) return l10n.socialTimeAgoDays(diff.inDays);
     return '${dateTime.day}/${dateTime.month}/${dateTime.year}';
   }
 }
@@ -661,7 +664,7 @@ class _ErrorView extends StatelessWidget {
               onPressed: onRetry,
               icon: Icon(Icons.refresh, color: context.colors.primary),
               label: Text(
-                'Reintentar',
+                AppLocalizations.of(context)!.nutritionRetry,
                 style: TextStyle(color: context.colors.primary),
               ),
             ),
@@ -708,7 +711,7 @@ class _PiquesTabState extends State<_PiquesTab> {
       if (mounted) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text('Error al cargar piques: $e')));
+        ).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.socialChallengeLoadError(e.toString()))));
       }
     } finally {
       if (mounted) {
@@ -721,6 +724,7 @@ class _PiquesTabState extends State<_PiquesTab> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     if (_isLoadingChallenges) {
       return Center(
         child: CircularProgressIndicator(color: context.colors.primary),
@@ -739,7 +743,7 @@ class _PiquesTabState extends State<_PiquesTab> {
             ),
             SizedBox(height: 16),
             Text(
-              'No tienes piques activos.',
+              l10n.socialNoActiveChallenges,
               style: TextStyle(
                 color: context.colors.textMain,
                 fontSize: 18,
@@ -748,7 +752,7 @@ class _PiquesTabState extends State<_PiquesTab> {
             ),
             SizedBox(height: 8),
             Text(
-              '¡Desafía a tus amigos para ver quién levanta más!',
+              AppLocalizations.of(context)!.socialChallengeFriends,
               style: TextStyle(color: context.colors.secondary),
               textAlign: TextAlign.center,
             ),
@@ -761,7 +765,7 @@ class _PiquesTabState extends State<_PiquesTab> {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: Text('Actualizar mis marcas'),
+              child: Text(l10n.socialUpdateMyRecords),
             ),
           ],
         ),
@@ -782,7 +786,7 @@ class _PiquesTabState extends State<_PiquesTab> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Tus Piques',
+                    l10n.socialYourChallenges,
                     style: TextStyle(
                       color: context.colors.textMain,
                       fontSize: 20,
@@ -793,7 +797,7 @@ class _PiquesTabState extends State<_PiquesTab> {
                     onPressed: _showUpdateRecordDialog,
                     icon: Icon(Icons.add, color: context.colors.primary),
                     label: Text(
-                      'Mis Marcas',
+                      l10n.socialMyRecords,
                       style: TextStyle(color: context.colors.primary),
                     ),
                   ),
@@ -810,6 +814,7 @@ class _PiquesTabState extends State<_PiquesTab> {
   }
 
   Widget _buildChallengeCard(Challenge challenge) {
+    final l10n = AppLocalizations.of(context)!;
     return Card(
       color: context.colors.surface,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -892,7 +897,7 @@ class _PiquesTabState extends State<_PiquesTab> {
                         ),
                       ),
                       child: Text(
-                        'Rechazar',
+                        l10n.socialReject,
                         style: TextStyle(color: Colors.red),
                       ),
                     ),
@@ -907,7 +912,7 @@ class _PiquesTabState extends State<_PiquesTab> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      child: Text('Aceptar'),
+                      child: Text(l10n.socialAccept),
                     ),
                   ),
                 ],
@@ -941,24 +946,25 @@ class _PiquesTabState extends State<_PiquesTab> {
   }
 
   Widget _buildStatusBadge(ChallengeStatus status) {
+    final l10n = AppLocalizations.of(context)!;
     Color color;
     String text;
     switch (status) {
       case ChallengeStatus.PENDING:
         color = Colors.orange;
-        text = 'PENDIENTE';
+        text = l10n.socialChallengeStatusPending;
         break;
       case ChallengeStatus.ACCEPTED:
         color = Colors.green;
-        text = 'ACTIVO';
+        text = l10n.socialChallengeStatusActive;
         break;
       case ChallengeStatus.REJECTED:
         color = Colors.red;
-        text = 'RECHAZADO';
+        text = l10n.socialChallengeStatusRejected;
         break;
       case ChallengeStatus.FINISHED:
         color = context.colors.primary;
-        text = 'FINALIZADO';
+        text = l10n.socialChallengeStatusFinished;
         break;
     }
 
@@ -987,7 +993,7 @@ class _PiquesTabState extends State<_PiquesTab> {
     } catch (e) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text('Error: $e')));
+      ).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.socialErrorDetails(e.toString()))));
     }
   }
 
@@ -998,11 +1004,12 @@ class _PiquesTabState extends State<_PiquesTab> {
     } catch (e) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text('Error: $e')));
+      ).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.socialErrorDetails(e.toString()))));
     }
   }
 
   void _showUpdateRecordDialog() {
+    final l10n = AppLocalizations.of(context)!;
     final TextEditingController exerciseController = TextEditingController();
     final TextEditingController weightController = TextEditingController();
 
@@ -1010,7 +1017,7 @@ class _PiquesTabState extends State<_PiquesTab> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(
-          'Actualizar Marca Personal',
+          l10n.socialUpdatePersonalRecord,
           style: TextStyle(color: context.colors.textMain),
         ),
         content: Column(
@@ -1019,7 +1026,7 @@ class _PiquesTabState extends State<_PiquesTab> {
             TextField(
               controller: exerciseController,
               decoration: InputDecoration(
-                labelText: 'Ejercicio (ej: Press Banca)',
+                labelText: l10n.socialExerciseHint,
                 labelStyle: TextStyle(color: context.colors.secondary),
               ),
               style: TextStyle(color: context.colors.textMain),
@@ -1028,7 +1035,7 @@ class _PiquesTabState extends State<_PiquesTab> {
             TextField(
               controller: weightController,
               decoration: InputDecoration(
-                labelText: 'Peso (kg)',
+                labelText: l10n.socialWeightKg,
                 labelStyle: TextStyle(color: context.colors.secondary),
               ),
               keyboardType: TextInputType.number,
@@ -1040,7 +1047,7 @@ class _PiquesTabState extends State<_PiquesTab> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: Text(
-              'Cancelar',
+              l10n.nutritionCancel,
               style: TextStyle(color: context.colors.secondary),
             ),
           ),
@@ -1055,18 +1062,18 @@ class _PiquesTabState extends State<_PiquesTab> {
                     Navigator.pop(context);
                     _loadChallenges();
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Marca actualizada')),
+                      SnackBar(content: Text(l10n.socialRecordUpdated)),
                     );
                   }
                 } catch (e) {
                   ScaffoldMessenger.of(
                     context,
-                  ).showSnackBar(SnackBar(content: Text('Error: $e')));
+                  ).showSnackBar(SnackBar(content: Text(l10n.socialErrorDetails(e.toString()))));
                 }
               }
             },
             style: ElevatedButton.styleFrom(backgroundColor: context.colors.primary),
-            child: Text('Guardar'),
+            child: Text(l10n.socialSave),
           ),
         ],
       ),

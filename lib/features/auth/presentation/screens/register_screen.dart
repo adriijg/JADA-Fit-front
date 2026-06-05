@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_strings.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../data/services/auth_service.dart';
@@ -59,25 +59,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
 
     if (name.isEmpty) {
-      nameError = AppStrings.errorEnterName;
+      nameError = AppLocalizations.of(context)!.errorEnterName;
     }
 
     if (email.isEmpty) {
-      emailError = AppStrings.errorEnterRegisterEmail;
+      emailError = AppLocalizations.of(context)!.errorEnterRegisterEmail;
     } else if (!_validateEmail(email)) {
-      emailError = AppStrings.errorInvalidEmail;
+      emailError = AppLocalizations.of(context)!.errorInvalidEmail;
     }
 
     if (password.isEmpty) {
-      passwordError = AppStrings.errorEnterPassword;
+      passwordError = AppLocalizations.of(context)!.errorEnterPassword;
     } else if (password.length < 8) {
-      passwordError = AppStrings.errorPasswordMinLength;
+      passwordError = AppLocalizations.of(context)!.errorPasswordMinLength;
     }
 
     if (repeatPassword.isEmpty) {
-      repeatPasswordError = AppStrings.errorRepeatPassword;
+      repeatPasswordError = AppLocalizations.of(context)!.errorRepeatPassword;
     } else if (password != repeatPassword) {
-      repeatPasswordError = AppStrings.errorPasswordsDontMatch;
+      repeatPasswordError = AppLocalizations.of(context)!.errorPasswordsDontMatch;
     }
 
     if (nameError != null ||
@@ -85,7 +85,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         passwordError != null ||
         repeatPasswordError != null) {
       setState(() {
-        errorMessage = AppStrings.errorFixForm;
+        errorMessage = AppLocalizations.of(context)!.errorFixForm;
       });
       return;
     }
@@ -114,10 +114,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
       if (!mounted) return;
 
       setState(() {
-        errorMessage = AppStrings.errorRegisterFailed;
+        errorMessage = AppLocalizations.of(context)!.errorRegisterFailed;
       });
 
-      _showMessage(AppStrings.errorRegisterFailed);
+      _showMessage(AppLocalizations.of(context)!.errorRegisterFailed);
     } finally {
       if (mounted) {
         setState(() => isLoading = false);
@@ -177,7 +177,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     SizedBox(height: 16),
                     Text(
-                      AppStrings.appName,
+                      AppLocalizations.of(context)!.appName,
                       style: TextStyle(
                         color: context.colors.primary,
                         fontFamily: 'Orbitron',
@@ -255,7 +255,7 @@ class _RegisterCard extends StatelessWidget {
         children: [
           Center(
             child: Text(
-              AppStrings.registerTitle,
+              AppLocalizations.of(context)!.registerTitle,
               style: TextStyle(
                 color: context.colors.textMain,
                 fontSize: 18,
@@ -266,7 +266,7 @@ class _RegisterCard extends StatelessWidget {
           ),
           SizedBox(height: 32),
           Text(
-            AppStrings.registerNameLabel,
+            AppLocalizations.of(context)!.registerNameLabel,
             style: TextStyle(
               color: context.colors.secondary,
               fontSize: 14,
@@ -276,13 +276,13 @@ class _RegisterCard extends StatelessWidget {
           SizedBox(height: 8),
           AuthTextField(
             controller: nameController,
-            hintText: AppStrings.registerNameHint,
+            hintText: AppLocalizations.of(context)!.registerNameHint,
             icon: Icons.person_outline,
             errorText: nameError,
           ),
           SizedBox(height: 22),
           Text(
-            AppStrings.registerEmailLabel,
+            AppLocalizations.of(context)!.registerEmailLabel,
             style: TextStyle(
               color: context.colors.secondary,
               fontSize: 14,
@@ -292,14 +292,14 @@ class _RegisterCard extends StatelessWidget {
           SizedBox(height: 8),
           AuthTextField(
             controller: emailController,
-            hintText: AppStrings.registerEmailHint,
+            hintText: AppLocalizations.of(context)!.registerEmailHint,
             icon: Icons.email_outlined,
             keyboardType: TextInputType.emailAddress,
             errorText: emailError,
           ),
           SizedBox(height: 22),
           Text(
-            AppStrings.registerPasswordLabel,
+            AppLocalizations.of(context)!.registerPasswordLabel,
             style: TextStyle(
               color: context.colors.secondary,
               fontSize: 14,
@@ -309,14 +309,14 @@ class _RegisterCard extends StatelessWidget {
           SizedBox(height: 8),
           AuthTextField(
             controller: passwordController,
-            hintText: AppStrings.registerPasswordHint,
+            hintText: AppLocalizations.of(context)!.registerPasswordHint,
             icon: Icons.lock_outline,
             obscureText: true,
             errorText: passwordError,
           ),
           SizedBox(height: 22),
           Text(
-            AppStrings.registerRepeatPasswordLabel,
+            AppLocalizations.of(context)!.registerRepeatPasswordLabel,
             style: TextStyle(
               color: context.colors.secondary,
               fontSize: 14,
@@ -326,7 +326,7 @@ class _RegisterCard extends StatelessWidget {
           SizedBox(height: 8),
           AuthTextField(
             controller: repeatPasswordController,
-            hintText: AppStrings.registerRepeatPasswordHint,
+            hintText: AppLocalizations.of(context)!.registerRepeatPasswordHint,
             icon: Icons.lock_reset,
             obscureText: true,
             errorText: repeatPasswordError,
@@ -372,7 +372,7 @@ class _RegisterCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          AppStrings.registerButton,
+                          AppLocalizations.of(context)!.registerButton,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 15,
@@ -392,7 +392,7 @@ class _RegisterCard extends StatelessWidget {
               style: TextButton.styleFrom(
                 foregroundColor: context.colors.secondary,
               ),
-              child: Text(AppStrings.alreadyHaveAccountPrompt),
+              child: Text(AppLocalizations.of(context)!.alreadyHaveAccountPrompt),
             ),
           ),
         ],

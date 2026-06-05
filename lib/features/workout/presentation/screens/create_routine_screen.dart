@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../data/models/exercise_catalog.dart';
@@ -148,7 +149,7 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(widget.isEditing ? '¡Rutina actualizada!' : '¡Rutina creada con éxito!'),
+          content: Text(widget.isEditing ? AppLocalizations.of(context)!.workoutRoutineUpdated : AppLocalizations.of(context)!.workoutRoutineCreated),
           backgroundColor: Colors.green,
         ),
       );
@@ -187,7 +188,7 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
           icon: Icon(Icons.arrow_back_ios_new_rounded, color: context.colors.textMain, size: 22),
         ),
         title: Text(
-          widget.isEditing ? 'Editar Rutina' : 'Nueva Rutina',
+          widget.isEditing ? AppLocalizations.of(context)!.workoutEditRoutine : AppLocalizations.of(context)!.workoutNewRoutine,
           style: TextStyle(
             color: context.colors.textMain,
             fontSize: 20,
@@ -206,12 +207,12 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const _SectionHeader(title: 'Detalles', icon: Icons.auto_awesome_rounded),
+                    _SectionHeader(title: AppLocalizations.of(context)!.workoutDetails, icon: Icons.auto_awesome_rounded),
                     SizedBox(height: 20),
                     _PremiumTextField(
                       controller: _nameController,
-                      label: 'Nombre',
-                      hint: 'Ej. Push Day / Pierna / Full Body',
+                      label: AppLocalizations.of(context)!.workoutName,
+                      hint: AppLocalizations.of(context)!.workoutNameHint,
                       validator: (v) => (v == null || v.trim().isEmpty) ? 'Requerido' : null,
                     ),
                     SizedBox(height: 16),
@@ -241,7 +242,7 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
                     SizedBox(height: 16),
                     _PremiumTextField(
                       controller: _descriptionController,
-                      label: 'Descripción',
+                      label: AppLocalizations.of(context)!.workoutDescription,
                       hint: 'Notas adicionales...',
                       maxLines: 2,
                     ),
@@ -276,7 +277,7 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
                                   size: 18,
                                 ),
                                 label: Text(
-                                  _showSuggestions ? 'CERRAR' : 'SUGERENCIAS',
+                                  _showSuggestions ? AppLocalizations.of(context)!.workoutClose : AppLocalizations.of(context)!.workoutSuggestions,
                                   style: TextStyle(fontWeight: FontWeight.w900, fontSize: 11),
                                 ),
                                 style: TextButton.styleFrom(
@@ -290,7 +291,7 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
                             TextButton.icon(
                               onPressed: _addExercise,
                               icon: Icon(Icons.add_circle_outline_rounded, size: 20),
-                              label: Text('AÑADIR', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 11)),
+                              label: Text(AppLocalizations.of(context)!.workoutAdd, style: TextStyle(fontWeight: FontWeight.w900, fontSize: 11)),
                               style: TextButton.styleFrom(
                                 foregroundColor: context.colors.primary,
                                 backgroundColor: context.colors.primary.withOpacity(0.1),
@@ -364,7 +365,7 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
           ),
           SizedBox(height: 4),
           Text(
-            'Toca un ejercicio para añadirlo a tu rutina',
+            AppLocalizations.of(context)!.workoutTapExercise,
             style: TextStyle(
               color: context.colors.tertiary.withOpacity(0.6),
               fontSize: 12,
@@ -435,7 +436,7 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
           Icon(Icons.add_task_rounded, color: context.colors.textMain.withOpacity(0.2), size: 48),
           SizedBox(height: 16),
           Text(
-            '¡Empieza a añadir ejercicios!',
+            AppLocalizations.of(context)!.workoutStartAddingExercises,
             style: TextStyle(
               color: context.colors.textMain.withOpacity(0.4),
               fontSize: 14,
@@ -912,7 +913,7 @@ class _PremiumExerciseForm extends StatelessWidget {
               children: [
                 _PremiumTextField(
                   controller: entry.nameController,
-                  label: 'Nombre',
+                  label: AppLocalizations.of(context)!.workoutName,
                   hint: 'Ej. Press de Banca',
                   validator: (v) => (v == null || v.trim().isEmpty) ? 'Requerido' : null,
                 ),
@@ -930,10 +931,10 @@ class _PremiumExerciseForm extends StatelessWidget {
                     ),
                     SizedBox(width: 12),
                     Expanded(
-                      child: _PremiumTextField(
-                        controller: entry.repsController,
-                        label: 'Reps',
-                        hint: '10',
+                        child: _PremiumTextField(
+                          controller: entry.repsController,
+                          label: AppLocalizations.of(context)!.workoutReps,
+                          hint: '10',
                         keyboardType: TextInputType.number,
                         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       ),

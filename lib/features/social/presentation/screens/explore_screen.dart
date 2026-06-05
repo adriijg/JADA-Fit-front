@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/image_url_resolver.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../data/models/post.dart';
 import '../../data/models/user_summary.dart';
 import '../../data/services/post_service.dart';
@@ -92,7 +93,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error al buscar: $e'),
+            content: Text(AppLocalizations.of(context)!.socialSearchError(e.toString())),
           ),
         );
       }
@@ -249,7 +250,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
             TextButton.icon(
               onPressed: _loadExplore,
               icon: Icon(Icons.refresh, color: context.colors.primary),
-              label: Text('Reintentar', style: TextStyle(color: context.colors.primary)),
+              label: Text(AppLocalizations.of(context)!.nutritionRetry, style: TextStyle(color: context.colors.primary)),
             ),
           ],
         ),
@@ -276,7 +277,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
             ),
             SizedBox(height: 16),
             Text(
-              'Nada que explorar aún',
+              AppLocalizations.of(context)!.socialNothingToExplore,
               style: TextStyle(
                 color: context.colors.textMain,
                 fontSize: 16,
@@ -285,7 +286,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
             ),
             SizedBox(height: 6),
             Text(
-              'Las publicaciones públicas aparecerán aquí',
+              AppLocalizations.of(context)!.socialPublicPostsHere,
               style: TextStyle(color: context.colors.secondary, fontSize: 13),
             ),
           ],

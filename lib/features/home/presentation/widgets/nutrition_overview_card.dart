@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_card.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class NutritionErrorCard extends StatelessWidget {
   NutritionErrorCard({
@@ -32,7 +33,7 @@ class NutritionErrorCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Nutrición de hoy',
+                      AppLocalizations.of(context)!.homeNutritionToday,
                       style: TextStyle(
                         color: context.colors.textMain,
                         fontSize: 19,
@@ -41,7 +42,7 @@ class NutritionErrorCard extends StatelessWidget {
                     ),
                     SizedBox(height: 6),
                     Text(
-                      'Resumen de calorías y macros',
+                      AppLocalizations.of(context)!.homeCaloriesAndMacrosSummary,
                       style: TextStyle(
                         color: context.colors.secondary,
                         fontSize: 12,
@@ -68,7 +69,7 @@ class NutritionErrorCard extends StatelessWidget {
           ),
           SizedBox(height: 14),
           AppCardButton(
-            label: 'Reintentar',
+            label: AppLocalizations.of(context)!.nutritionRetry,
             onTap: onRetry,
           ),
         ],
@@ -124,7 +125,7 @@ class NutritionOverviewCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Nutrición de hoy',
+                      AppLocalizations.of(context)!.homeNutritionToday,
                       style: TextStyle(
                         color: context.colors.textMain,
                         fontSize: 19,
@@ -133,7 +134,7 @@ class NutritionOverviewCard extends StatelessWidget {
                     ),
                     SizedBox(height: 6),
                     Text(
-                      'Resumen de calorías y macros',
+                      AppLocalizations.of(context)!.homeCaloriesAndMacrosSummary,
                       style: TextStyle(
                         color: context.colors.secondary,
                         fontSize: 12,
@@ -160,19 +161,19 @@ class NutritionOverviewCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     NutritionMetric(
-                      label: 'Consumidas',
+                      label: AppLocalizations.of(context)!.homeConsumed,
                       value: '$caloriesConsumed kcal',
                       icon: Icons.local_fire_department,
                     ),
                     SizedBox(height: 12),
                     NutritionMetric(
-                      label: 'Objetivo',
+                      label: AppLocalizations.of(context)!.homeGoal,
                       value: '$caloriesGoal kcal',
                       icon: Icons.flag_outlined,
                     ),
                     SizedBox(height: 12),
                     NutritionMetric(
-                      label: 'Restantes',
+                      label: AppLocalizations.of(context)!.homeRemaining,
                       value:
                           '${remainingCalories.clamp(0, caloriesGoal)} kcal',
                       icon: Icons.bolt_outlined,
@@ -184,21 +185,21 @@ class NutritionOverviewCard extends StatelessWidget {
           ),
           SizedBox(height: 24),
           MacroProgressBar(
-            label: 'Proteína',
+            label: AppLocalizations.of(context)!.homeProtein,
             consumed: proteinConsumed,
             goal: proteinGoal,
             unit: 'g',
           ),
           SizedBox(height: 14),
           MacroProgressBar(
-            label: 'Carbos',
+            label: AppLocalizations.of(context)!.homeCarbs,
             consumed: carbsConsumed,
             goal: carbsGoal,
             unit: 'g',
           ),
           SizedBox(height: 14),
           MacroProgressBar(
-            label: 'Grasas',
+            label: AppLocalizations.of(context)!.homeFats,
             consumed: fatsConsumed,
             goal: fatsGoal,
             unit: 'g',

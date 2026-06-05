@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../l10n/app_localizations.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_card.dart';
@@ -201,12 +202,12 @@ class _MacroTotalCard extends StatelessWidget {
           Row(
             children: [
               _MacroBlock(
-                label: 'Calorías',
+                label: AppLocalizations.of(context)!.nutritionCalories,
                 value: '${_f(recipe.totalCalories)} kcal',
               ),
               SizedBox(width: 8),
               _MacroBlock(
-                label: 'Proteína',
+                label: AppLocalizations.of(context)!.nutritionProtein,
                 value: '${_f(recipe.totalProtein)} g',
               ),
               SizedBox(width: 8),

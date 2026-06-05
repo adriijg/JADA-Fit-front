@@ -4,11 +4,9 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../data/models/chat_message_model.dart';
 import '../providers/ai_provider.dart';
-
-String _limitReachedMessage =
-    'Limite de historial de chat alcanzado. Elimina un chat existente para crear uno nuevo.';
 
 class AiScreen extends StatefulWidget {
   AiScreen({super.key});
@@ -24,6 +22,21 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
   int _lastMessageCount = 0;
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
+  Locale? _appliedLocale;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final locale = Localizations.localeOf(context);
+    if (_appliedLocale == locale) return;
+    _appliedLocale = locale;
+
+    final l10n = AppLocalizations.of(context)!;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      context.read<AiProvider>().updateLocalization(l10n);
+    });
+  }
 
   @override
   void initState() {
@@ -81,7 +94,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Copiado al portapapeles'),
+          content: Text(AppLocalizations.of(context)!.aiCopiedToClipboard),
           duration: Duration(seconds: 2),
           behavior: SnackBarBehavior.floating,
         ),
@@ -145,7 +158,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
           SizedBox(width: 10),
           Expanded(
             child: Text(
-              aiProvider.currentSessionTitle ?? 'Asistente IA',
+              aiProvider.currentSessionTitle ?? AppLocalizations.of(context)!.aiAssistant,
               style: TextStyle(
                 color: context.colors.textMain,
                 fontSize: 15,
@@ -165,7 +178,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
               if (!aiProvider.newChat()) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text(_limitReachedMessage),
+                    content: Text(AppLocalizations.of(context)!.aiLimitReached),
                     duration: Duration(seconds: 3),
                   ),
                 );
@@ -199,7 +212,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
         SizedBox(height: 16),
         Center(
           child: Text(
-            'Asistente IA',
+            AppLocalizations.of(context)!.aiAssistant,
             style: TextStyle(
               color: context.colors.textMain,
               fontSize: 20,
@@ -210,7 +223,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
         SizedBox(height: 8),
         Center(
           child: Text(
-            'Pregúntame sobre rutinas, nutrición o cualquier duda fitness.',
+            AppLocalizations.of(context)!.aiWelcomeSubtitle,
             style: TextStyle(
               color: context.colors.textMain.withValues(alpha: 0.6),
               fontSize: 14,
@@ -575,7 +588,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
                   fontSize: 14,
                 ),
                 decoration: InputDecoration(
-                  hintText: 'Escribe tu mensaje...',
+                  hintText: AppLocalizations.of(context)!.aiInputHint,
                   hintStyle: TextStyle(
                     color: context.colors.textMain.withValues(alpha: 0.6),
                     fontSize: 13,
@@ -654,6 +667,7 @@ class _ChatHistorySheet extends StatelessWidget {
     final aiProvider = context.watch<AiProvider>();
     final sessions = aiProvider.sessions;
     final currentIndex = aiProvider.currentSessionIndex;
+    final l10n = AppLocalizations.of(context)!;
 
     return Container(
       height: MediaQuery.of(context).size.height * 0.6,
@@ -673,7 +687,7 @@ class _ChatHistorySheet extends StatelessWidget {
           ),
           SizedBox(height: 20),
           Text(
-            'HISTORIAL',
+            l10n.aiHistoryTitle,
             style: TextStyle(
               color: context.colors.secondary,
               fontSize: 12,
@@ -686,7 +700,7 @@ class _ChatHistorySheet extends StatelessWidget {
             child: sessions.isEmpty
                 ? Center(
                     child: Text(
-                      'No hay conversaciones guardadas',
+                      l10n.aiNoSavedConversations,
                       style: TextStyle(color: context.colors.textMain),
                     ),
                   )
@@ -723,7 +737,7 @@ class _ChatHistorySheet extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                         subtitle: Text(
-                          '${session.messages.length} mensajes',
+                          l10n.aiMessageCount(session.messages.length),
                           style: TextStyle(
                             color: context.colors.textMain.withValues(alpha: 0.5),
                             fontSize: 12,

@@ -8,6 +8,7 @@ import '../../../../core/widgets/app_card.dart';
 import '../../../home/presentation/screens/home_screen.dart';
 import '../../data/services/onboarding_service.dart';
 import '../../../settings/presentation/providers/settings_provider.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class OnboardingScreen extends StatefulWidget {
   OnboardingScreen({super.key});
@@ -73,12 +74,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
 
     if (selectedGender == null) {
-      _setError('Selecciona tu género');
+      _setError(AppLocalizations.of(context)!.onboardingSelectGender);
       return;
     }
 
     if (selectedGoal == null) {
-      _setError('Selecciona tu objetivo');
+      _setError(AppLocalizations.of(context)!.onboardingSelectGoal);
       return;
     }
 
@@ -117,7 +118,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       if (!mounted) return;
 
       setState(() {
-        errorMessage = 'No se pudo completar la configuración inicial';
+        errorMessage = AppLocalizations.of(context)!.onboardingSetupFailed;
       });
     } finally {
       if (mounted) {
@@ -221,7 +222,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  'EMPEZAR',
+                                  AppLocalizations.of(context)!.onboardingStart,
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 15,
@@ -257,7 +258,7 @@ class _OnboardingHeader extends StatelessWidget {
         ),
         SizedBox(height: 18),
         Text(
-          'Configura tu perfil fitness',
+          AppLocalizations.of(context)!.onboardingSetupFitnessProfile,
           style: TextStyle(
             color: context.colors.textMain,
             fontSize: 28,
@@ -314,7 +315,7 @@ class _OnboardingCard extends StatelessWidget {
         children: [
           _OnboardingTextField(
             controller: weightController,
-            label: 'Peso actual',
+            label: AppLocalizations.of(context)!.onboardingCurrentWeight,
             hintText: imperial ? 'Ej: 154' : 'Ej: 70',
             suffix: imperial ? 'lbs' : 'kg',
             icon: Icons.monitor_weight_outlined,
@@ -325,7 +326,7 @@ class _OnboardingCard extends StatelessWidget {
           SizedBox(height: 16),
           _OnboardingTextField(
             controller: heightController,
-            label: 'Altura',
+            label: AppLocalizations.of(context)!.onboardingHeight,
             hintText: imperial ? 'Ej: 5.9' : 'Ej: 180',
             suffix: imperial ? 'ft' : 'cm',
             icon: Icons.height,
@@ -399,17 +400,17 @@ class _GenderDropdown extends StatelessWidget {
       iconEnabledColor: context.colors.secondary,
       decoration: _inputDecoration(
         context,
-        label: 'Género',
+        label: AppLocalizations.of(context)!.profileGender,
         icon: Icons.wc,
       ),
-      items: const [
+      items: [
         DropdownMenuItem(
           value: 'HOMBRE',
-          child: Text('Hombre'),
+          child: Text(AppLocalizations.of(context)!.fitnessMale),
         ),
         DropdownMenuItem(
           value: 'MUJER',
-          child: Text('Mujer'),
+          child: Text(AppLocalizations.of(context)!.fitnessFemale),
         ),
       ],
       onChanged: onChanged,
@@ -438,21 +439,21 @@ class _GoalDropdown extends StatelessWidget {
       iconEnabledColor: context.colors.secondary,
       decoration: _inputDecoration(
         context,
-        label: 'Objetivo',
+        label: AppLocalizations.of(context)!.onboardingGoal,
         icon: Icons.flag_outlined,
       ),
-      items: const [
+      items: [
         DropdownMenuItem(
           value: 'GANAR_MUSCULO',
-          child: Text('Ganar músculo'),
+          child: Text(AppLocalizations.of(context)!.fitnessGainMuscle),
         ),
         DropdownMenuItem(
           value: 'PERDER_GRASA',
-          child: Text('Perder grasa'),
+          child: Text(AppLocalizations.of(context)!.fitnessLoseFat),
         ),
         DropdownMenuItem(
           value: 'MANTENERSE_ATLETICO',
-          child: Text('Mantenerse atlético/a'),
+          child: Text(AppLocalizations.of(context)!.fitnessStayAthletic),
         ),
       ],
       onChanged: onChanged,

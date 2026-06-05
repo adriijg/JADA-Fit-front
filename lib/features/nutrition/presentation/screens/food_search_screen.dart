@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../l10n/app_localizations.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -122,7 +123,7 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
       setState(() => errorMessage = error.message);
     } catch (_) {
       if (!mounted) return;
-      setState(() => errorMessage = 'No se pudo añadir la receta');
+      setState(() => errorMessage = AppLocalizations.of(context)!.nutritionAddRecipeError);
     }
   }
 
@@ -140,22 +141,22 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(
-          'Eliminar alimento',
+          AppLocalizations.of(context)!.nutritionDeleteFood,
           style: TextStyle(color: context.colors.textMain),
         ),
         content: Text(
-          '¿Eliminar "${food.foodName}" del historial?',
+          AppLocalizations.of(context)!.nutritionDeleteFoodFromHistory(food.foodName),
           style: TextStyle(color: context.colors.textMain),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: Text('Cancelar'),
+            child: Text(AppLocalizations.of(context)!.nutritionCancel),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
             child: Text(
-              'Eliminar',
+              AppLocalizations.of(context)!.nutritionDelete,
               style: TextStyle(color: AppColors.error),
             ),
           ),
@@ -171,7 +172,7 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Alimento eliminado del historial'),
+            content: Text(AppLocalizations.of(context)!.nutritionFoodDeletedFromHistory(food.foodName)),
           ),
         );
       }
@@ -179,7 +180,7 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('No se pudo eliminar el alimento'),
+          content: Text(AppLocalizations.of(context)!.nutritionFoodDeleteError),
           backgroundColor: AppColors.error,
         ),
       );
@@ -328,8 +329,8 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
         ),
         title: Text(
           widget.pickerMode
-              ? 'Seleccionar alimento'
-              : 'Añadir a ${widget.initialMealType.label.toLowerCase()}',
+              ? AppLocalizations.of(context)!.nutritionSelectFood
+              : AppLocalizations.of(context)!.nutritionAddToEllipsis,
           style: TextStyle(
             color: context.colors.textMain,
             fontWeight: FontWeight.w700,
@@ -461,7 +462,7 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
 
                     final brand =
                         food.brand == null || food.brand!.trim().isEmpty
-                            ? 'Sin marca'
+                            ? AppLocalizations.of(context)!.nutritionNoBrand
                             : food.brand!;
 
                     return InkWell(
@@ -661,7 +662,7 @@ class _RecentFoodTile extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
-                'AÑADIR',
+                AppLocalizations.of(context)!.nutritionAddUpper,
                 style: TextStyle(
                   color: context.colors.primary,
                   fontSize: 10,
@@ -753,7 +754,7 @@ class _RecentRecipeTile extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
-                'AÑADIR',
+                AppLocalizations.of(context)!.nutritionAddUpper,
                 style: TextStyle(
                   color: context.colors.primary,
                   fontSize: 10,
@@ -850,7 +851,7 @@ class _SearchCard extends StatelessWidget {
                     ),
                     icon: Icon(Icons.search),
                     label: Text(
-                      'BUSCAR',
+                      AppLocalizations.of(context)!.nutritionSearchUpper,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),

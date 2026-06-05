@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_card.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class SmartQuickActionsCard extends StatelessWidget {
   SmartQuickActionsCard({
@@ -29,7 +30,7 @@ class SmartQuickActionsCard extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(left: 4, bottom: 14),
             child: Text(
-              'Accesos rápidos',
+              AppLocalizations.of(context)!.homeQuickActions,
               style: TextStyle(
                 color: context.colors.textMain,
                 fontSize: 18,
@@ -39,36 +40,36 @@ class SmartQuickActionsCard extends StatelessWidget {
           ),
           QuickActionTile(
             icon: Icons.qr_code_scanner,
-            title: 'Escanear alimento',
-            subtitle: 'Lee un código de barras y busca el alimento',
+            title: AppLocalizations.of(context)!.homeScanFood,
+            subtitle: AppLocalizations.of(context)!.homeQuickActionScanSubtitle,
             onTap: onScanFood,
           ),
           SizedBox(height: 10),
           QuickActionTile(
             icon: Icons.restaurant_menu,
-            title: 'Registrar comida',
-            subtitle: 'Añade una comida al día actual',
+            title: AppLocalizations.of(context)!.homeLogMeal,
+            subtitle: AppLocalizations.of(context)!.homeQuickActionMealSubtitle,
             onTap: onRegisterMeal,
           ),
           SizedBox(height: 10),
           QuickActionTile(
             icon: Icons.add_chart,
-            title: 'Añadir datos físicos',
-            subtitle: 'Registra peso, grasa corporal y masa muscular',
+            title: AppLocalizations.of(context)!.homeAddPhysicalData,
+            subtitle: AppLocalizations.of(context)!.homeQuickActionPhysicalSubtitle,
             onTap: onAddPhysicalData,
           ),
           SizedBox(height: 10),
           QuickActionTile(
             icon: Icons.calendar_month_outlined,
-            title: 'Ver rutina',
-            subtitle: 'Consulta tu entrenamiento actual',
+            title: AppLocalizations.of(context)!.homeViewRoutine,
+            subtitle: AppLocalizations.of(context)!.homeQuickActionRoutineSubtitle,
             onTap: onViewWorkout,
           ),
           SizedBox(height: 10),
           QuickActionTile(
             icon: Icons.auto_awesome,
-            title: 'Preguntar a la IA',
-            subtitle: 'Recibe una recomendación personalizada',
+            title: AppLocalizations.of(context)!.homeAskAI,
+            subtitle: AppLocalizations.of(context)!.homeQuickActionAiSubtitle,
             onTap: onAskAi,
           ),
         ],

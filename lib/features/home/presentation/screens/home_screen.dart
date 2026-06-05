@@ -5,6 +5,7 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_bottom_navigation_bar.dart';
 import '../../../../core/widgets/app_header.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../ai/presentation/providers/ai_provider.dart';
 import '../../../ai/presentation/screens/ai_screen.dart';
 import '../../../fitness_profile/data/models/fitness_progress_model.dart';
@@ -216,7 +217,7 @@ class _HomeDashboardSectionState extends State<_HomeDashboardSection> {
     } catch (_) {
       if (!mounted) return;
       setState(() {
-        _errorMessage = 'No se pudo cargar el resumen nutricional';
+        _errorMessage = AppLocalizations.of(context)!.homeNutritionLoadError;
       });
     } finally {
       if (mounted) {

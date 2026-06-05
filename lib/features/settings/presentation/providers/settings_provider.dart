@@ -11,6 +11,16 @@ class SettingsProvider extends ChangeNotifier {
   bool get aiNotificationsEnabled => _prefs.aiNotificationsEnabled;
   bool get workoutRemindersEnabled => _prefs.workoutRemindersEnabled;
 
+  Locale? get locale {
+    final code = _prefs.languageCode;
+    return code != null ? Locale(code) : null;
+  }
+
+  void setLocale(Locale? newLocale) {
+    _prefs.languageCode = newLocale?.languageCode;
+    notifyListeners();
+  }
+
   void setImperial(bool value) {
     _prefs.isImperial = value;
     notifyListeners();

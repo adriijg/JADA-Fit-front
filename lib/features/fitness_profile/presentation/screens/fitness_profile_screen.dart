@@ -11,6 +11,7 @@ import '../../../settings/presentation/providers/settings_provider.dart';
 import 'add_physical_log_screen.dart';
 import 'edit_fitness_profile_screen.dart';
 import 'fitness_progress_screen.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class FitnessProfileScreen extends StatefulWidget {
   FitnessProfileScreen({super.key});
@@ -56,7 +57,7 @@ class _FitnessProfileScreenState extends State<FitnessProfileScreen> {
       if (!mounted) return;
 
       setState(() {
-        errorMessage = 'No se pudo cargar tu perfil físico.';
+        errorMessage = AppLocalizations.of(context)!.fitnessProfileLoadError;
       });
     } finally {
       if (mounted) {
@@ -124,28 +125,28 @@ class _FitnessProfileScreenState extends State<FitnessProfileScreen> {
   }
 
   String _formatGender(String? value) {
-    if (value == null || value.trim().isEmpty) return 'Sin configurar';
+    if (value == null || value.trim().isEmpty) return AppLocalizations.of(context)!.fitnessNotConfigured;
 
     switch (value.trim().toUpperCase()) {
       case 'HOMBRE':
-        return 'Hombre';
+        return AppLocalizations.of(context)!.fitnessMale;
       case 'MUJER':
-        return 'Mujer';
+        return AppLocalizations.of(context)!.fitnessFemale;
       default:
         return value;
     }
   }
 
   String _formatGoal(String? value) {
-    if (value == null || value.trim().isEmpty) return 'Sin configurar';
+    if (value == null || value.trim().isEmpty) return AppLocalizations.of(context)!.fitnessNotConfigured;
 
     switch (value.trim().toUpperCase()) {
       case 'GANAR_MUSCULO':
-        return 'Ganar músculo';
+        return AppLocalizations.of(context)!.fitnessGainMuscle;
       case 'PERDER_GRASA':
-        return 'Perder grasa';
+        return AppLocalizations.of(context)!.fitnessLoseFat;
       case 'MANTENERSE_ATLETICO':
-        return 'Mantenerse atlético/a';
+        return AppLocalizations.of(context)!.fitnessStayAthletic;
       default:
         return value;
     }
@@ -172,7 +173,7 @@ class _FitnessProfileScreenState extends State<FitnessProfileScreen> {
           color: context.colors.textMain,
         ),
         title: Text(
-          'Perfil físico',
+          AppLocalizations.of(context)!.fitnessPhysicalProfile,
           style: TextStyle(
             color: context.colors.textMain,
             fontWeight: FontWeight.w700,
@@ -228,7 +229,7 @@ class _FitnessProfileScreenState extends State<FitnessProfileScreen> {
         height: 500,
         child: Center(
           child: _ErrorCard(
-            message: 'No se pudo cargar tu perfil físico.',
+            message: AppLocalizations.of(context)!.fitnessProfileLoadError,
             onRetry: _loadFitnessProfile,
           ),
         ),
@@ -249,7 +250,7 @@ class _FitnessProfileScreenState extends State<FitnessProfileScreen> {
         _MainStatsCard(
           weight: UnitConverter.formatWeight(currentProfile.weight, imperial),
           height: UnitConverter.formatHeight(currentProfile.height, imperial),
-          age: _formatInt(currentProfile.age, 'a\u00f1os'),
+          age: _formatInt(currentProfile.age, AppLocalizations.of(context)!.fitnessYears),
         ),
         SizedBox(height: 18),
         _BodyCompositionCard(
@@ -281,7 +282,7 @@ class _FitnessHeaderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hasGoal = goal != 'Sin configurar';
+    final hasGoal = goal != AppLocalizations.of(context)!.fitnessNotConfigured;
 
     return AppCard.elevated(
       borderRadius: 28,
@@ -307,7 +308,7 @@ class _FitnessHeaderCard extends StatelessWidget {
           ),
           SizedBox(height: 18),
           Text(
-            'Datos físicos',
+            AppLocalizations.of(context)!.fitnessPhysicalData,
             style: TextStyle(
               color: context.colors.textMain,
               fontSize: 23,
@@ -399,7 +400,7 @@ class _MainStatsCard extends StatelessWidget {
           Expanded(
             child: _StatItem(
               icon: Icons.height,
-              label: 'Altura',
+               label: AppLocalizations.of(context)!.fitnessHeight,
               value: height,
             ),
           ),
@@ -407,7 +408,7 @@ class _MainStatsCard extends StatelessWidget {
           Expanded(
             child: _StatItem(
               icon: Icons.cake_outlined,
-              label: 'Edad',
+               label: AppLocalizations.of(context)!.fitnessAge,
               value: age,
             ),
           ),
@@ -505,7 +506,7 @@ class _BodyCompositionCard extends StatelessWidget {
               Expanded(
                 child: _DetailBox(
                   icon: Icons.wc,
-                  label: 'Género',
+                  label: AppLocalizations.of(context)!.fitnessGender,
                   value: gender,
                 ),
               ),
@@ -522,7 +523,7 @@ class _BodyCompositionCard extends StatelessWidget {
           SizedBox(height: 12),
           _DetailBox(
             icon: Icons.fitness_center,
-            label: 'Masa muscular',
+            label: AppLocalizations.of(context)!.fitnessMuscleMass,
             value: muscleMass,
             fullWidth: true,
           ),
@@ -547,7 +548,7 @@ class _DetailBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isEmpty = value == '--' || value == 'Sin configurar';
+    final isEmpty = value == '--' || value == AppLocalizations.of(context)!.fitnessNotConfigured;
 
     return Container(
       width: fullWidth ? double.infinity : null,
@@ -622,22 +623,22 @@ class _FitnessActionsCard extends StatelessWidget {
         children: [
           _ActionTile(
             icon: Icons.edit_outlined,
-            title: 'Editar datos físicos',
-            subtitle: 'Altura, edad, género y objetivo',
+            title: AppLocalizations.of(context)!.fitnessEditPhysicalData,
+            subtitle: AppLocalizations.of(context)!.fitnessProfileDataSubtitle,
             onTap: onEditPhysicalData,
           ),
           SizedBox(height: 10),
           _ActionTile(
             icon: Icons.add_chart,
-            title: 'Añadir registro físico',
+            title: AppLocalizations.of(context)!.fitnessAddPhysicalRecordTitle,
             subtitle: 'Registra peso, grasa corporal y masa muscular',
             onTap: onAddPhysicalLog,
           ),
           SizedBox(height: 10),
           _ActionTile(
             icon: Icons.show_chart,
-            title: 'Ver estadísticas',
-            subtitle: 'Histórico y progreso físico',
+            title: AppLocalizations.of(context)!.fitnessViewStats,
+            subtitle: AppLocalizations.of(context)!.fitnessHistorySubtitle,
             onTap: onViewProgress,
           ),
         ],
@@ -760,7 +761,7 @@ class _ErrorCard extends StatelessWidget {
               ),
             ),
             child: Text(
-              'Reintentar',
+              AppLocalizations.of(context)!.nutritionRetry,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),

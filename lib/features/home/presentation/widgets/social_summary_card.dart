@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_card.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class SocialSummaryCard extends StatelessWidget {
   SocialSummaryCard({
@@ -19,7 +20,7 @@ class SocialSummaryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     String subtitle;
     if (activeChallenges == null && pendingRequests == null) {
-      subtitle = 'Conéctate con otros usuarios';
+      subtitle = AppLocalizations.of(context)!.homeConnectWithOthers;
     } else {
       final parts = <String>[];
       if (activeChallenges != null) {
@@ -28,7 +29,7 @@ class SocialSummaryCard extends StatelessWidget {
       if (pendingRequests != null && pendingRequests! > 0) {
         parts.add('$pendingRequests solicitud${pendingRequests == 1 ? '' : 'es'} pendiente${pendingRequests == 1 ? '' : 's'}');
       }
-      subtitle = parts.isNotEmpty ? parts.join(' · ') : 'Sin actividad reciente';
+      subtitle = parts.isNotEmpty ? parts.join(' · ') : AppLocalizations.of(context)!.homeNoRecentActivity;
     }
 
     return AppCard.elevated(
@@ -48,7 +49,7 @@ class SocialSummaryCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Actividad social',
+                  AppLocalizations.of(context)!.homeSocialActivity,
                   style: TextStyle(
                     color: context.colors.textMain,
                     fontSize: 16,

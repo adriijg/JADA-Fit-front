@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../l10n/app_localizations.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -119,25 +120,25 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(
-          'Eliminar receta',
+          AppLocalizations.of(context)!.nutritionDeleteRecipe,
           style: TextStyle(color: context.colors.textMain, fontWeight: FontWeight.w800),
         ),
         content: Text(
-          '¿Eliminar "${recipe.name}"?',
+          AppLocalizations.of(context)!.nutritionDeleteRecipeConfirm(recipe.name),
           style: TextStyle(color: context.colors.secondary),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
             child: Text(
-              'Cancelar',
+              AppLocalizations.of(context)!.nutritionCancel,
               style: TextStyle(color: context.colors.secondary),
             ),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
             child: Text(
-              'Eliminar',
+              AppLocalizations.of(context)!.nutritionDelete,
               style: TextStyle(color: AppColors.error, fontWeight: FontWeight.w800),
             ),
           ),
@@ -164,7 +165,7 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error al eliminar la receta'),
+          content: Text(AppLocalizations.of(context)!.nutritionErrorDeletingRecipe),
         ),
       );
     }
@@ -206,7 +207,7 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
             ),
             SizedBox(height: 20),
             Text(
-              'AÑADIR RECETA A...',
+              AppLocalizations.of(context)!.nutritionAddRecipeTo,
               style: TextStyle(
                 color: context.colors.secondary,
                 fontSize: 12, fontWeight: FontWeight.w800, letterSpacing: 1.2,
@@ -264,7 +265,7 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
       if (meals.isNotEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('${recipe.name} añadida a ${mealType.label.toLowerCase()}'),
+            content: Text(AppLocalizations.of(context)!.nutritionRecipeAddedToMeal(recipe.name, mealType.localizedLabel(AppLocalizations.of(context)!).toLowerCase())),
           ),
         );
       }
@@ -281,7 +282,7 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error al añadir la receta'),
+          content: Text(AppLocalizations.of(context)!.nutritionErrorAddingRecipe),
         ),
       );
     }
@@ -292,7 +293,7 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Mis recetas',
+          AppLocalizations.of(context)!.nutritionMyRecipes,
           style: TextStyle(
             color: context.colors.textMain,
             fontWeight: FontWeight.w800,
@@ -342,7 +343,7 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
             fontSize: 14,
           ),
           decoration: InputDecoration(
-            hintText: 'Buscar receta...',
+            hintText: AppLocalizations.of(context)!.nutritionSearchRecipe,
             hintStyle: TextStyle(
               color: context.colors.textMain.withOpacity(0.4),
               fontSize: 14,
@@ -409,7 +410,7 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
                     borderRadius: BorderRadius.circular(18),
                   ),
                 ),
-                child: Text('Reintentar'),
+                child: Text(AppLocalizations.of(context)!.nutritionRetry),
               ),
             ],
           ),
@@ -431,7 +432,7 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
               ),
               SizedBox(height: 20),
               Text(
-                'Todavía no tienes recetas',
+                AppLocalizations.of(context)!.nutritionRecipesEmpty,
                 style: TextStyle(
                   color: context.colors.textMain,
                   fontSize: 17,
@@ -440,7 +441,7 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
               ),
               SizedBox(height: 8),
               Text(
-                'Crea tu primera receta personalizada con tus alimentos favoritos.',
+                AppLocalizations.of(context)!.nutritionCreateFirstRecipe,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: context.colors.secondary,
@@ -452,7 +453,7 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
               ElevatedButton.icon(
                 onPressed: _openCreateRecipe,
                 icon: Icon(Icons.add, size: 18),
-                label: Text('Crear receta'),
+                label: Text(AppLocalizations.of(context)!.nutritionCreateRecipe),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: context.colors.primary,
                   foregroundColor: context.colors.background,
@@ -485,7 +486,7 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
               ),
               SizedBox(height: 16),
               Text(
-                'No hay recetas que coincidan',
+                AppLocalizations.of(context)!.nutritionNoMatchingRecipes,
                 style: TextStyle(
                   color: context.colors.textMain,
                   fontSize: 16,
@@ -494,7 +495,7 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
               ),
               SizedBox(height: 6),
               Text(
-                'Prueba con otro término de búsqueda.',
+                AppLocalizations.of(context)!.nutritionRecipesSearchEmpty,
                 style: TextStyle(
                   color: context.colors.secondary,
                   fontSize: 13,
@@ -679,7 +680,7 @@ class _RecipeCard extends StatelessWidget {
             child: OutlinedButton.icon(
               onPressed: onAddToDay,
               icon: Icon(Icons.add_circle_outline, size: 16),
-              label: Text('Añadir al día'),
+              label: Text(AppLocalizations.of(context)!.nutritionAddToDay),
               style: OutlinedButton.styleFrom(
                 foregroundColor: context.colors.primary,
                 side: BorderSide(

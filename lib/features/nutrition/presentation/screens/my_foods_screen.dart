@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../l10n/app_localizations.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -41,22 +42,22 @@ class _MyFoodsScreenState extends State<MyFoodsScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(
-          'Eliminar alimento',
+          AppLocalizations.of(context)!.nutritionDeleteFood,
           style: TextStyle(color: context.colors.textMain),
         ),
         content: Text(
-          'Se eliminará "${food.name}" de tus alimentos.\n¿Continuar?',
+          AppLocalizations.of(context)!.nutritionDeleteConfirmation,
           style: TextStyle(color: context.colors.textMain),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: Text('Cancelar'),
+            child: Text(AppLocalizations.of(context)!.nutritionCancel),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
             child: Text(
-              'Eliminar',
+              AppLocalizations.of(context)!.nutritionDelete,
               style: TextStyle(color: AppColors.error),
             ),
           ),
@@ -72,7 +73,7 @@ class _MyFoodsScreenState extends State<MyFoodsScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('"${food.name}" eliminado'),
+            content: Text(AppLocalizations.of(context)!.nutritionFoodDeleted(food.name)),
           ),
         );
       }
@@ -80,7 +81,7 @@ class _MyFoodsScreenState extends State<MyFoodsScreen> {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('No se pudo eliminar'),
+          content: Text(AppLocalizations.of(context)!.nutritionCouldNotDelete),
           backgroundColor: AppColors.error,
         ),
       );
@@ -106,7 +107,7 @@ class _MyFoodsScreenState extends State<MyFoodsScreen> {
         elevation: 0,
         iconTheme: IconThemeData(color: context.colors.textMain),
         title: Text(
-          'Mis Alimentos',
+          AppLocalizations.of(context)!.nutritionMyFoods,
           style: TextStyle(
             color: context.colors.textMain,
             fontWeight: FontWeight.w700,
@@ -119,7 +120,7 @@ class _MyFoodsScreenState extends State<MyFoodsScreen> {
           : _foods.isEmpty
               ? Center(
                   child: Text(
-                    'Aún no tienes alimentos personalizados',
+                    AppLocalizations.of(context)!.nutritionFoodsEmpty,
                     style: TextStyle(
                       color: context.colors.textMain.withOpacity(0.45),
                       fontSize: 14,
@@ -243,7 +244,7 @@ class _CreateFoodSheetState extends State<_CreateFoodSheet> {
     if (name.isEmpty || cal == null || prot == null || carb == null || fat == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Completa todos los campos'),
+          content: Text(AppLocalizations.of(context)!.nutritionCompleteAllFields),
           backgroundColor: AppColors.error,
         ),
       );
@@ -307,17 +308,17 @@ class _CreateFoodSheetState extends State<_CreateFoodSheet> {
           SizedBox(height: 12),
           Row(
             children: [
-              Expanded(child: _SheetField(ctrl: calCtrl, label: 'Kcal /100g', hint: 'Ej: 250', numeric: true)),
+              Expanded(child: _SheetField(ctrl: calCtrl, label: AppLocalizations.of(context)!.nutritionKcalPer100g, hint: 'Ej: 250', numeric: true)),
               SizedBox(width: 8),
-              Expanded(child: _SheetField(ctrl: protCtrl, label: 'Proteína /100g', hint: 'Ej: 9', numeric: true)),
+              Expanded(child: _SheetField(ctrl: protCtrl, label: AppLocalizations.of(context)!.nutritionProteinPer100g, hint: 'Ej: 9', numeric: true)),
             ],
           ),
           SizedBox(height: 12),
           Row(
             children: [
-              Expanded(child: _SheetField(ctrl: carbCtrl, label: 'Hidratos /100g', hint: 'Ej: 45', numeric: true)),
+              Expanded(child: _SheetField(ctrl: carbCtrl, label: AppLocalizations.of(context)!.nutritionCarbsPer100g, hint: 'Ej: 45', numeric: true)),
               SizedBox(width: 8),
-              Expanded(child: _SheetField(ctrl: fatCtrl, label: 'Grasas /100g', hint: 'Ej: 3', numeric: true)),
+              Expanded(child: _SheetField(ctrl: fatCtrl, label: AppLocalizations.of(context)!.nutritionFatPer100g, hint: 'Ej: 3', numeric: true)),
             ],
           ),
           SizedBox(height: 20),
@@ -343,7 +344,7 @@ class _CreateFoodSheetState extends State<_CreateFoodSheet> {
                       ),
                     )
                   : Text(
-                      'CREAR ALIMENTO',
+                      AppLocalizations.of(context)!.nutritionCreateFood,
                       style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1),
                     ),
             ),

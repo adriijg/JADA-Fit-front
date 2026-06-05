@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../l10n/app_localizations.dart';
 
 import '../../../../core/widgets/app_card.dart';
 import '../../../../core/network/api_exception.dart';
@@ -113,7 +114,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
             ),
             SizedBox(height: 20),
             Text(
-              'AÑADIR INGREDIENTE',
+              AppLocalizations.of(context)!.nutritionAddIngredientTitle,
               style: TextStyle(
                 color: context.colors.secondary,
                 fontSize: 12, fontWeight: FontWeight.w800, letterSpacing: 1.2,
@@ -122,8 +123,8 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
             SizedBox(height: 16),
             _OptionRow(
               icon: Icons.search,
-              label: 'Buscar alimento',
-              subtitle: 'Busca en el catálogo o escanea código de barras',
+              label: AppLocalizations.of(context)!.nutritionSearchFood,
+              subtitle: AppLocalizations.of(context)!.nutritionSearchOrScan,
               onTap: () {
                 Navigator.pop(context);
                 _openFoodPicker();
@@ -131,8 +132,8 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
             ),
             _OptionRow(
               icon: Icons.edit_note,
-              label: 'Añadir manualmente',
-              subtitle: 'Introduce nombre y macros del alimento',
+              label: AppLocalizations.of(context)!.nutritionAddManually,
+              subtitle: AppLocalizations.of(context)!.nutritionEnterNameAndMacros,
               onTap: () {
                 Navigator.pop(context);
                 _addManualIngredient();
@@ -195,7 +196,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
     if (_ingredients.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Añade al menos un ingrediente'),
+          content: Text(AppLocalizations.of(context)!.nutritionAddAtLeastOneIngredient),
         ),
       );
       return;
@@ -223,7 +224,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Receta actualizada correctamente'),
+            content: Text(AppLocalizations.of(context)!.nutritionRecipeUpdated),
           ),
         );
       } else {
@@ -232,7 +233,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Receta creada correctamente'),
+            content: Text(AppLocalizations.of(context)!.nutritionRecipeCreated),
           ),
         );
       }
@@ -251,7 +252,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error al guardar la receta'),
+          content: Text(AppLocalizations.of(context)!.nutritionRecipeSaveError),
         ),
       );
     } finally {
@@ -347,7 +348,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                 child: OutlinedButton.icon(
                   onPressed: _showAddIngredientSheet,
                   icon: Icon(Icons.add, size: 18),
-                  label: Text('Añadir ingrediente'),
+                  label: Text(AppLocalizations.of(context)!.nutritionAddIngredient),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: context.colors.primary,
                     side: BorderSide(
@@ -487,12 +488,12 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
           Row(
             children: [
               _MacroBadge(
-                label: 'Calorías',
+                label: AppLocalizations.of(context)!.nutritionCalories,
                 value: '${_totalCalories.toStringAsFixed(0)} kcal',
               ),
               SizedBox(width: 8),
               _MacroBadge(
-                label: 'Proteína',
+                label: AppLocalizations.of(context)!.nutritionProtein,
                 value: '${_totalProtein.toStringAsFixed(1)} g',
               ),
               SizedBox(width: 8),

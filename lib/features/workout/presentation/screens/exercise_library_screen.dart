@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_card.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../data/models/exercise_catalog.dart';
 import 'exercise_detail_screen.dart' as detail;
 
@@ -58,7 +59,7 @@ class _ExerciseLibraryScreenState extends State<ExerciseLibraryScreen> {
         elevation: 0,
         iconTheme: IconThemeData(color: context.colors.textMain),
         title: Text(
-          'Biblioteca de Ejercicios',
+          AppLocalizations.of(context)!.workoutExerciseLibrary,
           style: TextStyle(
             color: context.colors.textMain,
             fontWeight: FontWeight.w800,
@@ -79,7 +80,7 @@ class _ExerciseLibraryScreenState extends State<ExerciseLibraryScreen> {
                 controller: _searchController,
                 style: TextStyle(color: context.colors.textMain, fontWeight: FontWeight.w500),
                 decoration: InputDecoration(
-                  hintText: 'Buscar ejercicio...',
+                  hintText: AppLocalizations.of(context)!.workoutSearchExercise,
                   hintStyle: TextStyle(color: context.colors.textMain.withOpacity(0.3)),
                   prefixIcon: Icon(Icons.search_rounded, color: context.colors.secondary),
                   border: InputBorder.none,
@@ -107,9 +108,9 @@ class _ExerciseLibraryScreenState extends State<ExerciseLibraryScreen> {
       padding: EdgeInsets.symmetric(horizontal: 24, vertical: 4),
       child: Row(
         children: [
-          _filterChip('Todas', null, _selectedMuscleGroup == null && !_showBodyweightOnly,
+          _filterChip(AppLocalizations.of(context)!.workoutFilterAll, null, _selectedMuscleGroup == null && !_showBodyweightOnly,
               () => setState(() { _selectedMuscleGroup = null; _showBodyweightOnly = false; })),
-          _filterChip('Sin peso', null, _showBodyweightOnly,
+          _filterChip(AppLocalizations.of(context)!.workoutFilterBodyweight, null, _showBodyweightOnly,
               () => setState(() { _showBodyweightOnly = true; _selectedMuscleGroup = null; }),
               icon: Icons.accessibility_new_rounded),
           ..._muscleGroups.map((group) => _filterChip(
@@ -170,7 +171,7 @@ class _ExerciseLibraryScreenState extends State<ExerciseLibraryScreen> {
             Icon(Icons.search_off_rounded, color: context.colors.textMain.withOpacity(0.2), size: 64),
             SizedBox(height: 16),
             Text(
-              'No se encontraron ejercicios',
+              AppLocalizations.of(context)!.workoutNoExercisesFound,
               style: TextStyle(color: context.colors.textMain.withOpacity(0.5), fontSize: 16),
             ),
           ],
@@ -194,7 +195,7 @@ class _ExerciseLibraryScreenState extends State<ExerciseLibraryScreen> {
                 context,
                 MaterialPageRoute(
                   builder: (_) => detail.ExerciseDetailScreen(
-                    exercise: detail.toCatalogModel(exercise),
+                    exercise: detail.toCatalogModel(exercise, AppLocalizations.of(context)!),
                   ),
                 ),
               );

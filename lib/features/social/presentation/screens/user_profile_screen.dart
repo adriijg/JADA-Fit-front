@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/image_url_resolver.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../data/models/post.dart';
 import '../../data/models/user_profile.dart';
 import '../../data/services/post_service.dart';
@@ -98,7 +99,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error: $e'),
+            content: Text(AppLocalizations.of(context)!.socialErrorDetails(e.toString())),
             backgroundColor: AppColors.error,
           ),
         );
@@ -117,7 +118,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          _profile?.username ?? 'Perfil',
+          _profile?.username ?? AppLocalizations.of(context)!.profileTitle,
           style: TextStyle(
             color: context.colors.textMain,
             fontWeight: FontWeight.bold,
@@ -166,7 +167,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   ),
                 ),
                 icon: Icon(Icons.refresh, size: 18),
-                label: Text('Reintentar'),
+                label: Text(AppLocalizations.of(context)!.nutritionRetry),
               ),
             ],
           ),
@@ -360,7 +361,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         onPressed: _showChallengeDialog,
                         icon: Icon(Icons.emoji_events_outlined, color: context.colors.primary, size: 18),
                         label: Text(
-                          '¡Desafiar a un pique!',
+                          AppLocalizations.of(context)!.socialChallengeUser,
                           style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
                         ),
                         style: OutlinedButton.styleFrom(
@@ -476,7 +477,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         ),
                         SizedBox(height: 8),
                         Text(
-                          'Aún no hay publicaciones',
+                          AppLocalizations.of(context)!.socialNoPostsYet,
                           style: TextStyle(
                             color: context.colors.secondary,
                             fontSize: 13,
@@ -554,13 +555,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Desafiar a ${_profile!.username}', style: TextStyle(color: context.colors.textMain)),
+        title: Text(AppLocalizations.of(context)!.socialChallengeUserTitle(_profile!.username), style: TextStyle(color: context.colors.textMain)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '¿En qué ejercicio quieres competir?',
+              AppLocalizations.of(context)!.socialPickExercise,
               style: TextStyle(color: context.colors.secondary, fontSize: 14),
             ),
             SizedBox(height: 16),
@@ -580,7 +581,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Cancelar', style: TextStyle(color: context.colors.secondary)),
+            child: Text(AppLocalizations.of(context)!.nutritionCancel, style: TextStyle(color: context.colors.secondary)),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -591,20 +592,20 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   if (mounted) {
                     Navigator.pop(context);
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('¡Desafío enviado con éxito!')),
+                      SnackBar(content: Text(AppLocalizations.of(context)!.socialChallengeSent)),
                     );
                   }
                 } catch (e) {
                   if (mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Error: $e')),
+                      SnackBar(content: Text(AppLocalizations.of(context)!.socialErrorDetails(e.toString()))),
                     );
                   }
                 }
               }
             },
             style: ElevatedButton.styleFrom(backgroundColor: context.colors.primary),
-            child: Text('Enviar Desafío'),
+            child: Text(AppLocalizations.of(context)!.socialSendChallenge),
           ),
         ],
       ),

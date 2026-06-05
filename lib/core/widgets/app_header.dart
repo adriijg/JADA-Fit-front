@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../constants/app_strings.dart';
+import '../../l10n/app_localizations.dart';
 import '../theme/app_colors.dart';
 
 class AppHeader extends StatelessWidget {
@@ -27,7 +27,7 @@ class AppHeader extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              AppStrings.appName,
+              AppLocalizations.of(context)!.appName,
               style: TextStyle(
                 color: context.colors.primary,
                 fontWeight: FontWeight.bold,
@@ -41,7 +41,7 @@ class AppHeader extends StatelessWidget {
                 Icons.person,
                 color: context.colors.textMain,
               ),
-              tooltip: AppStrings.profileTitle,
+              tooltip: AppLocalizations.of(context)!.profileTitle,
             ),
           ],
         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../l10n/app_localizations.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -259,7 +260,7 @@ class _RegisterMealScreenState extends State<RegisterMealScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Comida registrada correctamente'),
+          content: Text(AppLocalizations.of(context)!.nutritionMealRegistered),
         ),
       );
 
@@ -486,8 +487,8 @@ class _ManualFoodCard extends StatelessWidget {
           SizedBox(height: 18),
           _ManualField(
             controller: foodNameController,
-            label: 'Nombre del alimento',
-            hint: 'Ej: Arroz integral',
+            label: AppLocalizations.of(context)!.nutritionFoodName,
+            hint: AppLocalizations.of(context)!.nutritionFoodNameHint,
           ),
           SizedBox(height: 12),
           Row(
@@ -495,7 +496,7 @@ class _ManualFoodCard extends StatelessWidget {
               Expanded(
                 child: _ManualField(
                   controller: caloriesController,
-                  label: 'Calorías /100g',
+                  label: AppLocalizations.of(context)!.nutritionCaloriesPer100g,
                   hint: 'Ej: 130',
                   keyboardType: TextInputType.numberWithOptions(decimal: true),
                 ),
@@ -504,7 +505,7 @@ class _ManualFoodCard extends StatelessWidget {
               Expanded(
                 child: _ManualField(
                   controller: proteinController,
-                  label: 'Proteína /100g',
+                  label: AppLocalizations.of(context)!.nutritionProteinPer100g,
                   hint: 'Ej: 2.7',
                   keyboardType: TextInputType.numberWithOptions(decimal: true),
                 ),
@@ -517,7 +518,7 @@ class _ManualFoodCard extends StatelessWidget {
               Expanded(
                 child: _ManualField(
                   controller: carbsController,
-                  label: 'Hidratos /100g',
+                  label: AppLocalizations.of(context)!.nutritionCarbsPer100g,
                   hint: 'Ej: 28',
                   keyboardType: TextInputType.numberWithOptions(decimal: true),
                 ),
@@ -526,7 +527,7 @@ class _ManualFoodCard extends StatelessWidget {
               Expanded(
                 child: _ManualField(
                   controller: fatsController,
-                  label: 'Grasas /100g',
+                  label: AppLocalizations.of(context)!.nutritionFatPer100g,
                   hint: 'Ej: 1.2',
                   keyboardType: TextInputType.numberWithOptions(decimal: true),
                 ),
@@ -862,7 +863,7 @@ class _MacroPreviewCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'RESUMEN CALCULADO',
+            AppLocalizations.of(context)!.nutritionCalculatedSummary,
             style: TextStyle(
               color: context.colors.secondary,
               fontSize: 11,
@@ -875,7 +876,7 @@ class _MacroPreviewCard extends StatelessWidget {
             children: [
               Expanded(
                 child: _MacroBox(
-                  label: 'Calorías',
+                  label: AppLocalizations.of(context)!.nutritionCalories,
                   value: calories,
                   icon: Icons.local_fire_department,
                 ),
@@ -883,7 +884,7 @@ class _MacroPreviewCard extends StatelessWidget {
               SizedBox(width: 10),
               Expanded(
                 child: _MacroBox(
-                  label: 'Proteína',
+                  label: AppLocalizations.of(context)!.nutritionProtein,
                   value: protein,
                   icon: Icons.fitness_center,
                 ),
@@ -895,7 +896,7 @@ class _MacroPreviewCard extends StatelessWidget {
             children: [
               Expanded(
                 child: _MacroBox(
-                  label: 'Hidratos',
+                  label: AppLocalizations.of(context)!.nutritionCarbs,
                   value: carbs,
                   icon: Icons.grain,
                 ),
@@ -903,7 +904,7 @@ class _MacroPreviewCard extends StatelessWidget {
               SizedBox(width: 10),
               Expanded(
                 child: _MacroBox(
-                  label: 'Grasas',
+                  label: AppLocalizations.of(context)!.nutritionFat,
                   value: fats,
                   icon: Icons.water_drop_outlined,
                 ),
