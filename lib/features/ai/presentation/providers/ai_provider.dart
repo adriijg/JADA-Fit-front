@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../../../core/services/notification_service.dart';
+import '../../../../core/storage/secure_storage_service.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../data/models/chat_message_model.dart';
 import '../../data/services/ai_service.dart';
@@ -50,7 +50,7 @@ class ChatSession {
 class AiProvider extends ChangeNotifier {
   final AiService _aiService = AiService();
   final NotificationService _notificationService = NotificationService.instance;
-  final FlutterSecureStorage _storage = const FlutterSecureStorage();
+  final SecureStorageService _storage = SecureStorageService();
 
   static const String _storageKey = 'ai_chat_sessions';
   static const int maxSessions = 5;

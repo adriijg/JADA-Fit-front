@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'app.dart';
@@ -10,23 +12,38 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final prefs = PreferencesService.instance;
-  await prefs.init();
+  try {
+    await prefs.init();
+  } catch (error, stack) {
+    debugPrint('PreferencesService.init failed: $error');
+    debugPrint('$stack');
+  }
 
   final notificationService = NotificationService.instance;
-  await notificationService.init();
-  await notificationService.requestPermission();
+  try {
+    await notificationService.init();
+    await notificationService.requestPermission();
+  } catch (error, stack) {
+    debugPrint('NotificationService init failed: $error');
+    debugPrint('$stack');
+  }
 
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider<AiProvider>(
-          create: (_) => AiProvider()..loadSessions(),
-        ),
-        ChangeNotifierProvider<SettingsProvider>(
-          create: (_) => SettingsProvider(prefs),
-        ),
-      ],
-      child: const JadaFitApp(),
-    ),
-  );
+  runZonedGuarded(() {
+    runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider<AiProvider>(
+            create: (_) => AiProvider()..loadSessions(),
+          ),
+          ChangeNotifierProvider<SettingsProvider>(
+            create: (_) => SettingsProvider(prefs),
+          ),
+        ],
+        child: const JadaFitApp(),
+      ),
+    );
+  }, (error, stack) {
+    debugPrint('Uncaught error during app startup: $error');
+    debugPrint('$stack');
+  });
 }

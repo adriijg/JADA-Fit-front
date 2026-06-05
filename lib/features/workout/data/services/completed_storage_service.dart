@@ -1,15 +1,30 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class CompletedStorageService {
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
+  static final Map<String, String> _webFallback = {};
 
   static const String _completedKey = 'completed_routines';
   static const String _exercisesKey = 'completed_exercises';
 
+  Future<String?> _read(String key) async {
+    if (kIsWeb) return _webFallback[key];
+    return _storage.read(key: key);
+  }
+
+  Future<void> _write(String key, String value) async {
+    if (kIsWeb) {
+      _webFallback[key] = value;
+      return;
+    }
+    await _storage.write(key: key, value: value);
+  }
+
   Future<Set<int>> getCompletedRoutineIds() async {
     try {
-      final raw = await _storage.read(key: _completedKey);
+      final raw = await _read(_completedKey);
       if (raw == null || raw.isEmpty) return {};
       final list = jsonDecode(raw) as List;
       return list.map((e) => e as int).toSet();
@@ -20,7 +35,7 @@ class CompletedStorageService {
 
   Future<Set<String>> getCompletedExerciseKeys() async {
     try {
-      final raw = await _storage.read(key: _exercisesKey);
+      final raw = await _read(_exercisesKey);
       if (raw == null || raw.isEmpty) return {};
       final list = jsonDecode(raw) as List;
       return list.map((e) => e as String).toSet();
@@ -32,18 +47,18 @@ class CompletedStorageService {
   Future<void> markRoutineCompleted(int routineId) async {
     final ids = await getCompletedRoutineIds();
     ids.add(routineId);
-    await _storage.write(
-      key: _completedKey,
-      value: jsonEncode(ids.toList()),
+    await _write(
+      _completedKey,
+      jsonEncode(ids.toList()),
     );
   }
 
   Future<void> markExerciseCompleted(int routineId, int exerciseIndex) async {
     final keys = await getCompletedExerciseKeys();
     keys.add('$routineId-$exerciseIndex');
-    await _storage.write(
-      key: _exercisesKey,
-      value: jsonEncode(keys.toList()),
+    await _write(
+      _exercisesKey,
+      jsonEncode(keys.toList()),
     );
   }
 

@@ -29,4 +29,25 @@ class SecureStorageService {
     }
     await _storage.delete(key: _tokenKey);
   }
-}
+  Future<String?> read({required String key}) async {
+    if (kIsWeb) {
+      return _webFallback[key];
+    }
+    return _storage.read(key: key);
+  }
+
+  Future<void> write({required String key, required String value}) async {
+    if (kIsWeb) {
+      _webFallback[key] = value;
+      return;
+    }
+    await _storage.write(key: key, value: value);
+  }
+
+  Future<void> delete({required String key}) async {
+    if (kIsWeb) {
+      _webFallback.remove(key);
+      return;
+    }
+    await _storage.delete(key: key);
+  }}
