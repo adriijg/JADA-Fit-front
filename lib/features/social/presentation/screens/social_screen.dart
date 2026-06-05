@@ -5,10 +5,13 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/image_url_resolver.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../auth/data/services/auth_service.dart';
 import '../../data/models/post.dart';
 import '../../data/models/story.dart';
 import '../../data/models/challenge.dart';
+import '../../data/models/user_summary.dart';
 import '../../data/services/post_service.dart';
+import '../../data/services/social_service.dart';
 import '../../data/services/story_service.dart';
 import '../../data/services/challenge_service.dart';
 import 'explore_screen.dart';
@@ -146,14 +149,18 @@ class _TabButton extends StatelessWidget {
             children: [
               Icon(
                 icon,
-                color: isSelected ? context.colors.primary : context.colors.secondary,
+                color: isSelected
+                    ? context.colors.primary
+                    : context.colors.secondary,
                 size: 22,
               ),
               SizedBox(height: 3),
               Text(
                 label,
                 style: TextStyle(
-                  color: isSelected ? context.colors.primary : context.colors.secondary,
+                  color: isSelected
+                      ? context.colors.primary
+                      : context.colors.secondary,
                   fontSize: 10,
                   fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
                   letterSpacing: 0.3,
@@ -178,10 +185,13 @@ class _FeedTab extends StatefulWidget {
 
 class _FeedTabState extends State<_FeedTab> {
   final PostService _postService = PostService();
+  final SocialService _socialService = SocialService();
   final StoryService _storyService = StoryService();
+  final AuthService _authService = AuthService();
 
   List<Post> _posts = [];
   List<Story> _stories = [];
+  final Set<String> _likeRequests = {};
   bool _isLoading = true;
   String? _error;
 
@@ -296,7 +306,7 @@ class _FeedTabState extends State<_FeedTab> {
 
   Widget _buildFeedContent() {
     return ListView.builder(
-      padding: EdgeInsets.only(bottom: 24),
+      padding: EdgeInsets.only(top: 12, bottom: 24),
       itemCount: _posts.length + (_stories.isNotEmpty ? 1 : 0),
       itemBuilder: (context, index) {
         // Stories bar at the top
@@ -321,9 +331,216 @@ class _FeedTabState extends State<_FeedTab> {
 
         final postIndex = _stories.isNotEmpty ? index - 1 : index;
         final post = _posts[postIndex];
-        return _PostCard(post: post);
+        return _PostCard(
+          post: post,
+          isLikeBusy: _likeRequests.contains(post.id),
+          onLike: () => _toggleLike(post),
+          onSend: () => _showSendSheet(post),
+        );
       },
     );
+  }
+
+  Future<void> _toggleLike(Post post) async {
+    if (_likeRequests.contains(post.id)) return;
+
+    final wasLiked = post.likedByMe;
+    final optimisticPost = post.copyWith(
+      likedByMe: !wasLiked,
+      likesCount: wasLiked
+          ? (post.likesCount - 1).clamp(0, post.likesCount)
+          : post.likesCount + 1,
+    );
+
+    setState(() {
+      _likeRequests.add(post.id);
+      _replacePost(optimisticPost);
+    });
+
+    try {
+      if (wasLiked) {
+        await _postService.unlikePost(post.id);
+      } else {
+        await _postService.likePost(post.id);
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Le has dado me gusta a ${post.author.username}'),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _replacePost(post));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('No se pudo actualizar el me gusta: $e')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _likeRequests.remove(post.id));
+      }
+    }
+  }
+
+  void _replacePost(Post post) {
+    final index = _posts.indexWhere((item) => item.id == post.id);
+    if (index == -1) return;
+    _posts[index] = post;
+  }
+
+  Future<void> _showSendSheet(Post post) async {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: context.colors.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
+      ),
+      builder: (sheetContext) {
+        return FutureBuilder(
+          future: _loadFollowingUsers(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return SizedBox(
+                height: 220,
+                child: Center(
+                  child: CircularProgressIndicator(
+                    color: context.colors.primary,
+                  ),
+                ),
+              );
+            }
+
+            if (snapshot.hasError) {
+              return Padding(
+                padding: EdgeInsets.all(24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    AppBottomSheetHandle(),
+                    SizedBox(height: 18),
+                    Icon(Icons.error_outline, color: AppColors.error, size: 34),
+                    SizedBox(height: 12),
+                    Text(
+                      'No se pudieron cargar tus seguidos',
+                      style: TextStyle(
+                        color: context.colors.textMain,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            final users = snapshot.data ?? [];
+            return SafeArea(
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(18, 12, 18, 18),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AppBottomSheetHandle(),
+                    SizedBox(height: 18),
+                    Text(
+                      'Enviar a',
+                      style: TextStyle(
+                        color: context.colors.textMain,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    SizedBox(height: 14),
+                    if (users.isEmpty)
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 24),
+                        child: Center(
+                          child: Text(
+                            'Todavia no sigues a ningun usuario',
+                            style: TextStyle(color: context.colors.secondary),
+                          ),
+                        ),
+                      )
+                    else
+                      Flexible(
+                        child: ListView.separated(
+                          shrinkWrap: true,
+                          itemCount: users.length,
+                          separatorBuilder: (context, index) =>
+                              SizedBox(height: 8),
+                          itemBuilder: (context, index) {
+                            final user = users[index];
+                            return Material(
+                              color: context.colors.inputBackground,
+                              borderRadius: BorderRadius.circular(14),
+                              child: ListTile(
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 4,
+                                ),
+                                leading: CircleAvatar(
+                                  backgroundColor: context.colors.primary
+                                      .withOpacity(0.18),
+                                  backgroundImage:
+                                      user.profilePictureUrl != null
+                                      ? NetworkImage(
+                                          ImageUrlResolver.resolve(
+                                            user.profilePictureUrl!,
+                                          ),
+                                        )
+                                      : null,
+                                  child: user.profilePictureUrl == null
+                                      ? Text(
+                                          user.username[0].toUpperCase(),
+                                          style: TextStyle(
+                                            color: context.colors.primary,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        )
+                                      : null,
+                                ),
+                                title: Text(
+                                  user.username,
+                                  style: TextStyle(
+                                    color: context.colors.textMain,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                trailing: Icon(
+                                  Icons.send_rounded,
+                                  color: context.colors.primary,
+                                  size: 20,
+                                ),
+                                onTap: () {
+                                  Navigator.pop(sheetContext);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        'Publicacion enviada a ${user.username}',
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<List<UserSummary>> _loadFollowingUsers() async {
+    final currentUser = await _authService.getCurrentUser();
+    return _socialService.getFollowing(currentUser.id);
   }
 }
 
@@ -368,7 +585,10 @@ class _StoriesBar extends StatelessWidget {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       gradient: LinearGradient(
-                        colors: [context.colors.primary, context.colors.secondary],
+                        colors: [
+                          context.colors.primary,
+                          context.colors.secondary,
+                        ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
@@ -432,9 +652,17 @@ class _StoriesBar extends StatelessWidget {
 // ─── Post Card ───────────────────────────────────────────────────────────────
 
 class _PostCard extends StatelessWidget {
-  const _PostCard({required this.post});
+  const _PostCard({
+    required this.post,
+    required this.onLike,
+    required this.onSend,
+    required this.isLikeBusy,
+  });
 
   final Post post;
+  final VoidCallback onLike;
+  final VoidCallback onSend;
+  final bool isLikeBusy;
 
   @override
   Widget build(BuildContext context) {
@@ -594,11 +822,30 @@ class _PostCard extends StatelessWidget {
             padding: EdgeInsets.fromLTRB(14, 0, 14, 14),
             child: Row(
               children: [
-                _ActionIcon(icon: Icons.favorite_border_rounded),
+                _ActionIcon(
+                  icon: post.likedByMe
+                      ? Icons.favorite_rounded
+                      : Icons.favorite_border_rounded,
+                  color: post.likedByMe
+                      ? Colors.redAccent
+                      : context.colors.textMain.withOpacity(0.8),
+                  onTap: isLikeBusy ? null : onLike,
+                ),
+                if (post.likesCount > 0) ...[
+                  SizedBox(width: 6),
+                  Text(
+                    '${post.likesCount}',
+                    style: TextStyle(
+                      color: context.colors.textMain.withOpacity(0.8),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
                 SizedBox(width: 16),
                 _ActionIcon(icon: Icons.chat_bubble_outline_rounded),
                 SizedBox(width: 16),
-                _ActionIcon(icon: Icons.send_outlined),
+                _ActionIcon(icon: Icons.send_outlined, onTap: onSend),
                 Spacer(),
                 _ActionIcon(icon: Icons.bookmark_border_rounded),
               ],
@@ -622,13 +869,26 @@ class _PostCard extends StatelessWidget {
 }
 
 class _ActionIcon extends StatelessWidget {
-  const _ActionIcon({required this.icon});
+  const _ActionIcon({required this.icon, this.onTap, this.color});
 
   final IconData icon;
+  final VoidCallback? onTap;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
-    return Icon(icon, color: context.colors.textMain.withOpacity(0.8), size: 22);
+    return InkResponse(
+      onTap: onTap,
+      radius: 22,
+      child: Padding(
+        padding: EdgeInsets.all(2),
+        child: Icon(
+          icon,
+          color: color ?? context.colors.textMain.withOpacity(0.8),
+          size: 22,
+        ),
+      ),
+    );
   }
 }
 
@@ -648,11 +908,7 @@ class _ErrorView extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.cloud_off_rounded,
-              color: AppColors.error,
-              size: 48,
-            ),
+            Icon(Icons.cloud_off_rounded, color: AppColors.error, size: 48),
             SizedBox(height: 16),
             Text(
               message,
@@ -709,9 +965,15 @@ class _PiquesTabState extends State<_PiquesTab> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.socialChallengeLoadError(e.toString()))));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(
+                context,
+              )!.socialChallengeLoadError(e.toString()),
+            ),
+          ),
+        );
       }
     } finally {
       if (mounted) {
@@ -991,9 +1253,13 @@ class _PiquesTabState extends State<_PiquesTab> {
       await _challengeService.acceptChallenge(id);
       _loadChallenges();
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.socialErrorDetails(e.toString()))));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)!.socialErrorDetails(e.toString()),
+          ),
+        ),
+      );
     }
   }
 
@@ -1002,9 +1268,13 @@ class _PiquesTabState extends State<_PiquesTab> {
       await _challengeService.rejectChallenge(id);
       _loadChallenges();
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.socialErrorDetails(e.toString()))));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)!.socialErrorDetails(e.toString()),
+          ),
+        ),
+      );
     }
   }
 
@@ -1066,13 +1336,17 @@ class _PiquesTabState extends State<_PiquesTab> {
                     );
                   }
                 } catch (e) {
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(SnackBar(content: Text(l10n.socialErrorDetails(e.toString()))));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(l10n.socialErrorDetails(e.toString())),
+                    ),
+                  );
                 }
               }
             },
-            style: ElevatedButton.styleFrom(backgroundColor: context.colors.primary),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: context.colors.primary,
+            ),
             child: Text(l10n.socialSave),
           ),
         ],
