@@ -120,18 +120,18 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
       builder: (ctx) => AlertDialog(
         title: Text(
           'Eliminar receta',
-          style: TextStyle(color: AppColors.textMain, fontWeight: FontWeight.w800),
+          style: TextStyle(color: context.colors.textMain, fontWeight: FontWeight.w800),
         ),
         content: Text(
           '¿Eliminar "${recipe.name}"?',
-          style: TextStyle(color: AppColors.secondary),
+          style: TextStyle(color: context.colors.secondary),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
             child: Text(
               'Cancelar',
-              style: TextStyle(color: AppColors.secondary),
+              style: TextStyle(color: context.colors.secondary),
             ),
           ),
           TextButton(
@@ -199,7 +199,7 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
               child: Container(
                 width: 40, height: 4,
                 decoration: BoxDecoration(
-                  color: AppColors.divider,
+                  color: context.colors.divider,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -208,7 +208,7 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
             Text(
               'AÑADIR RECETA A...',
               style: TextStyle(
-                color: AppColors.secondary,
+                color: context.colors.secondary,
                 fontSize: 12, fontWeight: FontWeight.w800, letterSpacing: 1.2,
               ),
             ),
@@ -294,19 +294,19 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
         title: Text(
           'Mis recetas',
           style: TextStyle(
-            color: AppColors.textMain,
+            color: context.colors.textMain,
             fontWeight: FontWeight.w800,
           ),
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: AppColors.textMain),
+          icon: Icon(Icons.arrow_back, color: context.colors.textMain),
           onPressed: () => Navigator.pop(context),
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _openCreateRecipe,
-        backgroundColor: AppColors.primary,
-        foregroundColor: AppColors.background,
+        backgroundColor: context.colors.primary,
+        foregroundColor: context.colors.background,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(18),
         ),
@@ -327,10 +327,10 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: context.colors.surface,
           borderRadius: BorderRadius.circular(18),
           border: Border.all(
-            color: AppColors.inputBorder,
+            color: context.colors.inputBorder,
             width: 0.7,
           ),
         ),
@@ -338,23 +338,23 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
           controller: _searchController,
           onChanged: _filterRecipes,
           style: TextStyle(
-            color: AppColors.textMain,
+            color: context.colors.textMain,
             fontSize: 14,
           ),
           decoration: InputDecoration(
             hintText: 'Buscar receta...',
             hintStyle: TextStyle(
-              color: AppColors.textMain.withOpacity(0.4),
+              color: context.colors.textMain.withOpacity(0.4),
               fontSize: 14,
             ),
             prefixIcon: Icon(
               Icons.search,
-              color: AppColors.secondary,
+              color: context.colors.secondary,
               size: 20,
             ),
             suffixIcon: _searchController.text.isNotEmpty
                 ? IconButton(
-                    icon: Icon(Icons.clear, color: AppColors.secondary, size: 18),
+                    icon: Icon(Icons.clear, color: context.colors.secondary, size: 18),
                     onPressed: () {
                       _searchController.clear();
                       _filterRecipes('');
@@ -373,7 +373,7 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
   Widget _buildBody() {
     if (_isLoading) {
       return Center(
-        child: CircularProgressIndicator(color: AppColors.primary),
+        child: CircularProgressIndicator(color: context.colors.primary),
       );
     }
 
@@ -394,7 +394,7 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
                 _errorMessage!,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: AppColors.textMain,
+                  color: context.colors.textMain,
                   fontSize: 14,
                   height: 1.5,
                 ),
@@ -403,8 +403,8 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
               ElevatedButton(
                 onPressed: _loadRecipes,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: AppColors.background,
+                  backgroundColor: context.colors.primary,
+                  foregroundColor: context.colors.background,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18),
                   ),
@@ -426,14 +426,14 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
             children: [
               Icon(
                 Icons.menu_book_outlined,
-                color: AppColors.secondary.withOpacity(0.5),
+                color: context.colors.secondary.withOpacity(0.5),
                 size: 64,
               ),
               SizedBox(height: 20),
               Text(
                 'Todavía no tienes recetas',
                 style: TextStyle(
-                  color: AppColors.textMain,
+                  color: context.colors.textMain,
                   fontSize: 17,
                   fontWeight: FontWeight.w800,
                 ),
@@ -443,7 +443,7 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
                 'Crea tu primera receta personalizada con tus alimentos favoritos.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: AppColors.secondary,
+                  color: context.colors.secondary,
                   fontSize: 13,
                   height: 1.5,
                 ),
@@ -454,8 +454,8 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
                 icon: Icon(Icons.add, size: 18),
                 label: Text('Crear receta'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: AppColors.background,
+                  backgroundColor: context.colors.primary,
+                  foregroundColor: context.colors.background,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18),
                   ),
@@ -480,14 +480,14 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
             children: [
               Icon(
                 Icons.search_off,
-                color: AppColors.secondary,
+                color: context.colors.secondary,
                 size: 48,
               ),
               SizedBox(height: 16),
               Text(
                 'No hay recetas que coincidan',
                 style: TextStyle(
-                  color: AppColors.textMain,
+                  color: context.colors.textMain,
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
                 ),
@@ -496,7 +496,7 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
               Text(
                 'Prueba con otro término de búsqueda.',
                 style: TextStyle(
-                  color: AppColors.secondary,
+                  color: context.colors.secondary,
                   fontSize: 13,
                 ),
               ),
@@ -508,7 +508,7 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
 
     return RefreshIndicator(
       onRefresh: _loadRecipes,
-      color: AppColors.primary,
+      color: context.colors.primary,
       child: ListView.builder(
         padding: EdgeInsets.fromLTRB(20, 8, 20, 96),
         itemCount: _filteredRecipes.length,
@@ -577,7 +577,7 @@ class _RecipeCard extends StatelessWidget {
                 icon: Icons.menu_book,
                 size: 44,
                 borderRadius: 16,
-                borderColor: AppColors.primary.withOpacity(0.22),
+                borderColor: context.colors.primary.withOpacity(0.22),
                 iconSize: 22,
               ),
               SizedBox(width: 14),
@@ -588,7 +588,7 @@ class _RecipeCard extends StatelessWidget {
                     Text(
                       recipe.name,
                       style: TextStyle(
-                        color: AppColors.textMain,
+                        color: context.colors.textMain,
                         fontSize: 17,
                         fontWeight: FontWeight.w900,
                       ),
@@ -600,7 +600,7 @@ class _RecipeCard extends StatelessWidget {
                           Text(
                             '${recipe.servings} porc.',
                             style: TextStyle(
-                              color: AppColors.secondary,
+                              color: context.colors.secondary,
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
                             ),
@@ -610,7 +610,7 @@ class _RecipeCard extends StatelessWidget {
                         Text(
                           '${recipe.ingredients.length} ingr.',
                           style: TextStyle(
-                            color: AppColors.secondary,
+                            color: context.colors.secondary,
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
                           ),
@@ -619,7 +619,7 @@ class _RecipeCard extends StatelessWidget {
                         Text(
                           _formatDate(recipe.createdAt),
                           style: TextStyle(
-                            color: AppColors.secondary,
+                            color: context.colors.secondary,
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
                           ),
@@ -636,12 +636,12 @@ class _RecipeCard extends StatelessWidget {
                   width: 36,
                   height: 36,
                   decoration: BoxDecoration(
-                    color: AppColors.inputBackground,
+                    color: context.colors.inputBackground,
                     borderRadius: BorderRadius.circular(14),
                   ),
                   child: Icon(
                     Icons.delete_outline,
-                    color: AppColors.secondary,
+                    color: context.colors.secondary,
                     size: 20,
                   ),
                 ),
@@ -681,9 +681,9 @@ class _RecipeCard extends StatelessWidget {
               icon: Icon(Icons.add_circle_outline, size: 16),
               label: Text('Añadir al día'),
               style: OutlinedButton.styleFrom(
-                foregroundColor: AppColors.primary,
+                foregroundColor: context.colors.primary,
                 side: BorderSide(
-                  color: AppColors.primary.withOpacity(0.4),
+                  color: context.colors.primary.withOpacity(0.4),
                 ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(14),
@@ -714,14 +714,14 @@ class _MacroChip extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 6, vertical: 8),
         decoration: BoxDecoration(
           color: highlighted
-              ? AppColors.primary.withOpacity(0.14)
-              : AppColors.surface,
+              ? context.colors.primary.withOpacity(0.14)
+              : context.colors.surface,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Text(
           value,
           style: TextStyle(
-            color: highlighted ? AppColors.primary : AppColors.secondary,
+            color: highlighted ? context.colors.primary : context.colors.secondary,
             fontSize: 12,
             fontWeight: FontWeight.w800,
           ),

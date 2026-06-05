@@ -131,10 +131,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
           padding: EdgeInsets.fromLTRB(0, 12, 0, 8),
           child: Container(
             decoration: BoxDecoration(
-              color: AppColors.inputBackground,
+              color: context.colors.inputBackground,
               borderRadius: BorderRadius.circular(14),
               border: Border.all(
-                color: AppColors.inputBorder.withValues(alpha: 0.5),
+                color: context.colors.inputBorder.withValues(alpha: 0.5),
                 width: 0.8,
               ),
             ),
@@ -143,19 +143,19 @@ class _ExploreScreenState extends State<ExploreScreen> {
               decoration: InputDecoration(
                 hintText: 'Buscar usuarios...',
                 hintStyle: TextStyle(
-                  color: AppColors.secondary.withValues(alpha: 0.6),
+                  color: context.colors.secondary.withValues(alpha: 0.6),
                   fontSize: 14,
                 ),
                 prefixIcon: Icon(
                   Icons.search_rounded,
-                  color: AppColors.secondary,
+                  color: context.colors.secondary,
                   size: 20,
                 ),
                 suffixIcon: _showSearchResults
                     ? IconButton(
                         icon: Icon(
                           Icons.close_rounded,
-                          color: AppColors.secondary,
+                          color: context.colors.secondary,
                           size: 18,
                         ),
                         onPressed: _clearSearch,
@@ -167,7 +167,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   vertical: 12,
                 ),
               ),
-              style: TextStyle(color: AppColors.textMain, fontSize: 14),
+              style: TextStyle(color: context.colors.textMain, fontSize: 14),
               onSubmitted: _searchUsers,
               onChanged: (value) {
                 if (value.isEmpty) _clearSearch();
@@ -189,7 +189,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
   Widget _buildSearchResults() {
     if (_isSearching) {
       return Center(
-        child: CircularProgressIndicator(color: AppColors.primary),
+        child: CircularProgressIndicator(color: context.colors.primary),
       );
     }
 
@@ -200,13 +200,13 @@ class _ExploreScreenState extends State<ExploreScreen> {
           children: [
             Icon(
               Icons.person_search_rounded,
-              color: AppColors.secondary.withValues(alpha: 0.5),
+              color: context.colors.secondary.withValues(alpha: 0.5),
               size: 48,
             ),
             SizedBox(height: 12),
             Text(
               'No se encontraron usuarios',
-              style: TextStyle(color: AppColors.secondary, fontSize: 14),
+              style: TextStyle(color: context.colors.secondary, fontSize: 14),
             ),
           ],
         ),
@@ -229,7 +229,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
   Widget _buildExploreGrid() {
     if (_isLoadingPosts) {
       return Center(
-        child: CircularProgressIndicator(color: AppColors.primary),
+        child: CircularProgressIndicator(color: context.colors.primary),
       );
     }
 
@@ -243,13 +243,13 @@ class _ExploreScreenState extends State<ExploreScreen> {
             Text(
               _error!,
               textAlign: TextAlign.center,
-              style: TextStyle(color: AppColors.secondary),
+              style: TextStyle(color: context.colors.secondary),
             ),
             SizedBox(height: 16),
             TextButton.icon(
               onPressed: _loadExplore,
-              icon: Icon(Icons.refresh, color: AppColors.primary),
-              label: Text('Reintentar', style: TextStyle(color: AppColors.primary)),
+              icon: Icon(Icons.refresh, color: context.colors.primary),
+              label: Text('Reintentar', style: TextStyle(color: context.colors.primary)),
             ),
           ],
         ),
@@ -265,12 +265,12 @@ class _ExploreScreenState extends State<ExploreScreen> {
               width: 72,
               height: 72,
               decoration: BoxDecoration(
-                color: AppColors.secondary.withValues(alpha: 0.1),
+                color: context.colors.secondary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Icon(
                 Icons.explore_rounded,
-                color: AppColors.secondary,
+                color: context.colors.secondary,
                 size: 32,
               ),
             ),
@@ -278,7 +278,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
             Text(
               'Nada que explorar aún',
               style: TextStyle(
-                color: AppColors.textMain,
+                color: context.colors.textMain,
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
               ),
@@ -286,7 +286,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
             SizedBox(height: 6),
             Text(
               'Las publicaciones públicas aparecerán aquí',
-              style: TextStyle(color: AppColors.secondary, fontSize: 13),
+              style: TextStyle(color: context.colors.secondary, fontSize: 13),
             ),
           ],
         ),
@@ -295,7 +295,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
     return RefreshIndicator(
       onRefresh: _loadExplore,
-      color: AppColors.primary,
+      color: context.colors.primary,
       child: GridView.builder(
         padding: EdgeInsets.symmetric(vertical: 8),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -330,7 +330,7 @@ class _UserSearchTile extends StatelessWidget {
       onTap: onTap,
       leading: CircleAvatar(
         radius: 22,
-        backgroundColor: AppColors.primary.withValues(alpha: 0.15),
+        backgroundColor: context.colors.primary.withValues(alpha: 0.15),
         backgroundImage: user.profilePictureUrl != null
             ? NetworkImage(ImageUrlResolver.resolve(user.profilePictureUrl!))
             : null,
@@ -338,7 +338,7 @@ class _UserSearchTile extends StatelessWidget {
             ? Text(
                 user.username[0].toUpperCase(),
                 style: TextStyle(
-                  color: AppColors.primary,
+                  color: context.colors.primary,
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),
@@ -348,14 +348,14 @@ class _UserSearchTile extends StatelessWidget {
       title: Text(
         user.username,
         style: TextStyle(
-          color: AppColors.textMain,
+          color: context.colors.textMain,
           fontWeight: FontWeight.w600,
           fontSize: 15,
         ),
       ),
       trailing: Icon(
         Icons.chevron_right_rounded,
-        color: AppColors.secondary.withValues(alpha: 0.5),
+        color: context.colors.secondary.withValues(alpha: 0.5),
       ),
     );
   }
@@ -379,11 +379,11 @@ class _ExploreGridTile extends StatelessWidget {
         fit: BoxFit.cover,
         errorBuilder: (context, error, stackTrace) {
           return Container(
-            color: AppColors.inputBackground,
+            color: context.colors.inputBackground,
             child: Center(
               child: Icon(
                 Icons.image_not_supported_outlined,
-                color: AppColors.secondary,
+                color: context.colors.secondary,
                 size: 24,
               ),
             ),
@@ -392,13 +392,13 @@ class _ExploreGridTile extends StatelessWidget {
         loadingBuilder: (context, child, loadingProgress) {
           if (loadingProgress == null) return child;
           return Container(
-            color: AppColors.inputBackground,
+            color: context.colors.inputBackground,
             child: Center(
               child: SizedBox(
                 width: 20,
                 height: 20,
                 child: CircularProgressIndicator(
-                  color: AppColors.primary,
+                  color: context.colors.primary,
                   strokeWidth: 2,
                 ),
               ),

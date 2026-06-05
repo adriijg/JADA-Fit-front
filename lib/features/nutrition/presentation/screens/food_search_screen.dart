@@ -141,11 +141,11 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
       builder: (ctx) => AlertDialog(
         title: Text(
           'Eliminar alimento',
-          style: TextStyle(color: AppColors.textMain),
+          style: TextStyle(color: context.colors.textMain),
         ),
         content: Text(
           '¿Eliminar "${food.foodName}" del historial?',
-          style: TextStyle(color: AppColors.textMain),
+          style: TextStyle(color: context.colors.textMain),
         ),
         actions: [
           TextButton(
@@ -324,14 +324,14 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
       appBar: AppBar(
         elevation: 0,
         iconTheme: IconThemeData(
-          color: AppColors.textMain,
+          color: context.colors.textMain,
         ),
         title: Text(
           widget.pickerMode
               ? 'Seleccionar alimento'
               : 'Añadir a ${widget.initialMealType.label.toLowerCase()}',
           style: TextStyle(
-            color: AppColors.textMain,
+            color: context.colors.textMain,
             fontWeight: FontWeight.w700,
             letterSpacing: 1,
           ),
@@ -362,7 +362,7 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
                 Padding(
                   padding: EdgeInsets.only(top: 28),
                   child: CircularProgressIndicator(
-                    color: AppColors.primary,
+                    color: context.colors.primary,
                   ),
                 ),
               if (!isLoading && foods.isEmpty && errorMessage == null) ...[
@@ -370,7 +370,7 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
                   Text(
                     'Registrados recientemente',
                     style: TextStyle(
-                      color: AppColors.secondary,
+                      color: context.colors.secondary,
                       fontSize: 13,
                       fontWeight: FontWeight.w800,
                       letterSpacing: 0.5,
@@ -415,7 +415,7 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
                         child: Text(
                           'Tus recetas',
                           style: TextStyle(
-                            color: AppColors.secondary,
+                            color: context.colors.secondary,
                             fontSize: 13,
                             fontWeight: FontWeight.w800,
                             letterSpacing: 0.5,
@@ -425,7 +425,7 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
                       TextButton(
                         onPressed: _openViewAllRecipes,
                         style: TextButton.styleFrom(
-                          foregroundColor: AppColors.primary,
+                          foregroundColor: context.colors.primary,
                           padding: EdgeInsets.symmetric(horizontal: 8),
                           minimumSize: Size.zero,
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -470,10 +470,10 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
                       child: Container(
                         padding: EdgeInsets.all(18),
                         decoration: BoxDecoration(
-                          color: AppColors.surface,
+                          color: context.colors.surface,
                           borderRadius: BorderRadius.circular(22),
                           border: Border.all(
-                            color: AppColors.divider.withOpacity(0.4),
+                            color: context.colors.divider.withOpacity(0.4),
                             width: 0.7,
                           ),
                         ),
@@ -483,12 +483,12 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
                               width: 46,
                               height: 46,
                               decoration: BoxDecoration(
-                                color: AppColors.inputBackground,
+                                color: context.colors.inputBackground,
                                 borderRadius: BorderRadius.circular(16),
                               ),
                               child: Icon(
                                 Icons.restaurant_menu,
-                                color: AppColors.primary,
+                                color: context.colors.primary,
                               ),
                             ),
                             SizedBox(width: 14),
@@ -499,7 +499,7 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
                                   Text(
                                     food.name,
                                     style: TextStyle(
-                                      color: AppColors.textMain,
+                                      color: context.colors.textMain,
                                       fontSize: 15,
                                       fontWeight: FontWeight.w800,
                                     ),
@@ -508,7 +508,7 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
                                   Text(
                                     '$brand · ${_sourceLabel(food.source)}',
                                     style: TextStyle(
-                                      color: AppColors.secondary,
+                                      color: context.colors.secondary,
                                       fontSize: 12,
                                     ),
                                   ),
@@ -519,7 +519,7 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
                                     'C ${_formatDouble(food.carbsPer100g, 'g')} · '
                                     'G ${_formatDouble(food.fatsPer100g, 'g')}',
                                     style: TextStyle(
-                                      color: AppColors.textMain
+                                      color: context.colors.textMain
                                           .withOpacity(0.58),
                                       fontSize: 11,
                                       height: 1.35,
@@ -530,7 +530,7 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
                             ),
                             Icon(
                               Icons.chevron_right,
-                              color: AppColors.secondary,
+                              color: context.colors.secondary,
                             ),
                           ],
                         ),
@@ -565,10 +565,10 @@ class _RecentFoodTile extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: context.colors.surface,
           borderRadius: BorderRadius.circular(22),
           border: Border.all(
-            color: AppColors.divider.withOpacity(0.4),
+            color: context.colors.divider.withOpacity(0.4),
             width: 0.7,
           ),
         ),
@@ -578,12 +578,12 @@ class _RecentFoodTile extends StatelessWidget {
               width: 42,
               height: 42,
               decoration: BoxDecoration(
-                color: AppColors.inputBackground,
+                color: context.colors.inputBackground,
                 borderRadius: BorderRadius.circular(14),
               ),
               child: Icon(
                 Icons.restaurant,
-                color: AppColors.primary,
+                color: context.colors.primary,
                 size: 20,
               ),
             ),
@@ -600,7 +600,7 @@ class _RecentFoodTile extends StatelessWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            color: AppColors.textMain,
+                            color: context.colors.textMain,
                             fontSize: 14,
                             fontWeight: FontWeight.w800,
                           ),
@@ -614,13 +614,13 @@ class _RecentFoodTile extends StatelessWidget {
                             vertical: 2,
                           ),
                           decoration: BoxDecoration(
-                            color: AppColors.primary.withOpacity(0.12),
+                            color: context.colors.primary.withOpacity(0.12),
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: Text(
                             'TUYO',
                             style: TextStyle(
-                              color: AppColors.primary,
+                              color: context.colors.primary,
                               fontSize: 8,
                               fontWeight: FontWeight.w900,
                               letterSpacing: 0.3,
@@ -634,7 +634,7 @@ class _RecentFoodTile extends StatelessWidget {
                   Text(
                     '${food.caloriesPer100g.toInt()} kcal / 100g',
                     style: TextStyle(
-                      color: AppColors.secondary,
+                      color: context.colors.secondary,
                       fontSize: 11,
                     ),
                   ),
@@ -657,13 +657,13 @@ class _RecentFoodTile extends StatelessWidget {
                 vertical: 6,
               ),
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.12),
+                color: context.colors.primary.withOpacity(0.12),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
                 'AÑADIR',
                 style: TextStyle(
-                  color: AppColors.primary,
+                  color: context.colors.primary,
                   fontSize: 10,
                   fontWeight: FontWeight.w900,
                   letterSpacing: 0.5,
@@ -694,10 +694,10 @@ class _RecentRecipeTile extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: context.colors.surface,
           borderRadius: BorderRadius.circular(22),
           border: Border.all(
-            color: AppColors.divider.withOpacity(0.4),
+            color: context.colors.divider.withOpacity(0.4),
             width: 0.7,
           ),
         ),
@@ -707,12 +707,12 @@ class _RecentRecipeTile extends StatelessWidget {
               width: 42,
               height: 42,
               decoration: BoxDecoration(
-                color: AppColors.inputBackground,
+                color: context.colors.inputBackground,
                 borderRadius: BorderRadius.circular(14),
               ),
               child: Icon(
                 Icons.menu_book,
-                color: AppColors.primary,
+                color: context.colors.primary,
                 size: 20,
               ),
             ),
@@ -726,7 +726,7 @@ class _RecentRecipeTile extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: AppColors.textMain,
+                      color: context.colors.textMain,
                       fontSize: 14,
                       fontWeight: FontWeight.w800,
                     ),
@@ -736,7 +736,7 @@ class _RecentRecipeTile extends StatelessWidget {
                     '${recipe.totalCalories.toInt()} kcal · '
                     '${recipe.ingredients.length} ingr.',
                     style: TextStyle(
-                      color: AppColors.secondary,
+                      color: context.colors.secondary,
                       fontSize: 11,
                     ),
                   ),
@@ -749,13 +749,13 @@ class _RecentRecipeTile extends StatelessWidget {
                 vertical: 6,
               ),
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.12),
+                color: context.colors.primary.withOpacity(0.12),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
                 'AÑADIR',
                 style: TextStyle(
-                  color: AppColors.primary,
+                  color: context.colors.primary,
                   fontSize: 10,
                   fontWeight: FontWeight.w900,
                   letterSpacing: 0.5,
@@ -790,10 +790,10 @@ class _SearchCard extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.all(22),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
-          color: AppColors.divider.withOpacity(0.4),
+          color: context.colors.divider.withOpacity(0.4),
           width: 0.7,
         ),
       ),
@@ -804,30 +804,30 @@ class _SearchCard extends StatelessWidget {
             textInputAction: TextInputAction.search,
             onSubmitted: (_) => onSearch(),
             style: TextStyle(
-              color: AppColors.textMain,
+              color: context.colors.textMain,
               fontSize: 15,
             ),
             decoration: InputDecoration(
               filled: true,
-              fillColor: AppColors.inputBackground,
+              fillColor: context.colors.inputBackground,
               hintText: 'Buscar alimento, ej: Nutella',
               hintStyle: TextStyle(
-                color: AppColors.textMain.withOpacity(0.45),
+                color: context.colors.textMain.withOpacity(0.45),
               ),
               prefixIcon: Icon(
                 Icons.search,
-                color: AppColors.secondary,
+                color: context.colors.secondary,
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(18),
                 borderSide: BorderSide(
-                  color: AppColors.inputBorder,
+                  color: context.colors.inputBorder,
                 ),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(18),
                 borderSide: BorderSide(
-                  color: AppColors.primary,
+                  color: context.colors.primary,
                   width: 1.4,
                 ),
               ),
@@ -842,8 +842,8 @@ class _SearchCard extends StatelessWidget {
                   child: ElevatedButton.icon(
                     onPressed: isLoading ? null : onSearch,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: AppColors.background,
+                      backgroundColor: context.colors.primary,
+                      foregroundColor: context.colors.background,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
@@ -865,8 +865,8 @@ class _SearchCard extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: isLoading ? null : onScan,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: AppColors.background,
+                    backgroundColor: context.colors.primary,
+                    foregroundColor: context.colors.background,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
@@ -882,8 +882,8 @@ class _SearchCard extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: isLoading ? null : onCreateFood,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: AppColors.background,
+                    backgroundColor: context.colors.primary,
+                    foregroundColor: context.colors.background,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
@@ -913,7 +913,7 @@ class _ErrorCard extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: AppColors.error.withOpacity(0.5),
@@ -922,7 +922,7 @@ class _ErrorCard extends StatelessWidget {
       child: Text(
         message,
         style: TextStyle(
-          color: AppColors.textMain,
+          color: context.colors.textMain,
           fontSize: 14,
           height: 1.5,
         ),

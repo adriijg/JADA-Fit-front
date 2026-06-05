@@ -106,7 +106,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
               child: Container(
                 width: 40, height: 4,
                 decoration: BoxDecoration(
-                  color: AppColors.divider,
+                  color: context.colors.divider,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -115,7 +115,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
             Text(
               'AÑADIR INGREDIENTE',
               style: TextStyle(
-                color: AppColors.secondary,
+                color: context.colors.secondary,
                 fontSize: 12, fontWeight: FontWeight.w800, letterSpacing: 1.2,
               ),
             ),
@@ -266,12 +266,12 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
         title: Text(
           _isEditing ? 'Editar receta' : 'Nueva receta',
           style: TextStyle(
-            color: AppColors.textMain,
+            color: context.colors.textMain,
             fontWeight: FontWeight.w800,
           ),
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: AppColors.textMain),
+          icon: Icon(Icons.arrow_back, color: context.colors.textMain),
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
@@ -283,13 +283,13 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                     height: 20,
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
-                      color: AppColors.primary,
+                      color: context.colors.primary,
                     ),
                   )
                 : Text(
                     'Guardar',
                     style: TextStyle(
-                      color: AppColors.primary,
+                      color: context.colors.primary,
                       fontWeight: FontWeight.w800,
                       fontSize: 15,
                     ),
@@ -313,7 +313,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                   Text(
                     'INGREDIENTES',
                     style: TextStyle(
-                      color: AppColors.secondary,
+                      color: context.colors.secondary,
                       fontSize: 12,
                       fontWeight: FontWeight.w800,
                       letterSpacing: 1.2,
@@ -323,7 +323,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                   Text(
                     '${_ingredients.length} alimento${_ingredients.length == 1 ? '' : 's'}',
                     style: TextStyle(
-                      color: AppColors.secondary,
+                      color: context.colors.secondary,
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                     ),
@@ -349,9 +349,9 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                   icon: Icon(Icons.add, size: 18),
                   label: Text('Añadir ingrediente'),
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: AppColors.primary,
+                    foregroundColor: context.colors.primary,
                     side: BorderSide(
-                      color: AppColors.primary.withOpacity(0.4),
+                      color: context.colors.primary.withOpacity(0.4),
                     ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
@@ -382,7 +382,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
           Text(
             'NOMBRE DE LA RECETA',
             style: TextStyle(
-              color: AppColors.secondary,
+              color: context.colors.secondary,
               fontSize: 11,
               fontWeight: FontWeight.w800,
               letterSpacing: 0.8,
@@ -392,14 +392,14 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
           TextFormField(
             controller: _nameController,
             style: TextStyle(
-              color: AppColors.textMain,
+              color: context.colors.textMain,
               fontSize: 16,
               fontWeight: FontWeight.w700,
             ),
             decoration: InputDecoration(
               hintText: 'Ej: Sandwich Vegetal',
               hintStyle: TextStyle(
-                color: AppColors.secondary,
+                color: context.colors.secondary,
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
@@ -429,7 +429,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
           Text(
             'PORCIONES',
             style: TextStyle(
-              color: AppColors.secondary,
+              color: context.colors.secondary,
               fontSize: 11,
               fontWeight: FontWeight.w800,
               letterSpacing: 0.8,
@@ -440,14 +440,14 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
             controller: _servingsController,
             keyboardType: TextInputType.number,
             style: TextStyle(
-              color: AppColors.textMain,
+              color: context.colors.textMain,
               fontSize: 16,
               fontWeight: FontWeight.w700,
             ),
             decoration: InputDecoration(
               hintText: '1',
               hintStyle: TextStyle(
-                color: AppColors.secondary,
+                color: context.colors.secondary,
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
@@ -470,12 +470,12 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
         children: [
           Row(
             children: [
-              Icon(Icons.bar_chart, color: AppColors.primary, size: 20),
+              Icon(Icons.bar_chart, color: context.colors.primary, size: 20),
               SizedBox(width: 8),
               Text(
                 'TOTAL RECETA',
                 style: TextStyle(
-                  color: AppColors.secondary,
+                  color: context.colors.secondary,
                   fontSize: 11,
                   fontWeight: FontWeight.w800,
                   letterSpacing: 0.8,
@@ -539,14 +539,14 @@ class _IngredientCard extends StatelessWidget {
                 size: 32,
                 borderRadius: 12,
                 iconSize: 13,
-                color: AppColors.primary,
-                backgroundColor: AppColors.inputBackground,
+                color: context.colors.primary,
+                backgroundColor: context.colors.inputBackground,
               ),
               SizedBox(width: 10),
               Text(
                 'ALIMENTO',
                 style: TextStyle(
-                  color: AppColors.secondary,
+                  color: context.colors.secondary,
                   fontSize: 10,
                   fontWeight: FontWeight.w800,
                   letterSpacing: 0.8,
@@ -560,12 +560,12 @@ class _IngredientCard extends StatelessWidget {
                   width: 32,
                   height: 32,
                   decoration: BoxDecoration(
-                    color: AppColors.inputBackground,
+                    color: context.colors.inputBackground,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
                     Icons.delete_outline,
-                    color: AppColors.secondary,
+                    color: context.colors.secondary,
                     size: 18,
                   ),
                 ),
@@ -576,28 +576,28 @@ class _IngredientCard extends StatelessWidget {
           TextFormField(
             initialValue: ingredient.foodName,
             style: TextStyle(
-              color: AppColors.textMain,
+              color: context.colors.textMain,
               fontSize: 14,
               fontWeight: FontWeight.w700,
             ),
             decoration: InputDecoration(
               labelText: 'Nombre del alimento',
               labelStyle: TextStyle(
-                color: AppColors.secondary,
+                color: context.colors.secondary,
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(14)),
-                borderSide: BorderSide(color: AppColors.inputBorder, width: 0.7),
+                borderSide: BorderSide(color: context.colors.inputBorder, width: 0.7),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(14)),
-                borderSide: BorderSide(color: AppColors.inputBorder, width: 0.7),
+                borderSide: BorderSide(color: context.colors.inputBorder, width: 0.7),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(14)),
-                borderSide: BorderSide(color: AppColors.primary, width: 1.2),
+                borderSide: BorderSide(color: context.colors.primary, width: 1.2),
               ),
               contentPadding: EdgeInsets.symmetric(
                 horizontal: 14,
@@ -667,13 +667,13 @@ class _IngredientCard extends StatelessWidget {
             borderRadius: 12,
             child: Row(
               children: [
-                _MiniMacro('${ingredient.calories.toStringAsFixed(0)} kcal'),
+                _MiniMacro(color: context.colors.secondary, text: '${ingredient.calories.toStringAsFixed(0)} kcal'),
                 SizedBox(width: 10),
-                _MiniMacro('P ${ingredient.protein.toStringAsFixed(1)}g'),
+                _MiniMacro(color: context.colors.secondary, text: 'P ${ingredient.protein.toStringAsFixed(1)}g'),
                 SizedBox(width: 10),
-                _MiniMacro('C ${ingredient.carbs.toStringAsFixed(1)}g'),
+                _MiniMacro(color: context.colors.secondary, text: 'C ${ingredient.carbs.toStringAsFixed(1)}g'),
                 SizedBox(width: 10),
-                _MiniMacro('G ${ingredient.fats.toStringAsFixed(1)}g'),
+                _MiniMacro(color: context.colors.secondary, text: 'G ${ingredient.fats.toStringAsFixed(1)}g'),
               ],
             ),
           ),
@@ -682,11 +682,11 @@ class _IngredientCard extends StatelessWidget {
     );
   }
 
-  Widget _MiniMacro(String text) {
+  Widget _MiniMacro({required Color color, required String text}) {
     return Text(
       text,
       style: TextStyle(
-        color: AppColors.secondary,
+        color: color,
         fontSize: 11,
         fontWeight: FontWeight.w700,
       ),
@@ -711,28 +711,28 @@ class _MacroField extends StatelessWidget {
       initialValue: initialValue,
       keyboardType: TextInputType.number,
       style: TextStyle(
-        color: AppColors.textMain,
+        color: context.colors.textMain,
         fontSize: 13,
         fontWeight: FontWeight.w700,
       ),
       decoration: InputDecoration(
         labelText: label,
         labelStyle: TextStyle(
-          color: AppColors.secondary,
+          color: context.colors.secondary,
           fontSize: 11,
           fontWeight: FontWeight.w600,
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
-          borderSide: BorderSide(color: AppColors.inputBorder, width: 0.7),
+          borderSide: BorderSide(color: context.colors.inputBorder, width: 0.7),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
-          borderSide: BorderSide(color: AppColors.inputBorder, width: 0.7),
+          borderSide: BorderSide(color: context.colors.inputBorder, width: 0.7),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
-          borderSide: BorderSide(color: AppColors.primary, width: 1.2),
+          borderSide: BorderSide(color: context.colors.primary, width: 1.2),
         ),
         contentPadding: EdgeInsets.symmetric(
           horizontal: 12,

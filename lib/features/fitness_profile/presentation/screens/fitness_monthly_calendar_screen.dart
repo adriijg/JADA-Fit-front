@@ -158,12 +158,12 @@ class _FitnessMonthlyCalendarScreenState
       appBar: AppBar(
         elevation: 0,
         iconTheme: IconThemeData(
-          color: AppColors.textMain,
+          color: context.colors.textMain,
         ),
         title: Text(
           'Calendario mensual',
           style: TextStyle(
-            color: AppColors.textMain,
+            color: context.colors.textMain,
             fontWeight: FontWeight.w700,
             letterSpacing: 1,
           ),
@@ -173,8 +173,8 @@ class _FitnessMonthlyCalendarScreenState
         onPressed: () {
           _openAddLogForDay(selectedDay ?? DateTime.now());
         },
-        backgroundColor: AppColors.primary,
-        foregroundColor: AppColors.background,
+        backgroundColor: context.colors.primary,
+        foregroundColor: context.colors.background,
         child: Icon(Icons.add),
       ),
       body: SafeArea(
@@ -257,14 +257,14 @@ class _MonthlyCalendarCard extends StatelessWidget {
                 onPressed: onPreviousMonth,
                 icon: Icon(
                   Icons.chevron_left,
-                  color: AppColors.secondary,
+                  color: context.colors.secondary,
                 ),
               ),
               Expanded(
                 child: Text(
                   title,
                   style: TextStyle(
-                    color: AppColors.textMain,
+                    color: context.colors.textMain,
                     fontSize: 20,
                     fontWeight: FontWeight.w900,
                   ),
@@ -276,8 +276,8 @@ class _MonthlyCalendarCard extends StatelessWidget {
                 icon: Icon(
                   Icons.chevron_right,
                   color: canGoNext
-                      ? AppColors.secondary
-                      : AppColors.divider.withOpacity(0.55),
+                      ? context.colors.secondary
+                      : context.colors.divider.withOpacity(0.55),
                 ),
               ),
             ],
@@ -322,15 +322,15 @@ class _MonthlyCalendarCard extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? AppColors.primary
+                        ? context.colors.primary
                         : hasRecords
-                            ? AppColors.inputBackground
-                            : AppColors.background,
+                            ? context.colors.inputBackground
+                            : context.colors.background,
                     borderRadius: BorderRadius.circular(14),
                     border: Border.all(
                       color: hasRecords
-                          ? AppColors.primary.withOpacity(0.7)
-                          : AppColors.divider.withOpacity(0.4),
+                          ? context.colors.primary.withOpacity(0.7)
+                          : context.colors.divider.withOpacity(0.4),
                       width: 0.8,
                     ),
                   ),
@@ -341,8 +341,8 @@ class _MonthlyCalendarCard extends StatelessWidget {
                         day.day.toString(),
                         style: TextStyle(
                           color: isSelected
-                              ? AppColors.background
-                              : AppColors.textMain,
+                              ? context.colors.background
+                              : context.colors.textMain,
                           fontSize: 13,
                           fontWeight: FontWeight.w800,
                         ),
@@ -355,8 +355,8 @@ class _MonthlyCalendarCard extends StatelessWidget {
                             height: 5,
                             decoration: BoxDecoration(
                               color: isSelected
-                                  ? AppColors.background
-                                  : AppColors.primary,
+                                  ? context.colors.background
+                                  : context.colors.primary,
                               shape: BoxShape.circle,
                             ),
                           ),
@@ -386,7 +386,7 @@ class _WeekdayHeader extends StatelessWidget {
       child: Text(
         label,
         style: TextStyle(
-          color: AppColors.secondary,
+          color: context.colors.secondary,
           fontSize: 12,
           fontWeight: FontWeight.w900,
         ),
@@ -450,7 +450,7 @@ class _MonthlySelectedDayCard extends StatelessWidget {
                     Text(
                       _formatDate(selectedDay),
                       style: TextStyle(
-                        color: AppColors.textMain,
+                        color: context.colors.textMain,
                         fontSize: 20,
                         fontWeight: FontWeight.w900,
                       ),
@@ -461,7 +461,7 @@ class _MonthlySelectedDayCard extends StatelessWidget {
                           ? 'Sin registros físicos'
                           : '${records.length} registro${records.length == 1 ? '' : 's'} guardado${records.length == 1 ? '' : 's'}',
                       style: TextStyle(
-                        color: AppColors.secondary,
+                        color: context.colors.secondary,
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                       ),
@@ -478,8 +478,8 @@ class _MonthlySelectedDayCard extends StatelessWidget {
             child: ElevatedButton.icon(
               onPressed: onAddRecord,
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.background,
+                backgroundColor: context.colors.primary,
+                foregroundColor: context.colors.background,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(18),
                 ),
@@ -537,7 +537,7 @@ class _MonthlyRecordCard extends StatelessWidget {
             children: [
               Icon(
                 Icons.show_chart,
-                color: AppColors.primary,
+                color: context.colors.primary,
                 size: 22,
               ),
               SizedBox(width: 10),
@@ -545,7 +545,7 @@ class _MonthlyRecordCard extends StatelessWidget {
                 child: Text(
                   'Registro físico',
                   style: TextStyle(
-                    color: AppColors.textMain,
+                    color: context.colors.textMain,
                     fontSize: 15,
                     fontWeight: FontWeight.w800,
                   ),
@@ -557,10 +557,10 @@ class _MonthlyRecordCard extends StatelessWidget {
                   vertical: 6,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.surface,
+                  color: context.colors.surface,
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(
-                    color: AppColors.inputBorder,
+                    color: context.colors.inputBorder,
                     width: 0.7,
                   ),
                 ),
@@ -568,14 +568,14 @@ class _MonthlyRecordCard extends StatelessWidget {
                   children: [
                     Icon(
                       Icons.schedule,
-                      color: AppColors.secondary,
+                      color: context.colors.secondary,
                       size: 14,
                     ),
                     SizedBox(width: 5),
                     Text(
                       formatTime(record.loggedAt),
                       style: TextStyle(
-                        color: AppColors.secondary,
+                        color: context.colors.secondary,
                         fontSize: 11,
                         fontWeight: FontWeight.w700,
                       ),
@@ -639,10 +639,10 @@ class _MonthlyMetricBox extends StatelessWidget {
       width: fullWidth ? double.infinity : null,
       padding: EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(18),
         border: Border.all(
-          color: AppColors.inputBorder,
+          color: context.colors.inputBorder,
           width: 0.7,
         ),
       ),
@@ -650,7 +650,7 @@ class _MonthlyMetricBox extends StatelessWidget {
         children: [
           Icon(
             icon,
-            color: AppColors.primary,
+            color: context.colors.primary,
             size: 21,
           ),
           SizedBox(width: 10),
@@ -661,7 +661,7 @@ class _MonthlyMetricBox extends StatelessWidget {
                 Text(
                   label.toUpperCase(),
                   style: TextStyle(
-                    color: AppColors.secondary,
+                    color: context.colors.secondary,
                     fontSize: 9,
                     fontWeight: FontWeight.w800,
                     letterSpacing: 1,
@@ -672,8 +672,8 @@ class _MonthlyMetricBox extends StatelessWidget {
                   value,
                   style: TextStyle(
                     color: isEmpty
-                        ? AppColors.textMain.withOpacity(0.45)
-                        : AppColors.textMain,
+                        ? context.colors.textMain.withOpacity(0.45)
+                        : context.colors.textMain,
                     fontSize: 14,
                     fontWeight: FontWeight.w900,
                     fontStyle: isEmpty ? FontStyle.italic : FontStyle.normal,
@@ -704,14 +704,14 @@ class _NoDaySelectedCard extends StatelessWidget {
         children: [
           Icon(
             Icons.touch_app,
-            color: AppColors.primary,
+            color: context.colors.primary,
             size: 34,
           ),
           SizedBox(height: 14),
           Text(
             'Selecciona un día',
             style: TextStyle(
-              color: AppColors.textMain,
+              color: context.colors.textMain,
               fontSize: 18,
               fontWeight: FontWeight.w900,
             ),
@@ -720,7 +720,7 @@ class _NoDaySelectedCard extends StatelessWidget {
           Text(
             'Pulsa un día del calendario para ver o añadir registros físicos.',
             style: TextStyle(
-              color: AppColors.secondary,
+              color: context.colors.secondary,
               fontSize: 13,
               height: 1.4,
             ),
@@ -733,9 +733,9 @@ class _NoDaySelectedCard extends StatelessWidget {
             child: OutlinedButton.icon(
               onPressed: onAddToday,
               style: OutlinedButton.styleFrom(
-                foregroundColor: AppColors.primary,
+                foregroundColor: context.colors.primary,
                 side: BorderSide(
-                  color: AppColors.primary,
+                  color: context.colors.primary,
                   width: 1,
                 ),
                 shape: RoundedRectangleBorder(
@@ -768,10 +768,10 @@ class _EmptySelectedDay extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: AppColors.inputBackground,
+        color: context.colors.inputBackground,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: AppColors.inputBorder,
+          color: context.colors.inputBorder,
           width: 0.7,
         ),
       ),
@@ -779,14 +779,14 @@ class _EmptySelectedDay extends StatelessWidget {
         children: [
           Icon(
             Icons.calendar_today_outlined,
-            color: AppColors.secondary,
+            color: context.colors.secondary,
             size: 30,
           ),
           SizedBox(height: 12),
           Text(
             'No hay registros para este día',
             style: TextStyle(
-              color: AppColors.textMain,
+              color: context.colors.textMain,
               fontSize: 15,
               fontWeight: FontWeight.w800,
             ),
@@ -796,7 +796,7 @@ class _EmptySelectedDay extends StatelessWidget {
           Text(
             'Puedes añadir un registro usando el botón superior.',
             style: TextStyle(
-              color: AppColors.secondary,
+              color: context.colors.secondary,
               fontSize: 12,
               height: 1.4,
             ),

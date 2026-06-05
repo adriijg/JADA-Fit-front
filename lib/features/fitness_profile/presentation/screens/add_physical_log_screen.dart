@@ -111,9 +111,9 @@ class _AddPhysicalLogScreenState extends State<AddPhysicalLogScreen> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: ColorScheme.dark(
-              primary: AppColors.primary,
-              surface: AppColors.surface,
-              onSurface: AppColors.textMain,
+              primary: context.colors.primary,
+              surface: context.colors.surface,
+              onSurface: context.colors.textMain,
             ),
             dialogTheme: DialogThemeData(
             ),
@@ -244,12 +244,12 @@ class _AddPhysicalLogScreenState extends State<AddPhysicalLogScreen> {
       appBar: AppBar(
         elevation: 0,
         iconTheme: IconThemeData(
-          color: AppColors.textMain,
+          color: context.colors.textMain,
         ),
         title: Text(
           'Añadir datos físicos',
           style: TextStyle(
-            color: AppColors.textMain,
+            color: context.colors.textMain,
             fontWeight: FontWeight.w700,
             letterSpacing: 1,
           ),
@@ -298,10 +298,10 @@ class _AddPhysicalLogScreenState extends State<AddPhysicalLogScreen> {
                 child: ElevatedButton(
                   onPressed: isLoading ? null : _saveLog,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: AppColors.background,
+                    backgroundColor: context.colors.primary,
+                    foregroundColor: context.colors.background,
                     elevation: 12,
-                    shadowColor: AppColors.primary.withOpacity(0.32),
+                    shadowColor: context.colors.primary.withOpacity(0.32),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24),
                     ),
@@ -312,7 +312,7 @@ class _AddPhysicalLogScreenState extends State<AddPhysicalLogScreen> {
                           height: 22,
                           child: CircularProgressIndicator(
                             strokeWidth: 2.4,
-                            color: AppColors.background,
+                            color: context.colors.background,
                           ),
                         )
                       : Row(
@@ -360,14 +360,14 @@ class _IntroCard extends StatelessWidget {
         children: [
           Icon(
             Icons.add_chart,
-            color: AppColors.primary,
+            color: context.colors.primary,
             size: 42,
           ),
           SizedBox(height: 18),
           Text(
             'Nuevo registro físico',
             style: TextStyle(
-              color: AppColors.textMain,
+              color: context.colors.textMain,
               fontSize: 24,
               fontWeight: FontWeight.w900,
               height: 1.15,
@@ -377,7 +377,7 @@ class _IntroCard extends StatelessWidget {
           Text(
             'Puedes registrar datos de hoy o de una fecha anterior si se te olvidó apuntarlos.',
             style: TextStyle(
-              color: AppColors.secondary,
+              color: context.colors.secondary,
               fontSize: 14,
               height: 1.5,
             ),
@@ -389,10 +389,10 @@ class _IntroCard extends StatelessWidget {
               vertical: 9,
             ),
             decoration: BoxDecoration(
-              color: AppColors.inputBackground,
+              color: context.colors.inputBackground,
               borderRadius: BorderRadius.circular(18),
               border: Border.all(
-                color: AppColors.inputBorder,
+                color: context.colors.inputBorder,
                 width: 0.7,
               ),
             ),
@@ -401,7 +401,7 @@ class _IntroCard extends StatelessWidget {
               children: [
                 Icon(
                   Icons.flag_outlined,
-                  color: AppColors.primary,
+                  color: context.colors.primary,
                   size: 18,
                 ),
                 SizedBox(width: 8),
@@ -409,8 +409,8 @@ class _IntroCard extends StatelessWidget {
                   hasGoal ? goal : 'Sin objetivo configurado',
                   style: TextStyle(
                     color: hasGoal
-                        ? AppColors.textMain
-                        : AppColors.textMain.withOpacity(0.55),
+                        ? context.colors.textMain
+                        : context.colors.textMain.withOpacity(0.55),
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
                     fontStyle: hasGoal ? FontStyle.normal : FontStyle.italic,
@@ -448,10 +448,10 @@ class _DateCard extends StatelessWidget {
             vertical: 14,
           ),
           decoration: BoxDecoration(
-            color: AppColors.inputBackground,
+            color: context.colors.inputBackground,
             borderRadius: BorderRadius.circular(18),
             border: Border.all(
-              color: AppColors.inputBorder,
+              color: context.colors.inputBorder,
               width: 0.7,
             ),
           ),
@@ -459,7 +459,7 @@ class _DateCard extends StatelessWidget {
             children: [
               Icon(
                 Icons.calendar_month_outlined,
-                color: AppColors.primary,
+                color: context.colors.primary,
                 size: 24,
               ),
               SizedBox(width: 14),
@@ -470,7 +470,7 @@ class _DateCard extends StatelessWidget {
                     Text(
                       'FECHA DEL REGISTRO',
                       style: TextStyle(
-                        color: AppColors.secondary,
+                        color: context.colors.secondary,
                         fontSize: 10,
                         fontWeight: FontWeight.w800,
                         letterSpacing: 1,
@@ -480,7 +480,7 @@ class _DateCard extends StatelessWidget {
                     Text(
                       selectedDate,
                       style: TextStyle(
-                        color: AppColors.textMain,
+                        color: context.colors.textMain,
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
                       ),
@@ -489,7 +489,7 @@ class _DateCard extends StatelessWidget {
                     Text(
                       'La hora se guardará automáticamente',
                       style: TextStyle(
-                        color: AppColors.textMain.withOpacity(0.55),
+                        color: context.colors.textMain.withOpacity(0.55),
                         fontSize: 11,
                       ),
                     ),
@@ -498,7 +498,7 @@ class _DateCard extends StatelessWidget {
               ),
               Icon(
                 Icons.edit_calendar,
-                color: AppColors.secondary,
+                color: context.colors.secondary,
               ),
             ],
           ),
@@ -581,40 +581,40 @@ class _PhysicalLogTextField extends StatelessWidget {
       controller: controller,
       keyboardType: keyboardType,
       style: TextStyle(
-        color: AppColors.textMain,
+        color: context.colors.textMain,
         fontSize: 15,
       ),
       decoration: InputDecoration(
         filled: true,
-        fillColor: AppColors.inputBackground,
+        fillColor: context.colors.inputBackground,
         labelText: label,
         labelStyle: TextStyle(
-          color: AppColors.secondary,
+          color: context.colors.secondary,
           fontWeight: FontWeight.w600,
         ),
         hintText: hintText,
         hintStyle: TextStyle(
-          color: AppColors.textMain.withOpacity(0.45),
+          color: context.colors.textMain.withOpacity(0.45),
         ),
         prefixIcon: Icon(
           icon,
-          color: AppColors.primary,
+          color: context.colors.primary,
         ),
         suffixText: suffix,
         suffixStyle: TextStyle(
-          color: AppColors.secondary,
+          color: context.colors.secondary,
           fontWeight: FontWeight.w700,
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
           borderSide: BorderSide(
-            color: AppColors.inputBorder,
+            color: context.colors.inputBorder,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
           borderSide: BorderSide(
-            color: AppColors.primary,
+            color: context.colors.primary,
             width: 1.4,
           ),
         ),

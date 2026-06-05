@@ -69,10 +69,10 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            backgroundColor: AppColors.surface,
+            backgroundColor: context.colors.surface,
             expandedHeight: _videoHeight,
             pinned: true,
-            iconTheme: IconThemeData(color: AppColors.textMain),
+            iconTheme: IconThemeData(color: context.colors.textMain),
             flexibleSpace: FlexibleSpaceBar(
               background: _buildVideoPlayer(),
             ),
@@ -80,7 +80,7 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
           SliverToBoxAdapter(
             child: Container(
               decoration: BoxDecoration(
-                color: AppColors.background,
+                color: context.colors.background,
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(32),
                   topRight: Radius.circular(32),
@@ -93,7 +93,7 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
                   Text(
                     widget.exercise.name,
                     style: TextStyle(
-                      color: AppColors.textMain,
+                      color: context.colors.textMain,
                       fontSize: 28,
                       fontWeight: FontWeight.w900,
                     ),
@@ -105,7 +105,7 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
                   Text(
                     widget.exercise.description,
                     style: TextStyle(
-                      color: AppColors.textMain.withOpacity(0.7),
+                      color: context.colors.textMain.withOpacity(0.7),
                       fontSize: 16,
                       height: 1.6,
                     ),
@@ -118,16 +118,16 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
                   Container(
                     padding: EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.1),
+                      color: context.colors.primary.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+                      border: Border.all(color: context.colors.primary.withOpacity(0.3)),
                     ),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Icon(
                           Icons.check_circle_rounded,
-                          color: AppColors.primary,
+                          color: context.colors.primary,
                           size: 24,
                         ),
                         SizedBox(width: 16),
@@ -135,7 +135,7 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
                           child: Text(
                             widget.exercise.benefits,
                             style: TextStyle(
-                              color: AppColors.textMain,
+                              color: context.colors.textMain,
                               fontSize: 15,
                               height: 1.5,
                               fontWeight: FontWeight.w500,
@@ -154,7 +154,7 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
         ],
       ),
       floatingActionButton: _isVideoInitialized ? FloatingActionButton(
-        backgroundColor: AppColors.primary,
+        backgroundColor: context.colors.primary,
         onPressed: () {
           setState(() {
             _videoController!.value.isPlaying
@@ -173,12 +173,12 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
   Widget _buildSectionTitle(String title, IconData icon) {
     return Row(
       children: [
-        Icon(icon, color: AppColors.secondary, size: 24),
+        Icon(icon, color: context.colors.secondary, size: 24),
         SizedBox(width: 8),
         Text(
           title,
           style: TextStyle(
-            color: AppColors.textMain,
+            color: context.colors.textMain,
             fontSize: 20,
             fontWeight: FontWeight.w800,
           ),
@@ -190,7 +190,7 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
   Widget _buildVideoPlayer() {
     if (_isVideoError) {
       return Container(
-        color: AppColors.surface,
+        color: context.colors.surface,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -198,7 +198,7 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
             SizedBox(height: 16),
             Text(
               'No se pudo cargar el video.',
-              style: TextStyle(color: AppColors.textMain.withOpacity(0.5)),
+              style: TextStyle(color: context.colors.textMain.withOpacity(0.5)),
             )
           ],
         ),
@@ -225,7 +225,7 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
                 colors: [
                   Colors.black.withOpacity(0.4),
                   Colors.transparent,
-                  AppColors.background.withOpacity(0.8),
+                  context.colors.background.withOpacity(0.8),
                 ],
                 stops: const [0.0, 0.5, 1.0],
               ),
@@ -236,9 +236,9 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
     }
 
     return Container(
-      color: AppColors.surface,
+      color: context.colors.surface,
       child: Center(
-        child: CircularProgressIndicator(color: AppColors.primary),
+        child: CircularProgressIndicator(color: context.colors.primary),
       ),
     );
   }

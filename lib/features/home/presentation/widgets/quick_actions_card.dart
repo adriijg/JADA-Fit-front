@@ -31,7 +31,7 @@ class SmartQuickActionsCard extends StatelessWidget {
             child: Text(
               'Accesos rápidos',
               style: TextStyle(
-                color: AppColors.textMain,
+                color: context.colors.textMain,
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
               ),
@@ -98,7 +98,7 @@ class QuickActionTile extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
       child: Row(
         children: [
-          Icon(icon, color: AppColors.primary, size: 24),
+          Icon(icon, color: context.colors.primary, size: 24),
           SizedBox(width: 14),
           Expanded(
             child: Column(
@@ -107,7 +107,7 @@ class QuickActionTile extends StatelessWidget {
                 Text(
                   title,
                   style: TextStyle(
-                    color: AppColors.textMain,
+                    color: context.colors.textMain,
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
                   ),
@@ -116,7 +116,7 @@ class QuickActionTile extends StatelessWidget {
                 Text(
                   subtitle,
                   style: TextStyle(
-                    color: AppColors.secondary,
+                    color: context.colors.secondary,
                     fontSize: 12,
                     height: 1.3,
                   ),
@@ -124,7 +124,7 @@ class QuickActionTile extends StatelessWidget {
               ],
             ),
           ),
-          Icon(Icons.chevron_right, color: AppColors.secondary),
+          Icon(Icons.chevron_right, color: context.colors.secondary),
         ],
       ),
     );

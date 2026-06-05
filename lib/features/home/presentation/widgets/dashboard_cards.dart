@@ -99,7 +99,7 @@ class SmallDashboardCard extends StatelessWidget {
           Text(
             title.toUpperCase(),
             style: TextStyle(
-              color: AppColors.secondary,
+              color: context.colors.secondary,
               fontSize: 10,
               fontWeight: FontWeight.w800,
               letterSpacing: 1,
@@ -109,7 +109,7 @@ class SmallDashboardCard extends StatelessWidget {
           Text(
             value,
             style: TextStyle(
-              color: AppColors.textMain,
+              color: context.colors.textMain,
               fontSize: 17,
               fontWeight: FontWeight.w800,
             ),
@@ -118,7 +118,7 @@ class SmallDashboardCard extends StatelessWidget {
           Text(
             subtitle,
             style: TextStyle(
-              color: AppColors.textMain.withOpacity(0.62),
+              color: context.colors.textMain.withOpacity(0.62),
               fontSize: 12,
               height: 1.3,
             ),

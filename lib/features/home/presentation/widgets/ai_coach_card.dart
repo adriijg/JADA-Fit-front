@@ -25,9 +25,9 @@ class AiCoachCard extends StatelessWidget {
             size: 54,
             borderRadius: 18,
             iconSize: 28,
-            color: AppColors.tertiary,
-            backgroundColor: AppColors.inputBackground,
-            borderColor: AppColors.tertiary.withOpacity(0.5),
+            color: context.colors.tertiary,
+            backgroundColor: context.colors.inputBackground,
+            borderColor: context.colors.tertiary.withOpacity(0.5),
           ),
           SizedBox(width: 16),
           Expanded(
@@ -37,7 +37,7 @@ class AiCoachCard extends StatelessWidget {
                 Text(
                   'Coach IA',
                   style: TextStyle(
-                    color: AppColors.textMain,
+                    color: context.colors.textMain,
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
                   ),
@@ -46,7 +46,7 @@ class AiCoachCard extends StatelessWidget {
                 Text(
                   'Toca para recibir una recomendación personalizada.',
                   style: TextStyle(
-                    color: AppColors.secondary,
+                    color: context.colors.secondary,
                     fontSize: 12,
                     height: 1.4,
                   ),
@@ -54,7 +54,7 @@ class AiCoachCard extends StatelessWidget {
               ],
             ),
           ),
-          Icon(Icons.chevron_right, color: AppColors.secondary),
+          Icon(Icons.chevron_right, color: context.colors.secondary),
         ],
       ),
     );

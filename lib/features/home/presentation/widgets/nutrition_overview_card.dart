@@ -34,7 +34,7 @@ class NutritionErrorCard extends StatelessWidget {
                     Text(
                       'Nutrición de hoy',
                       style: TextStyle(
-                        color: AppColors.textMain,
+                        color: context.colors.textMain,
                         fontSize: 19,
                         fontWeight: FontWeight.w900,
                       ),
@@ -43,7 +43,7 @@ class NutritionErrorCard extends StatelessWidget {
                     Text(
                       'Resumen de calorías y macros',
                       style: TextStyle(
-                        color: AppColors.secondary,
+                        color: context.colors.secondary,
                         fontSize: 12,
                         height: 1.3,
                       ),
@@ -51,7 +51,7 @@ class NutritionErrorCard extends StatelessWidget {
                   ],
                 ),
               ),
-              Icon(Icons.chevron_right, color: AppColors.secondary),
+              Icon(Icons.chevron_right, color: context.colors.secondary),
             ],
           ),
           SizedBox(height: 18),
@@ -60,7 +60,7 @@ class NutritionErrorCard extends StatelessWidget {
           Text(
             message,
             style: TextStyle(
-              color: AppColors.textMain,
+              color: context.colors.textMain,
               fontSize: 13,
               height: 1.4,
             ),
@@ -126,7 +126,7 @@ class NutritionOverviewCard extends StatelessWidget {
                     Text(
                       'Nutrición de hoy',
                       style: TextStyle(
-                        color: AppColors.textMain,
+                        color: context.colors.textMain,
                         fontSize: 19,
                         fontWeight: FontWeight.w900,
                       ),
@@ -135,7 +135,7 @@ class NutritionOverviewCard extends StatelessWidget {
                     Text(
                       'Resumen de calorías y macros',
                       style: TextStyle(
-                        color: AppColors.secondary,
+                        color: context.colors.secondary,
                         fontSize: 12,
                         height: 1.3,
                       ),
@@ -143,7 +143,7 @@ class NutritionOverviewCard extends StatelessWidget {
                   ],
                 ),
               ),
-              Icon(Icons.chevron_right, color: AppColors.secondary),
+              Icon(Icons.chevron_right, color: context.colors.secondary),
             ],
           ),
           SizedBox(height: 22),
@@ -233,7 +233,11 @@ class CalorieRingChart extends StatelessWidget {
         children: [
           CustomPaint(
             size: Size(116, 116),
-            painter: _RingProgressPainter(progress: safeProgress),
+            painter: _RingProgressPainter(
+              progress: safeProgress,
+              backgroundColor: context.colors.inputBorder,
+              progressColor: context.colors.primary,
+            ),
           ),
           Column(
             mainAxisSize: MainAxisSize.min,
@@ -241,7 +245,7 @@ class CalorieRingChart extends StatelessWidget {
               Text(
                 '${(safeProgress * 100).round()}%',
                 style: TextStyle(
-                  color: AppColors.primary,
+                  color: context.colors.primary,
                   fontSize: 25,
                   fontWeight: FontWeight.w900,
                 ),
@@ -250,7 +254,7 @@ class CalorieRingChart extends StatelessWidget {
               Text(
                 '$consumed/$goal',
                 style: TextStyle(
-                  color: AppColors.textMain.withOpacity(0.68),
+                  color: context.colors.textMain.withOpacity(0.68),
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
                 ),
@@ -258,7 +262,7 @@ class CalorieRingChart extends StatelessWidget {
               Text(
                 'kcal',
                 style: TextStyle(
-                  color: AppColors.textMain.withOpacity(0.5),
+                  color: context.colors.textMain.withOpacity(0.5),
                   fontSize: 10,
                 ),
               ),
@@ -271,9 +275,15 @@ class CalorieRingChart extends StatelessWidget {
 }
 
 class _RingProgressPainter extends CustomPainter {
-  const _RingProgressPainter({required this.progress});
+  const _RingProgressPainter({
+    required this.progress,
+    required this.backgroundColor,
+    required this.progressColor,
+  });
 
   final double progress;
+  final Color backgroundColor;
+  final Color progressColor;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -282,13 +292,13 @@ class _RingProgressPainter extends CustomPainter {
     final radius = (size.width - strokeWidth) / 2;
 
     final backgroundPaint = Paint()
-      ..color = AppColors.inputBorder
+      ..color = backgroundColor
       ..style = PaintingStyle.stroke
       ..strokeWidth = strokeWidth
       ..strokeCap = StrokeCap.round;
 
     final progressPaint = Paint()
-      ..color = AppColors.primary
+      ..color = progressColor
       ..style = PaintingStyle.stroke
       ..strokeWidth = strokeWidth
       ..strokeCap = StrokeCap.round;
@@ -308,7 +318,9 @@ class _RingProgressPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _RingProgressPainter oldDelegate) {
-    return oldDelegate.progress != progress;
+    return oldDelegate.progress != progress
+        || oldDelegate.backgroundColor != backgroundColor
+        || oldDelegate.progressColor != progressColor;
   }
 }
 
@@ -328,13 +340,13 @@ class NutritionMetric extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, color: AppColors.primary, size: 19),
+        Icon(icon, color: context.colors.primary, size: 19),
         SizedBox(width: 8),
         Expanded(
           child: Text(
             label,
             style: TextStyle(
-              color: AppColors.secondary,
+              color: context.colors.secondary,
               fontSize: 11,
               fontWeight: FontWeight.w700,
             ),
@@ -343,7 +355,7 @@ class NutritionMetric extends StatelessWidget {
         Text(
           value,
           style: TextStyle(
-            color: AppColors.textMain,
+            color: context.colors.textMain,
             fontSize: 12,
             fontWeight: FontWeight.w800,
           ),
@@ -378,7 +390,7 @@ class MacroProgressBar extends StatelessWidget {
             Text(
               label,
               style: TextStyle(
-                color: AppColors.textMain,
+                color: context.colors.textMain,
                 fontSize: 13,
                 fontWeight: FontWeight.w700,
               ),
@@ -387,7 +399,7 @@ class MacroProgressBar extends StatelessWidget {
             Text(
               '$consumed / $goal $unit',
               style: TextStyle(
-                color: AppColors.secondary,
+                color: context.colors.secondary,
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
               ),
@@ -400,8 +412,8 @@ class MacroProgressBar extends StatelessWidget {
           child: LinearProgressIndicator(
             value: progress,
             minHeight: 10,
-            backgroundColor: AppColors.inputBorder,
-            valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+            backgroundColor: context.colors.inputBorder,
+            valueColor: AlwaysStoppedAnimation<Color>(context.colors.primary),
           ),
         ),
       ],

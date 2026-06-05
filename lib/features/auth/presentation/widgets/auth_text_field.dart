@@ -26,10 +26,10 @@ class AuthTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.inputBackground,
+        color: context.colors.inputBackground,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: errorText != null ? AppColors.error : AppColors.inputBorder.withOpacity(0.38),
+          color: errorText != null ? AppColors.error : context.colors.inputBorder.withOpacity(0.38),
           width: 1,
         ),
       ),
@@ -37,16 +37,16 @@ class AuthTextField extends StatelessWidget {
         controller: controller,
         obscureText: obscureText,
         keyboardType: keyboardType,
-        cursorColor: AppColors.primary,
+        cursorColor: context.colors.primary,
         style: TextStyle(
-          color: AppColors.textMain,
+          color: context.colors.textMain,
           fontSize: 14,
           letterSpacing: 1,
         ),
         decoration: InputDecoration(
           hintText: hintText,
           hintStyle: TextStyle(
-            color: AppColors.textMain.withOpacity(0.4),
+            color: context.colors.textMain.withOpacity(0.4),
             fontSize: 13,
             letterSpacing: 1,
           ),
@@ -54,7 +54,7 @@ class AuthTextField extends StatelessWidget {
             padding: EdgeInsets.only(left: 12, right: 10),
             child: Icon(
               icon,
-              color: AppColors.secondary,
+              color: context.colors.secondary,
               size: 20,
             ),
           ),

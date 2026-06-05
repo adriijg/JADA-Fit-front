@@ -173,13 +173,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     Icon(
                       Icons.fitness_center,
                       size: 72,
-                      color: AppColors.primary,
+                      color: context.colors.primary,
                     ),
                     SizedBox(height: 16),
                     Text(
                       AppStrings.appName,
                       style: TextStyle(
-                        color: AppColors.primary,
+                        color: context.colors.primary,
                         fontFamily: 'Orbitron',
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
@@ -247,7 +247,7 @@ class _RegisterCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(26),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(28),
       ),
       child: Column(
@@ -257,7 +257,7 @@ class _RegisterCard extends StatelessWidget {
             child: Text(
               AppStrings.registerTitle,
               style: TextStyle(
-                color: AppColors.textMain,
+                color: context.colors.textMain,
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 1.2,
@@ -268,7 +268,7 @@ class _RegisterCard extends StatelessWidget {
           Text(
             AppStrings.registerNameLabel,
             style: TextStyle(
-              color: AppColors.secondary,
+              color: context.colors.secondary,
               fontSize: 14,
               letterSpacing: 1,
             ),
@@ -284,7 +284,7 @@ class _RegisterCard extends StatelessWidget {
           Text(
             AppStrings.registerEmailLabel,
             style: TextStyle(
-              color: AppColors.secondary,
+              color: context.colors.secondary,
               fontSize: 14,
               letterSpacing: 1,
             ),
@@ -301,7 +301,7 @@ class _RegisterCard extends StatelessWidget {
           Text(
             AppStrings.registerPasswordLabel,
             style: TextStyle(
-              color: AppColors.secondary,
+              color: context.colors.secondary,
               fontSize: 14,
               letterSpacing: 1,
             ),
@@ -318,7 +318,7 @@ class _RegisterCard extends StatelessWidget {
           Text(
             AppStrings.registerRepeatPasswordLabel,
             style: TextStyle(
-              color: AppColors.secondary,
+              color: context.colors.secondary,
               fontSize: 14,
               letterSpacing: 1,
             ),
@@ -353,8 +353,8 @@ class _RegisterCard extends StatelessWidget {
             child: ElevatedButton(
               onPressed: isLoading ? null : onRegister,
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.background,
+                backgroundColor: context.colors.primary,
+                foregroundColor: context.colors.background,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(24),
                 ),
@@ -365,7 +365,7 @@ class _RegisterCard extends StatelessWidget {
                       height: 22,
                       child: CircularProgressIndicator(
                         strokeWidth: 2.4,
-                        color: AppColors.background,
+                        color: context.colors.background,
                       ),
                     )
                   : Row(
@@ -390,7 +390,7 @@ class _RegisterCard extends StatelessWidget {
             child: TextButton(
               onPressed: onGoToLogin,
               style: TextButton.styleFrom(
-                foregroundColor: AppColors.secondary,
+                foregroundColor: context.colors.secondary,
               ),
               child: Text(AppStrings.alreadyHaveAccountPrompt),
             ),

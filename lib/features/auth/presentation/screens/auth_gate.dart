@@ -86,7 +86,7 @@ class _AuthGateState extends State<AuthGate> {
     return Scaffold(
       body: Center(
         child: CircularProgressIndicator(
-          color: AppColors.primary,
+          color: context.colors.primary,
         ),
       ),
     );

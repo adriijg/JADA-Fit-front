@@ -200,10 +200,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     child: ElevatedButton(
                       onPressed: isLoading ? null : _completeOnboarding,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary,
-                        foregroundColor: AppColors.background,
+                        backgroundColor: context.colors.primary,
+                        foregroundColor: context.colors.background,
                         elevation: 12,
-                        shadowColor: AppColors.primary.withOpacity(0.32),
+                        shadowColor: context.colors.primary.withOpacity(0.32),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(24),
                         ),
@@ -213,7 +213,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               width: 22,
                               height: 22,
                               child: CircularProgressIndicator(
-                                color: AppColors.background,
+                                color: context.colors.background,
                                 strokeWidth: 2.4,
                               ),
                             )
@@ -253,13 +253,13 @@ class _OnboardingHeader extends StatelessWidget {
         Icon(
           Icons.fitness_center,
           size: 58,
-          color: AppColors.primary,
+          color: context.colors.primary,
         ),
         SizedBox(height: 18),
         Text(
           'Configura tu perfil fitness',
           style: TextStyle(
-            color: AppColors.textMain,
+            color: context.colors.textMain,
             fontSize: 28,
             fontWeight: FontWeight.w900,
             height: 1.15,
@@ -269,7 +269,7 @@ class _OnboardingHeader extends StatelessWidget {
         Text(
           'Usaremos estos datos para personalizar tus recomendaciones, objetivos y progreso.',
           style: TextStyle(
-            color: AppColors.secondary,
+            color: context.colors.secondary,
             fontSize: 14,
             height: 1.5,
           ),
@@ -391,13 +391,14 @@ class _GenderDropdown extends StatelessWidget {
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
       initialValue: value,
-      dropdownColor: AppColors.surface,
+      dropdownColor: context.colors.surface,
       style: TextStyle(
-        color: AppColors.textMain,
+        color: context.colors.textMain,
         fontSize: 15,
       ),
-      iconEnabledColor: AppColors.secondary,
+      iconEnabledColor: context.colors.secondary,
       decoration: _inputDecoration(
+        context,
         label: 'Género',
         icon: Icons.wc,
       ),
@@ -429,13 +430,14 @@ class _GoalDropdown extends StatelessWidget {
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
       initialValue: value,
-      dropdownColor: AppColors.surface,
+      dropdownColor: context.colors.surface,
       style: TextStyle(
-        color: AppColors.textMain,
+        color: context.colors.textMain,
         fontSize: 15,
       ),
-      iconEnabledColor: AppColors.secondary,
+      iconEnabledColor: context.colors.secondary,
       decoration: _inputDecoration(
+        context,
         label: 'Objetivo',
         icon: Icons.flag_outlined,
       ),
@@ -481,10 +483,11 @@ class _OnboardingTextField extends StatelessWidget {
       controller: controller,
       keyboardType: keyboardType,
       style: TextStyle(
-        color: AppColors.textMain,
+        color: context.colors.textMain,
         fontSize: 15,
       ),
       decoration: _inputDecoration(
+        context,
         label: label,
         hintText: hintText,
         icon: icon,
@@ -494,7 +497,8 @@ class _OnboardingTextField extends StatelessWidget {
   }
 }
 
-InputDecoration _inputDecoration({
+InputDecoration _inputDecoration(
+  BuildContext context, {
   required String label,
   required IconData icon,
   String? hintText,
@@ -502,35 +506,35 @@ InputDecoration _inputDecoration({
 }) {
   return InputDecoration(
     filled: true,
-    fillColor: AppColors.inputBackground,
+    fillColor: context.colors.inputBackground,
     labelText: label,
     labelStyle: TextStyle(
-      color: AppColors.secondary,
+      color: context.colors.secondary,
       fontWeight: FontWeight.w600,
     ),
     hintText: hintText,
     hintStyle: TextStyle(
-      color: AppColors.textMain.withOpacity(0.45),
+      color: context.colors.textMain.withOpacity(0.45),
     ),
     prefixIcon: Icon(
       icon,
-      color: AppColors.primary,
+      color: context.colors.primary,
     ),
     suffixText: suffix,
     suffixStyle: TextStyle(
-      color: AppColors.secondary,
+      color: context.colors.secondary,
       fontWeight: FontWeight.w700,
     ),
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(18),
       borderSide: BorderSide(
-        color: AppColors.inputBorder,
+        color: context.colors.inputBorder,
       ),
     ),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(18),
       borderSide: BorderSide(
-        color: AppColors.primary,
+        color: context.colors.primary,
         width: 1.4,
       ),
     ),

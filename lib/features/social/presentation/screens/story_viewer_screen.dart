@@ -89,21 +89,21 @@ class _StoryViewerScreenState extends State<StoryViewerScreen>
               builder: (context) {
                 Widget errorPlaceholder() {
                   return Container(
-                    color: AppColors.background,
-                    child: const Center(
+                    color: context.colors.background,
+                    child: Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
                             Icons.image_not_supported_outlined,
-                            color: AppColors.secondary,
+                            color: context.colors.secondary,
                             size: 56,
                           ),
                           SizedBox(height: 12),
                           Text(
                             'No se pudo cargar la historia',
                             style: TextStyle(
-                              color: AppColors.secondary,
+                              color: context.colors.secondary,
                               fontSize: 14,
                             ),
                           ),
@@ -116,10 +116,10 @@ class _StoryViewerScreenState extends State<StoryViewerScreen>
                 Widget loadingPlaceholder(BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
                   if (loadingProgress == null) return child;
                   return Container(
-                    color: AppColors.background,
-                    child: const Center(
+                    color: context.colors.background,
+                    child: Center(
                       child: CircularProgressIndicator(
-                        color: AppColors.primary,
+                        color: context.colors.primary,
                         strokeWidth: 2,
                       ),
                     ),
@@ -214,7 +214,7 @@ class _StoryViewerScreenState extends State<StoryViewerScreen>
                       CircleAvatar(
                         radius: 16,
                         backgroundColor:
-                            AppColors.primary.withValues(alpha: 0.2),
+                            context.colors.primary.withValues(alpha: 0.2),
                         backgroundImage:
                             story.author.profilePictureUrl != null
                                 ? NetworkImage(
@@ -223,8 +223,8 @@ class _StoryViewerScreenState extends State<StoryViewerScreen>
                         child: story.author.profilePictureUrl == null
                             ? Text(
                                 story.author.username[0].toUpperCase(),
-                                style: const TextStyle(
-                                  color: AppColors.primary,
+                                style: TextStyle(
+                                  color: context.colors.primary,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 12,
                                 ),

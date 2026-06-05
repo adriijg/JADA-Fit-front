@@ -50,7 +50,7 @@ class SocialSummaryCard extends StatelessWidget {
                 Text(
                   'Actividad social',
                   style: TextStyle(
-                    color: AppColors.textMain,
+                    color: context.colors.textMain,
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
                   ),
@@ -59,7 +59,7 @@ class SocialSummaryCard extends StatelessWidget {
                 Text(
                   subtitle,
                   style: TextStyle(
-                    color: AppColors.secondary,
+                    color: context.colors.secondary,
                     fontSize: 12,
                     height: 1.4,
                   ),
@@ -67,7 +67,7 @@ class SocialSummaryCard extends StatelessWidget {
               ],
             ),
           ),
-          Icon(Icons.chevron_right, color: AppColors.secondary),
+          Icon(Icons.chevron_right, color: context.colors.secondary),
         ],
       ),
     );

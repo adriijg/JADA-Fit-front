@@ -168,11 +168,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        iconTheme: IconThemeData(color: AppColors.textMain),
+        iconTheme: IconThemeData(color: context.colors.textMain),
         title: Text(
           'Editar datos físicos',
           style: TextStyle(
-            color: AppColors.textMain,
+            color: context.colors.textMain,
             fontWeight: FontWeight.w700,
             letterSpacing: 1,
           ),
@@ -223,8 +223,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 child: ElevatedButton(
                   onPressed: isLoading ? null : _saveProfile,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: AppColors.background,
+                    backgroundColor: context.colors.primary,
+                    foregroundColor: context.colors.background,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(22),
                     ),
@@ -234,7 +234,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           width: 22,
                           height: 22,
                           child: CircularProgressIndicator(
-                            color: AppColors.background,
+                            color: context.colors.background,
                             strokeWidth: 2.4,
                           ),
                         )
@@ -270,10 +270,10 @@ class _HeaderCard extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.all(22),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: AppColors.divider.withOpacity(0.4),
+          color: context.colors.divider.withOpacity(0.4),
           width: 0.7,
         ),
       ),
@@ -284,15 +284,15 @@ class _HeaderCard extends StatelessWidget {
             height: 58,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: AppColors.inputBackground,
+              color: context.colors.inputBackground,
               border: Border.all(
-                color: AppColors.primary,
+                color: context.colors.primary,
                 width: 1.5,
               ),
             ),
             child: Icon(
               Icons.person,
-              color: AppColors.primary,
+              color: context.colors.primary,
               size: 30,
             ),
           ),
@@ -304,7 +304,7 @@ class _HeaderCard extends StatelessWidget {
                 Text(
                   name,
                   style: TextStyle(
-                    color: AppColors.textMain,
+                    color: context.colors.textMain,
                     fontSize: 18,
                     fontWeight: FontWeight.w800,
                   ),
@@ -313,7 +313,7 @@ class _HeaderCard extends StatelessWidget {
                 Text(
                   email,
                   style: TextStyle(
-                    color: AppColors.secondary,
+                    color: context.colors.secondary,
                     fontSize: 13,
                   ),
                 ),
@@ -355,10 +355,10 @@ class _EditFormCard extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.all(22),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: AppColors.divider.withOpacity(0.4),
+          color: context.colors.divider.withOpacity(0.4),
           width: 0.7,
         ),
       ),
@@ -448,23 +448,23 @@ class _GenderDropdownField extends StatelessWidget {
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
       initialValue: value,
-      dropdownColor: AppColors.surface,
+      dropdownColor: context.colors.surface,
       style: TextStyle(
-        color: AppColors.textMain,
+        color: context.colors.textMain,
         fontSize: 15,
       ),
-      iconEnabledColor: AppColors.secondary,
+      iconEnabledColor: context.colors.secondary,
       decoration: InputDecoration(
         filled: true,
-        fillColor: AppColors.inputBackground,
+        fillColor: context.colors.inputBackground,
         labelText: 'Género',
         labelStyle: TextStyle(
-          color: AppColors.secondary,
+          color: context.colors.secondary,
           fontWeight: FontWeight.w600,
         ),
         prefixIcon: Icon(
           Icons.wc,
-          color: AppColors.primary,
+          color: context.colors.primary,
         ),
         suffixIcon: value == null
             ? null
@@ -472,19 +472,19 @@ class _GenderDropdownField extends StatelessWidget {
                 onPressed: onClear,
                 icon: Icon(
                   Icons.close,
-                  color: AppColors.secondary,
+                  color: context.colors.secondary,
                 ),
               ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
           borderSide: BorderSide(
-            color: AppColors.inputBorder,
+            color: context.colors.inputBorder,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
           borderSide: BorderSide(
-            color: AppColors.primary,
+            color: context.colors.primary,
             width: 1.4,
           ),
         ),
@@ -527,40 +527,40 @@ class _EditProfileField extends StatelessWidget {
       controller: controller,
       keyboardType: keyboardType,
       style: TextStyle(
-        color: AppColors.textMain,
+        color: context.colors.textMain,
         fontSize: 15,
       ),
       decoration: InputDecoration(
         filled: true,
-        fillColor: AppColors.inputBackground,
+        fillColor: context.colors.inputBackground,
         labelText: label,
         labelStyle: TextStyle(
-          color: AppColors.secondary,
+          color: context.colors.secondary,
           fontWeight: FontWeight.w600,
         ),
         hintText: hintText,
         hintStyle: TextStyle(
-          color: AppColors.textMain.withOpacity(0.45),
+          color: context.colors.textMain.withOpacity(0.45),
         ),
         prefixIcon: Icon(
           icon,
-          color: AppColors.primary,
+          color: context.colors.primary,
         ),
         suffixText: suffix,
         suffixStyle: TextStyle(
-          color: AppColors.secondary,
+          color: context.colors.secondary,
           fontWeight: FontWeight.w700,
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
           borderSide: BorderSide(
-            color: AppColors.inputBorder,
+            color: context.colors.inputBorder,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
           borderSide: BorderSide(
-            color: AppColors.primary,
+            color: context.colors.primary,
             width: 1.4,
           ),
         ),

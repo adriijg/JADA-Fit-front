@@ -290,12 +290,12 @@ class _FitnessProgressScreenState extends State<FitnessProgressScreen> {
       appBar: AppBar(
         elevation: 0,
         iconTheme: IconThemeData(
-          color: AppColors.textMain,
+          color: context.colors.textMain,
         ),
         title: Text(
           'Estadísticas físicas',
           style: TextStyle(
-            color: AppColors.textMain,
+            color: context.colors.textMain,
             fontWeight: FontWeight.w700,
             letterSpacing: 1,
           ),
@@ -303,14 +303,14 @@ class _FitnessProgressScreenState extends State<FitnessProgressScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _openAddLog(),
-        backgroundColor: AppColors.primary,
-        foregroundColor: AppColors.background,
+        backgroundColor: context.colors.primary,
+        foregroundColor: context.colors.background,
         child: Icon(Icons.add),
       ),
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: _loadProgress,
-          color: AppColors.primary,
+          color: context.colors.primary,
           child: SingleChildScrollView(
             physics: AlwaysScrollableScrollPhysics(),
             padding: EdgeInsets.symmetric(
@@ -336,7 +336,7 @@ class _FitnessProgressScreenState extends State<FitnessProgressScreen> {
         height: 500,
         child: Center(
           child: CircularProgressIndicator(
-            color: AppColors.primary,
+            color: context.colors.primary,
           ),
         ),
       );
@@ -421,8 +421,8 @@ class _FitnessProgressScreenState extends State<FitnessProgressScreen> {
           child: ElevatedButton.icon(
             onPressed: _openMonthlyCalendar,
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: AppColors.background,
+              backgroundColor: context.colors.primary,
+              foregroundColor: context.colors.background,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
@@ -543,15 +543,15 @@ class _ProgressHeroCard extends StatelessWidget {
                 height: 82,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.inputBackground,
+                  color: context.colors.inputBackground,
                   border: Border.all(
-                    color: AppColors.primary,
+                    color: context.colors.primary,
                     width: 2,
                   ),
                 ),
                 child: Icon(
                   Icons.show_chart,
-                  color: AppColors.primary,
+                  color: context.colors.primary,
                   size: 42,
                 ),
               ),
@@ -563,7 +563,7 @@ class _ProgressHeroCard extends StatelessWidget {
                     Text(
                       'Progreso físico',
                       style: TextStyle(
-                        color: AppColors.textMain,
+                        color: context.colors.textMain,
                         fontSize: 20,
                         fontWeight: FontWeight.w900,
                       ),
@@ -572,7 +572,7 @@ class _ProgressHeroCard extends StatelessWidget {
                     Text(
                       latestWeight,
                       style: TextStyle(
-                        color: AppColors.primary,
+                        color: context.colors.primary,
                         fontSize: 26,
                         fontWeight: FontWeight.w900,
                       ),
@@ -581,7 +581,7 @@ class _ProgressHeroCard extends StatelessWidget {
                     Text(
                       'Cambio total: $weightChange',
                       style: TextStyle(
-                        color: AppColors.secondary,
+                        color: context.colors.secondary,
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
                       ),
@@ -590,7 +590,7 @@ class _ProgressHeroCard extends StatelessWidget {
                     Text(
                       '$totalRecords registros guardados',
                       style: TextStyle(
-                        color: AppColors.textMain.withOpacity(0.55),
+                        color: context.colors.textMain.withOpacity(0.55),
                         fontSize: 12,
                       ),
                     ),
@@ -606,8 +606,8 @@ class _ProgressHeroCard extends StatelessWidget {
             child: ElevatedButton.icon(
               onPressed: onAddRecord,
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.background,
+                backgroundColor: context.colors.primary,
+                foregroundColor: context.colors.background,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(18),
                 ),
@@ -656,7 +656,7 @@ class _MonthSelectorCard extends StatelessWidget {
             onPressed: onPrevious,
             icon: Icon(
               Icons.chevron_left,
-              color: AppColors.secondary,
+              color: context.colors.secondary,
             ),
           ),
           Expanded(
@@ -665,7 +665,7 @@ class _MonthSelectorCard extends StatelessWidget {
                 Text(
                   title,
                   style: TextStyle(
-                    color: AppColors.textMain,
+                    color: context.colors.textMain,
                     fontSize: 18,
                     fontWeight: FontWeight.w900,
                   ),
@@ -675,7 +675,7 @@ class _MonthSelectorCard extends StatelessWidget {
                 Text(
                   'Desliza la gráfica para cambiar de mes',
                   style: TextStyle(
-                    color: AppColors.secondary,
+                    color: context.colors.secondary,
                     fontSize: 11,
                     fontWeight: FontWeight.w600,
                   ),
@@ -689,8 +689,8 @@ class _MonthSelectorCard extends StatelessWidget {
             icon: Icon(
               Icons.chevron_right,
               color: canGoNext
-                  ? AppColors.secondary
-                  : AppColors.divider.withOpacity(0.55),
+                  ? context.colors.secondary
+                  : context.colors.divider.withOpacity(0.55),
             ),
           ),
         ],
@@ -731,13 +731,13 @@ class _MetricSelectorCard extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? AppColors.primary
-                        : AppColors.inputBackground,
+                        ? context.colors.primary
+                        : context.colors.inputBackground,
                     borderRadius: BorderRadius.circular(18),
                     border: Border.all(
                       color: isSelected
-                          ? AppColors.primary
-                          : AppColors.inputBorder,
+                          ? context.colors.primary
+                          : context.colors.inputBorder,
                       width: 0.8,
                     ),
                   ),
@@ -746,8 +746,8 @@ class _MetricSelectorCard extends StatelessWidget {
                       Icon(
                         metric.icon,
                         color: isSelected
-                            ? AppColors.background
-                            : AppColors.primary,
+                            ? context.colors.background
+                            : context.colors.primary,
                         size: 22,
                       ),
                       SizedBox(height: 7),
@@ -755,8 +755,8 @@ class _MetricSelectorCard extends StatelessWidget {
                         metric.title,
                         style: TextStyle(
                           color: isSelected
-                              ? AppColors.background
-                              : AppColors.textMain,
+                              ? context.colors.background
+                              : context.colors.textMain,
                           fontSize: 12,
                           fontWeight: FontWeight.w800,
                         ),
@@ -854,7 +854,7 @@ class _SingleProgressChartCard extends StatelessWidget {
             children: [
               Icon(
                 metric.icon,
-                color: AppColors.primary,
+                color: context.colors.primary,
                 size: 25,
               ),
               SizedBox(width: 10),
@@ -862,7 +862,7 @@ class _SingleProgressChartCard extends StatelessWidget {
                 child: Text(
                   metric.fullTitle,
                   style: TextStyle(
-                    color: AppColors.textMain,
+                    color: context.colors.textMain,
                     fontSize: 18,
                     fontWeight: FontWeight.w900,
                   ),
@@ -874,7 +874,7 @@ class _SingleProgressChartCard extends StatelessWidget {
           Text(
             '$monthTitle · ${metric.subtitle}',
             style: TextStyle(
-              color: AppColors.secondary,
+              color: context.colors.secondary,
               fontSize: 12,
               height: 1.4,
             ),
@@ -913,7 +913,7 @@ class _SingleProgressChartCard extends StatelessWidget {
               height: 230,
               width: double.infinity,
               child: LineChart(
-                _lineChartData(chartPoints, metric.unit),
+                _lineChartData(context, chartPoints, metric.unit),
               ),
             )
           else
@@ -922,10 +922,10 @@ class _SingleProgressChartCard extends StatelessWidget {
               height: 170,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: AppColors.inputBackground,
+                color: context.colors.inputBackground,
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: AppColors.inputBorder,
+                  color: context.colors.inputBorder,
                   width: 0.7,
                 ),
               ),
@@ -934,7 +934,7 @@ class _SingleProgressChartCard extends StatelessWidget {
                     ? 'No hay registros para este mes'
                     : 'Necesitas al menos 2 registros para ver la gráfica',
                 style: TextStyle(
-                  color: AppColors.secondary,
+                  color: context.colors.secondary,
                   fontSize: 13,
                 ),
                 textAlign: TextAlign.center,
@@ -945,7 +945,7 @@ class _SingleProgressChartCard extends StatelessWidget {
     );
   }
 
-  LineChartData _lineChartData(List<_ChartPoint> points, String unit) {
+  LineChartData _lineChartData(BuildContext context, List<_ChartPoint> points, String unit) {
     final spots = <FlSpot>[];
 
     for (var i = 0; i < points.length; i++) {
@@ -975,7 +975,7 @@ class _SingleProgressChartCard extends StatelessWidget {
         drawVerticalLine: false,
         getDrawingHorizontalLine: (value) {
           return FlLine(
-            color: AppColors.inputBorder,
+            color: context.colors.inputBorder,
             strokeWidth: 1,
           );
         },
@@ -1008,7 +1008,7 @@ class _SingleProgressChartCard extends StatelessWidget {
                 child: Text(
                   date.day.toString(),
                   style: TextStyle(
-                    color: AppColors.textMain.withOpacity(0.55),
+                    color: context.colors.textMain.withOpacity(0.55),
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
                   ),
@@ -1025,7 +1025,7 @@ class _SingleProgressChartCard extends StatelessWidget {
               return Text(
                 value.toStringAsFixed(0),
                 style: TextStyle(
-                  color: AppColors.textMain.withOpacity(0.55),
+                  color: context.colors.textMain.withOpacity(0.55),
                   fontSize: 10,
                   fontWeight: FontWeight.w600,
                 ),
@@ -1037,7 +1037,7 @@ class _SingleProgressChartCard extends StatelessWidget {
       lineTouchData: LineTouchData(
         enabled: true,
         touchTooltipData: LineTouchTooltipData(
-          getTooltipColor: (_) => AppColors.inputBackground,
+          getTooltipColor: (_) => context.colors.inputBackground,
           tooltipRoundedRadius: 12,
           getTooltipItems: (spots) {
             return spots.map((spot) {
@@ -1052,7 +1052,7 @@ class _SingleProgressChartCard extends StatelessWidget {
               return LineTooltipItem(
                 '${date.day}/${date.month}\n${spot.y.toStringAsFixed(spot.y % 1 == 0 ? 0 : 1)} $unit',
                 TextStyle(
-                  color: AppColors.primary,
+                  color: context.colors.primary,
                   fontWeight: FontWeight.w800,
                 ),
               );
@@ -1064,7 +1064,7 @@ class _SingleProgressChartCard extends StatelessWidget {
         LineChartBarData(
           spots: spots,
           isCurved: true,
-          color: AppColors.primary,
+          color: context.colors.primary,
           barWidth: 4,
           isStrokeCapRound: true,
           dotData: FlDotData(
@@ -1072,15 +1072,15 @@ class _SingleProgressChartCard extends StatelessWidget {
             getDotPainter: (spot, percent, barData, index) {
               return FlDotCirclePainter(
                 radius: 4,
-                color: AppColors.primary,
+                color: context.colors.primary,
                 strokeWidth: 3,
-                strokeColor: AppColors.surface,
+                strokeColor: context.colors.surface,
               );
             },
           ),
           belowBarData: BarAreaData(
             show: true,
-            color: AppColors.primary.withOpacity(0.12),
+            color: context.colors.primary.withOpacity(0.12),
           ),
         ),
       ],
@@ -1105,10 +1105,10 @@ class _ChartMiniValue extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: AppColors.inputBackground,
+          color: context.colors.inputBackground,
           borderRadius: BorderRadius.circular(18),
           border: Border.all(
-            color: AppColors.inputBorder,
+            color: context.colors.inputBorder,
             width: 0.7,
           ),
         ),
@@ -1118,8 +1118,8 @@ class _ChartMiniValue extends StatelessWidget {
               value,
               style: TextStyle(
                 color: isEmpty
-                    ? AppColors.textMain.withOpacity(0.45)
-                    : AppColors.textMain,
+                    ? context.colors.textMain.withOpacity(0.45)
+                    : context.colors.textMain,
                 fontSize: 17,
                 fontWeight: FontWeight.w900,
                 fontStyle: isEmpty ? FontStyle.italic : FontStyle.normal,
@@ -1130,7 +1130,7 @@ class _ChartMiniValue extends StatelessWidget {
             Text(
               label.toUpperCase(),
               style: TextStyle(
-                color: AppColors.secondary,
+                color: context.colors.secondary,
                 fontSize: 10,
                 fontWeight: FontWeight.w800,
                 letterSpacing: 1,
@@ -1229,7 +1229,7 @@ class _WeeklyCalendarCard extends StatelessWidget {
             children: [
               Icon(
                 Icons.calendar_view_week,
-                color: AppColors.primary,
+                color: context.colors.primary,
                 size: 24,
               ),
               SizedBox(width: 10),
@@ -1237,7 +1237,7 @@ class _WeeklyCalendarCard extends StatelessWidget {
                 child: Text(
                   'Calendario semanal',
                   style: TextStyle(
-                    color: AppColors.textMain,
+                    color: context.colors.textMain,
                     fontSize: 18,
                     fontWeight: FontWeight.w900,
                   ),
@@ -1249,7 +1249,7 @@ class _WeeklyCalendarCard extends StatelessWidget {
           Text(
             'Semana del ${formatDate(days.first)} al ${formatDate(days.last)}',
             style: TextStyle(
-              color: AppColors.secondary,
+              color: context.colors.secondary,
               fontSize: 12,
               height: 1.4,
             ),
@@ -1263,9 +1263,9 @@ class _WeeklyCalendarCard extends StatelessWidget {
                 onAddRecordForDay(DateTime.now());
               },
               style: OutlinedButton.styleFrom(
-                foregroundColor: AppColors.primary,
+                foregroundColor: context.colors.primary,
                 side: BorderSide(
-                  color: AppColors.primary,
+                  color: context.colors.primary,
                   width: 1,
                 ),
                 shape: RoundedRectangleBorder(
@@ -1323,13 +1323,13 @@ class _WeeklyCalendarCard extends StatelessWidget {
                       ),
                       decoration: BoxDecoration(
                         color: hasRecords
-                            ? AppColors.primary
-                            : AppColors.inputBackground,
+                            ? context.colors.primary
+                            : context.colors.inputBackground,
                         borderRadius: BorderRadius.circular(18),
                         border: Border.all(
                           color: hasRecords
-                              ? AppColors.primary
-                              : AppColors.inputBorder,
+                              ? context.colors.primary
+                              : context.colors.inputBorder,
                           width: 0.7,
                         ),
                       ),
@@ -1339,8 +1339,8 @@ class _WeeklyCalendarCard extends StatelessWidget {
                             _weekdayLabel(day.weekday),
                             style: TextStyle(
                               color: hasRecords
-                                  ? AppColors.background
-                                  : AppColors.secondary,
+                                  ? context.colors.background
+                                  : context.colors.secondary,
                               fontSize: 11,
                               fontWeight: FontWeight.w900,
                             ),
@@ -1350,8 +1350,8 @@ class _WeeklyCalendarCard extends StatelessWidget {
                             day.day.toString(),
                             style: TextStyle(
                               color: hasRecords
-                                  ? AppColors.background
-                                  : AppColors.textMain,
+                                  ? context.colors.background
+                                  : context.colors.textMain,
                               fontSize: 17,
                               fontWeight: FontWeight.w900,
                             ),
@@ -1363,15 +1363,15 @@ class _WeeklyCalendarCard extends StatelessWidget {
                                 : Icons.add_circle_outline,
                             size: 15,
                             color: hasRecords
-                                ? AppColors.background
-                                : AppColors.secondary,
+                                ? context.colors.background
+                                : context.colors.secondary,
                           ),
                           if (latest != null) ...[
                             SizedBox(height: 8),
                             Text(
                               _formatValue(latest.weight, 'kg'),
                               style: TextStyle(
-                                color: AppColors.background,
+                                color: context.colors.background,
                                 fontSize: 9,
                                 fontWeight: FontWeight.w800,
                               ),
@@ -1441,7 +1441,7 @@ class _DayRecordsBottomSheet extends StatelessWidget {
             Text(
               formatDate(day),
               style: TextStyle(
-                color: AppColors.textMain,
+                color: context.colors.textMain,
                 fontSize: 20,
                 fontWeight: FontWeight.w900,
               ),
@@ -1453,8 +1453,8 @@ class _DayRecordsBottomSheet extends StatelessWidget {
               child: ElevatedButton.icon(
                 onPressed: onAddRecord,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: AppColors.background,
+                  backgroundColor: context.colors.primary,
+                  foregroundColor: context.colors.background,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18),
                   ),
@@ -1475,7 +1475,7 @@ class _DayRecordsBottomSheet extends StatelessWidget {
               Text(
                 'No hay registros para este día.',
                 style: TextStyle(
-                  color: AppColors.secondary,
+                  color: context.colors.secondary,
                   fontSize: 13,
                 ),
               )
@@ -1486,17 +1486,17 @@ class _DayRecordsBottomSheet extends StatelessWidget {
                   margin: EdgeInsets.only(bottom: 12),
                   padding: EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: AppColors.inputBackground,
+                    color: context.colors.inputBackground,
                     borderRadius: BorderRadius.circular(18),
                     border: Border.all(
-                      color: AppColors.inputBorder,
+                      color: context.colors.inputBorder,
                       width: 0.7,
                     ),
                   ),
                   child: Text(
                     '${_formatTime(item.loggedAt)} · ${_formatDouble(item.weight, 'kg', imperial: imperial)} · ${_formatDouble(item.bodyFat, '%')} grasa · ${_formatDouble(item.muscleMass, 'kg', imperial: imperial)} músculo',
                     style: TextStyle(
-                      color: AppColors.textMain,
+                      color: context.colors.textMain,
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
                     ),
@@ -1530,14 +1530,14 @@ class _EmptyProgressCard extends StatelessWidget {
             children: [
               Icon(
                 Icons.show_chart,
-                color: AppColors.primary,
+                color: context.colors.primary,
                 size: 48,
               ),
               SizedBox(height: 18),
               Text(
                 'Todavía no hay datos de progreso',
                 style: TextStyle(
-                  color: AppColors.textMain,
+                  color: context.colors.textMain,
                   fontSize: 18,
                   fontWeight: FontWeight.w900,
                 ),
@@ -1547,7 +1547,7 @@ class _EmptyProgressCard extends StatelessWidget {
               Text(
                 'Añade tus primeros datos físicos para empezar a ver tu evolución.',
                 style: TextStyle(
-                  color: AppColors.secondary,
+                  color: context.colors.secondary,
                   fontSize: 13,
                   height: 1.5,
                 ),
@@ -1560,8 +1560,8 @@ class _EmptyProgressCard extends StatelessWidget {
                 child: ElevatedButton.icon(
                   onPressed: onAddRecord,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: AppColors.background,
+                    backgroundColor: context.colors.primary,
+                    foregroundColor: context.colors.background,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18),
                     ),
@@ -1611,7 +1611,7 @@ class _ErrorCard extends StatelessWidget {
           Text(
             message,
             style: TextStyle(
-              color: AppColors.textMain,
+              color: context.colors.textMain,
               fontSize: 15,
               height: 1.5,
             ),
@@ -1621,8 +1621,8 @@ class _ErrorCard extends StatelessWidget {
           ElevatedButton(
             onPressed: onRetry,
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: AppColors.background,
+              backgroundColor: context.colors.primary,
+              foregroundColor: context.colors.background,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(18),
               ),

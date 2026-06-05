@@ -17,7 +17,7 @@ class GreetingCard extends StatelessWidget {
           Text(
             'Hola 👋',
             style: TextStyle(
-              color: AppColors.textMain,
+              color: context.colors.textMain,
               fontSize: 27,
               fontWeight: FontWeight.w900,
               letterSpacing: 0.4,
@@ -27,7 +27,7 @@ class GreetingCard extends StatelessWidget {
           Text(
             'Este es tu panel principal. Aquí tendrás el resumen de nutrición, entrenamiento, progreso físico y recomendaciones inteligentes.',
             style: TextStyle(
-              color: AppColors.secondary,
+              color: context.colors.secondary,
               fontSize: 14,
               height: 1.5,
             ),

@@ -144,13 +144,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     Icon(
                       Icons.fitness_center,
                       size: 82,
-                      color: AppColors.primary,
+                      color: context.colors.primary,
                     ),
                     SizedBox(height: 16),
                     Text(
                       AppStrings.appName,
                       style: TextStyle(
-                        color: AppColors.primary,
+                        color: context.colors.primary,
                         fontFamily: 'Orbitron',
                         fontSize: 34,
                         fontWeight: FontWeight.bold,
@@ -224,7 +224,7 @@ class _LoginCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(26),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(28),
       ),
       child: Column(
@@ -234,7 +234,7 @@ class _LoginCard extends StatelessWidget {
             child: Text(
               AppStrings.loginTitle,
               style: TextStyle(
-                color: AppColors.textMain,
+                color: context.colors.textMain,
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 1.2,
@@ -245,7 +245,7 @@ class _LoginCard extends StatelessWidget {
           Text(
             AppStrings.loginUserLabel,
             style: TextStyle(
-              color: AppColors.secondary,
+              color: context.colors.secondary,
               fontSize: 14,
               letterSpacing: 1,
             ),
@@ -262,7 +262,7 @@ class _LoginCard extends StatelessWidget {
           Text(
             AppStrings.loginPasswordLabel,
             style: TextStyle(
-              color: AppColors.secondary,
+              color: context.colors.secondary,
               fontSize: 14,
               letterSpacing: 1,
             ),
@@ -277,7 +277,7 @@ class _LoginCard extends StatelessWidget {
             suffixIcon: IconButton(
               icon: Icon(
                 obscurePassword ? Icons.visibility_off : Icons.visibility,
-                color: AppColors.secondary,
+                color: context.colors.secondary,
                 size: 20,
               ),
               onPressed: onToggleObscure,
@@ -296,7 +296,7 @@ class _LoginCard extends StatelessWidget {
                 );
               },
               style: TextButton.styleFrom(
-                foregroundColor: AppColors.secondary,
+                foregroundColor: context.colors.secondary,
                 padding: EdgeInsets.zero,
                 minimumSize: Size(0, 0),
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -330,8 +330,8 @@ class _LoginCard extends StatelessWidget {
             child: ElevatedButton(
               onPressed: isLoading ? null : onLogin,
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.background,
+                backgroundColor: context.colors.primary,
+                foregroundColor: context.colors.background,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(24),
                 ),
@@ -342,7 +342,7 @@ class _LoginCard extends StatelessWidget {
                       height: 22,
                       child: CircularProgressIndicator(
                         strokeWidth: 2.4,
-                        color: AppColors.background,
+                        color: context.colors.background,
                       ),
                     )
                   : Row(
@@ -367,7 +367,7 @@ class _LoginCard extends StatelessWidget {
             child: TextButton(
               onPressed: onGoToRegister,
               style: TextButton.styleFrom(
-                foregroundColor: AppColors.secondary,
+                foregroundColor: context.colors.secondary,
                 textStyle: TextStyle(
                   fontSize: 13,
                   letterSpacing: 0.4,
@@ -381,7 +381,7 @@ class _LoginCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Divider(
-                  color: AppColors.divider,
+                  color: context.colors.divider,
                   thickness: 1,
                 ),
               ),
@@ -390,14 +390,14 @@ class _LoginCard extends StatelessWidget {
                 child: Text(
                   AppStrings.continueWith,
                   style: TextStyle(
-                    color: AppColors.textMain,
+                    color: context.colors.textMain,
                     fontSize: 12,
                   ),
                 ),
               ),
               Expanded(
                 child: Divider(
-                  color: AppColors.divider,
+                  color: context.colors.divider,
                   thickness: 1,
                 ),
               ),
@@ -414,7 +414,7 @@ class _LoginCard extends StatelessWidget {
               ),
               SocialLoginButton(
                 icon: FontAwesomeIcons.apple,
-                color: AppColors.textMain,
+                color: context.colors.textMain,
                 onTap: onAppleLogin,
               ),
               SocialLoginButton(

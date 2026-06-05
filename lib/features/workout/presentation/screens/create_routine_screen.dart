@@ -184,12 +184,12 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
         centerTitle: true,
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.textMain, size: 22),
+          icon: Icon(Icons.arrow_back_ios_new_rounded, color: context.colors.textMain, size: 22),
         ),
         title: Text(
           widget.isEditing ? 'Editar Rutina' : 'Nueva Rutina',
           style: TextStyle(
-            color: AppColors.textMain,
+            color: context.colors.textMain,
             fontSize: 20,
             fontWeight: FontWeight.w900,
           ),
@@ -280,8 +280,8 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
                                   style: TextStyle(fontWeight: FontWeight.w900, fontSize: 11),
                                 ),
                                 style: TextButton.styleFrom(
-                                  foregroundColor: AppColors.tertiary,
-                                  backgroundColor: AppColors.tertiary.withOpacity(0.1),
+                                  foregroundColor: context.colors.tertiary,
+                                  backgroundColor: context.colors.tertiary.withOpacity(0.1),
                                   padding: EdgeInsets.symmetric(horizontal: 12),
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                                 ),
@@ -292,8 +292,8 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
                               icon: Icon(Icons.add_circle_outline_rounded, size: 20),
                               label: Text('AÑADIR', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 11)),
                               style: TextButton.styleFrom(
-                                foregroundColor: AppColors.primary,
-                                backgroundColor: AppColors.primary.withOpacity(0.1),
+                                foregroundColor: context.colors.primary,
+                                backgroundColor: context.colors.primary.withOpacity(0.1),
                                 padding: EdgeInsets.symmetric(horizontal: 12),
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                               ),
@@ -339,23 +339,23 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
       margin: const EdgeInsets.only(bottom: 20),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.tertiary.withOpacity(0.05),
+        color: context.colors.tertiary.withOpacity(0.05),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.tertiary.withOpacity(0.15)),
+        border: Border.all(color: context.colors.tertiary.withOpacity(0.15)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(Icons.auto_awesome_rounded, color: AppColors.tertiary, size: 18),
+              Icon(Icons.auto_awesome_rounded, color: context.colors.tertiary, size: 18),
               SizedBox(width: 8),
               Text(
                 _selectedSplit != null
                     ? 'Ejercicios sugeridos para ${_selectedGoal!.displayName} - ${_selectedSplit!.displayName}'
                     : 'Ejercicios sugeridos para ${_selectedGoal!.displayName}',
                 style: TextStyle(
-                  color: AppColors.tertiary,
+                  color: context.colors.tertiary,
                   fontSize: 14,
                   fontWeight: FontWeight.w800,
                 ),
@@ -366,7 +366,7 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
           Text(
             'Toca un ejercicio para añadirlo a tu rutina',
             style: TextStyle(
-              color: AppColors.tertiary.withOpacity(0.6),
+              color: context.colors.tertiary.withOpacity(0.6),
               fontSize: 12,
             ),
           ),
@@ -378,26 +378,26 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                     decoration: BoxDecoration(
-                      color: AppColors.surface,
+                      color: context.colors.surface,
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: AppColors.divider.withOpacity(0.1)),
+                      border: Border.all(color: context.colors.divider.withOpacity(0.1)),
                     ),
                     child: Row(
                       children: [
                         Container(
                           padding: EdgeInsets.all(6),
                           decoration: BoxDecoration(
-                            color: AppColors.tertiary.withOpacity(0.1),
+                            color: context.colors.tertiary.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: Icon(Icons.add_rounded, color: AppColors.tertiary, size: 16),
+                          child: Icon(Icons.add_rounded, color: context.colors.tertiary, size: 16),
                         ),
                         SizedBox(width: 12),
                         Expanded(
                           child: Text(
                             s.name,
                             style: TextStyle(
-                              color: AppColors.textMain,
+                              color: context.colors.textMain,
                               fontSize: 14,
                               fontWeight: FontWeight.w700,
                             ),
@@ -406,7 +406,7 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
                         Text(
                           '${s.suggestedSets}x${s.suggestedReps}',
                           style: TextStyle(
-                            color: AppColors.textMain.withOpacity(0.4),
+                            color: context.colors.textMain.withOpacity(0.4),
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
                           ),
@@ -426,18 +426,18 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
       width: double.infinity,
       padding: EdgeInsets.all(40),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(32),
-        border: Border.all(color: AppColors.divider.withOpacity(0.1)),
+        border: Border.all(color: context.colors.divider.withOpacity(0.1)),
       ),
       child: Column(
         children: [
-          Icon(Icons.add_task_rounded, color: AppColors.textMain.withOpacity(0.2), size: 48),
+          Icon(Icons.add_task_rounded, color: context.colors.textMain.withOpacity(0.2), size: 48),
           SizedBox(height: 16),
           Text(
             '¡Empieza a añadir ejercicios!',
             style: TextStyle(
-              color: AppColors.textMain.withOpacity(0.4),
+              color: context.colors.textMain.withOpacity(0.4),
               fontSize: 14,
               fontWeight: FontWeight.w600,
             ),
@@ -449,7 +449,7 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
               child: Text(
                 'o prueba ejercicios sugeridos para tu objetivo',
                 style: TextStyle(
-                  color: AppColors.tertiary.withOpacity(0.7),
+                  color: context.colors.tertiary.withOpacity(0.7),
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                   decoration: TextDecoration.underline,
@@ -465,14 +465,14 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
   Widget _buildBottomBar() {
     return Container(
       padding: EdgeInsets.fromLTRB(24, 16, 24, 16 + MediaQuery.of(context).padding.bottom),
-      decoration: BoxDecoration(color: AppColors.background),
+      decoration: BoxDecoration(color: context.colors.background),
       child: SizedBox(
         width: double.infinity,
         height: 56,
         child: ElevatedButton(
           onPressed: _saving ? null : _save,
           style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.primary,
+            backgroundColor: context.colors.primary,
             foregroundColor: Colors.black,
             elevation: 0,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -509,7 +509,7 @@ class _GoalSelector extends StatelessWidget {
           child: Text(
             'Objetivo',
             style: TextStyle(
-              color: AppColors.textMain.withOpacity(0.5),
+              color: context.colors.textMain.withOpacity(0.5),
               fontSize: 13,
               fontWeight: FontWeight.w800,
             ),
@@ -517,22 +517,22 @@ class _GoalSelector extends StatelessWidget {
         ),
         Container(
           decoration: BoxDecoration(
-            color: AppColors.surface,
+            color: context.colors.surface,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.divider.withOpacity(0.1)),
+            border: Border.all(color: context.colors.divider.withOpacity(0.1)),
           ),
           child: DropdownButtonFormField<RoutineGoal>(
             value: selectedGoal,
             hint: Text(
               'Selecciona un objetivo',
               style: TextStyle(
-                color: AppColors.textMain.withOpacity(0.2),
+                color: context.colors.textMain.withOpacity(0.2),
                 fontSize: 16,
               ),
             ),
-            dropdownColor: AppColors.surface,
-            icon: Icon(Icons.expand_more_rounded, color: AppColors.secondary),
-            style: TextStyle(color: AppColors.textMain, fontSize: 16, fontWeight: FontWeight.w600),
+            dropdownColor: context.colors.surface,
+            icon: Icon(Icons.expand_more_rounded, color: context.colors.secondary),
+            style: TextStyle(color: context.colors.textMain, fontSize: 16, fontWeight: FontWeight.w600),
             decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -544,7 +544,7 @@ class _GoalSelector extends StatelessWidget {
                   children: [
                     Icon(
                       _iconForGoal(goal),
-                      color: AppColors.primary,
+                      color: context.colors.primary,
                       size: 20,
                     ),
                     SizedBox(width: 12),
@@ -586,9 +586,9 @@ class _GoalInfoCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.primary.withOpacity(0.05),
+        color: context.colors.primary.withOpacity(0.05),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.primary.withOpacity(0.1)),
+        border: Border.all(color: context.colors.primary.withOpacity(0.1)),
       ),
       child: Row(
         children: [
@@ -599,7 +599,7 @@ class _GoalInfoCard extends StatelessWidget {
                 Text(
                   goal.description,
                   style: TextStyle(
-                    color: AppColors.textMain.withOpacity(0.7),
+                    color: context.colors.textMain.withOpacity(0.7),
                     fontSize: 12,
                     height: 1.4,
                   ),
@@ -614,7 +614,7 @@ class _GoalInfoCard extends StatelessWidget {
               Text(
                 'Series: ${goal.suggestedSets}',
                 style: TextStyle(
-                  color: AppColors.primary,
+                  color: context.colors.primary,
                   fontSize: 12,
                   fontWeight: FontWeight.w800,
                 ),
@@ -623,7 +623,7 @@ class _GoalInfoCard extends StatelessWidget {
               Text(
                 'Reps: ${goal.repRange}',
                 style: TextStyle(
-                  color: AppColors.primary,
+                  color: context.colors.primary,
                   fontSize: 12,
                   fontWeight: FontWeight.w800,
                 ),
@@ -652,7 +652,7 @@ class _SplitSelector extends StatelessWidget {
           child: Text(
             'Tipo de rutina',
             style: TextStyle(
-              color: AppColors.textMain.withOpacity(0.5),
+              color: context.colors.textMain.withOpacity(0.5),
               fontSize: 13,
               fontWeight: FontWeight.w800,
             ),
@@ -660,22 +660,22 @@ class _SplitSelector extends StatelessWidget {
         ),
         Container(
           decoration: BoxDecoration(
-            color: AppColors.surface,
+            color: context.colors.surface,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.divider.withOpacity(0.1)),
+            border: Border.all(color: context.colors.divider.withOpacity(0.1)),
           ),
           child: DropdownButtonFormField<RoutineSplit>(
             value: selectedSplit,
             hint: Text(
               'Ej. Empuje, Piernas, Full Body...',
               style: TextStyle(
-                color: AppColors.textMain.withOpacity(0.2),
+                color: context.colors.textMain.withOpacity(0.2),
                 fontSize: 16,
               ),
             ),
-            dropdownColor: AppColors.surface,
-            icon: Icon(Icons.expand_more_rounded, color: AppColors.secondary),
-            style: TextStyle(color: AppColors.textMain, fontSize: 16, fontWeight: FontWeight.w600),
+            dropdownColor: context.colors.surface,
+            icon: Icon(Icons.expand_more_rounded, color: context.colors.secondary),
+            style: TextStyle(color: context.colors.textMain, fontSize: 16, fontWeight: FontWeight.w600),
             decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -687,7 +687,7 @@ class _SplitSelector extends StatelessWidget {
                   children: [
                     Icon(
                       _iconForSplit(split),
-                      color: AppColors.tertiary,
+                      color: context.colors.tertiary,
                       size: 20,
                     ),
                     SizedBox(width: 12),
@@ -696,7 +696,7 @@ class _SplitSelector extends StatelessWidget {
                     Text(
                       split.description,
                       style: TextStyle(
-                        color: AppColors.textMain.withOpacity(0.3),
+                        color: context.colors.textMain.withOpacity(0.3),
                         fontSize: 12,
                       ),
                     ),
@@ -757,12 +757,12 @@ class _SectionHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, color: AppColors.primary, size: 22),
+        Icon(icon, color: context.colors.primary, size: 22),
         SizedBox(width: 8),
         Text(
           title,
           style: TextStyle(
-            color: AppColors.textMain,
+            color: context.colors.textMain,
             fontSize: 22,
             fontWeight: FontWeight.w900,
             letterSpacing: -0.5,
@@ -802,7 +802,7 @@ class _PremiumTextField extends StatelessWidget {
           child: Text(
             label,
             style: TextStyle(
-              color: AppColors.textMain.withOpacity(0.5),
+              color: context.colors.textMain.withOpacity(0.5),
               fontSize: 13,
               fontWeight: FontWeight.w800,
             ),
@@ -814,23 +814,23 @@ class _PremiumTextField extends StatelessWidget {
           keyboardType: keyboardType,
           inputFormatters: inputFormatters,
           validator: validator,
-          style: TextStyle(color: AppColors.textMain, fontSize: 16, fontWeight: FontWeight.w600),
+          style: TextStyle(color: context.colors.textMain, fontSize: 16, fontWeight: FontWeight.w600),
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: TextStyle(
-              color: AppColors.textMain.withOpacity(0.2),
+              color: context.colors.textMain.withOpacity(0.2),
               fontSize: 16,
               fontWeight: FontWeight.w400,
             ),
             filled: true,
-            fillColor: AppColors.surface,
+            fillColor: context.colors.surface,
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(color: AppColors.divider.withOpacity(0.1)),
+              borderSide: BorderSide(color: context.colors.divider.withOpacity(0.1)),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(color: AppColors.primary, width: 2),
+              borderSide: BorderSide(color: context.colors.primary, width: 2),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
@@ -863,9 +863,9 @@ class _PremiumExerciseForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: AppColors.divider.withOpacity(0.1)),
+        border: Border.all(color: context.colors.divider.withOpacity(0.1)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -873,7 +873,7 @@ class _PremiumExerciseForm extends StatelessWidget {
           Container(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
             decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.05),
+              color: context.colors.primary.withOpacity(0.05),
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(28),
                 topRight: Radius.circular(28),
@@ -883,7 +883,7 @@ class _PremiumExerciseForm extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 12,
-                  backgroundColor: AppColors.primary,
+                  backgroundColor: context.colors.primary,
                   child: Text(
                     '$index',
                     style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w900),
@@ -893,7 +893,7 @@ class _PremiumExerciseForm extends StatelessWidget {
                 Text(
                   'Ejercicio',
                   style: TextStyle(
-                    color: AppColors.primary,
+                    color: context.colors.primary,
                     fontWeight: FontWeight.w900,
                     fontSize: 15,
                   ),

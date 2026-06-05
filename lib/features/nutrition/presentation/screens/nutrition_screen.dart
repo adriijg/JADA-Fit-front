@@ -202,7 +202,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
               child: Container(
                 width: 40, height: 4,
                 decoration: BoxDecoration(
-                  color: AppColors.divider,
+                  color: context.colors.divider,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -211,7 +211,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
             Text(
               'A�ADIR ALIMENTO A...',
               style: TextStyle(
-                color: AppColors.secondary,
+                color: context.colors.secondary,
                 fontSize: 12, fontWeight: FontWeight.w800, letterSpacing: 1.2,
               ),
             ),
@@ -347,7 +347,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
       children: [
         RefreshIndicator(
           onRefresh: _loadDaySummary,
-          color: AppColors.primary,
+          color: context.colors.primary,
           child: SingleChildScrollView(
             physics: AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.only(
@@ -359,7 +359,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
                 Text(
                   AppStrings.nutritionTitle,
                   style: TextStyle(
-                    color: AppColors.textMain,
+                    color: context.colors.textMain,
                     fontSize: 24,
                     fontWeight: FontWeight.w800,
                   ),
@@ -368,7 +368,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
                 Text(
                   _formatDayTitle(_selectedDate),
                   style: TextStyle(
-                    color: AppColors.secondary,
+                    color: context.colors.secondary,
                     fontSize: 14,
                     height: 1.5,
                   ),
@@ -479,8 +479,8 @@ class _NutritionScreenState extends State<NutritionScreen> {
           bottom: 16,
           child: FloatingActionButton(
             onPressed: _showAddFoodMenu,
-            backgroundColor: AppColors.primary,
-            foregroundColor: AppColors.background,
+            backgroundColor: context.colors.primary,
+            foregroundColor: context.colors.background,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
@@ -555,10 +555,10 @@ class _WeekCalendar extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: AppColors.divider.withOpacity(0.4),
+          color: context.colors.divider.withOpacity(0.4),
           width: 0.7,
         ),
       ),
@@ -578,12 +578,12 @@ class _WeekCalendar extends StatelessWidget {
                 margin: const EdgeInsets.symmetric(horizontal: 3),
                 decoration: BoxDecoration(
                   color: selected
-                      ? AppColors.primary
-                      : AppColors.inputBackground,
+                      ? context.colors.primary
+                      : context.colors.inputBackground,
                   borderRadius: BorderRadius.circular(18),
                   border: Border.all(
                     color:
-                        selected ? AppColors.primary : AppColors.inputBorder,
+                        selected ? context.colors.primary : context.colors.inputBorder,
                     width: 0.7,
                   ),
                 ),
@@ -593,8 +593,8 @@ class _WeekCalendar extends StatelessWidget {
                       _weekdayLabel(day.weekday),
                       style: TextStyle(
                         color: selected
-                            ? AppColors.background
-                            : AppColors.secondary,
+                            ? context.colors.background
+                            : context.colors.secondary,
                         fontSize: 11,
                         fontWeight: FontWeight.w800,
                       ),
@@ -604,8 +604,8 @@ class _WeekCalendar extends StatelessWidget {
                       day.day.toString(),
                       style: TextStyle(
                         color: selected
-                            ? AppColors.background
-                            : AppColors.textMain,
+                            ? context.colors.background
+                            : context.colors.textMain,
                         fontSize: 15,
                         fontWeight: FontWeight.w900,
                       ),
@@ -658,10 +658,10 @@ class _DailySummaryCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
-          color: AppColors.primary.withOpacity(0.26),
+          color: context.colors.primary.withOpacity(0.26),
           width: 0.8,
         ),
       ),
@@ -679,8 +679,8 @@ class _DailySummaryCard extends StatelessWidget {
                   child: CircularProgressIndicator(
                     value: caloriesProgress,
                     strokeWidth: 12,
-                    color: AppColors.primary,
-                    backgroundColor: AppColors.inputBackground,
+                    color: context.colors.primary,
+                    backgroundColor: context.colors.inputBackground,
                     strokeCap: StrokeCap.round,
                   ),
                 ),
@@ -690,7 +690,7 @@ class _DailySummaryCard extends StatelessWidget {
                     Text(
                       _formatDouble(summary.totalCalories, ''),
                       style: TextStyle(
-                        color: AppColors.textMain,
+                        color: context.colors.textMain,
                         fontSize: 23,
                         fontWeight: FontWeight.w900,
                       ),
@@ -699,7 +699,7 @@ class _DailySummaryCard extends StatelessWidget {
                     Text(
                       '/ ${_formatDouble(summary.caloriesTarget, 'kcal')}',
                       style: TextStyle(
-                        color: AppColors.secondary,
+                        color: context.colors.secondary,
                         fontSize: 11,
                         fontWeight: FontWeight.w700,
                       ),
@@ -790,7 +790,7 @@ class _MacroProgressRow extends StatelessWidget {
               child: Text(
                 label,
                 style: TextStyle(
-                  color: AppColors.textMain,
+                  color: context.colors.textMain,
                   fontSize: 13,
                   fontWeight: FontWeight.w800,
                 ),
@@ -799,7 +799,7 @@ class _MacroProgressRow extends StatelessWidget {
             Text(
               '${_format(current)} / ${_format(target)} $unit',
               style: TextStyle(
-                color: AppColors.secondary,
+                color: context.colors.secondary,
                 fontSize: 11,
                 fontWeight: FontWeight.w700,
               ),
@@ -812,8 +812,8 @@ class _MacroProgressRow extends StatelessWidget {
           child: LinearProgressIndicator(
             value: _progress(),
             minHeight: 8,
-            color: AppColors.primary,
-            backgroundColor: AppColors.inputBackground,
+            color: context.colors.primary,
+            backgroundColor: context.colors.inputBackground,
           ),
         ),
       ],
@@ -874,10 +874,10 @@ class _MealSectionCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
-          color: AppColors.divider.withOpacity(0.38),
+          color: context.colors.divider.withOpacity(0.38),
           width: 0.7,
         ),
       ),
@@ -894,16 +894,16 @@ class _MealSectionCard extends StatelessWidget {
                     width: 42,
                     height: 42,
                     decoration: BoxDecoration(
-                      color: AppColors.inputBackground,
+                      color: context.colors.inputBackground,
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: AppColors.primary.withOpacity(0.22),
+                        color: context.colors.primary.withOpacity(0.22),
                         width: 0.8,
                       ),
                     ),
                     child: Icon(
                       _iconForMealType(),
-                      color: AppColors.primary,
+                      color: context.colors.primary,
                       size: 23,
                     ),
                   ),
@@ -915,7 +915,7 @@ class _MealSectionCard extends StatelessWidget {
                         Text(
                           mealType.label,
                           style: TextStyle(
-                            color: AppColors.textMain,
+                            color: context.colors.textMain,
                             fontSize: 18,
                             fontWeight: FontWeight.w900,
                           ),
@@ -926,7 +926,7 @@ class _MealSectionCard extends StatelessWidget {
                               ? '${meals.length} alimento${meals.length == 1 ? '' : 's'}'
                               : 'Sin alimentos',
                           style: TextStyle(
-                            color: AppColors.secondary,
+                            color: context.colors.secondary,
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
                           ),
@@ -940,13 +940,13 @@ class _MealSectionCard extends StatelessWidget {
                       vertical: 8,
                     ),
                     decoration: BoxDecoration(
-                      color: AppColors.inputBackground,
+                      color: context.colors.inputBackground,
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Text(
                       hasMeals ? '${totalCalories.toInt()} kcal' : '-',
                       style: TextStyle(
-                        color: AppColors.primary,
+                        color: context.colors.primary,
                         fontSize: 18,
                         fontWeight: FontWeight.w900,
                       ),
@@ -958,7 +958,7 @@ class _MealSectionCard extends StatelessWidget {
                     duration: Duration(milliseconds: 200),
                     child: Icon(
                       Icons.keyboard_arrow_up,
-                      color: AppColors.secondary,
+                      color: context.colors.secondary,
                       size: 24,
                     ),
                   ),
@@ -1050,15 +1050,15 @@ class _EmptyMealSection extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         decoration: BoxDecoration(
-          color: AppColors.inputBackground,
+          color: context.colors.inputBackground,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: AppColors.inputBorder, width: 0.7),
+          border: Border.all(color: context.colors.inputBorder, width: 0.7),
         ),
         child: Row(
           children: [
             Icon(
               Icons.add_circle_outline,
-              color: AppColors.primary,
+              color: context.colors.primary,
               size: 22,
             ),
             SizedBox(width: 10),
@@ -1066,7 +1066,7 @@ class _EmptyMealSection extends StatelessWidget {
               child: Text(
                 'A�ade alimentos para calcular calor�as y macros.',
                 style: TextStyle(
-                  color: AppColors.textMain.withOpacity(0.55),
+                  color: context.colors.textMain.withOpacity(0.55),
                   fontSize: 13,
                   height: 1.35,
                 ),
@@ -1075,7 +1075,7 @@ class _EmptyMealSection extends StatelessWidget {
             TextButton(
               onPressed: onAddFood,
               style: TextButton.styleFrom(
-                foregroundColor: AppColors.primary,
+                foregroundColor: context.colors.primary,
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 textStyle: TextStyle(
                   fontSize: 12,
@@ -1148,10 +1148,10 @@ class _MealMacroChip extends StatelessWidget {
         vertical: 10,
       ),
       decoration: BoxDecoration(
-        color: AppColors.inputBackground,
+        color: context.colors.inputBackground,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: AppColors.inputBorder,
+          color: context.colors.inputBorder,
           width: 0.7,
         ),
       ),
@@ -1160,7 +1160,7 @@ class _MealMacroChip extends StatelessWidget {
           Text(
             value,
             style: TextStyle(
-              color: AppColors.textMain,
+              color: context.colors.textMain,
               fontSize: 13,
               fontWeight: FontWeight.w900,
             ),
@@ -1170,7 +1170,7 @@ class _MealMacroChip extends StatelessWidget {
           Text(
             label.toUpperCase(),
             style: TextStyle(
-              color: AppColors.secondary,
+              color: context.colors.secondary,
               fontSize: 9,
               fontWeight: FontWeight.w800,
               letterSpacing: 0.5,
@@ -1218,10 +1218,10 @@ class _MealItem extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: AppColors.inputBackground,
+          color: context.colors.inputBackground,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: AppColors.inputBorder,
+            color: context.colors.inputBorder,
             width: 0.7,
           ),
         ),
@@ -1232,12 +1232,12 @@ class _MealItem extends StatelessWidget {
               width: 38,
               height: 38,
               decoration: BoxDecoration(
-                color: AppColors.surface,
+                color: context.colors.surface,
                 borderRadius: BorderRadius.circular(14),
               ),
               child: Icon(
                 Icons.restaurant,
-                color: AppColors.primary,
+                color: context.colors.primary,
                 size: 20,
               ),
             ),
@@ -1251,7 +1251,7 @@ class _MealItem extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: AppColors.textMain,
+                      color: context.colors.textMain,
                       fontSize: 14,
                       fontWeight: FontWeight.w900,
                       height: 1.25,
@@ -1291,12 +1291,12 @@ class _MealItem extends StatelessWidget {
                 width: 36,
                 height: 36,
                 decoration: BoxDecoration(
-                  color: AppColors.surface,
+                  color: context.colors.surface,
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: Icon(
                   Icons.delete_outline,
-                  color: AppColors.secondary,
+                  color: context.colors.secondary,
                   size: 20,
                 ),
               ),
@@ -1326,14 +1326,14 @@ class _MealInfoPill extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: highlighted
-            ? AppColors.primary.withOpacity(0.14)
-            : AppColors.surface,
+            ? context.colors.primary.withOpacity(0.14)
+            : context.colors.surface,
         borderRadius: BorderRadius.circular(999),
       ),
       child: Text(
         value,
         style: TextStyle(
-          color: highlighted ? AppColors.primary : AppColors.secondary,
+          color: highlighted ? context.colors.primary : context.colors.secondary,
           fontSize: 10,
           fontWeight: FontWeight.w800,
         ),
@@ -1355,7 +1355,7 @@ class _RemainingCalories extends StatelessWidget {
   Widget build(BuildContext context) {
     final diff = target - current;
     final remaining = diff > 0;
-    final color = remaining ? AppColors.primary : AppColors.error;
+    final color = remaining ? context.colors.primary : AppColors.error;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
@@ -1396,9 +1396,9 @@ class _NutritionShimmer extends StatelessWidget {
     return Shimmer(
       gradient: LinearGradient(
         colors: [
-          AppColors.inputBackground,
-          AppColors.divider,
-          AppColors.inputBackground,
+          context.colors.inputBackground,
+          context.colors.divider,
+          context.colors.inputBackground,
         ],
         stops: [0.3, 0.5, 0.7],
         begin: Alignment(-1, 0),
@@ -1433,7 +1433,7 @@ class _ShimmerBlock extends StatelessWidget {
       width: double.infinity,
       height: height,
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(28),
       ),
     );
@@ -1455,7 +1455,7 @@ class _ErrorCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
           color: AppColors.error.withOpacity(0.5),
@@ -1473,7 +1473,7 @@ class _ErrorCard extends StatelessWidget {
           Text(
             message,
             style: TextStyle(
-              color: AppColors.textMain,
+              color: context.colors.textMain,
               fontSize: 14,
               height: 1.5,
             ),
@@ -1483,8 +1483,8 @@ class _ErrorCard extends StatelessWidget {
           ElevatedButton(
             onPressed: onRetry,
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: AppColors.background,
+              backgroundColor: context.colors.primary,
+              foregroundColor: context.colors.background,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(18),
               ),
@@ -1557,7 +1557,7 @@ class _WaterTrackerCardBodyState extends State<_WaterTrackerCardBody> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(18),
       ),
       child: Column(
@@ -1565,12 +1565,12 @@ class _WaterTrackerCardBodyState extends State<_WaterTrackerCardBody> {
         children: [
           Row(
             children: [
-              Icon(Icons.water_drop, color: AppColors.primary, size: 20),
+              Icon(Icons.water_drop, color: context.colors.primary, size: 20),
               SizedBox(width: 8),
               Text(
                 'Agua',
                 style: TextStyle(
-                  color: AppColors.textMain,
+                  color: context.colors.textMain,
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
@@ -1582,14 +1582,14 @@ class _WaterTrackerCardBodyState extends State<_WaterTrackerCardBody> {
                   height: 14,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    color: AppColors.primary,
+                    color: context.colors.primary,
                   ),
                 )
               else
                 Text(
                   '${total.toInt()} / ${_glassCount * _glassMl} ml',
                   style: TextStyle(
-                    color: AppColors.textMain.withValues(alpha: 0.55),
+                    color: context.colors.textMain.withValues(alpha: 0.55),
                     fontSize: 13,
                   ),
                 ),
@@ -1647,6 +1647,7 @@ class _WaterGlass extends StatelessWidget {
         painter: _WaterGlassPainter(
           fillLevel: fillLevel,
           isFilled: isFilled,
+          textMainColor: context.colors.textMain,
         ),
       ),
     );
@@ -1657,10 +1658,12 @@ class _WaterGlassPainter extends CustomPainter {
   _WaterGlassPainter({
     required this.fillLevel,
     required this.isFilled,
+    required this.textMainColor,
   });
 
   final double fillLevel;
   final bool isFilled;
+  final Color textMainColor;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -1703,7 +1706,7 @@ class _WaterGlassPainter extends CustomPainter {
     canvas.drawPath(
       glassPath,
       Paint()
-        ..color = AppColors.textMain.withValues(alpha: 0.35)
+        ..color = textMainColor.withValues(alpha: 0.35)
         ..style = PaintingStyle.stroke
         ..strokeWidth = 1.5,
     );
@@ -1712,7 +1715,7 @@ class _WaterGlassPainter extends CustomPainter {
       Offset((w - topWidth) / 2, glassTop),
       Offset((w - topWidth) / 2 + topWidth, glassTop),
       Paint()
-        ..color = AppColors.textMain.withValues(alpha: 0.5)
+        ..color = textMainColor.withValues(alpha: 0.5)
         ..style = PaintingStyle.stroke
         ..strokeWidth = rimThickness,
     );
@@ -1720,7 +1723,7 @@ class _WaterGlassPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_WaterGlassPainter oldDelegate) =>
-      oldDelegate.fillLevel != fillLevel || oldDelegate.isFilled != isFilled;
+      oldDelegate.fillLevel != fillLevel || oldDelegate.isFilled != isFilled || oldDelegate.textMainColor != textMainColor;
 }
 
 class _PhysicalTrackingCard extends StatelessWidget {
@@ -1739,7 +1742,7 @@ class _PhysicalTrackingCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(18),
       ),
       child: Column(
@@ -1747,12 +1750,12 @@ class _PhysicalTrackingCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(Icons.fitness_center, color: AppColors.primary, size: 20),
+              Icon(Icons.fitness_center, color: context.colors.primary, size: 20),
               SizedBox(width: 8),
               Text(
                 'Seguimiento F�sico',
                 style: TextStyle(
-                  color: AppColors.textMain,
+                  color: context.colors.textMain,
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
@@ -1764,7 +1767,7 @@ class _PhysicalTrackingCard extends StatelessWidget {
                   height: 14,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    color: AppColors.primary,
+                    color: context.colors.primary,
                   ),
                 ),
             ],
@@ -1774,7 +1777,7 @@ class _PhysicalTrackingCard extends StatelessWidget {
             Text(
               'A�n no hay registros',
               style: TextStyle(
-                color: AppColors.textMain.withValues(alpha: 0.45),
+                color: context.colors.textMain.withValues(alpha: 0.45),
                 fontSize: 13,
               ),
             )
@@ -1796,8 +1799,8 @@ class _PhysicalTrackingCard extends StatelessWidget {
                   icon: Icon(Icons.add, size: 18),
                   label: Text('A�adir registro'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: AppColors.background,
+                    backgroundColor: context.colors.primary,
+                    foregroundColor: context.colors.background,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18),
                     ),
@@ -1818,9 +1821,9 @@ class _PhysicalTrackingCard extends StatelessWidget {
                   icon: Icon(Icons.show_chart, size: 18),
                   label: Text('Ver resumen'),
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: AppColors.primary,
+                    foregroundColor: context.colors.primary,
                     side: BorderSide(
-                      color: AppColors.primary.withOpacity(0.4),
+                      color: context.colors.primary.withOpacity(0.4),
                     ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18),
@@ -1853,7 +1856,7 @@ class _FitnessBarChart extends StatelessWidget {
             value: log.weight!,
             unit: 'kg',
             maxRef: (log.weight! * 1.5).clamp(80, 250),
-            color: AppColors.primary,
+            color: context.colors.primary,
           ),
         ),
       if (log.bodyFat != null)
@@ -1947,7 +1950,7 @@ class _MiniMetricChart extends StatelessWidget {
           label,
           style: TextStyle(
             fontSize: 10,
-            color: AppColors.secondary,
+            color: context.colors.secondary,
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -1968,7 +1971,7 @@ class _CreateFoodCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.primary,
+        color: context.colors.primary,
         borderRadius: BorderRadius.circular(18),
       ),
       child: InkWell(
@@ -2019,7 +2022,7 @@ class _RecipesCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.primary,
+        color: context.colors.primary,
         borderRadius: BorderRadius.circular(18),
       ),
       child: InkWell(
@@ -2079,27 +2082,27 @@ class _MealOptionRow extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           decoration: BoxDecoration(
-            color: AppColors.inputBackground,
+            color: context.colors.inputBackground,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: AppColors.inputBorder,
+              color: context.colors.inputBorder,
               width: 0.7,
             ),
           ),
           child: Row(
             children: [
-              Icon(icon, color: AppColors.primary, size: 22),
+              Icon(icon, color: context.colors.primary, size: 22),
               SizedBox(width: 14),
               Text(
                 label,
                 style: TextStyle(
-                  color: AppColors.textMain,
+                  color: context.colors.textMain,
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
                 ),
               ),
               Spacer(),
-              Icon(Icons.chevron_right, color: AppColors.secondary, size: 20),
+              Icon(Icons.chevron_right, color: context.colors.secondary, size: 20),
             ],
           ),
         ),

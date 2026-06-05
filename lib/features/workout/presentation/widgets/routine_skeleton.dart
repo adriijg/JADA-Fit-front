@@ -8,16 +8,16 @@ class RoutineSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: AppColors.surface,
-      highlightColor: AppColors.divider.withOpacity(0.2),
+      baseColor: context.colors.surface,
+      highlightColor: context.colors.divider.withOpacity(0.2),
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: context.colors.surface,
           borderRadius: BorderRadius.circular(32),
           border: Border.all(
-            color: AppColors.divider.withOpacity(0.1),
+            color: context.colors.divider.withOpacity(0.1),
             width: 1.5,
           ),
         ),

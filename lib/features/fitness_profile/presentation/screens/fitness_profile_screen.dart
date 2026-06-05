@@ -169,12 +169,12 @@ class _FitnessProfileScreenState extends State<FitnessProfileScreen> {
       appBar: AppBar(
         elevation: 0,
         iconTheme: IconThemeData(
-          color: AppColors.textMain,
+          color: context.colors.textMain,
         ),
         title: Text(
           'Perfil físico',
           style: TextStyle(
-            color: AppColors.textMain,
+            color: context.colors.textMain,
             fontWeight: FontWeight.w700,
             letterSpacing: 1,
           ),
@@ -183,7 +183,7 @@ class _FitnessProfileScreenState extends State<FitnessProfileScreen> {
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: _loadFitnessProfile,
-          color: AppColors.primary,
+          color: context.colors.primary,
           child: SingleChildScrollView(
             physics: AlwaysScrollableScrollPhysics(),
             padding: EdgeInsets.symmetric(
@@ -203,7 +203,7 @@ class _FitnessProfileScreenState extends State<FitnessProfileScreen> {
         height: 500,
         child: Center(
           child: CircularProgressIndicator(
-            color: AppColors.primary,
+            color: context.colors.primary,
           ),
         ),
       );
@@ -293,15 +293,15 @@ class _FitnessHeaderCard extends StatelessWidget {
             height: 82,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: AppColors.inputBackground,
+              color: context.colors.inputBackground,
               border: Border.all(
-                color: AppColors.primary,
+                color: context.colors.primary,
                 width: 2,
               ),
             ),
             child: Icon(
               Icons.fitness_center,
-              color: AppColors.primary,
+              color: context.colors.primary,
               size: 42,
             ),
           ),
@@ -309,7 +309,7 @@ class _FitnessHeaderCard extends StatelessWidget {
           Text(
             'Datos físicos',
             style: TextStyle(
-              color: AppColors.textMain,
+              color: context.colors.textMain,
               fontSize: 23,
               fontWeight: FontWeight.w800,
               letterSpacing: 0.8,
@@ -320,7 +320,7 @@ class _FitnessHeaderCard extends StatelessWidget {
           Text(
             username,
             style: TextStyle(
-              color: AppColors.secondary,
+              color: context.colors.secondary,
               fontSize: 14,
               letterSpacing: 0.4,
             ),
@@ -333,12 +333,12 @@ class _FitnessHeaderCard extends StatelessWidget {
               vertical: 9,
             ),
             decoration: BoxDecoration(
-              color: AppColors.inputBackground,
+              color: context.colors.inputBackground,
               borderRadius: BorderRadius.circular(18),
               border: Border.all(
                 color: hasGoal
-                    ? AppColors.primary.withOpacity(0.35)
-                    : AppColors.divider.withOpacity(0.4),
+                    ? context.colors.primary.withOpacity(0.35)
+                    : context.colors.divider.withOpacity(0.4),
                 width: 0.8,
               ),
             ),
@@ -346,8 +346,8 @@ class _FitnessHeaderCard extends StatelessWidget {
               goal,
               style: TextStyle(
                 color: hasGoal
-                    ? AppColors.primary
-                    : AppColors.textMain.withOpacity(0.5),
+                    ? context.colors.primary
+                    : context.colors.textMain.withOpacity(0.5),
                 fontSize: 13,
                 fontWeight: FontWeight.w700,
                 fontStyle: hasGoal ? FontStyle.normal : FontStyle.italic,
@@ -359,7 +359,7 @@ class _FitnessHeaderCard extends StatelessWidget {
           Text(
             'Actualizado: $updatedAt',
             style: TextStyle(
-              color: AppColors.textMain.withOpacity(0.55),
+              color: context.colors.textMain.withOpacity(0.55),
               fontSize: 12,
             ),
             textAlign: TextAlign.center,
@@ -436,7 +436,7 @@ class _StatItem extends StatelessWidget {
       children: [
         Icon(
           icon,
-          color: AppColors.primary,
+          color: context.colors.primary,
           size: 26,
         ),
         SizedBox(height: 10),
@@ -444,8 +444,8 @@ class _StatItem extends StatelessWidget {
           value,
           style: TextStyle(
             color: isEmpty
-                ? AppColors.textMain.withOpacity(0.45)
-                : AppColors.textMain,
+                ? context.colors.textMain.withOpacity(0.45)
+                : context.colors.textMain,
             fontSize: 17,
             fontWeight: FontWeight.w800,
             fontStyle: isEmpty ? FontStyle.italic : FontStyle.normal,
@@ -456,7 +456,7 @@ class _StatItem extends StatelessWidget {
         Text(
           label.toUpperCase(),
           style: TextStyle(
-            color: AppColors.secondary,
+            color: context.colors.secondary,
             fontSize: 10,
             fontWeight: FontWeight.w700,
             letterSpacing: 1,
@@ -476,7 +476,7 @@ class _VerticalDivider extends StatelessWidget {
     return Container(
       width: 1,
       height: 72,
-      color: AppColors.divider.withOpacity(0.7),
+      color: context.colors.divider.withOpacity(0.7),
       margin: EdgeInsets.symmetric(horizontal: 10),
     );
   }
@@ -553,10 +553,10 @@ class _DetailBox extends StatelessWidget {
       width: fullWidth ? double.infinity : null,
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.inputBackground,
+        color: context.colors.inputBackground,
         borderRadius: BorderRadius.circular(18),
         border: Border.all(
-          color: AppColors.inputBorder,
+          color: context.colors.inputBorder,
           width: 0.7,
         ),
       ),
@@ -564,7 +564,7 @@ class _DetailBox extends StatelessWidget {
         children: [
           Icon(
             icon,
-            color: AppColors.primary,
+            color: context.colors.primary,
             size: 23,
           ),
           SizedBox(width: 12),
@@ -575,7 +575,7 @@ class _DetailBox extends StatelessWidget {
                 Text(
                   label.toUpperCase(),
                   style: TextStyle(
-                    color: AppColors.secondary,
+                    color: context.colors.secondary,
                     fontSize: 10,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 1,
@@ -586,8 +586,8 @@ class _DetailBox extends StatelessWidget {
                   value,
                   style: TextStyle(
                     color: isEmpty
-                        ? AppColors.textMain.withOpacity(0.45)
-                        : AppColors.textMain,
+                        ? context.colors.textMain.withOpacity(0.45)
+                        : context.colors.textMain,
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                     fontStyle: isEmpty ? FontStyle.italic : FontStyle.normal,
@@ -671,7 +671,7 @@ class _ActionTile extends StatelessWidget {
         children: [
             Icon(
               icon,
-              color: AppColors.primary,
+              color: context.colors.primary,
               size: 24,
             ),
             SizedBox(width: 14),
@@ -682,7 +682,7 @@ class _ActionTile extends StatelessWidget {
                   Text(
                     title,
                     style: TextStyle(
-                      color: AppColors.textMain,
+                      color: context.colors.textMain,
                       fontSize: 15,
                       fontWeight: FontWeight.w700,
                     ),
@@ -691,7 +691,7 @@ class _ActionTile extends StatelessWidget {
                   Text(
                     subtitle,
                     style: TextStyle(
-                      color: AppColors.secondary,
+                      color: context.colors.secondary,
                       fontSize: 12,
                       height: 1.3,
                     ),
@@ -701,7 +701,7 @@ class _ActionTile extends StatelessWidget {
             ),
             Icon(
               Icons.chevron_right,
-              color: AppColors.secondary,
+              color: context.colors.secondary,
             ),
           ],
       ),
@@ -724,10 +724,10 @@ class _ErrorCard extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: AppColors.divider.withOpacity(0.4),
+          color: context.colors.divider.withOpacity(0.4),
           width: 0.7,
         ),
       ),
@@ -743,7 +743,7 @@ class _ErrorCard extends StatelessWidget {
           Text(
             message,
             style: TextStyle(
-              color: AppColors.textMain,
+              color: context.colors.textMain,
               fontSize: 15,
               height: 1.5,
             ),
@@ -753,8 +753,8 @@ class _ErrorCard extends StatelessWidget {
           ElevatedButton(
             onPressed: onRetry,
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: AppColors.background,
+              backgroundColor: context.colors.primary,
+              foregroundColor: context.colors.background,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(18),
               ),

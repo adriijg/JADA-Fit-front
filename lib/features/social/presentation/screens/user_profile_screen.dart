@@ -119,12 +119,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         title: Text(
           _profile?.username ?? 'Perfil',
           style: TextStyle(
-            color: AppColors.textMain,
+            color: context.colors.textMain,
             fontWeight: FontWeight.bold,
           ),
         ),
         elevation: 0,
-        iconTheme: IconThemeData(color: AppColors.textMain),
+        iconTheme: IconThemeData(color: context.colors.textMain),
       ),
       body: _buildBody(),
     );
@@ -133,7 +133,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Widget _buildBody() {
     if (_isLoading) {
       return Center(
-        child: CircularProgressIndicator(color: AppColors.primary),
+        child: CircularProgressIndicator(color: context.colors.primary),
       );
     }
 
@@ -153,14 +153,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               Text(
                 _error!,
                 textAlign: TextAlign.center,
-                style: TextStyle(color: AppColors.secondary),
+                style: TextStyle(color: context.colors.secondary),
               ),
               SizedBox(height: 20),
               ElevatedButton.icon(
                 onPressed: _loadProfile,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: AppColors.background,
+                  backgroundColor: context.colors.primary,
+                  foregroundColor: context.colors.background,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -178,7 +178,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
     return RefreshIndicator(
       onRefresh: _loadProfile,
-      color: AppColors.primary,
+      color: context.colors.primary,
       child: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
@@ -196,8 +196,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       shape: BoxShape.circle,
                       gradient: LinearGradient(
                         colors: [
-                          AppColors.primary.withValues(alpha: 0.4),
-                          AppColors.secondary.withValues(alpha: 0.4),
+                          context.colors.primary.withValues(alpha: 0.4),
+                          context.colors.secondary.withValues(alpha: 0.4),
                         ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
@@ -216,7 +216,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           ? Text(
                               _profile!.username[0].toUpperCase(),
                               style: TextStyle(
-                                color: AppColors.primary,
+                                color: context.colors.primary,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 32,
                               ),
@@ -230,7 +230,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   Text(
                     '@${_profile!.username}',
                     style: TextStyle(
-                      color: AppColors.textMain,
+                      color: context.colors.textMain,
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
                     ),
@@ -244,7 +244,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       _profile!.bio!,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: AppColors.textMain.withValues(alpha: 0.7),
+                        color: context.colors.textMain.withValues(alpha: 0.7),
                         fontSize: 13,
                         height: 1.4,
                       ),
@@ -257,10 +257,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   Container(
                     padding: EdgeInsets.symmetric(vertical: 16),
                     decoration: BoxDecoration(
-                      color: AppColors.surface,
+                      color: context.colors.surface,
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: AppColors.divider.withValues(alpha: 0.3),
+                        color: context.colors.divider.withValues(alpha: 0.3),
                         width: 0.5,
                       ),
                     ),
@@ -274,7 +274,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         Container(
                           width: 0.5,
                           height: 30,
-                          color: AppColors.divider.withValues(alpha: 0.4),
+                          color: context.colors.divider.withValues(alpha: 0.4),
                         ),
                         _StatColumn(
                           value: _profile!.followersCount.toString(),
@@ -283,7 +283,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         Container(
                           width: 0.5,
                           height: 30,
-                          color: AppColors.divider.withValues(alpha: 0.4),
+                          color: context.colors.divider.withValues(alpha: 0.4),
                         ),
                         _StatColumn(
                           value: _profile!.followingCount.toString(),
@@ -303,16 +303,16 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           _isProcessingFollow ? null : _toggleFollow,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: _profile!.isFollowing
-                            ? AppColors.surface
-                            : AppColors.primary,
+                            ? context.colors.surface
+                            : context.colors.primary,
                         foregroundColor: _profile!.isFollowing
-                            ? AppColors.textMain
-                            : AppColors.background,
+                            ? context.colors.textMain
+                            : context.colors.background,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(14),
                           side: _profile!.isFollowing
                               ? BorderSide(
-                                  color: AppColors.divider
+                                  color: context.colors.divider
                                       .withValues(alpha: 0.4),
                                 )
                               : BorderSide.none,
@@ -325,7 +325,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               height: 20,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
-                                color: AppColors.primary,
+                                color: context.colors.primary,
                               ),
                             )
                           : Row(
@@ -358,15 +358,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       height: 48,
                       child: OutlinedButton.icon(
                         onPressed: _showChallengeDialog,
-                        icon: Icon(Icons.emoji_events_outlined, color: AppColors.primary, size: 18),
+                        icon: Icon(Icons.emoji_events_outlined, color: context.colors.primary, size: 18),
                         label: Text(
                           '¡Desafiar a un pique!',
                           style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
                         ),
                         style: OutlinedButton.styleFrom(
-                          foregroundColor: AppColors.primary,
+                          foregroundColor: context.colors.primary,
                           side: BorderSide(
-                            color: AppColors.primary.withValues(alpha: 0.5),
+                            color: context.colors.primary.withValues(alpha: 0.5),
                           ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(14),
@@ -381,10 +381,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   Container(
                     padding: EdgeInsets.all(14),
                     decoration: BoxDecoration(
-                      color: AppColors.surface,
+                      color: context.colors.surface,
                       borderRadius: BorderRadius.circular(14),
                       border: Border.all(
-                        color: AppColors.divider.withValues(alpha: 0.2),
+                        color: context.colors.divider.withValues(alpha: 0.2),
                       ),
                     ),
                     child: Row(
@@ -394,8 +394,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               ? Icons.insights_rounded
                               : Icons.lock_outline_rounded,
                           color: _profile!.shareProgress
-                              ? AppColors.primary
-                              : AppColors.secondary,
+                              ? context.colors.primary
+                              : context.colors.secondary,
                           size: 20,
                         ),
                         SizedBox(width: 12),
@@ -406,8 +406,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                 : 'Progreso privado',
                             style: TextStyle(
                               color: _profile!.shareProgress
-                                  ? AppColors.textMain
-                                  : AppColors.secondary,
+                                  ? context.colors.textMain
+                                  : context.colors.secondary,
                               fontSize: 13,
                             ),
                           ),
@@ -428,7 +428,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           ),
                           decoration: BoxDecoration(
                             color:
-                                AppColors.primary.withValues(alpha: 0.1),
+                                context.colors.primary.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Row(
@@ -436,14 +436,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             children: [
                               Icon(
                                 Icons.grid_view_rounded,
-                                color: AppColors.primary,
+                                color: context.colors.primary,
                                 size: 16,
                               ),
                               SizedBox(width: 6),
                               Text(
                                 'Publicaciones',
                                 style: TextStyle(
-                                  color: AppColors.primary,
+                                  color: context.colors.primary,
                                   fontSize: 12,
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -471,14 +471,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         Icon(
                           Icons.photo_camera_outlined,
                           color:
-                              AppColors.secondary.withValues(alpha: 0.4),
+                              context.colors.secondary.withValues(alpha: 0.4),
                           size: 36,
                         ),
                         SizedBox(height: 8),
                         Text(
                           'Aún no hay publicaciones',
                           style: TextStyle(
-                            color: AppColors.secondary,
+                            color: context.colors.secondary,
                             fontSize: 13,
                           ),
                         ),
@@ -510,11 +510,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             builder: (context) {
                               Widget errorPlaceholder() {
                                 return Container(
-                                  color: AppColors.inputBackground,
+                                  color: context.colors.inputBackground,
                                   child: Center(
                                     child: Icon(
                                       Icons.image_not_supported_outlined,
-                                      color: AppColors.secondary,
+                                      color: context.colors.secondary,
                                       size: 24,
                                     ),
                                   ),
@@ -554,14 +554,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Desafiar a ${_profile!.username}', style: TextStyle(color: AppColors.textMain)),
+        title: Text('Desafiar a ${_profile!.username}', style: TextStyle(color: context.colors.textMain)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               '¿En qué ejercicio quieres competir?',
-              style: TextStyle(color: AppColors.secondary, fontSize: 14),
+              style: TextStyle(color: context.colors.secondary, fontSize: 14),
             ),
             SizedBox(height: 16),
             TextField(
@@ -569,18 +569,18 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               autofocus: true,
               decoration: InputDecoration(
                 hintText: 'Ej: Press Banca, Sentadilla...',
-                hintStyle: TextStyle(color: AppColors.secondary),
-                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.divider)),
-                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.primary)),
+                hintStyle: TextStyle(color: context.colors.secondary),
+                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: context.colors.divider)),
+                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: context.colors.primary)),
               ),
-              style: TextStyle(color: AppColors.textMain),
+              style: TextStyle(color: context.colors.textMain),
             ),
           ],
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Cancelar', style: TextStyle(color: AppColors.secondary)),
+            child: Text('Cancelar', style: TextStyle(color: context.colors.secondary)),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -603,7 +603,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 }
               }
             },
-            style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
+            style: ElevatedButton.styleFrom(backgroundColor: context.colors.primary),
             child: Text('Enviar Desafío'),
           ),
         ],
@@ -627,7 +627,7 @@ class _StatColumn extends StatelessWidget {
         Text(
           value,
           style: TextStyle(
-            color: AppColors.textMain,
+            color: context.colors.textMain,
             fontSize: 18,
             fontWeight: FontWeight.w800,
           ),
@@ -636,7 +636,7 @@ class _StatColumn extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-            color: AppColors.secondary.withValues(alpha: 0.7),
+            color: context.colors.secondary.withValues(alpha: 0.7),
             fontSize: 11,
             fontWeight: FontWeight.w600,
           ),

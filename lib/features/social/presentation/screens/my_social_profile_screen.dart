@@ -158,7 +158,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                       width: 40,
                       height: 4,
                       decoration: BoxDecoration(
-                        color: AppColors.divider,
+                        color: context.colors.divider,
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
@@ -167,7 +167,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                   Text(
                     'Nueva publicación',
                     style: TextStyle(
-                      color: AppColors.textMain,
+                      color: context.colors.textMain,
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
                     ),
@@ -186,10 +186,10 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                       width: double.infinity,
                       height: 180,
                       decoration: BoxDecoration(
-                        color: AppColors.inputBackground,
+                        color: context.colors.inputBackground,
                         borderRadius: BorderRadius.circular(14),
                         border: Border.all(
-                          color: AppColors.inputBorder.withValues(alpha: 0.5),
+                          color: context.colors.inputBorder.withValues(alpha: 0.5),
                           width: 0.8,
                         ),
                       ),
@@ -207,14 +207,14 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                               children: [
                                 Icon(
                                   Icons.add_photo_alternate_outlined,
-                                  color: AppColors.secondary,
+                                  color: context.colors.secondary,
                                   size: 40,
                                 ),
                                 SizedBox(height: 8),
                                 Text(
                                   'Seleccionar de la galería',
                                   style: TextStyle(
-                                    color: AppColors.secondary.withValues(
+                                    color: context.colors.secondary.withValues(
                                       alpha: 0.7,
                                     ),
                                     fontSize: 14,
@@ -274,8 +274,8 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary,
-                        foregroundColor: AppColors.background,
+                        backgroundColor: context.colors.primary,
+                        foregroundColor: context.colors.background,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(14),
                         ),
@@ -326,7 +326,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                       width: 40,
                       height: 4,
                       decoration: BoxDecoration(
-                        color: AppColors.divider,
+                        color: context.colors.divider,
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
@@ -335,7 +335,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                   Text(
                     'Nueva historia',
                     style: TextStyle(
-                      color: AppColors.textMain,
+                      color: context.colors.textMain,
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
                     ),
@@ -344,7 +344,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                   Text(
                     'Las historias desaparecen en 24 horas',
                     style: TextStyle(
-                      color: AppColors.secondary.withValues(alpha: 0.7),
+                      color: context.colors.secondary.withValues(alpha: 0.7),
                       fontSize: 13,
                     ),
                   ),
@@ -362,10 +362,10 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                       width: double.infinity,
                       height: 300,
                       decoration: BoxDecoration(
-                        color: AppColors.inputBackground,
+                        color: context.colors.inputBackground,
                         borderRadius: BorderRadius.circular(14),
                         border: Border.all(
-                          color: AppColors.inputBorder.withValues(alpha: 0.5),
+                          color: context.colors.inputBorder.withValues(alpha: 0.5),
                           width: 0.8,
                         ),
                       ),
@@ -383,14 +383,14 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                               children: [
                                 Icon(
                                   Icons.add_photo_alternate_outlined,
-                                  color: AppColors.secondary,
+                                  color: context.colors.secondary,
                                   size: 40,
                                 ),
                                 SizedBox(height: 8),
                                 Text(
                                   'Seleccionar de la galería',
                                   style: TextStyle(
-                                    color: AppColors.secondary.withValues(
+                                    color: context.colors.secondary.withValues(
                                       alpha: 0.7,
                                     ),
                                     fontSize: 14,
@@ -442,8 +442,8 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.secondary,
-                        foregroundColor: AppColors.background,
+                        backgroundColor: context.colors.secondary,
+                        foregroundColor: context.colors.background,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(14),
                         ),
@@ -498,7 +498,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                       width: 40,
                       height: 4,
                       decoration: BoxDecoration(
-                        color: AppColors.divider,
+                        color: context.colors.divider,
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
@@ -507,7 +507,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                   Text(
                     'Editar perfil',
                     style: TextStyle(
-                      color: AppColors.textMain,
+                      color: context.colors.textMain,
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
                     ),
@@ -532,9 +532,9 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                             height: 100,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: AppColors.inputBackground,
+                              color: context.colors.inputBackground,
                               border: Border.all(
-                                color: AppColors.inputBorder.withValues(
+                                color: context.colors.inputBorder.withValues(
                                   alpha: 0.5,
                                 ),
                                 width: 0.8,
@@ -552,7 +552,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                                                 Icon(
                                                   Icons.person,
                                                   size: 50,
-                                                  color: AppColors.secondary,
+                                                  color: context.colors.secondary,
                                                 ),
                                           )
                                         : Image.network(
@@ -564,12 +564,12 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                                                 Icon(
                                                   Icons.person,
                                                   size: 50,
-                                                  color: AppColors.secondary,
+                                                  color: context.colors.secondary,
                                                 ),
                                           ))
                                   : Icon(
                                       Icons.person,
-                                      color: AppColors.secondary,
+                                      color: context.colors.secondary,
                                       size: 50,
                                     ),
                             ),
@@ -578,17 +578,17 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                             width: 32,
                             height: 32,
                             decoration: BoxDecoration(
-                              color: AppColors.primary,
+                              color: context.colors.primary,
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color: AppColors.background,
+                                color: context.colors.background,
                                 width: 2,
                               ),
                             ),
                             child: Icon(
                               Icons.camera_alt,
                               size: 16,
-                              color: AppColors.background,
+                              color: context.colors.background,
                             ),
                           ),
                         ],
@@ -634,8 +634,8 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary,
-                        foregroundColor: AppColors.background,
+                        backgroundColor: context.colors.primary,
+                        foregroundColor: context.colors.background,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(14),
                         ),
@@ -666,24 +666,24 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.inputBackground,
+        color: context.colors.inputBackground,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: AppColors.inputBorder.withValues(alpha: 0.5),
+          color: context.colors.inputBorder.withValues(alpha: 0.5),
           width: 0.8,
         ),
       ),
       child: TextField(
         controller: controller,
         maxLines: maxLines,
-        style: TextStyle(color: AppColors.textMain, fontSize: 14),
+        style: TextStyle(color: context.colors.textMain, fontSize: 14),
         decoration: InputDecoration(
           hintText: label,
           hintStyle: TextStyle(
-            color: AppColors.secondary.withValues(alpha: 0.5),
+            color: context.colors.secondary.withValues(alpha: 0.5),
             fontSize: 14,
           ),
-          prefixIcon: Icon(icon, color: AppColors.secondary, size: 20),
+          prefixIcon: Icon(icon, color: context.colors.secondary, size: 20),
           border: InputBorder.none,
           contentPadding: EdgeInsets.symmetric(
             horizontal: 16,
@@ -698,7 +698,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
   Widget build(BuildContext context) {
     if (_isLoading) {
       return Center(
-        child: CircularProgressIndicator(color: AppColors.primary),
+        child: CircularProgressIndicator(color: context.colors.primary),
       );
     }
 
@@ -716,15 +716,15 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
             Text(
               _error!,
               textAlign: TextAlign.center,
-              style: TextStyle(color: AppColors.secondary),
+              style: TextStyle(color: context.colors.secondary),
             ),
             SizedBox(height: 16),
             TextButton.icon(
               onPressed: _loadProfile,
-              icon: Icon(Icons.refresh, color: AppColors.primary),
+              icon: Icon(Icons.refresh, color: context.colors.primary),
               label: Text(
                 'Reintentar',
-                style: TextStyle(color: AppColors.primary),
+                style: TextStyle(color: context.colors.primary),
               ),
             ),
           ],
@@ -742,7 +742,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
 
     return RefreshIndicator(
       onRefresh: _loadProfile,
-      color: AppColors.primary,
+      color: context.colors.primary,
       child: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
@@ -761,8 +761,8 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                         shape: BoxShape.circle,
                         gradient: LinearGradient(
                           colors: [
-                            AppColors.primary.withValues(alpha: 0.4),
-                            AppColors.secondary.withValues(alpha: 0.4),
+                            context.colors.primary.withValues(alpha: 0.4),
+                            context.colors.secondary.withValues(alpha: 0.4),
                           ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
@@ -781,7 +781,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                             ? Text(
                                 username[0].toUpperCase(),
                                 style: TextStyle(
-                                  color: AppColors.primary,
+                                  color: context.colors.primary,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 32,
                                 ),
@@ -793,17 +793,17 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                       width: 28,
                       height: 28,
                       decoration: BoxDecoration(
-                        color: AppColors.primary,
+                        color: context.colors.primary,
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: AppColors.background,
+                          color: context.colors.background,
                           width: 2,
                         ),
                       ),
                       child: Icon(
                         Icons.edit,
                         size: 14,
-                        color: AppColors.background,
+                        color: context.colors.background,
                       ),
                     ),
                   ],
@@ -814,7 +814,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                 Text(
                   '@$username',
                   style: TextStyle(
-                    color: AppColors.textMain,
+                    color: context.colors.textMain,
                     fontSize: 20,
                     fontWeight: FontWeight.w800,
                   ),
@@ -829,7 +829,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                       bio,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: AppColors.textMain.withValues(alpha: 0.7),
+                        color: context.colors.textMain.withValues(alpha: 0.7),
                         fontSize: 13,
                         height: 1.4,
                       ),
@@ -844,10 +844,10 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                   margin: EdgeInsets.symmetric(horizontal: 0),
                   padding: EdgeInsets.symmetric(vertical: 16),
                   decoration: BoxDecoration(
-                    color: AppColors.surface,
+                    color: context.colors.surface,
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
-                      color: AppColors.divider.withValues(alpha: 0.3),
+                      color: context.colors.divider.withValues(alpha: 0.3),
                       width: 0.5,
                     ),
                   ),
@@ -858,13 +858,13 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                       Container(
                         width: 0.5,
                         height: 30,
-                        color: AppColors.divider.withValues(alpha: 0.4),
+                        color: context.colors.divider.withValues(alpha: 0.4),
                       ),
                       _StatItem(value: '$followersCount', label: 'Seguidores'),
                       Container(
                         width: 0.5,
                         height: 30,
-                        color: AppColors.divider.withValues(alpha: 0.4),
+                        color: context.colors.divider.withValues(alpha: 0.4),
                       ),
                       _StatItem(value: '$followingCount', label: 'Siguiendo'),
                     ],
@@ -880,7 +880,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                       child: _ActionButton(
                         label: 'Editar perfil',
                         icon: Icons.edit_outlined,
-                        color: AppColors.primary,
+                        color: context.colors.primary,
                         onTap: _showEditProfileDialog,
                       ),
                     ),
@@ -889,7 +889,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                       child: _ActionButton(
                         label: 'Nuevo post',
                         icon: Icons.add_photo_alternate_outlined,
-                        color: AppColors.secondary,
+                        color: context.colors.secondary,
                         onTap: _showCreatePostDialog,
                       ),
                     ),
@@ -898,7 +898,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                       child: _ActionButton(
                         label: 'Historia',
                         icon: Icons.auto_awesome,
-                        color: AppColors.tertiary,
+                        color: context.colors.tertiary,
                         onTap: _showCreateStoryDialog,
                       ),
                     ),
@@ -916,7 +916,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                         vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.primary.withValues(alpha: 0.1),
+                        color: context.colors.primary.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Row(
@@ -924,14 +924,14 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                         children: [
                           Icon(
                             Icons.grid_view_rounded,
-                            color: AppColors.primary,
+                            color: context.colors.primary,
                             size: 16,
                           ),
                           SizedBox(width: 6),
                           Text(
                             'Mis publicaciones',
                             style: TextStyle(
-                              color: AppColors.primary,
+                              color: context.colors.primary,
                               fontSize: 12,
                               fontWeight: FontWeight.w700,
                             ),
@@ -957,14 +957,14 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                       children: [
                         Icon(
                           Icons.photo_camera_outlined,
-                          color: AppColors.secondary.withValues(alpha: 0.4),
+                          color: context.colors.secondary.withValues(alpha: 0.4),
                           size: 40,
                         ),
                         SizedBox(height: 10),
                         Text(
                           'Aún no tienes publicaciones',
                           style: TextStyle(
-                            color: AppColors.secondary,
+                            color: context.colors.secondary,
                             fontSize: 14,
                           ),
                         ),
@@ -972,7 +972,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                         Text(
                           'Comparte tu progreso con la comunidad',
                           style: TextStyle(
-                            color: AppColors.secondary,
+                            color: context.colors.secondary,
                             fontSize: 12,
                           ),
                         ),
@@ -990,11 +990,11 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                     final post = _myPosts[index];
                     Widget errorPlaceholder() {
                       return Container(
-                        color: AppColors.inputBackground,
+                        color: context.colors.inputBackground,
                         child: Center(
                           child: Icon(
                             Icons.image_not_supported_outlined,
-                            color: AppColors.secondary,
+                            color: context.colors.secondary,
                             size: 24,
                           ),
                         ),
@@ -1040,7 +1040,7 @@ class _StatItem extends StatelessWidget {
         Text(
           value,
           style: TextStyle(
-            color: AppColors.textMain,
+            color: context.colors.textMain,
             fontSize: 18,
             fontWeight: FontWeight.w800,
           ),
@@ -1049,7 +1049,7 @@ class _StatItem extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-            color: AppColors.secondary.withValues(alpha: 0.7),
+            color: context.colors.secondary.withValues(alpha: 0.7),
             fontSize: 11,
             fontWeight: FontWeight.w600,
           ),

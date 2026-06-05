@@ -58,7 +58,7 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
             Text(
               '¿Eliminar rutina?',
               style: TextStyle(
-                color: AppColors.textMain,
+                color: context.colors.textMain,
                 fontWeight: FontWeight.w900,
               ),
             ),
@@ -67,7 +67,7 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
         content: Text(
           'Se eliminará "${widget.routine.name}" y todos sus ejercicios. Esta acción no se puede deshacer.',
           style: TextStyle(
-            color: AppColors.textMain.withOpacity(0.72),
+            color: context.colors.textMain.withOpacity(0.72),
             height: 1.5,
           ),
         ),
@@ -76,7 +76,7 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
             onPressed: () => Navigator.pop(ctx, false),
             child: Text(
               'Cancelar',
-              style: TextStyle(color: AppColors.secondary, fontWeight: FontWeight.w700),
+              style: TextStyle(color: context.colors.secondary, fontWeight: FontWeight.w700),
             ),
           ),
           ElevatedButton(
@@ -218,10 +218,10 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
               icon: Container(
                 padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: AppColors.background.withOpacity(0.5),
+                  color: context.colors.background.withOpacity(0.5),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(Icons.arrow_back_ios_new, color: AppColors.textMain, size: 18),
+                child: Icon(Icons.arrow_back_ios_new, color: context.colors.textMain, size: 18),
               ),
             ),
             actions: [
@@ -270,10 +270,10 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
                     icon: Container(
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: AppColors.primary.withOpacity(0.1),
+                        color: context.colors.primary.withOpacity(0.1),
                         shape: BoxShape.circle,
                       ),
-                      child: Icon(Icons.edit_outlined, color: AppColors.primary, size: 20),
+                      child: Icon(Icons.edit_outlined, color: context.colors.primary, size: 20),
                     ),
                     tooltip: 'Editar rutina',
                   ),
@@ -298,8 +298,8 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      AppColors.tertiary.withOpacity(0.3),
-                      AppColors.background,
+                      context.colors.tertiary.withOpacity(0.3),
+                      context.colors.background,
                     ],
                   ),
                 ),
@@ -313,14 +313,14 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
                         Container(
                           padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                           decoration: BoxDecoration(
-                            color: AppColors.tertiary.withOpacity(0.2),
+                            color: context.colors.tertiary.withOpacity(0.2),
                             borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: AppColors.tertiary.withOpacity(0.3)),
+                            border: Border.all(color: context.colors.tertiary.withOpacity(0.3)),
                           ),
                           child: Text(
                             routine.targetGoal.toUpperCase(),
                             style: TextStyle(
-                              color: AppColors.tertiary,
+                              color: context.colors.tertiary,
                               fontSize: 11,
                               fontWeight: FontWeight.w900,
                               letterSpacing: 1,
@@ -331,7 +331,7 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
                         Text(
                           routine.name,
                           style: TextStyle(
-                            color: AppColors.textMain,
+                            color: context.colors.textMain,
                             fontSize: 36,
                             fontWeight: FontWeight.w900,
                             height: 1.1,
@@ -342,7 +342,7 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
                           Text(
                             routine.description,
                             style: TextStyle(
-                              color: AppColors.textMain.withOpacity(0.7),
+                              color: context.colors.textMain.withOpacity(0.7),
                               fontSize: 15,
                               height: 1.5,
                             ),
@@ -364,12 +364,12 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
                 children: [
                   Row(
                     children: [
-                      Icon(Icons.fitness_center_rounded, color: AppColors.secondary, size: 20),
+                      Icon(Icons.fitness_center_rounded, color: context.colors.secondary, size: 20),
                       SizedBox(width: 8),
                       Text(
                         'Ejercicios (${routine.exercises.length})',
                         style: TextStyle(
-                          color: AppColors.textMain,
+                          color: context.colors.textMain,
                           fontSize: 20,
                           fontWeight: FontWeight.w900,
                         ),
@@ -382,22 +382,22 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
                       width: double.infinity,
                       padding: EdgeInsets.symmetric(vertical: 40),
                       decoration: BoxDecoration(
-                        color: AppColors.surface,
+                        color: context.colors.surface,
                         borderRadius: BorderRadius.circular(28),
-                        border: Border.all(color: AppColors.divider.withOpacity(0.3)),
+                        border: Border.all(color: context.colors.divider.withOpacity(0.3)),
                       ),
                       child: Column(
                         children: [
                           Icon(
                             Icons.sports_gymnastics_rounded,
-                            color: AppColors.textMain.withOpacity(0.2),
+                            color: context.colors.textMain.withOpacity(0.2),
                             size: 48,
                           ),
                           SizedBox(height: 16),
                           Text(
                             'Esta rutina no tiene ejercicios',
                             style: TextStyle(
-                              color: AppColors.textMain.withOpacity(0.5),
+                              color: context.colors.textMain.withOpacity(0.5),
                               fontSize: 15,
                             ),
                           ),
@@ -503,7 +503,7 @@ class _PremiumExerciseCard extends StatelessWidget {
         padding: EdgeInsets.zero,
         borderColor: isCompleted
             ? AppColors.success.withOpacity(0.4)
-            : AppColors.divider.withOpacity(0.3),
+            : context.colors.divider.withOpacity(0.3),
         borderWidth: isCompleted ? 1.5 : 1,
         child: IntrinsicHeight(
           child: Row(
@@ -514,7 +514,7 @@ class _PremiumExerciseCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: isCompleted
                       ? AppColors.success.withOpacity(0.15)
-                      : AppColors.primary.withOpacity(0.1),
+                      : context.colors.primary.withOpacity(0.1),
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(24),
                     bottomLeft: Radius.circular(24),
@@ -526,7 +526,7 @@ class _PremiumExerciseCard extends StatelessWidget {
                       : Text(
                           '$index',
                           style: TextStyle(
-                            color: AppColors.primary,
+                            color: context.colors.primary,
                             fontWeight: FontWeight.w900,
                             fontSize: 18,
                           ),
@@ -547,7 +547,7 @@ class _PremiumExerciseCard extends StatelessWidget {
                               style: TextStyle(
                                 color: isCompleted
                                     ? AppColors.success.withOpacity(0.8)
-                                    : AppColors.textMain,
+                                    : context.colors.textMain,
                                 fontWeight: FontWeight.w800,
                                 fontSize: 17,
                                 decoration: isCompleted
@@ -563,7 +563,7 @@ class _PremiumExerciseCard extends StatelessWidget {
                                   : Icons.radio_button_unchecked_rounded,
                               color: isCompleted
                                   ? AppColors.success
-                                  : AppColors.textMain.withOpacity(0.3),
+                                  : context.colors.textMain.withOpacity(0.3),
                               size: 24,
                             ),
                         ],
@@ -573,7 +573,7 @@ class _PremiumExerciseCard extends StatelessWidget {
                         Text(
                           exercise.description,
                           style: TextStyle(
-                            color: AppColors.textMain.withOpacity(0.6),
+                            color: context.colors.textMain.withOpacity(0.6),
                             fontSize: 13,
                             height: 1.4,
                           ),
@@ -585,20 +585,20 @@ class _PremiumExerciseCard extends StatelessWidget {
                           _StatPill(
                             icon: Icons.repeat_rounded,
                             value: '${exercise.sets} series',
-                            color: AppColors.secondary,
+                            color: context.colors.secondary,
                           ),
                           SizedBox(width: 8),
                           _StatPill(
                             icon: Icons.unfold_more_rounded,
                             value: '${exercise.reps} reps',
-                            color: AppColors.secondary,
+                            color: context.colors.secondary,
                           ),
                           if (exercise.durationSeconds > 0) ...[
                             SizedBox(width: 8),
                             _StatPill(
                               icon: Icons.timer_outlined,
                               value: formatDuration(exercise.durationSeconds),
-                              color: AppColors.tertiary,
+                              color: context.colors.tertiary,
                             ),
                           ],
                         ],

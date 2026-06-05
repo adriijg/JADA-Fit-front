@@ -16,7 +16,7 @@ class SettingsScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Configuraci\u00f3n'),
         backgroundColor: Colors.transparent,
-        foregroundColor: AppColors.textMain,
+        foregroundColor: context.colors.textMain,
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.fromLTRB(20, 8, 20, 32),
@@ -129,7 +129,7 @@ class _SectionTitle extends StatelessWidget {
         child: Text(
           title,
           style: TextStyle(
-            color: AppColors.secondary.withOpacity(0.7),
+            color: context.colors.secondary.withOpacity(0.7),
             fontSize: 13,
             fontWeight: FontWeight.w700,
             letterSpacing: 0.5,
@@ -150,13 +150,13 @@ class _ThemeSelector extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
       child: Row(
         children: [
-          Icon(Icons.brightness_6_outlined, color: AppColors.primary, size: 24),
+          Icon(Icons.brightness_6_outlined, color: context.colors.primary, size: 24),
           SizedBox(width: 14),
           Expanded(
             child: Text(
               'Tema',
               style: TextStyle(
-                color: AppColors.textMain,
+                color: context.colors.textMain,
                 fontSize: 15,
                 fontWeight: FontWeight.w700,
               ),
@@ -208,23 +208,23 @@ class _ThemeChip extends StatelessWidget {
         duration: Duration(milliseconds: 200),
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(
-          color: selected ? AppColors.primary.withOpacity(0.15) : Colors.transparent,
+          color: selected ? context.colors.primary.withOpacity(0.15) : Colors.transparent,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: selected ? AppColors.primary.withOpacity(0.4) : AppColors.divider.withOpacity(0.3),
+            color: selected ? context.colors.primary.withOpacity(0.4) : context.colors.divider.withOpacity(0.3),
           ),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 14, color: selected ? AppColors.primary : AppColors.textMain.withOpacity(0.5)),
+            Icon(icon, size: 14, color: selected ? context.colors.primary : context.colors.textMain.withOpacity(0.5)),
             SizedBox(width: 4),
             Text(
               label,
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
-                color: selected ? AppColors.primary : AppColors.textMain.withOpacity(0.5),
+                color: selected ? context.colors.primary : context.colors.textMain.withOpacity(0.5),
               ),
             ),
           ],
@@ -255,7 +255,7 @@ class _SettingsToggleTile extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       child: Row(
         children: [
-          Icon(icon, color: AppColors.primary, size: 24),
+          Icon(icon, color: context.colors.primary, size: 24),
           SizedBox(width: 14),
           Expanded(
             child: Column(
@@ -264,7 +264,7 @@ class _SettingsToggleTile extends StatelessWidget {
                 Text(
                   title,
                   style: TextStyle(
-                    color: AppColors.textMain,
+                    color: context.colors.textMain,
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
                   ),
@@ -273,7 +273,7 @@ class _SettingsToggleTile extends StatelessWidget {
                 Text(
                   subtitle,
                   style: TextStyle(
-                    color: AppColors.secondary.withOpacity(0.8),
+                    color: context.colors.secondary.withOpacity(0.8),
                     fontSize: 12,
                     height: 1.3,
                   ),
@@ -285,10 +285,10 @@ class _SettingsToggleTile extends StatelessWidget {
             height: 28,
             child: Switch(
               value: value,
-              activeThumbColor: AppColors.background,
-              activeTrackColor: AppColors.primary,
-              inactiveThumbColor: AppColors.textMain.withOpacity(0.25),
-              inactiveTrackColor: AppColors.divider,
+              activeThumbColor: context.colors.background,
+              activeTrackColor: context.colors.primary,
+              inactiveThumbColor: context.colors.textMain.withOpacity(0.25),
+              inactiveTrackColor: context.colors.divider,
               trackOutlineColor: WidgetStateProperty.resolveWith((_) => Colors.transparent),
               onChanged: onChanged,
             ),
@@ -319,7 +319,7 @@ class _SettingsOptionTile extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
       child: Row(
         children: [
-          Icon(icon, color: AppColors.primary, size: 24),
+          Icon(icon, color: context.colors.primary, size: 24),
           SizedBox(width: 14),
           Expanded(
             child: Column(
@@ -328,7 +328,7 @@ class _SettingsOptionTile extends StatelessWidget {
                 Text(
                   title,
                   style: TextStyle(
-                    color: AppColors.textMain,
+                    color: context.colors.textMain,
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
                   ),
@@ -337,7 +337,7 @@ class _SettingsOptionTile extends StatelessWidget {
                 Text(
                   subtitle,
                   style: TextStyle(
-                    color: AppColors.secondary.withOpacity(0.8),
+                    color: context.colors.secondary.withOpacity(0.8),
                     fontSize: 12,
                     height: 1.3,
                   ),
@@ -345,7 +345,7 @@ class _SettingsOptionTile extends StatelessWidget {
               ],
             ),
           ),
-          Icon(Icons.chevron_right, color: AppColors.secondary.withOpacity(0.5)),
+          Icon(Icons.chevron_right, color: context.colors.secondary.withOpacity(0.5)),
         ],
       ),
     );
@@ -358,7 +358,7 @@ class _SettingsDivider extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 14),
       child: Divider(
-        color: AppColors.divider.withOpacity(0.3),
+        color: context.colors.divider.withOpacity(0.3),
         height: 1,
       ),
     );

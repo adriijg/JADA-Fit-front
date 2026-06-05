@@ -100,12 +100,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         elevation: 0,
         iconTheme: IconThemeData(
-          color: AppColors.textMain,
+          color: context.colors.textMain,
         ),
         title: Text(
           AppStrings.profileTitle,
           style: TextStyle(
-            color: AppColors.textMain,
+            color: context.colors.textMain,
             fontWeight: FontWeight.w700,
             letterSpacing: 1,
           ),
@@ -130,13 +130,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             CircularProgressIndicator(
-              color: AppColors.primary,
+              color: context.colors.primary,
             ),
             SizedBox(height: 16),
             Text(
               'Cargando cuenta...',
               style: TextStyle(
-                color: AppColors.textMain,
+                color: context.colors.textMain,
                 fontSize: 14,
               ),
             ),
@@ -223,15 +223,15 @@ class _AccountHeaderCard extends StatelessWidget {
             height: 92,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: AppColors.inputBackground,
+              color: context.colors.inputBackground,
               border: Border.all(
-                color: AppColors.primary,
+                color: context.colors.primary,
                 width: 2,
               ),
             ),
             child: Icon(
               Icons.person,
-              color: AppColors.primary,
+              color: context.colors.primary,
               size: 48,
             ),
           ),
@@ -239,7 +239,7 @@ class _AccountHeaderCard extends StatelessWidget {
           Text(
             user.username,
             style: TextStyle(
-              color: AppColors.textMain,
+              color: context.colors.textMain,
               fontSize: 23,
               fontWeight: FontWeight.w800,
               letterSpacing: 0.8,
@@ -250,7 +250,7 @@ class _AccountHeaderCard extends StatelessWidget {
           Text(
             user.email,
             style: TextStyle(
-              color: AppColors.secondary,
+              color: context.colors.secondary,
               fontSize: 14,
               letterSpacing: 0.4,
             ),
@@ -311,7 +311,7 @@ class _AccountDivider extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 18),
       child: Divider(
-        color: AppColors.divider,
+        color: context.colors.divider,
         height: 1,
       ),
     );
@@ -346,7 +346,7 @@ class _AccountInfoRow extends StatelessWidget {
               Text(
                 label.toUpperCase(),
                 style: TextStyle(
-                  color: AppColors.secondary,
+                  color: context.colors.secondary,
                   fontSize: 11,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 1,
@@ -356,7 +356,7 @@ class _AccountInfoRow extends StatelessWidget {
               Text(
                 value,
                 style: TextStyle(
-                  color: AppColors.textMain,
+                  color: context.colors.textMain,
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
                 ),
@@ -510,7 +510,7 @@ class _PrivacyToggleTile extends StatelessWidget {
         children: [
           Icon(
             icon,
-            color: AppColors.primary,
+            color: context.colors.primary,
             size: 24,
           ),
           SizedBox(width: 14),
@@ -521,7 +521,7 @@ class _PrivacyToggleTile extends StatelessWidget {
                 Text(
                   title,
                   style: TextStyle(
-                    color: AppColors.textMain,
+                    color: context.colors.textMain,
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
                   ),
@@ -530,7 +530,7 @@ class _PrivacyToggleTile extends StatelessWidget {
                 Text(
                   subtitle,
                   style: TextStyle(
-                    color: AppColors.secondary,
+                    color: context.colors.secondary,
                     fontSize: 12,
                     height: 1.3,
                   ),
@@ -543,14 +543,14 @@ class _PrivacyToggleTile extends StatelessWidget {
               padding: EdgeInsets.all(12.0),
               child: SizedBox(
                 width: 24, height: 24,
-                child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primary),
+                child: CircularProgressIndicator(strokeWidth: 2, color: context.colors.primary),
               ),
             )
           else
             Switch(
               value: value,
               onChanged: onChanged,
-              activeThumbColor: AppColors.primary,
+              activeThumbColor: context.colors.primary,
             ),
         ],
       ),
@@ -575,8 +575,8 @@ class _AccountOptionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final iconColor = isDestructive ? AppColors.error : AppColors.primary;
-    final titleColor = isDestructive ? AppColors.error : AppColors.textMain;
+    final iconColor = isDestructive ? AppColors.error : context.colors.primary;
+    final titleColor = isDestructive ? AppColors.error : context.colors.textMain;
 
     return AppCard.input(
       onTap: onTap,
@@ -605,7 +605,7 @@ class _AccountOptionTile extends StatelessWidget {
                 Text(
                   subtitle,
                   style: TextStyle(
-                    color: AppColors.secondary,
+                    color: context.colors.secondary,
                     fontSize: 12,
                     height: 1.3,
                   ),
@@ -615,7 +615,7 @@ class _AccountOptionTile extends StatelessWidget {
           ),
           Icon(
             Icons.chevron_right,
-            color: isDestructive ? AppColors.error : AppColors.secondary,
+            color: isDestructive ? AppColors.error : context.colors.secondary,
           ),
         ],
       ),
@@ -649,7 +649,7 @@ class _ErrorCard extends StatelessWidget {
           Text(
             message,
             style: TextStyle(
-              color: AppColors.textMain,
+              color: context.colors.textMain,
               fontSize: 15,
               height: 1.5,
             ),
@@ -659,8 +659,8 @@ class _ErrorCard extends StatelessWidget {
           ElevatedButton(
             onPressed: onRetry,
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: AppColors.background,
+              backgroundColor: context.colors.primary,
+              foregroundColor: context.colors.background,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(18),
               ),

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../theme/app_colors.dart';
 
+enum _CardStyle { normal, primary, tertiary, error, elevated, input }
+
 class AppCard extends StatelessWidget {
-  AppCard({
+  const AppCard({
     super.key,
     required this.child,
     this.onTap,
@@ -13,6 +15,7 @@ class AppCard extends StatelessWidget {
     this.borderWidth = 0.8,
     this.backgroundColor,
     this.boxShadow,
+    this.cardStyle = _CardStyle.normal,
   });
 
   factory AppCard.primary({
@@ -27,7 +30,7 @@ class AppCard extends StatelessWidget {
       onTap: onTap,
       padding: padding,
       borderRadius: borderRadius,
-      borderColor: AppColors.primary.withOpacity(0.28),
+      cardStyle: _CardStyle.primary,
       child: child,
     );
   }
@@ -44,7 +47,7 @@ class AppCard extends StatelessWidget {
       onTap: onTap,
       padding: padding,
       borderRadius: borderRadius,
-      borderColor: AppColors.tertiary.withOpacity(0.45),
+      cardStyle: _CardStyle.tertiary,
       child: child,
     );
   }
@@ -61,7 +64,7 @@ class AppCard extends StatelessWidget {
       onTap: onTap,
       padding: padding,
       borderRadius: borderRadius,
-      borderColor: AppColors.error.withOpacity(0.5),
+      cardStyle: _CardStyle.error,
       child: child,
     );
   }
@@ -80,14 +83,8 @@ class AppCard extends StatelessWidget {
       onTap: onTap,
       padding: padding,
       borderRadius: borderRadius,
-      borderColor: (borderColor ?? AppColors.divider).withOpacity(borderOpacity),
-      boxShadow: [
-        BoxShadow(
-          color: AppColors.primary.withOpacity(0.04),
-          blurRadius: 20,
-          offset: Offset(0, 6),
-        ),
-      ],
+      borderColor: borderColor != null ? borderColor.withOpacity(borderOpacity) : null,
+      cardStyle: _CardStyle.elevated,
       child: child,
     );
   }
@@ -104,9 +101,8 @@ class AppCard extends StatelessWidget {
       onTap: onTap,
       padding: padding,
       borderRadius: borderRadius,
-      borderColor: AppColors.inputBorder,
       borderWidth: 0.7,
-      backgroundColor: AppColors.inputBackground,
+      cardStyle: _CardStyle.input,
       child: child,
     );
   }
@@ -119,21 +115,55 @@ class AppCard extends StatelessWidget {
   final double borderWidth;
   final Color? backgroundColor;
   final List<BoxShadow>? boxShadow;
+  final _CardStyle cardStyle;
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = backgroundColor ?? Theme.of(context).cardColor;
+    final Color resolvedBorder;
+    switch (cardStyle) {
+      case _CardStyle.primary:
+        resolvedBorder = borderColor ?? context.colors.primary.withOpacity(0.28);
+        break;
+      case _CardStyle.tertiary:
+        resolvedBorder = borderColor ?? context.colors.tertiary.withOpacity(0.45);
+        break;
+      case _CardStyle.error:
+        resolvedBorder = borderColor ?? AppColors.error.withOpacity(0.5);
+        break;
+      case _CardStyle.elevated:
+        resolvedBorder = borderColor ?? context.colors.divider.withOpacity(0.4);
+        break;
+      case _CardStyle.input:
+        resolvedBorder = borderColor ?? context.colors.inputBorder;
+        break;
+      case _CardStyle.normal:
+        resolvedBorder = borderColor ?? context.colors.divider.withOpacity(0.4);
+        break;
+    }
+
+    final resolvedShadow = boxShadow ?? (cardStyle == _CardStyle.elevated
+        ? [BoxShadow(
+            color: context.colors.primary.withOpacity(0.04),
+            blurRadius: 20,
+            offset: Offset(0, 6),
+          )]
+        : null);
+
+    final resolvedBg = backgroundColor ?? (cardStyle == _CardStyle.input
+        ? context.colors.inputBackground
+        : Theme.of(context).cardColor);
+
     final card = Container(
       width: double.infinity,
       padding: padding,
       decoration: BoxDecoration(
-        color: bgColor,
+        color: resolvedBg,
         borderRadius: BorderRadius.circular(borderRadius),
         border: Border.all(
-          color: borderColor ?? AppColors.divider.withOpacity(0.4),
+          color: resolvedBorder,
           width: borderWidth,
         ),
-        boxShadow: boxShadow,
+        boxShadow: resolvedShadow,
       ),
       child: child,
     );
@@ -157,7 +187,7 @@ class AppCardIcon extends StatelessWidget {
     this.size = 46,
     this.iconSize = 24,
     this.borderRadius = 16,
-    this.color = AppColors.primary,
+    this.color,
     this.backgroundColor,
     this.borderColor,
   });
@@ -166,7 +196,7 @@ class AppCardIcon extends StatelessWidget {
   final double size;
   final double iconSize;
   final double borderRadius;
-  final Color color;
+  final Color? color;
   final Color? backgroundColor;
   final Color? borderColor;
 
@@ -176,13 +206,13 @@ class AppCardIcon extends StatelessWidget {
       width: size,
       height: size,
       decoration: BoxDecoration(
-        color: backgroundColor ?? AppColors.inputBackground,
+        color: backgroundColor ?? context.colors.inputBackground,
         borderRadius: BorderRadius.circular(borderRadius),
         border: borderColor != null
             ? Border.all(color: borderColor!, width: 0.8)
             : null,
       ),
-      child: Icon(icon, color: color, size: iconSize),
+      child: Icon(icon, color: color ?? context.colors.primary, size: iconSize),
     );
   }
 }
@@ -204,7 +234,7 @@ class AppCardSectionTitle extends StatelessWidget {
         Text(
           text,
           style: TextStyle(
-            color: AppColors.secondary,
+            color: context.colors.secondary,
             fontSize: 12,
             fontWeight: FontWeight.w800,
             letterSpacing: 1.2,
@@ -229,7 +259,7 @@ class AppCardDivider extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: height),
       child: Divider(
-        color: AppColors.divider,
+        color: context.colors.divider,
         height: 1,
       ),
     );
@@ -244,7 +274,7 @@ class AppCardRow extends StatelessWidget {
     required this.value,
     this.iconSize = 44,
     this.iconRadius = 16,
-    this.iconColor = AppColors.primary,
+    this.iconColor,
   });
 
   final IconData icon;
@@ -252,7 +282,7 @@ class AppCardRow extends StatelessWidget {
   final String value;
   final double iconSize;
   final double iconRadius;
-  final Color iconColor;
+  final Color? iconColor;
 
   @override
   Widget build(BuildContext context) {
@@ -272,7 +302,7 @@ class AppCardRow extends StatelessWidget {
               Text(
                 label.toUpperCase(),
                 style: TextStyle(
-                  color: AppColors.secondary,
+                  color: context.colors.secondary,
                   fontSize: 11,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 1,
@@ -282,7 +312,7 @@ class AppCardRow extends StatelessWidget {
               Text(
                 value,
                 style: TextStyle(
-                  color: AppColors.textMain,
+                  color: context.colors.textMain,
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
                 ),
@@ -318,19 +348,19 @@ class AppMacroBadge extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 6, vertical: 10),
         decoration: BoxDecoration(
           color: highlighted
-              ? AppColors.primary.withOpacity(0.14)
-              : AppColors.inputBackground,
+              ? context.colors.primary.withOpacity(0.14)
+              : context.colors.inputBackground,
           borderRadius: BorderRadius.circular(borderRadius),
           border: highlighted
               ? null
-              : Border.all(color: AppColors.inputBorder, width: 0.7),
+              : Border.all(color: context.colors.inputBorder, width: 0.7),
         ),
         child: Column(
           children: [
             Text(
               value,
               style: TextStyle(
-                color: highlighted ? AppColors.primary : AppColors.textMain,
+                color: highlighted ? context.colors.primary : context.colors.textMain,
                 fontSize: fontSize,
                 fontWeight: FontWeight.w900,
               ),
@@ -340,7 +370,7 @@ class AppMacroBadge extends StatelessWidget {
             Text(
               label.toUpperCase(),
               style: TextStyle(
-                color: highlighted ? AppColors.primary : AppColors.secondary,
+                color: highlighted ? context.colors.primary : context.colors.secondary,
                 fontSize: 9,
                 fontWeight: FontWeight.w800,
                 letterSpacing: 0.5,
@@ -370,14 +400,14 @@ class AppPill extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: highlighted
-            ? AppColors.primary.withOpacity(0.14)
-            : AppColors.surface,
+            ? context.colors.primary.withOpacity(0.14)
+            : context.colors.surface,
         borderRadius: BorderRadius.circular(999),
       ),
       child: Text(
         text,
         style: TextStyle(
-          color: highlighted ? AppColors.primary : AppColors.secondary,
+          color: highlighted ? context.colors.primary : context.colors.secondary,
           fontSize: 10,
           fontWeight: FontWeight.w800,
         ),
@@ -392,7 +422,7 @@ class AppCardButton extends StatelessWidget {
     required this.label,
     required this.onTap,
     this.icon,
-    this.backgroundColor = AppColors.primary,
+    this.backgroundColor,
     this.foregroundColor,
     this.borderRadius = 14,
   });
@@ -406,8 +436,8 @@ class AppCardButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = backgroundColor ?? AppColors.primary;
-    final fg = foregroundColor ?? AppColors.background;
+    final bg = backgroundColor ?? context.colors.primary;
+    final fg = foregroundColor ?? context.colors.background;
     final btn = ElevatedButton(
       onPressed: onTap,
       style: ElevatedButton.styleFrom(
@@ -451,22 +481,23 @@ class AppCardOutlinedButton extends StatelessWidget {
     required this.onTap,
     this.icon,
     this.borderRadius = 14,
-    this.color = AppColors.primary,
+    this.color,
   });
 
   final String label;
   final VoidCallback onTap;
   final IconData? icon;
   final double borderRadius;
-  final Color color;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
+    final clr = color ?? context.colors.primary;
     final btn = OutlinedButton(
       onPressed: onTap,
       style: OutlinedButton.styleFrom(
-        foregroundColor: color,
-        side: BorderSide(color: color.withOpacity(0.4)),
+        foregroundColor: clr,
+        side: BorderSide(color: clr.withOpacity(0.4)),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(borderRadius),
         ),
@@ -483,8 +514,8 @@ class AppCardOutlinedButton extends StatelessWidget {
           icon: Icon(icon, size: 16),
           label: Text(label),
           style: OutlinedButton.styleFrom(
-            foregroundColor: color,
-            side: BorderSide(color: color.withOpacity(0.4)),
+            foregroundColor: clr,
+            side: BorderSide(color: clr.withOpacity(0.4)),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(borderRadius),
             ),
@@ -508,7 +539,7 @@ class AppBottomSheetHandle extends StatelessWidget {
         width: 40,
         height: 4,
         decoration: BoxDecoration(
-          color: AppColors.divider,
+          color: context.colors.divider,
           borderRadius: BorderRadius.circular(2),
         ),
       ),
@@ -528,7 +559,7 @@ class AppBottomSheetTitle extends StatelessWidget {
       child: Text(
         text,
         style: TextStyle(
-          color: AppColors.secondary,
+          color: context.colors.secondary,
           fontSize: 12,
           fontWeight: FontWeight.w800,
           letterSpacing: 1.2,
@@ -557,7 +588,7 @@ class AppBottomSheetOption extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(bottom: 8),
       child: Material(
-        color: AppColors.inputBackground,
+        color: context.colors.inputBackground,
         borderRadius: BorderRadius.circular(16),
         child: InkWell(
           borderRadius: BorderRadius.circular(16),
@@ -567,7 +598,7 @@ class AppBottomSheetOption extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppColors.inputBorder, width: 0.7),
+              border: Border.all(color: context.colors.inputBorder, width: 0.7),
             ),
             child: Row(
               children: [
@@ -585,7 +616,7 @@ class AppBottomSheetOption extends StatelessWidget {
                       Text(
                         label,
                         style: TextStyle(
-                          color: AppColors.textMain,
+                          color: context.colors.textMain,
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
                         ),
@@ -594,14 +625,14 @@ class AppBottomSheetOption extends StatelessWidget {
                       Text(
                         subtitle,
                         style: TextStyle(
-                          color: AppColors.secondary,
+                          color: context.colors.secondary,
                           fontSize: 12,
                         ),
                       ),
                     ],
                   ),
                 ),
-                Icon(Icons.chevron_right, color: AppColors.secondary, size: 20),
+                Icon(Icons.chevron_right, color: context.colors.secondary, size: 20),
               ],
             ),
           ),
@@ -628,7 +659,7 @@ class AppBottomSheetSimpleOption extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(bottom: 8),
       child: Material(
-        color: AppColors.inputBackground,
+        color: context.colors.inputBackground,
         borderRadius: BorderRadius.circular(16),
         child: InkWell(
           borderRadius: BorderRadius.circular(16),
@@ -638,16 +669,16 @@ class AppBottomSheetSimpleOption extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppColors.inputBorder, width: 0.7),
+              border: Border.all(color: context.colors.inputBorder, width: 0.7),
             ),
             child: Row(
               children: [
-                Icon(icon, color: AppColors.primary, size: 22),
+                Icon(icon, color: context.colors.primary, size: 22),
                 SizedBox(width: 14),
                 Text(
                   label,
                   style: TextStyle(
-                    color: AppColors.textMain,
+                    color: context.colors.textMain,
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
                   ),

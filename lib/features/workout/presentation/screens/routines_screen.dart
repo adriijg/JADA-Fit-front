@@ -115,7 +115,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: _loadRoutines,
-      color: AppColors.primary,
+      color: context.colors.primary,
       child: SingleChildScrollView(
         physics: AlwaysScrollableScrollPhysics(),
         padding: EdgeInsets.only(bottom: 32),
@@ -131,7 +131,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
                     Text(
                       AppStrings.routinesTitle,
                       style: TextStyle(
-                        color: AppColors.textMain,
+                        color: context.colors.textMain,
                         fontSize: 24,
                         fontWeight: FontWeight.w800,
                       ),
@@ -140,7 +140,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
                     Text(
                       'Tus planes de entrenamiento',
                       style: TextStyle(
-                        color: AppColors.secondary,
+                        color: context.colors.secondary,
                         fontSize: 14,
                         height: 1.5,
                       ),
@@ -157,11 +157,11 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
                         padding: EdgeInsets.all(12),
                         margin: EdgeInsets.only(right: 12),
                         decoration: BoxDecoration(
-                          color: AppColors.surface,
+                          color: context.colors.surface,
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: AppColors.divider.withOpacity(0.1)),
+                          border: Border.all(color: context.colors.divider.withOpacity(0.1)),
                         ),
-                        child: Icon(Icons.menu_book_rounded, color: AppColors.primary, size: 24),
+                        child: Icon(Icons.menu_book_rounded, color: context.colors.primary, size: 24),
                       ),
                     ),
                     GestureDetector(
@@ -169,7 +169,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
                       child: Container(
                         padding: EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: AppColors.primary,
+                          color: context.colors.primary,
                           borderRadius: BorderRadius.circular(16),
 
                         ),
@@ -221,7 +221,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
               Text(
                 value,
                 style: TextStyle(
-                  color: AppColors.textMain,
+                  color: context.colors.textMain,
                   fontSize: 16,
                   fontWeight: FontWeight.w900,
                 ),
@@ -229,7 +229,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
               Text(
                 label,
                 style: TextStyle(
-                  color: AppColors.textMain.withOpacity(0.4),
+                  color: context.colors.textMain.withOpacity(0.4),
                   fontSize: 8,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.5,
@@ -245,25 +245,25 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
   Widget _buildSearchBar() {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.inputBackground,
+        color: context.colors.inputBackground,
         borderRadius: BorderRadius.circular(18),
         border: Border.all(
-          color: AppColors.inputBorder,
+          color: context.colors.inputBorder,
           width: 0.7,
         ),
       ),
       child: TextField(
         controller: _searchController,
-        style: TextStyle(color: AppColors.textMain, fontWeight: FontWeight.w500),
+        style: TextStyle(color: context.colors.textMain, fontWeight: FontWeight.w500),
         decoration: InputDecoration(
           hintText: 'Buscar rutinas...',
-          hintStyle: TextStyle(color: AppColors.textMain.withOpacity(0.3)),
-          prefixIcon: Icon(Icons.search_rounded, color: AppColors.secondary),
+          hintStyle: TextStyle(color: context.colors.textMain.withOpacity(0.3)),
+          prefixIcon: Icon(Icons.search_rounded, color: context.colors.secondary),
           border: InputBorder.none,
           contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
           suffixIcon: _searchQuery.isNotEmpty 
               ? IconButton(
-                  icon: Icon(Icons.close_rounded, color: AppColors.textMain),
+                  icon: Icon(Icons.close_rounded, color: context.colors.textMain),
                   onPressed: () => _searchController.clear(),
                 )
               : null,
@@ -289,17 +289,17 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
               onSelected: (selected) {
                 if (selected) setState(() => _selectedGoal = goal);
               },
-              backgroundColor: AppColors.inputBackground,
-              selectedColor: AppColors.primary,
+              backgroundColor: context.colors.inputBackground,
+              selectedColor: context.colors.primary,
               labelStyle: TextStyle(
-                color: isSelected ? Colors.black : AppColors.textMain.withOpacity(0.5),
+                color: isSelected ? Colors.black : context.colors.textMain.withOpacity(0.5),
                 fontWeight: FontWeight.w800,
                 fontSize: 11,
               ),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(14),
                 side: BorderSide(
-                  color: isSelected ? AppColors.primary : AppColors.inputBorder,
+                  color: isSelected ? context.colors.primary : context.colors.inputBorder,
                 ),
               ),
               showCheckmark: false,
@@ -336,15 +336,15 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
               SizedBox(height: 24),
               Text(
                 _errorMessage!,
-                style: TextStyle(color: AppColors.textMain, fontSize: 16),
+                style: TextStyle(color: context.colors.textMain, fontSize: 16),
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 24),
               ElevatedButton(
                 onPressed: _loadRoutines,
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: AppColors.textMain,
-                  side: BorderSide(color: AppColors.divider.withOpacity(0.5)),
+                  foregroundColor: context.colors.textMain,
+                  side: BorderSide(color: context.colors.divider.withOpacity(0.5)),
                   padding: EdgeInsets.symmetric(horizontal: 32, vertical: 14),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                 ),
@@ -365,10 +365,10 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
         margin: EdgeInsets.symmetric(vertical: 20),
         padding: EdgeInsets.all(40),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: context.colors.surface,
           borderRadius: BorderRadius.circular(32),
           border: Border.all(
-            color: AppColors.divider.withOpacity(0.1),
+            color: context.colors.divider.withOpacity(0.1),
           ),
         ),
         child: Column(
@@ -378,7 +378,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
               _searchQuery.isNotEmpty || _selectedGoal != null
                   ? Icons.search_off_rounded
                   : Icons.sports_gymnastics,
-              color: AppColors.primary.withOpacity(0.5),
+              color: context.colors.primary.withOpacity(0.5),
               size: 64,
             ),
             SizedBox(height: 24),
@@ -387,7 +387,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
                   ? 'Sin resultados'
                   : 'Aún no hay rutinas',
               style: TextStyle(
-                color: AppColors.textMain,
+                color: context.colors.textMain,
                 fontSize: 22,
                 fontWeight: FontWeight.w800,
               ),
@@ -398,7 +398,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
                   ? 'No encontramos rutinas que coincidan con tus filtros.'
                   : 'Diseña tu primera rutina de entrenamiento para empezar a registrar tus progresos.',
               style: TextStyle(
-                color: AppColors.textMain.withOpacity(0.5),
+                color: context.colors.textMain.withOpacity(0.5),
                 fontSize: 15,
                 height: 1.5,
               ),
@@ -420,16 +420,16 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
                 Container(
                   padding: EdgeInsets.all(6),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.15),
+                    color: context.colors.primary.withOpacity(0.15),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Icon(Icons.play_circle_rounded, color: AppColors.primary, size: 18),
+                  child: Icon(Icons.play_circle_rounded, color: context.colors.primary, size: 18),
                 ),
                 SizedBox(width: 10),
                 Text(
                   'En progreso',
                   style: TextStyle(
-                    color: AppColors.textMain,
+                    color: context.colors.textMain,
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
                   ),
@@ -438,7 +438,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
                 Text(
                   '${inProgress.length}',
                   style: TextStyle(
-                    color: AppColors.textMain.withOpacity(0.4),
+                    color: context.colors.textMain.withOpacity(0.4),
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                   ),
@@ -522,7 +522,7 @@ class _PremiumRoutineCard extends StatelessWidget {
       padding: EdgeInsets.only(bottom: 20),
       child: AppCard(
         borderRadius: 32,
-        borderColor: AppColors.divider.withOpacity(0.1),
+        borderColor: context.colors.divider.withOpacity(0.1),
         borderWidth: 1.5,
         padding: EdgeInsets.all(24),
         onTap: onTap,
@@ -538,7 +538,7 @@ class _PremiumRoutineCard extends StatelessWidget {
                     gradient: LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
-                      colors: [AppColors.tertiary, AppColors.secondary],
+                      colors: [context.colors.tertiary, context.colors.secondary],
                     ),
                     borderRadius: BorderRadius.circular(18),
                   ),
@@ -556,7 +556,7 @@ class _PremiumRoutineCard extends StatelessWidget {
                       Text(
                         routine.name,
                         style: TextStyle(
-                          color: AppColors.textMain,
+                          color: context.colors.textMain,
                           fontSize: 18,
                           fontWeight: FontWeight.w900,
                         ),
@@ -565,13 +565,13 @@ class _PremiumRoutineCard extends StatelessWidget {
                       Container(
                         padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                         decoration: BoxDecoration(
-                          color: AppColors.primary.withOpacity(0.1),
+                          color: context.colors.primary.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
                           routine.targetGoal.toUpperCase(),
                           style: TextStyle(
-                            color: AppColors.primary,
+                            color: context.colors.primary,
                             fontSize: 10,
                             fontWeight: FontWeight.w900,
                           ),
@@ -582,7 +582,7 @@ class _PremiumRoutineCard extends StatelessWidget {
                 ),
                 Icon(
                   Icons.chevron_right_rounded,
-                  color: AppColors.divider,
+                  color: context.colors.divider,
                   size: 24,
                 ),
               ],
@@ -594,27 +594,27 @@ class _PremiumRoutineCard extends StatelessWidget {
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  color: AppColors.textMain.withOpacity(0.5),
+                  color: context.colors.textMain.withOpacity(0.5),
                   fontSize: 13,
                   height: 1.4,
                 ),
               ),
             ],
             SizedBox(height: 16),
-            Divider(height: 1, color: AppColors.divider),
+            Divider(height: 1, color: context.colors.divider),
             SizedBox(height: 16),
             Row(
               children: [
                 Icon(
                   Icons.layers_outlined,
-                  color: AppColors.textMain.withOpacity(0.3),
+                  color: context.colors.textMain.withOpacity(0.3),
                   size: 14,
                 ),
                 SizedBox(width: 4),
                 Text(
                   '${routine.exercises.length} ejercicios',
                   style: TextStyle(
-                    color: AppColors.textMain.withOpacity(0.5),
+                    color: context.colors.textMain.withOpacity(0.5),
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
                   ),
@@ -627,7 +627,7 @@ class _PremiumRoutineCard extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        color: AppColors.textMain.withOpacity(0.3),
+                        color: context.colors.textMain.withOpacity(0.3),
                         fontSize: 12,
                         fontStyle: FontStyle.italic,
                       ),

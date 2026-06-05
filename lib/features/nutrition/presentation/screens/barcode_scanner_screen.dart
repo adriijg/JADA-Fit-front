@@ -112,12 +112,12 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
       appBar: AppBar(
         elevation: 0,
         iconTheme: IconThemeData(
-          color: AppColors.textMain,
+          color: context.colors.textMain,
         ),
         title: Text(
           'Escanear alimento',
           style: TextStyle(
-            color: AppColors.textMain,
+            color: context.colors.textMain,
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -127,8 +127,8 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
             icon: Icon(
               Icons.flash_on,
               color: _isScannerReady
-                  ? AppColors.primary
-                  : AppColors.textMain.withOpacity(0.35),
+                  ? context.colors.primary
+                  : context.colors.textMain.withOpacity(0.35),
             ),
           ),
           IconButton(
@@ -136,8 +136,8 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
             icon: Icon(
               Icons.cameraswitch,
               color: _isScannerReady
-                  ? AppColors.secondary
-                  : AppColors.textMain.withOpacity(0.35),
+                  ? context.colors.secondary
+                  : context.colors.textMain.withOpacity(0.35),
             ),
           ),
         ],
@@ -157,7 +157,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
                   width: double.infinity,
                   padding: EdgeInsets.all(22),
                   decoration: BoxDecoration(
-                    color: AppColors.surface,
+                    color: context.colors.surface,
                     borderRadius: BorderRadius.circular(24),
                     border: Border.all(
                       color: AppColors.error.withOpacity(0.5),
@@ -176,7 +176,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
                       Text(
                         _cameraError!,
                         style: TextStyle(
-                          color: AppColors.textMain,
+                          color: context.colors.textMain,
                           fontSize: 14,
                           height: 1.5,
                         ),
@@ -186,8 +186,8 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
                       ElevatedButton(
                         onPressed: _startScanner,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                          foregroundColor: AppColors.background,
+                          backgroundColor: context.colors.primary,
+                          foregroundColor: context.colors.background,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18),
                           ),
@@ -213,7 +213,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(22),
                   border: Border.all(
-                    color: AppColors.primary,
+                    color: context.colors.primary,
                     width: 3,
                   ),
                 ),
@@ -228,10 +228,10 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
               child: Container(
                 padding: EdgeInsets.all(18),
                 decoration: BoxDecoration(
-                  color: AppColors.surface.withOpacity(0.92),
+                  color: context.colors.surface.withOpacity(0.92),
                   borderRadius: BorderRadius.circular(22),
                   border: Border.all(
-                    color: AppColors.divider.withOpacity(0.5),
+                    color: context.colors.divider.withOpacity(0.5),
                     width: 0.7,
                   ),
                 ),
@@ -240,7 +240,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
                       ? 'Apunta la cámara al código de barras del producto.'
                       : 'Iniciando cámara...',
                   style: TextStyle(
-                    color: AppColors.textMain,
+                    color: context.colors.textMain,
                     fontSize: 14,
                     height: 1.5,
                   ),

@@ -254,7 +254,7 @@ class _HomeDashboardSectionState extends State<_HomeDashboardSection> {
 
     return RefreshIndicator(
       onRefresh: _loadDaySummary,
-      color: AppColors.primary,
+      color: context.colors.primary,
       child: SingleChildScrollView(
         physics: AlwaysScrollableScrollPhysics(),
         child: Column(
@@ -267,7 +267,7 @@ class _HomeDashboardSectionState extends State<_HomeDashboardSection> {
                 height: 250,
                 child: Center(
                   child: CircularProgressIndicator(
-                    color: AppColors.primary,
+                    color: context.colors.primary,
                   ),
                 ),
               )

@@ -235,12 +235,12 @@ class _EditFitnessProfileScreenState extends State<EditFitnessProfileScreen> {
       appBar: AppBar(
         elevation: 0,
         iconTheme: IconThemeData(
-          color: AppColors.textMain,
+          color: context.colors.textMain,
         ),
         title: Text(
           'Editar datos físicos',
           style: TextStyle(
-            color: AppColors.textMain,
+            color: context.colors.textMain,
             fontWeight: FontWeight.w700,
             letterSpacing: 1,
           ),
@@ -313,10 +313,10 @@ class _EditFitnessProfileScreenState extends State<EditFitnessProfileScreen> {
                 child: ElevatedButton(
                   onPressed: isLoading ? null : _saveProfile,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: AppColors.background,
+                    backgroundColor: context.colors.primary,
+                    foregroundColor: context.colors.background,
                     elevation: 12,
-                    shadowColor: AppColors.primary.withOpacity(0.32),
+                    shadowColor: context.colors.primary.withOpacity(0.32),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24),
                     ),
@@ -327,7 +327,7 @@ class _EditFitnessProfileScreenState extends State<EditFitnessProfileScreen> {
                           height: 22,
                           child: CircularProgressIndicator(
                             strokeWidth: 2.4,
-                            color: AppColors.background,
+                            color: context.colors.background,
                           ),
                         )
                       : Row(
@@ -369,14 +369,14 @@ class _IntroCard extends StatelessWidget {
         children: [
           Icon(
             Icons.tune,
-            color: AppColors.primary,
+            color: context.colors.primary,
             size: 42,
           ),
           SizedBox(height: 18),
           Text(
             'Configura tu perfil físico',
             style: TextStyle(
-              color: AppColors.textMain,
+              color: context.colors.textMain,
               fontSize: 24,
               fontWeight: FontWeight.w900,
               height: 1.15,
@@ -386,7 +386,7 @@ class _IntroCard extends StatelessWidget {
           Text(
             'Estos datos sirven para personalizar tus objetivos, recomendaciones y futuros análisis.',
             style: TextStyle(
-              color: AppColors.secondary,
+              color: context.colors.secondary,
               fontSize: 14,
               height: 1.5,
             ),
@@ -459,40 +459,40 @@ class _FitnessTextField extends StatelessWidget {
       controller: controller,
       keyboardType: keyboardType,
       style: TextStyle(
-        color: AppColors.textMain,
+        color: context.colors.textMain,
         fontSize: 15,
       ),
       decoration: InputDecoration(
         filled: true,
-        fillColor: AppColors.inputBackground,
+        fillColor: context.colors.inputBackground,
         labelText: label,
         labelStyle: TextStyle(
-          color: AppColors.secondary,
+          color: context.colors.secondary,
           fontWeight: FontWeight.w600,
         ),
         hintText: hintText,
         hintStyle: TextStyle(
-          color: AppColors.textMain.withOpacity(0.45),
+          color: context.colors.textMain.withOpacity(0.45),
         ),
         prefixIcon: Icon(
           icon,
-          color: AppColors.primary,
+          color: context.colors.primary,
         ),
         suffixText: suffix,
         suffixStyle: TextStyle(
-          color: AppColors.secondary,
+          color: context.colors.secondary,
           fontWeight: FontWeight.w700,
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
           borderSide: BorderSide(
-            color: AppColors.inputBorder,
+            color: context.colors.inputBorder,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
           borderSide: BorderSide(
-            color: AppColors.primary,
+            color: context.colors.primary,
             width: 1.4,
           ),
         ),
@@ -529,7 +529,7 @@ class _SelectorCard extends StatelessWidget {
           Text(
             title.toUpperCase(),
             style: TextStyle(
-              color: AppColors.secondary,
+              color: context.colors.secondary,
               fontSize: 11,
               fontWeight: FontWeight.w800,
               letterSpacing: 1,
@@ -539,7 +539,7 @@ class _SelectorCard extends StatelessWidget {
           Text(
             subtitle,
             style: TextStyle(
-              color: AppColors.secondary,
+              color: context.colors.secondary,
               fontSize: 12,
               height: 1.4,
             ),
@@ -563,13 +563,13 @@ class _SelectorCard extends StatelessWidget {
                     ),
                     decoration: BoxDecoration(
                       color: isSelected
-                          ? AppColors.primary
-                          : AppColors.inputBackground,
+                          ? context.colors.primary
+                          : context.colors.inputBackground,
                       borderRadius: BorderRadius.circular(18),
                       border: Border.all(
                         color: isSelected
-                            ? AppColors.primary
-                            : AppColors.inputBorder,
+                            ? context.colors.primary
+                            : context.colors.inputBorder,
                         width: 0.8,
                       ),
                     ),
@@ -580,8 +580,8 @@ class _SelectorCard extends StatelessWidget {
                               ? Icons.radio_button_checked
                               : Icons.radio_button_unchecked,
                           color: isSelected
-                              ? AppColors.background
-                              : AppColors.secondary,
+                              ? context.colors.background
+                              : context.colors.secondary,
                           size: 21,
                         ),
                         SizedBox(width: 12),
@@ -590,8 +590,8 @@ class _SelectorCard extends StatelessWidget {
                             labelBuilder(value),
                             style: TextStyle(
                               color: isSelected
-                                  ? AppColors.background
-                                  : AppColors.textMain,
+                                  ? context.colors.background
+                                  : context.colors.textMain,
                               fontSize: 14,
                               fontWeight: FontWeight.w800,
                             ),

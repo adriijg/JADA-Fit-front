@@ -18,9 +18,9 @@ class AppHeader extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: context.colors.surface,
           border: Border(
-            bottom: BorderSide(color: AppColors.divider, width: 0.5),
+            bottom: BorderSide(color: context.colors.divider, width: 0.5),
           ),
         ),
         child: Row(
@@ -29,7 +29,7 @@ class AppHeader extends StatelessWidget {
             Text(
               AppStrings.appName,
               style: TextStyle(
-                color: AppColors.primary,
+                color: context.colors.primary,
                 fontWeight: FontWeight.bold,
                 fontSize: 24,
                 letterSpacing: 1.4,
@@ -39,7 +39,7 @@ class AppHeader extends StatelessWidget {
               onPressed: onProfileTap,
               icon: Icon(
                 Icons.person,
-                color: AppColors.textMain,
+                color: context.colors.textMain,
               ),
               tooltip: AppStrings.profileTitle,
             ),

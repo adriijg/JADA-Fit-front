@@ -93,14 +93,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     Icon(
                       Icons.lock_outline,
                       size: 82,
-                      color: AppColors.primary,
+                      color: context.colors.primary,
                     ),
                     SizedBox(height: 16),
                     Text(
                       AppStrings.forgotPasswordTitle,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: AppColors.primary,
+                        color: context.colors.primary,
                         fontFamily: 'Orbitron',
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -111,7 +111,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     Container(
                       padding: EdgeInsets.all(26),
                       decoration: BoxDecoration(
-                        color: AppColors.surface,
+                        color: context.colors.surface,
                         borderRadius: BorderRadius.circular(28),
                       ),
                       child: Column(
@@ -120,7 +120,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           Text(
                             AppStrings.forgotPasswordEmailLabel,
                             style: TextStyle(
-                              color: AppColors.secondary,
+                              color: context.colors.secondary,
                               fontSize: 14,
                               letterSpacing: 1,
                             ),
@@ -154,8 +154,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             child: ElevatedButton(
                               onPressed: isLoading ? null : _sendCode,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.primary,
-                                foregroundColor: AppColors.background,
+                                backgroundColor: context.colors.primary,
+                                foregroundColor: context.colors.background,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(24),
                                 ),
@@ -166,7 +166,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                       height: 22,
                                       child: CircularProgressIndicator(
                                         strokeWidth: 2.4,
-                                        color: AppColors.background,
+                                        color: context.colors.background,
                                       ),
                                     )
                                   : Text(
@@ -192,7 +192,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         (route) => false,
                       ),
                       style: TextButton.styleFrom(
-                        foregroundColor: AppColors.secondary,
+                        foregroundColor: context.colors.secondary,
                       ),
                       child: Text(AppStrings.backToLogin),
                     ),

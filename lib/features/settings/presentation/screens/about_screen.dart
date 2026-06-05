@@ -13,7 +13,7 @@ class AboutScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Acerca de'),
         backgroundColor: Colors.transparent,
-        foregroundColor: AppColors.textMain,
+        foregroundColor: context.colors.textMain,
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.fromLTRB(20, 16, 20, 32),
@@ -24,12 +24,12 @@ class AboutScreen extends StatelessWidget {
               width: 80,
               height: 80,
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
+                color: context.colors.primary.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Icon(
                 Icons.fitness_center,
-                color: AppColors.primary,
+                color: context.colors.primary,
                 size: 40,
               ),
             ),
@@ -37,7 +37,7 @@ class AboutScreen extends StatelessWidget {
             Text(
               AppStrings.appName,
               style: TextStyle(
-                color: AppColors.textMain,
+                color: context.colors.textMain,
                 fontSize: 24,
                 fontWeight: FontWeight.w800,
               ),
@@ -46,7 +46,7 @@ class AboutScreen extends StatelessWidget {
             Text(
               'Versión 1.0.0',
               style: TextStyle(
-                color: AppColors.secondary.withOpacity(0.6),
+                color: context.colors.secondary.withOpacity(0.6),
                 fontSize: 14,
               ),
             ),
@@ -60,7 +60,7 @@ class AboutScreen extends StatelessWidget {
                   Text(
                     'Descripción',
                     style: TextStyle(
-                      color: AppColors.textMain,
+                      color: context.colors.textMain,
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                     ),
@@ -71,7 +71,7 @@ class AboutScreen extends StatelessWidget {
                     'Crea rutinas personalizadas, sigue tu progreso físico, '
                     'recibe asistencia con IA y conecta con una comunidad fitness.',
                     style: TextStyle(
-                      color: AppColors.textMain.withOpacity(0.7),
+                      color: context.colors.textMain.withOpacity(0.7),
                       fontSize: 14,
                       height: 1.5,
                     ),
@@ -89,7 +89,7 @@ class AboutScreen extends StatelessWidget {
                   Text(
                     'Contacto',
                     style: TextStyle(
-                      color: AppColors.textMain,
+                      color: context.colors.textMain,
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                     ),
@@ -111,7 +111,7 @@ class AboutScreen extends StatelessWidget {
                   Text(
                     'Legal',
                     style: TextStyle(
-                      color: AppColors.textMain,
+                      color: context.colors.textMain,
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                     ),
@@ -120,7 +120,7 @@ class AboutScreen extends StatelessWidget {
                   Text(
                     'Términos y condiciones',
                     style: TextStyle(
-                      color: AppColors.primary.withOpacity(0.8),
+                      color: context.colors.primary.withOpacity(0.8),
                       fontSize: 14,
                     ),
                   ),
@@ -128,7 +128,7 @@ class AboutScreen extends StatelessWidget {
                   Text(
                     'Política de privacidad',
                     style: TextStyle(
-                      color: AppColors.primary.withOpacity(0.8),
+                      color: context.colors.primary.withOpacity(0.8),
                       fontSize: 14,
                     ),
                   ),
@@ -151,12 +151,12 @@ class _ContactRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, color: AppColors.secondary, size: 18),
+        Icon(icon, color: context.colors.secondary, size: 18),
         SizedBox(width: 10),
         Text(
           text,
           style: TextStyle(
-            color: AppColors.textMain.withOpacity(0.7),
+            color: context.colors.textMain.withOpacity(0.7),
             fontSize: 14,
           ),
         ),

@@ -61,12 +61,12 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
         title: Text(
           _recipe.name,
           style: TextStyle(
-            color: AppColors.textMain,
+            color: context.colors.textMain,
             fontWeight: FontWeight.w800,
           ),
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: AppColors.textMain),
+          icon: Icon(Icons.arrow_back, color: context.colors.textMain),
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
@@ -78,13 +78,13 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                 height: 20,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  color: AppColors.primary,
+                  color: context.colors.primary,
                 ),
               ),
             )
           else
             IconButton(
-              icon: Icon(Icons.edit_outlined, color: AppColors.primary),
+              icon: Icon(Icons.edit_outlined, color: context.colors.primary),
               onPressed: _editRecipe,
             ),
         ],
@@ -101,7 +101,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                 Text(
                   'INGREDIENTES',
                   style: TextStyle(
-                    color: AppColors.secondary,
+                    color: context.colors.secondary,
                     fontSize: 12,
                     fontWeight: FontWeight.w800,
                     letterSpacing: 1.2,
@@ -111,7 +111,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                 Text(
                   '${_recipe.ingredients.length}',
                   style: TextStyle(
-                    color: AppColors.secondary,
+                    color: context.colors.secondary,
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                   ),
@@ -121,7 +121,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                   Text(
                     '${_recipe.servings} porciones',
                     style: TextStyle(
-                      color: AppColors.secondary,
+                      color: context.colors.secondary,
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                     ),
@@ -166,7 +166,7 @@ class _MacroTotalCard extends StatelessWidget {
                 icon: Icons.menu_book,
                 size: 48,
                 borderRadius: 16,
-                borderColor: AppColors.primary,
+                borderColor: context.colors.primary,
               ),
               SizedBox(width: 14),
               Expanded(
@@ -176,7 +176,7 @@ class _MacroTotalCard extends StatelessWidget {
                     Text(
                       recipe.name,
                       style: TextStyle(
-                        color: AppColors.textMain,
+                        color: context.colors.textMain,
                         fontSize: 20,
                         fontWeight: FontWeight.w900,
                       ),
@@ -186,7 +186,7 @@ class _MacroTotalCard extends StatelessWidget {
                       Text(
                         '${recipe.servings} porciones',
                         style: TextStyle(
-                          color: AppColors.secondary,
+                          color: context.colors.secondary,
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
                         ),
@@ -247,7 +247,7 @@ class _MacroBlock extends StatelessWidget {
             Text(
               value,
               style: TextStyle(
-                color: AppColors.textMain,
+                color: context.colors.textMain,
                 fontSize: 13,
                 fontWeight: FontWeight.w900,
               ),
@@ -257,7 +257,7 @@ class _MacroBlock extends StatelessWidget {
             Text(
               label.toUpperCase(),
               style: TextStyle(
-                color: AppColors.secondary,
+                color: context.colors.secondary,
                 fontSize: 9,
                 fontWeight: FontWeight.w800,
                 letterSpacing: 0.5,
@@ -303,7 +303,7 @@ class _IngredientDetailCard extends StatelessWidget {
                 Text(
                   ingredient.foodName,
                   style: TextStyle(
-                    color: AppColors.textMain,
+                    color: context.colors.textMain,
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
                   ),
@@ -316,7 +316,7 @@ class _IngredientDetailCard extends StatelessWidget {
                   'C ${_f(ingredient.carbs)}g · '
                   'G ${_f(ingredient.fats)}g',
                   style: TextStyle(
-                    color: AppColors.secondary,
+                    color: context.colors.secondary,
                     fontSize: 11,
                   ),
                 ),

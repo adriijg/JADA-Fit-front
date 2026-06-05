@@ -42,11 +42,11 @@ class _MyFoodsScreenState extends State<MyFoodsScreen> {
       builder: (ctx) => AlertDialog(
         title: Text(
           'Eliminar alimento',
-          style: TextStyle(color: AppColors.textMain),
+          style: TextStyle(color: context.colors.textMain),
         ),
         content: Text(
           'Se eliminará "${food.name}" de tus alimentos.\n¿Continuar?',
-          style: TextStyle(color: AppColors.textMain),
+          style: TextStyle(color: context.colors.textMain),
         ),
         actions: [
           TextButton(
@@ -104,24 +104,24 @@ class _MyFoodsScreenState extends State<MyFoodsScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        iconTheme: IconThemeData(color: AppColors.textMain),
+        iconTheme: IconThemeData(color: context.colors.textMain),
         title: Text(
           'Mis Alimentos',
           style: TextStyle(
-            color: AppColors.textMain,
+            color: context.colors.textMain,
             fontWeight: FontWeight.w700,
             letterSpacing: 1,
           ),
         ),
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator(color: AppColors.primary))
+          ? Center(child: CircularProgressIndicator(color: context.colors.primary))
           : _foods.isEmpty
               ? Center(
                   child: Text(
                     'Aún no tienes alimentos personalizados',
                     style: TextStyle(
-                      color: AppColors.textMain.withOpacity(0.45),
+                      color: context.colors.textMain.withOpacity(0.45),
                       fontSize: 14,
                     ),
                   ),
@@ -135,10 +135,10 @@ class _MyFoodsScreenState extends State<MyFoodsScreen> {
                     return Container(
                       padding: EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: AppColors.surface,
+                        color: context.colors.surface,
                         borderRadius: BorderRadius.circular(18),
                         border: Border.all(
-                          color: AppColors.divider.withOpacity(0.4),
+                          color: context.colors.divider.withOpacity(0.4),
                           width: 0.7,
                         ),
                       ),
@@ -148,12 +148,12 @@ class _MyFoodsScreenState extends State<MyFoodsScreen> {
                             width: 42,
                             height: 42,
                             decoration: BoxDecoration(
-                              color: AppColors.primary.withOpacity(0.15),
+                              color: context.colors.primary.withOpacity(0.15),
                               borderRadius: BorderRadius.circular(14),
                             ),
                             child: Icon(
                               Icons.restaurant,
-                              color: AppColors.primary,
+                              color: context.colors.primary,
                               size: 20,
                             ),
                           ),
@@ -165,7 +165,7 @@ class _MyFoodsScreenState extends State<MyFoodsScreen> {
                                 Text(
                                   food.name,
                                   style: TextStyle(
-                                    color: AppColors.textMain,
+                                    color: context.colors.textMain,
                                     fontSize: 14,
                                     fontWeight: FontWeight.w800,
                                   ),
@@ -177,7 +177,7 @@ class _MyFoodsScreenState extends State<MyFoodsScreen> {
                                   'C ${food.carbsPer100g.toInt()}g \u00b7 '
                                   'G ${food.fatsPer100g.toInt()}g / 100g',
                                   style: TextStyle(
-                                    color: AppColors.secondary,
+                                    color: context.colors.secondary,
                                     fontSize: 11,
                                   ),
                                 ),
@@ -196,8 +196,8 @@ class _MyFoodsScreenState extends State<MyFoodsScreen> {
                 ),
       floatingActionButton: FloatingActionButton(
         onPressed: _createFood,
-        backgroundColor: AppColors.primary,
-        foregroundColor: AppColors.background,
+        backgroundColor: context.colors.primary,
+        foregroundColor: context.colors.background,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
@@ -287,7 +287,7 @@ class _CreateFoodSheetState extends State<_CreateFoodSheet> {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: AppColors.divider,
+                color: context.colors.divider,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -296,7 +296,7 @@ class _CreateFoodSheetState extends State<_CreateFoodSheet> {
           Text(
             'NUEVO ALIMENTO',
             style: TextStyle(
-              color: AppColors.secondary,
+              color: context.colors.secondary,
               fontSize: 12,
               fontWeight: FontWeight.w800,
               letterSpacing: 1.2,
@@ -327,8 +327,8 @@ class _CreateFoodSheetState extends State<_CreateFoodSheet> {
             child: ElevatedButton(
               onPressed: _saving ? null : _save,
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.background,
+                backgroundColor: context.colors.primary,
+                foregroundColor: context.colors.background,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
@@ -339,7 +339,7 @@ class _CreateFoodSheetState extends State<_CreateFoodSheet> {
                       height: 20,
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
-                        color: AppColors.background,
+                        color: context.colors.background,
                       ),
                     )
                   : Text(
@@ -372,20 +372,20 @@ class _SheetField extends StatelessWidget {
     return TextField(
       controller: ctrl,
       keyboardType: numeric ? TextInputType.numberWithOptions(decimal: true) : TextInputType.text,
-      style: TextStyle(color: AppColors.textMain, fontSize: 14),
+      style: TextStyle(color: context.colors.textMain, fontSize: 14),
       decoration: InputDecoration(
         filled: true,
-        fillColor: AppColors.inputBackground,
+        fillColor: context.colors.inputBackground,
         labelText: label,
-        labelStyle: TextStyle(color: AppColors.secondary, fontWeight: FontWeight.w600),
+        labelStyle: TextStyle(color: context.colors.secondary, fontWeight: FontWeight.w600),
         hintText: hint,
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(color: AppColors.inputBorder),
+          borderSide: BorderSide(color: context.colors.inputBorder),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(color: AppColors.primary, width: 1.4),
+          borderSide: BorderSide(color: context.colors.primary, width: 1.4),
         ),
         contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       ),

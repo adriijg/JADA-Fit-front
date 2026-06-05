@@ -23,10 +23,10 @@ class SocialLoginButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: AppColors.inputBackground,
+          color: context.colors.inputBackground,
           shape: BoxShape.circle,
           border: Border.all(
-            color: AppColors.divider.withOpacity(0.7),
+            color: context.colors.divider.withOpacity(0.7),
             width: 1.2,
           ),
 

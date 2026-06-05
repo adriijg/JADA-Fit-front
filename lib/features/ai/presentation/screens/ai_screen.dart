@@ -141,13 +141,13 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
       padding: EdgeInsets.fromLTRB(20, 8, 16, 8),
       child: Row(
         children: [
-          Icon(Icons.auto_awesome, color: AppColors.primary, size: 20),
+          Icon(Icons.auto_awesome, color: context.colors.primary, size: 20),
           SizedBox(width: 10),
           Expanded(
             child: Text(
               aiProvider.currentSessionTitle ?? 'Asistente IA',
               style: TextStyle(
-                color: AppColors.textMain,
+                color: context.colors.textMain,
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
               ),
@@ -186,13 +186,13 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
             width: 72,
             height: 72,
             decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.1),
+              color: context.colors.primary.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(
               Icons.auto_awesome,
               size: 36,
-              color: AppColors.primary,
+              color: context.colors.primary,
             ),
           ),
         ),
@@ -201,7 +201,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
           child: Text(
             'Asistente IA',
             style: TextStyle(
-              color: AppColors.textMain,
+              color: context.colors.textMain,
               fontSize: 20,
               fontWeight: FontWeight.w700,
             ),
@@ -212,7 +212,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
           child: Text(
             'Pregúntame sobre rutinas, nutrición o cualquier duda fitness.',
             style: TextStyle(
-              color: AppColors.textMain.withValues(alpha: 0.6),
+              color: context.colors.textMain.withValues(alpha: 0.6),
               fontSize: 14,
               height: 1.5,
             ),
@@ -229,7 +229,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
     return Padding(
       padding: EdgeInsets.only(bottom: 10),
       child: Material(
-        color: AppColors.surface,
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(16),
         child: InkWell(
           borderRadius: BorderRadius.circular(16),
@@ -240,7 +240,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: AppColors.divider.withValues(alpha: 0.3),
+                color: context.colors.divider.withValues(alpha: 0.3),
                 width: 0.7,
               ),
             ),
@@ -249,14 +249,14 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
                 Icon(
                   Icons.lightbulb_outline,
                   size: 18,
-                  color: AppColors.primary.withValues(alpha: 0.7),
+                  color: context.colors.primary.withValues(alpha: 0.7),
                 ),
                 SizedBox(width: 12),
                 Expanded(
                   child: Text(
                     text,
                     style: TextStyle(
-                      color: AppColors.textMain,
+                      color: context.colors.textMain,
                       fontSize: 13,
                       height: 1.4,
                     ),
@@ -304,7 +304,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               decoration: BoxDecoration(
-                color: AppColors.surface,
+                color: context.colors.surface,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(18),
                   topRight: Radius.circular(18),
@@ -312,7 +312,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
                   bottomLeft: Radius.circular(4),
                 ),
                 border: Border.all(
-                  color: AppColors.divider.withValues(alpha: 0.3),
+                  color: context.colors.divider.withValues(alpha: 0.3),
                   width: 0.7,
                 ),
               ),
@@ -328,7 +328,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
                           width: 8,
                           height: 8,
                           decoration: BoxDecoration(
-                            color: AppColors.primary
+                            color: context.colors.primary
                                 .withValues(alpha: _pulseAnimation.value - (i * 0.15).clamp(0.0, 1.0)),
                             shape: BoxShape.circle,
                           ),
@@ -357,14 +357,14 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
             label: Text(
               s,
               style: TextStyle(
-                color: AppColors.primary,
+                color: context.colors.primary,
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
               ),
             ),
-            backgroundColor: AppColors.primary.withValues(alpha: 0.08),
+            backgroundColor: context.colors.primary.withValues(alpha: 0.08),
             side: BorderSide(
-              color: AppColors.primary.withValues(alpha: 0.2),
+              color: context.colors.primary.withValues(alpha: 0.2),
               width: 0.5,
             ),
             shape: RoundedRectangleBorder(
@@ -394,7 +394,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
               ),
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
-                color: isUser ? AppColors.primary : AppColors.surface,
+                color: isUser ? context.colors.primary : context.colors.surface,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(18),
                   topRight: Radius.circular(18),
@@ -404,7 +404,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
                 border: isUser
                     ? null
                     : Border.all(
-                        color: AppColors.divider.withValues(alpha: 0.3),
+                        color: context.colors.divider.withValues(alpha: 0.3),
                         width: 0.7,
                       ),
               ),
@@ -415,7 +415,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
                       ? Text(
                           message.text,
                           style: TextStyle(
-                            color: AppColors.background,
+                            color: context.colors.background,
                             fontSize: 14,
                             height: 1.5,
                           ),
@@ -424,57 +424,57 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
                           data: message.text,
                           styleSheet: MarkdownStyleSheet(
                             p: TextStyle(
-                              color: AppColors.textMain,
+                              color: context.colors.textMain,
                               fontSize: 14,
                               height: 1.5,
                             ),
                             strong: TextStyle(
-                              color: AppColors.textMain,
+                              color: context.colors.textMain,
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                             ),
                             em: TextStyle(
-                              color: AppColors.textMain,
+                              color: context.colors.textMain,
                               fontSize: 14,
                               fontStyle: FontStyle.italic,
                             ),
                             code: TextStyle(
-                              color: AppColors.secondary,
+                              color: context.colors.secondary,
                               fontSize: 13,
                               backgroundColor: Color(0x3300E5FF),
                             ),
                             codeblockDecoration: BoxDecoration(
-                              color: AppColors.inputBackground,
+                              color: context.colors.inputBackground,
                               borderRadius: BorderRadius.circular(8),
                               border: Border.all(
-                                color: AppColors.divider.withValues(alpha: 0.3),
+                                color: context.colors.divider.withValues(alpha: 0.3),
                               ),
                             ),
                             blockquoteDecoration: BoxDecoration(
                               border: Border(
                                 left: BorderSide(
-                                  color: AppColors.primary.withValues(alpha: 0.5),
+                                  color: context.colors.primary.withValues(alpha: 0.5),
                                   width: 3,
                                 ),
                               ),
-                              color: AppColors.inputBackground,
+                              color: context.colors.inputBackground,
                             ),
                             listBullet: TextStyle(
-                              color: AppColors.textMain,
+                              color: context.colors.textMain,
                               fontSize: 14,
                             ),
                             h1: TextStyle(
-                              color: AppColors.textMain,
+                              color: context.colors.textMain,
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
                             h2: TextStyle(
-                              color: AppColors.textMain,
+                              color: context.colors.textMain,
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
                             h3: TextStyle(
-                              color: AppColors.textMain,
+                              color: context.colors.textMain,
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
                             ),
@@ -518,7 +518,7 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
           child: Icon(
             icon,
             size: 14,
-            color: AppColors.textMain.withValues(alpha: 0.5),
+            color: context.colors.textMain.withValues(alpha: 0.5),
           ),
         ),
       ),
@@ -530,13 +530,13 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
       width: 32,
       height: 32,
       decoration: BoxDecoration(
-        color: isUser ? AppColors.secondary : AppColors.primary,
+        color: isUser ? context.colors.secondary : context.colors.primary,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Icon(
         isUser ? Icons.person : Icons.auto_awesome,
         size: 18,
-        color: AppColors.background,
+        color: context.colors.background,
       ),
     );
   }
@@ -545,9 +545,9 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
     return Container(
       padding: EdgeInsets.fromLTRB(0, 8, 0, bottomInset),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.colors.surface,
         border: Border(
-          top: BorderSide(color: AppColors.divider, width: 0.5),
+          top: BorderSide(color: context.colors.divider, width: 0.5),
         ),
       ),
       child: Row(
@@ -555,29 +555,29 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                color: AppColors.inputBackground,
+                color: context.colors.inputBackground,
                 borderRadius: BorderRadius.circular(24),
                 border: Border.all(
-                  color: AppColors.inputBorder.withValues(alpha: 0.38),
+                  color: context.colors.inputBorder.withValues(alpha: 0.38),
                   width: 1,
                 ),
               ),
               child: TextField(
                 controller: _messageController,
                 focusNode: _focusNode,
-                cursorColor: AppColors.primary,
+                cursorColor: context.colors.primary,
                 textInputAction: TextInputAction.send,
                 onSubmitted: (_) => _sendMessage(),
                 maxLines: 4,
                 minLines: 1,
                 style: TextStyle(
-                  color: AppColors.textMain,
+                  color: context.colors.textMain,
                   fontSize: 14,
                 ),
                 decoration: InputDecoration(
                   hintText: 'Escribe tu mensaje...',
                   hintStyle: TextStyle(
-                    color: AppColors.textMain.withValues(alpha: 0.6),
+                    color: context.colors.textMain.withValues(alpha: 0.6),
                     fontSize: 13,
                   ),
                   border: InputBorder.none,
@@ -592,13 +592,13 @@ class _AiScreenState extends State<AiScreen> with TickerProviderStateMixin {
           SizedBox(width: 10),
           Container(
             decoration: BoxDecoration(
-              color: isLoading ? AppColors.divider : AppColors.primary,
+              color: isLoading ? context.colors.divider : context.colors.primary,
               shape: BoxShape.circle,
             ),
             child: IconButton(
               onPressed: isLoading ? null : _sendMessage,
               icon: Icon(Icons.send_rounded),
-              color: AppColors.background,
+              color: context.colors.background,
               iconSize: 20,
               splashRadius: 22,
             ),
@@ -618,7 +618,7 @@ class _HeaderButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.surface,
+      color: context.colors.surface,
       borderRadius: BorderRadius.circular(12),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
@@ -629,11 +629,11 @@ class _HeaderButton extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: AppColors.divider.withValues(alpha: 0.3),
+              color: context.colors.divider.withValues(alpha: 0.3),
               width: 0.7,
             ),
           ),
-          child: Icon(icon, size: 20, color: AppColors.textMain),
+          child: Icon(icon, size: 20, color: context.colors.textMain),
         ),
       ),
     );
@@ -666,7 +666,7 @@ class _ChatHistorySheet extends StatelessWidget {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: AppColors.divider,
+                color: context.colors.divider,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -675,7 +675,7 @@ class _ChatHistorySheet extends StatelessWidget {
           Text(
             'HISTORIAL',
             style: TextStyle(
-              color: AppColors.secondary,
+              color: context.colors.secondary,
               fontSize: 12,
               fontWeight: FontWeight.w800,
               letterSpacing: 1.2,
@@ -687,13 +687,13 @@ class _ChatHistorySheet extends StatelessWidget {
                 ? Center(
                     child: Text(
                       'No hay conversaciones guardadas',
-                      style: TextStyle(color: AppColors.textMain),
+                      style: TextStyle(color: context.colors.textMain),
                     ),
                   )
                 : ListView.separated(
                     itemCount: sessions.length,
                     separatorBuilder: (_, _) => Divider(
-                      color: AppColors.divider,
+                      color: context.colors.divider,
                       height: 1,
                     ),
                     itemBuilder: (context, index) {
@@ -707,16 +707,16 @@ class _ChatHistorySheet extends StatelessWidget {
                         leading: Icon(
                           Icons.chat_rounded,
                           color: isCurrent
-                              ? AppColors.primary
-                              : AppColors.textMain.withValues(alpha: 0.5),
+                              ? context.colors.primary
+                              : context.colors.textMain.withValues(alpha: 0.5),
                           size: 22,
                         ),
                         title: Text(
                           session.title,
                           style: TextStyle(
                             color: isCurrent
-                                ? AppColors.primary
-                                : AppColors.textMain,
+                                ? context.colors.primary
+                                : context.colors.textMain,
                             fontSize: 14,
                             fontWeight: isCurrent ? FontWeight.w600 : FontWeight.normal,
                           ),
@@ -725,7 +725,7 @@ class _ChatHistorySheet extends StatelessWidget {
                         subtitle: Text(
                           '${session.messages.length} mensajes',
                           style: TextStyle(
-                            color: AppColors.textMain.withValues(alpha: 0.5),
+                            color: context.colors.textMain.withValues(alpha: 0.5),
                             fontSize: 12,
                           ),
                         ),
@@ -733,7 +733,7 @@ class _ChatHistorySheet extends StatelessWidget {
                           icon: Icon(
                             Icons.delete_outline,
                             size: 20,
-                            color: AppColors.textMain.withValues(alpha: 0.4),
+                            color: context.colors.textMain.withValues(alpha: 0.4),
                           ),
                           onPressed: () => onDelete(index),
                         ),

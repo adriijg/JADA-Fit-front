@@ -71,10 +71,10 @@ class _SocialTopBar extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 0, vertical: 4),
       decoration: BoxDecoration(
-        color: AppColors.surface.withOpacity(0.7),
+        color: context.colors.surface.withOpacity(0.7),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: AppColors.divider.withOpacity(0.3),
+          color: context.colors.divider.withOpacity(0.3),
           width: 0.5,
         ),
       ),
@@ -135,7 +135,7 @@ class _TabButton extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: 10),
           decoration: BoxDecoration(
             color: isSelected
-                ? AppColors.primary.withOpacity(0.15)
+                ? context.colors.primary.withOpacity(0.15)
                 : Colors.transparent,
             borderRadius: BorderRadius.circular(12),
           ),
@@ -144,14 +144,14 @@ class _TabButton extends StatelessWidget {
             children: [
               Icon(
                 icon,
-                color: isSelected ? AppColors.primary : AppColors.secondary,
+                color: isSelected ? context.colors.primary : context.colors.secondary,
                 size: 22,
               ),
               SizedBox(height: 3),
               Text(
                 label,
                 style: TextStyle(
-                  color: isSelected ? AppColors.primary : AppColors.secondary,
+                  color: isSelected ? context.colors.primary : context.colors.secondary,
                   fontSize: 10,
                   fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
                   letterSpacing: 0.3,
@@ -226,7 +226,7 @@ class _FeedTabState extends State<_FeedTab> {
   Widget build(BuildContext context) {
     if (_isLoading) {
       return Center(
-        child: CircularProgressIndicator(color: AppColors.primary),
+        child: CircularProgressIndicator(color: context.colors.primary),
       );
     }
 
@@ -236,7 +236,7 @@ class _FeedTabState extends State<_FeedTab> {
 
     return RefreshIndicator(
       onRefresh: _loadFeed,
-      color: AppColors.primary,
+      color: context.colors.primary,
       child: _posts.isEmpty && _stories.isEmpty
           ? _buildEmptyFeed()
           : _buildFeedContent(),
@@ -256,12 +256,12 @@ class _FeedTabState extends State<_FeedTab> {
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.1),
+                    color: context.colors.primary.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(24),
                   ),
                   child: Icon(
                     Icons.photo_camera_outlined,
-                    color: AppColors.primary,
+                    color: context.colors.primary,
                     size: 36,
                   ),
                 ),
@@ -269,7 +269,7 @@ class _FeedTabState extends State<_FeedTab> {
                 Text(
                   'Tu feed está vacío',
                   style: TextStyle(
-                    color: AppColors.textMain,
+                    color: context.colors.textMain,
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
                   ),
@@ -279,7 +279,7 @@ class _FeedTabState extends State<_FeedTab> {
                   'Sigue a otros usuarios para ver sus\npublicaciones e historias aquí.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: AppColors.secondary,
+                    color: context.colors.secondary,
                     fontSize: 14,
                     height: 1.5,
                   ),
@@ -366,13 +366,13 @@ class _StoriesBar extends StatelessWidget {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       gradient: LinearGradient(
-                        colors: [AppColors.primary, AppColors.secondary],
+                        colors: [context.colors.primary, context.colors.secondary],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.primary.withOpacity(0.3),
+                          color: context.colors.primary.withOpacity(0.3),
                           blurRadius: 12,
                           offset: Offset(0, 4),
                         ),
@@ -382,7 +382,7 @@ class _StoriesBar extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: AppColors.background,
+                        color: context.colors.background,
                       ),
                       padding: EdgeInsets.all(2),
                       child: CircleAvatar(
@@ -397,7 +397,7 @@ class _StoriesBar extends StatelessWidget {
                             ? Text(
                                 story.author.username[0].toUpperCase(),
                                 style: TextStyle(
-                                  color: AppColors.primary,
+                                  color: context.colors.primary,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18,
                                 ),
@@ -412,7 +412,7 @@ class _StoriesBar extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: AppColors.textMain,
+                      color: context.colors.textMain,
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
                     ),
@@ -438,7 +438,7 @@ class _PostCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard(
       borderRadius: 20,
-      borderColor: AppColors.divider.withOpacity(0.3),
+      borderColor: context.colors.divider.withOpacity(0.3),
       borderWidth: 0.5,
       padding: EdgeInsets.zero,
       child: Column(
@@ -451,7 +451,7 @@ class _PostCard extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 18,
-                  backgroundColor: AppColors.primary.withOpacity(0.2),
+                  backgroundColor: context.colors.primary.withOpacity(0.2),
                   backgroundImage: post.author.profilePictureUrl != null
                       ? NetworkImage(
                           ImageUrlResolver.resolve(
@@ -463,7 +463,7 @@ class _PostCard extends StatelessWidget {
                       ? Text(
                           post.author.username[0].toUpperCase(),
                           style: TextStyle(
-                            color: AppColors.primary,
+                            color: context.colors.primary,
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
                           ),
@@ -478,7 +478,7 @@ class _PostCard extends StatelessWidget {
                       Text(
                         post.author.username,
                         style: TextStyle(
-                          color: AppColors.textMain,
+                          color: context.colors.textMain,
                           fontWeight: FontWeight.w700,
                           fontSize: 14,
                         ),
@@ -486,7 +486,7 @@ class _PostCard extends StatelessWidget {
                       Text(
                         _timeAgo(post.createdAt),
                         style: TextStyle(
-                          color: AppColors.secondary.withOpacity(0.7),
+                          color: context.colors.secondary.withOpacity(0.7),
                           fontSize: 11,
                         ),
                       ),
@@ -495,7 +495,7 @@ class _PostCard extends StatelessWidget {
                 ),
                 Icon(
                   Icons.more_horiz,
-                  color: AppColors.secondary.withOpacity(0.5),
+                  color: context.colors.secondary.withOpacity(0.5),
                   size: 20,
                 ),
               ],
@@ -510,11 +510,11 @@ class _PostCard extends StatelessWidget {
                 builder: (context) {
                   Widget errorPlaceholder() {
                     return Container(
-                      color: AppColors.inputBackground,
+                      color: context.colors.inputBackground,
                       child: Center(
                         child: Icon(
                           Icons.image_not_supported_outlined,
-                          color: AppColors.secondary,
+                          color: context.colors.secondary,
                           size: 48,
                         ),
                       ),
@@ -528,10 +528,10 @@ class _PostCard extends StatelessWidget {
                   ) {
                     if (loadingProgress == null) return child;
                     return Container(
-                      color: AppColors.inputBackground,
+                      color: context.colors.inputBackground,
                       child: Center(
                         child: CircularProgressIndicator(
-                          color: AppColors.primary,
+                          color: context.colors.primary,
                           strokeWidth: 2,
                         ),
                       ),
@@ -568,7 +568,7 @@ class _PostCard extends StatelessWidget {
                     TextSpan(
                       text: '${post.author.username} ',
                       style: TextStyle(
-                        color: AppColors.textMain,
+                        color: context.colors.textMain,
                         fontWeight: FontWeight.w700,
                         fontSize: 13,
                       ),
@@ -576,7 +576,7 @@ class _PostCard extends StatelessWidget {
                     TextSpan(
                       text: post.caption!,
                       style: TextStyle(
-                        color: AppColors.textMain,
+                        color: context.colors.textMain,
                         fontSize: 13,
                         height: 1.4,
                       ),
@@ -625,7 +625,7 @@ class _ActionIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Icon(icon, color: AppColors.textMain.withOpacity(0.8), size: 22);
+    return Icon(icon, color: context.colors.textMain.withOpacity(0.8), size: 22);
   }
 }
 
@@ -654,15 +654,15 @@ class _ErrorView extends StatelessWidget {
             Text(
               message,
               textAlign: TextAlign.center,
-              style: TextStyle(color: AppColors.secondary, fontSize: 14),
+              style: TextStyle(color: context.colors.secondary, fontSize: 14),
             ),
             SizedBox(height: 20),
             TextButton.icon(
               onPressed: onRetry,
-              icon: Icon(Icons.refresh, color: AppColors.primary),
+              icon: Icon(Icons.refresh, color: context.colors.primary),
               label: Text(
                 'Reintentar',
-                style: TextStyle(color: AppColors.primary),
+                style: TextStyle(color: context.colors.primary),
               ),
             ),
           ],
@@ -723,7 +723,7 @@ class _PiquesTabState extends State<_PiquesTab> {
   Widget build(BuildContext context) {
     if (_isLoadingChallenges) {
       return Center(
-        child: CircularProgressIndicator(color: AppColors.primary),
+        child: CircularProgressIndicator(color: context.colors.primary),
       );
     }
 
@@ -735,13 +735,13 @@ class _PiquesTabState extends State<_PiquesTab> {
             Icon(
               Icons.emoji_events_outlined,
               size: 64,
-              color: AppColors.secondary,
+              color: context.colors.secondary,
             ),
             SizedBox(height: 16),
             Text(
               'No tienes piques activos.',
               style: TextStyle(
-                color: AppColors.textMain,
+                color: context.colors.textMain,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
@@ -749,14 +749,14 @@ class _PiquesTabState extends State<_PiquesTab> {
             SizedBox(height: 8),
             Text(
               '¡Desafía a tus amigos para ver quién levanta más!',
-              style: TextStyle(color: AppColors.secondary),
+              style: TextStyle(color: context.colors.secondary),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 24),
             ElevatedButton(
               onPressed: _showUpdateRecordDialog,
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
+                backgroundColor: context.colors.primary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -770,7 +770,7 @@ class _PiquesTabState extends State<_PiquesTab> {
 
     return RefreshIndicator(
       onRefresh: _loadChallenges,
-      color: AppColors.primary,
+      color: context.colors.primary,
       child: ListView.builder(
         padding: EdgeInsets.all(16),
         itemCount: _myChallenges.length + 1,
@@ -784,17 +784,17 @@ class _PiquesTabState extends State<_PiquesTab> {
                   Text(
                     'Tus Piques',
                     style: TextStyle(
-                      color: AppColors.textMain,
+                      color: context.colors.textMain,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   TextButton.icon(
                     onPressed: _showUpdateRecordDialog,
-                    icon: Icon(Icons.add, color: AppColors.primary),
+                    icon: Icon(Icons.add, color: context.colors.primary),
                     label: Text(
                       'Mis Marcas',
-                      style: TextStyle(color: AppColors.primary),
+                      style: TextStyle(color: context.colors.primary),
                     ),
                   ),
                 ],
@@ -811,7 +811,7 @@ class _PiquesTabState extends State<_PiquesTab> {
 
   Widget _buildChallengeCard(Challenge challenge) {
     return Card(
-      color: AppColors.surface,
+      color: context.colors.surface,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       margin: EdgeInsets.only(bottom: 16),
       child: Padding(
@@ -822,11 +822,11 @@ class _PiquesTabState extends State<_PiquesTab> {
             Row(
               children: [
                 CircleAvatar(
-                  backgroundColor: AppColors.primary.withOpacity(0.1),
+                  backgroundColor: context.colors.primary.withOpacity(0.1),
                   child: Text(
                     challenge.challenger.username[0].toUpperCase(),
                     style: TextStyle(
-                      color: AppColors.primary,
+                      color: context.colors.primary,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -835,17 +835,17 @@ class _PiquesTabState extends State<_PiquesTab> {
                 Text(
                   'vs',
                   style: TextStyle(
-                    color: AppColors.secondary,
+                    color: context.colors.secondary,
                     fontStyle: FontStyle.italic,
                   ),
                 ),
                 SizedBox(width: 12),
                 CircleAvatar(
-                  backgroundColor: AppColors.primary.withOpacity(0.1),
+                  backgroundColor: context.colors.primary.withOpacity(0.1),
                   child: Text(
                     challenge.challenged.username[0].toUpperCase(),
                     style: TextStyle(
-                      color: AppColors.primary,
+                      color: context.colors.primary,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -858,7 +858,7 @@ class _PiquesTabState extends State<_PiquesTab> {
             Text(
               challenge.exerciseName,
               style: TextStyle(
-                color: AppColors.textMain,
+                color: context.colors.textMain,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
@@ -924,14 +924,14 @@ class _PiquesTabState extends State<_PiquesTab> {
       children: [
         Text(
           username,
-          style: TextStyle(color: AppColors.secondary, fontSize: 12),
+          style: TextStyle(color: context.colors.secondary, fontSize: 12),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
         Text(
           '${weight.toStringAsFixed(1)} kg',
           style: TextStyle(
-            color: AppColors.textMain,
+            color: context.colors.textMain,
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
@@ -957,7 +957,7 @@ class _PiquesTabState extends State<_PiquesTab> {
         text = 'RECHAZADO';
         break;
       case ChallengeStatus.FINISHED:
-        color = AppColors.primary;
+        color = context.colors.primary;
         text = 'FINALIZADO';
         break;
     }
@@ -1011,7 +1011,7 @@ class _PiquesTabState extends State<_PiquesTab> {
       builder: (context) => AlertDialog(
         title: Text(
           'Actualizar Marca Personal',
-          style: TextStyle(color: AppColors.textMain),
+          style: TextStyle(color: context.colors.textMain),
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -1020,19 +1020,19 @@ class _PiquesTabState extends State<_PiquesTab> {
               controller: exerciseController,
               decoration: InputDecoration(
                 labelText: 'Ejercicio (ej: Press Banca)',
-                labelStyle: TextStyle(color: AppColors.secondary),
+                labelStyle: TextStyle(color: context.colors.secondary),
               ),
-              style: TextStyle(color: AppColors.textMain),
+              style: TextStyle(color: context.colors.textMain),
             ),
             SizedBox(height: 16),
             TextField(
               controller: weightController,
               decoration: InputDecoration(
                 labelText: 'Peso (kg)',
-                labelStyle: TextStyle(color: AppColors.secondary),
+                labelStyle: TextStyle(color: context.colors.secondary),
               ),
               keyboardType: TextInputType.number,
-              style: TextStyle(color: AppColors.textMain),
+              style: TextStyle(color: context.colors.textMain),
             ),
           ],
         ),
@@ -1041,7 +1041,7 @@ class _PiquesTabState extends State<_PiquesTab> {
             onPressed: () => Navigator.pop(context),
             child: Text(
               'Cancelar',
-              style: TextStyle(color: AppColors.secondary),
+              style: TextStyle(color: context.colors.secondary),
             ),
           ),
           ElevatedButton(
@@ -1065,7 +1065,7 @@ class _PiquesTabState extends State<_PiquesTab> {
                 }
               }
             },
-            style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
+            style: ElevatedButton.styleFrom(backgroundColor: context.colors.primary),
             child: Text('Guardar'),
           ),
         ],

@@ -167,9 +167,9 @@ class _RegisterMealScreenState extends State<RegisterMealScreen> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: ColorScheme.dark(
-              primary: AppColors.primary,
-              surface: AppColors.surface,
-              onSurface: AppColors.textMain,
+              primary: context.colors.primary,
+              surface: context.colors.surface,
+              onSurface: context.colors.textMain,
             ),
             dialogTheme: DialogThemeData(
             ),
@@ -321,12 +321,12 @@ class _RegisterMealScreenState extends State<RegisterMealScreen> {
       appBar: AppBar(
         elevation: 0,
         iconTheme: IconThemeData(
-          color: AppColors.textMain,
+          color: context.colors.textMain,
         ),
         title: Text(
           'Registrar comida',
           style: TextStyle(
-            color: AppColors.textMain,
+            color: context.colors.textMain,
             fontWeight: FontWeight.w700,
             letterSpacing: 1,
           ),
@@ -395,10 +395,10 @@ class _RegisterMealScreenState extends State<RegisterMealScreen> {
                 child: ElevatedButton(
                   onPressed: isLoading ? null : _saveMeal,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: AppColors.background,
+                    backgroundColor: context.colors.primary,
+                    foregroundColor: context.colors.background,
                     elevation: 12,
-                    shadowColor: AppColors.primary.withOpacity(0.32),
+                    shadowColor: context.colors.primary.withOpacity(0.32),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24),
                     ),
@@ -409,7 +409,7 @@ class _RegisterMealScreenState extends State<RegisterMealScreen> {
                           height: 22,
                           child: CircularProgressIndicator(
                             strokeWidth: 2.4,
-                            color: AppColors.background,
+                            color: context.colors.background,
                           ),
                         )
                       : Row(
@@ -458,10 +458,10 @@ class _ManualFoodCard extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
-          color: AppColors.primary.withOpacity(0.28),
+          color: context.colors.primary.withOpacity(0.28),
           width: 0.8,
         ),
       ),
@@ -470,12 +470,12 @@ class _ManualFoodCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(Icons.create, color: AppColors.primary, size: 22),
+              Icon(Icons.create, color: context.colors.primary, size: 22),
               SizedBox(width: 10),
               Text(
                 'NUEVO ALIMENTO',
                 style: TextStyle(
-                  color: AppColors.secondary,
+                  color: context.colors.secondary,
                   fontSize: 11,
                   fontWeight: FontWeight.w800,
                   letterSpacing: 1,
@@ -558,28 +558,28 @@ class _ManualField extends StatelessWidget {
       controller: controller,
       keyboardType: keyboardType ?? TextInputType.text,
       style: TextStyle(
-        color: AppColors.textMain,
+        color: context.colors.textMain,
         fontSize: 15,
       ),
       decoration: InputDecoration(
         filled: true,
-        fillColor: AppColors.inputBackground,
+        fillColor: context.colors.inputBackground,
         labelText: label,
         labelStyle: TextStyle(
-          color: AppColors.secondary,
+          color: context.colors.secondary,
           fontWeight: FontWeight.w600,
         ),
         hintText: hint,
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
           borderSide: BorderSide(
-            color: AppColors.inputBorder,
+            color: context.colors.inputBorder,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
           borderSide: BorderSide(
-            color: AppColors.primary,
+            color: context.colors.primary,
             width: 1.4,
           ),
         ),
@@ -620,10 +620,10 @@ class _FoodHeaderCard extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
-          color: AppColors.primary.withOpacity(0.28),
+          color: context.colors.primary.withOpacity(0.28),
           width: 0.8,
         ),
       ),
@@ -632,14 +632,14 @@ class _FoodHeaderCard extends StatelessWidget {
         children: [
           Icon(
             Icons.restaurant_menu,
-            color: AppColors.primary,
+            color: context.colors.primary,
             size: 42,
           ),
           SizedBox(height: 18),
           Text(
             food.name,
             style: TextStyle(
-              color: AppColors.textMain,
+              color: context.colors.textMain,
               fontSize: 23,
               fontWeight: FontWeight.w900,
               height: 1.18,
@@ -649,7 +649,7 @@ class _FoodHeaderCard extends StatelessWidget {
           Text(
             '$brand · ${_sourceLabel(food.source)}',
             style: TextStyle(
-              color: AppColors.secondary,
+              color: context.colors.secondary,
               fontSize: 13,
             ),
           ),
@@ -676,37 +676,37 @@ class _QuantityCard extends StatelessWidget {
         keyboardType: TextInputType.numberWithOptions(decimal: true),
         onChanged: onChanged,
         style: TextStyle(
-          color: AppColors.textMain,
+          color: context.colors.textMain,
           fontSize: 15,
         ),
         decoration: InputDecoration(
           filled: true,
-          fillColor: AppColors.inputBackground,
+          fillColor: context.colors.inputBackground,
           labelText: 'Cantidad',
           labelStyle: TextStyle(
-            color: AppColors.secondary,
+            color: context.colors.secondary,
             fontWeight: FontWeight.w600,
           ),
           hintText: 'Ej: 150',
           prefixIcon: Icon(
             Icons.scale_outlined,
-            color: AppColors.primary,
+            color: context.colors.primary,
           ),
           suffixText: 'g',
           suffixStyle: TextStyle(
-            color: AppColors.secondary,
+            color: context.colors.secondary,
             fontWeight: FontWeight.w700,
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(18),
             borderSide: BorderSide(
-              color: AppColors.inputBorder,
+              color: context.colors.inputBorder,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(18),
             borderSide: BorderSide(
-              color: AppColors.primary,
+              color: context.colors.primary,
               width: 1.4,
             ),
           ),
@@ -734,7 +734,7 @@ class _MealTypeCard extends StatelessWidget {
           Text(
             'TIPO DE COMIDA',
             style: TextStyle(
-              color: AppColors.secondary,
+              color: context.colors.secondary,
               fontSize: 11,
               fontWeight: FontWeight.w800,
               letterSpacing: 1,
@@ -758,13 +758,13 @@ class _MealTypeCard extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? AppColors.primary
-                        : AppColors.inputBackground,
+                        ? context.colors.primary
+                        : context.colors.inputBackground,
                     borderRadius: BorderRadius.circular(18),
                     border: Border.all(
                       color: isSelected
-                          ? AppColors.primary
-                          : AppColors.inputBorder,
+                          ? context.colors.primary
+                          : context.colors.inputBorder,
                       width: 0.8,
                     ),
                   ),
@@ -772,8 +772,8 @@ class _MealTypeCard extends StatelessWidget {
                     mealType.label,
                     style: TextStyle(
                       color: isSelected
-                          ? AppColors.background
-                          : AppColors.textMain,
+                          ? context.colors.background
+                          : context.colors.textMain,
                       fontSize: 13,
                       fontWeight: FontWeight.w800,
                     ),
@@ -806,10 +806,10 @@ class _DateCard extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: AppColors.inputBackground,
+            color: context.colors.inputBackground,
             borderRadius: BorderRadius.circular(18),
             border: Border.all(
-              color: AppColors.inputBorder,
+              color: context.colors.inputBorder,
               width: 0.7,
             ),
           ),
@@ -817,21 +817,21 @@ class _DateCard extends StatelessWidget {
             children: [
               Icon(
                 Icons.calendar_month_outlined,
-                color: AppColors.primary,
+                color: context.colors.primary,
               ),
               SizedBox(width: 14),
               Expanded(
                 child: Text(
                   selectedDate,
                   style: TextStyle(
-                    color: AppColors.textMain,
+                    color: context.colors.textMain,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
               Icon(
                 Icons.edit_calendar,
-                color: AppColors.secondary,
+                color: context.colors.secondary,
               ),
             ],
           ),
@@ -857,14 +857,14 @@ class _MacroPreviewCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _Card(
-      borderColor: AppColors.primary.withOpacity(0.28),
+      borderColor: context.colors.primary.withOpacity(0.28),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             'RESUMEN CALCULADO',
             style: TextStyle(
-              color: AppColors.secondary,
+              color: context.colors.secondary,
               fontSize: 11,
               fontWeight: FontWeight.w800,
               letterSpacing: 1,
@@ -932,10 +932,10 @@ class _MacroBox extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: AppColors.inputBackground,
+        color: context.colors.inputBackground,
         borderRadius: BorderRadius.circular(18),
         border: Border.all(
-          color: AppColors.inputBorder,
+          color: context.colors.inputBorder,
           width: 0.7,
         ),
       ),
@@ -943,14 +943,14 @@ class _MacroBox extends StatelessWidget {
         children: [
           Icon(
             icon,
-            color: AppColors.primary,
+            color: context.colors.primary,
             size: 23,
           ),
           SizedBox(height: 10),
           Text(
             value,
             style: TextStyle(
-              color: AppColors.textMain,
+              color: context.colors.textMain,
               fontSize: 16,
               fontWeight: FontWeight.w900,
             ),
@@ -960,7 +960,7 @@ class _MacroBox extends StatelessWidget {
           Text(
             label.toUpperCase(),
             style: TextStyle(
-              color: AppColors.secondary,
+              color: context.colors.secondary,
               fontSize: 10,
               fontWeight: FontWeight.w800,
               letterSpacing: 0.8,
@@ -988,10 +988,10 @@ class _Card extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.all(22),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
-          color: borderColor ?? AppColors.divider.withOpacity(0.4),
+          color: borderColor ?? context.colors.divider.withOpacity(0.4),
           width: 0.7,
         ),
       ),
