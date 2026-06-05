@@ -25,3 +25,4 @@ class PreferencesStorage {
   Future<void> remove(String key) async {
     await _prefs?.remove(key);
   }
+}
