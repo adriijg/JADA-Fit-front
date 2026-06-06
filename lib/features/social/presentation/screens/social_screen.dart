@@ -331,11 +331,14 @@ class _FeedTabState extends State<_FeedTab> {
 
         final postIndex = _stories.isNotEmpty ? index - 1 : index;
         final post = _posts[postIndex];
-        return _PostCard(
-          post: post,
-          isLikeBusy: _likeRequests.contains(post.id),
-          onLike: () => _toggleLike(post),
-          onSend: () => _showSendSheet(post),
+        return Padding(
+          padding: EdgeInsets.only(bottom: 16),
+          child: _PostCard(
+            post: post,
+            isLikeBusy: _likeRequests.contains(post.id),
+            onLike: () => _toggleLike(post),
+            onSend: () => _showSendSheet(post),
+          ),
         );
       },
     );
@@ -819,7 +822,7 @@ class _PostCard extends StatelessWidget {
 
           // Bottom actions bar
           Padding(
-            padding: EdgeInsets.fromLTRB(14, 0, 14, 14),
+            padding: EdgeInsets.fromLTRB(14, 8, 14, 14),
             child: Row(
               children: [
                 _ActionIcon(

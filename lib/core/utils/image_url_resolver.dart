@@ -21,7 +21,10 @@ class ImageUrlResolver {
           ? '/api$trimmedUrl'
           : trimmedUrl;
       final base = ApiConfig.baseUrl;
-      if (kIsWeb) return serverPath;
+      if (kIsWeb) {
+        final origin = Uri.base;
+        return '${origin.scheme}://${origin.host}:${origin.port}$serverPath';
+      }
       final serverRoot = base.endsWith('/api')
           ? base.substring(0, base.length - 4)
           : base;
