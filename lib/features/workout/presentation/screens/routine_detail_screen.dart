@@ -10,7 +10,7 @@ import '../../data/services/completed_storage_service.dart';
 import 'create_routine_screen.dart';
 
 class RoutineDetailScreen extends StatefulWidget {
-  RoutineDetailScreen({super.key, required this.routine});
+  const RoutineDetailScreen({super.key, required this.routine});
 
   final RoutineModel routine;
 

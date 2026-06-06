@@ -5,7 +5,7 @@ import '../../../../core/widgets/app_card.dart';
 import '../../../../l10n/app_localizations.dart';
 
 class GreetingCard extends StatelessWidget {
-  GreetingCard({super.key});
+  const GreetingCard({super.key});
 
   @override
   Widget build(BuildContext context) {

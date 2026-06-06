@@ -29,7 +29,7 @@ const _months = [
 ];
 
 class FitnessProgressScreen extends StatefulWidget {
-  FitnessProgressScreen({super.key});
+  const FitnessProgressScreen({super.key});
 
   @override
   State<FitnessProgressScreen> createState() => _FitnessProgressScreenState();

@@ -8,7 +8,7 @@ import '../../data/services/fitness_progress_service.dart';
 import '../../../../l10n/app_localizations.dart';
 
 class AddPhysicalLogScreen extends StatefulWidget {
-  AddPhysicalLogScreen({
+  const AddPhysicalLogScreen({
     super.key,
     this.currentProfile,
     this.initialDate,

@@ -7,7 +7,7 @@ import '../../data/models/catalog_food_model.dart';
 import '../../data/services/catalog_food_service.dart';
 
 class MyFoodsScreen extends StatefulWidget {
-  MyFoodsScreen({super.key});
+  const MyFoodsScreen({super.key});
 
   @override
   State<MyFoodsScreen> createState() => _MyFoodsScreenState();

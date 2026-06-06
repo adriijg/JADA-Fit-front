@@ -8,7 +8,7 @@ import '../../data/services/recipe_service.dart';
 import 'create_recipe_screen.dart';
 
 class RecipeDetailScreen extends StatefulWidget {
-  RecipeDetailScreen({
+  const RecipeDetailScreen({
     super.key,
     required this.recipe,
   });

@@ -9,7 +9,7 @@ import 'auth_gate.dart';
 import 'login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
-  RegisterScreen({super.key});
+  const RegisterScreen({super.key});
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();

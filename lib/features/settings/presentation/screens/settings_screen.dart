@@ -9,7 +9,7 @@ import '../../presentation/providers/settings_provider.dart';
 import 'about_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
-  SettingsScreen({super.key});
+  const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

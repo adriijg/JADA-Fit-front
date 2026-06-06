@@ -22,7 +22,7 @@ const _months = [
 ];
 
 class FitnessMonthlyCalendarScreen extends StatefulWidget {
-  FitnessMonthlyCalendarScreen({
+  const FitnessMonthlyCalendarScreen({
     super.key,
     required this.progress,
     required this.initialMonth,

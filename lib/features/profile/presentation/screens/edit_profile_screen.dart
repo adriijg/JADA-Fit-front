@@ -7,7 +7,7 @@ import '../../data/models/profile_model.dart';
 import '../../data/services/profile_service.dart';
 
 class EditProfileScreen extends StatefulWidget {
-  EditProfileScreen({
+  const EditProfileScreen({
     super.key,
     required this.profile,
   });

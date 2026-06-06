@@ -14,7 +14,7 @@ import 'fitness_progress_screen.dart';
 import '../../../../l10n/app_localizations.dart';
 
 class FitnessProfileScreen extends StatefulWidget {
-  FitnessProfileScreen({super.key});
+  const FitnessProfileScreen({super.key});
 
   @override
   State<FitnessProfileScreen> createState() => _FitnessProfileScreenState();

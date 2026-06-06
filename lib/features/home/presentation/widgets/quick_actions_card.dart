@@ -5,7 +5,7 @@ import '../../../../core/widgets/app_card.dart';
 import '../../../../l10n/app_localizations.dart';
 
 class SmartQuickActionsCard extends StatelessWidget {
-  SmartQuickActionsCard({
+  const SmartQuickActionsCard({
     super.key,
     required this.onScanFood,
     required this.onRegisterMeal,
@@ -79,7 +79,7 @@ class SmartQuickActionsCard extends StatelessWidget {
 }
 
 class QuickActionTile extends StatelessWidget {
-  QuickActionTile({
+  const QuickActionTile({
     super.key,
     required this.icon,
     required this.title,

@@ -14,7 +14,7 @@ import '../../data/services/routine_service.dart';
 class CreateRoutineScreen extends StatefulWidget {
   final RoutineModel? existingRoutine;
 
-  CreateRoutineScreen({super.key, this.existingRoutine});
+  const CreateRoutineScreen({super.key, this.existingRoutine});
 
   bool get isEditing => existingRoutine != null;
 
@@ -523,7 +523,7 @@ class _GoalSelector extends StatelessWidget {
             border: Border.all(color: context.colors.divider.withOpacity(0.1)),
           ),
           child: DropdownButtonFormField<RoutineGoal>(
-            value: selectedGoal,
+            initialValue: selectedGoal,
             hint: Text(
               'Selecciona un objetivo',
               style: TextStyle(
@@ -666,7 +666,7 @@ class _SplitSelector extends StatelessWidget {
             border: Border.all(color: context.colors.divider.withOpacity(0.1)),
           ),
           child: DropdownButtonFormField<RoutineSplit>(
-            value: selectedSplit,
+            initialValue: selectedSplit,
             hint: Text(
               'Ej. Empuje, Piernas, Full Body...',
               style: TextStyle(

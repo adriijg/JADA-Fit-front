@@ -26,7 +26,7 @@ import '../widgets/quick_actions_card.dart';
 import '../widgets/social_summary_card.dart';
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({super.key});
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();

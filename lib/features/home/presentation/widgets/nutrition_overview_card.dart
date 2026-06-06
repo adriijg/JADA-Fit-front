@@ -7,7 +7,7 @@ import '../../../../core/widgets/app_card.dart';
 import '../../../../l10n/app_localizations.dart';
 
 class NutritionErrorCard extends StatelessWidget {
-  NutritionErrorCard({
+  const NutritionErrorCard({
     super.key,
     required this.message,
     required this.onRetry,
@@ -79,7 +79,7 @@ class NutritionErrorCard extends StatelessWidget {
 }
 
 class NutritionOverviewCard extends StatelessWidget {
-  NutritionOverviewCard({
+  const NutritionOverviewCard({
     super.key,
     required this.caloriesConsumed,
     required this.caloriesGoal,
@@ -211,7 +211,7 @@ class NutritionOverviewCard extends StatelessWidget {
 }
 
 class CalorieRingChart extends StatelessWidget {
-  CalorieRingChart({
+  const CalorieRingChart({
     super.key,
     required this.progress,
     required this.consumed,
@@ -326,7 +326,7 @@ class _RingProgressPainter extends CustomPainter {
 }
 
 class NutritionMetric extends StatelessWidget {
-  NutritionMetric({
+  const NutritionMetric({
     super.key,
     required this.label,
     required this.value,
@@ -367,7 +367,7 @@ class NutritionMetric extends StatelessWidget {
 }
 
 class MacroProgressBar extends StatelessWidget {
-  MacroProgressBar({
+  const MacroProgressBar({
     super.key,
     required this.label,
     required this.consumed,

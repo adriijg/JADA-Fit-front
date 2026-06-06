@@ -6,7 +6,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../core/theme/app_colors.dart';
 
 class BarcodeScannerScreen extends StatefulWidget {
-  BarcodeScannerScreen({super.key});
+  const BarcodeScannerScreen({super.key});
 
   @override
   State<BarcodeScannerScreen> createState() => _BarcodeScannerScreenState();

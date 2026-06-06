@@ -9,7 +9,7 @@ import 'login_screen.dart';
 import 'reset_password_screen.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
-  ForgotPasswordScreen({super.key});
+  const ForgotPasswordScreen({super.key});
 
   @override
   State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();

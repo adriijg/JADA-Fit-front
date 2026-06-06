@@ -11,7 +11,7 @@ import '../../../settings/presentation/providers/settings_provider.dart';
 import '../../../../l10n/app_localizations.dart';
 
 class OnboardingScreen extends StatefulWidget {
-  OnboardingScreen({super.key});
+  const OnboardingScreen({super.key});
 
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();

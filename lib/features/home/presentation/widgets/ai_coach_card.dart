@@ -5,7 +5,7 @@ import '../../../../core/widgets/app_card.dart';
 import '../../../../l10n/app_localizations.dart';
 
 class AiCoachCard extends StatelessWidget {
-  AiCoachCard({
+  const AiCoachCard({
     super.key,
     required this.onTap,
     this.message,

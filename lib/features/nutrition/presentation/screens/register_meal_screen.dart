@@ -9,7 +9,7 @@ import '../../data/services/catalog_food_service.dart';
 import '../../data/services/nutrition_meal_service.dart';
 
 class RegisterMealScreen extends StatefulWidget {
-  RegisterMealScreen({
+  const RegisterMealScreen({
     super.key,
     required this.food,
     required this.initialMealType,

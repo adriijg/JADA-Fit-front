@@ -15,7 +15,7 @@ import 'my_recipes_screen.dart';
 import 'register_meal_screen.dart';
 
 class FoodSearchScreen extends StatefulWidget {
-  FoodSearchScreen({
+  const FoodSearchScreen({
     super.key,
     required this.initialMealType,
     required this.initialDate,

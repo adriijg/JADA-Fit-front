@@ -4,7 +4,7 @@ import '../../l10n/app_localizations.dart';
 import '../theme/app_colors.dart';
 
 class AppHeader extends StatelessWidget {
-  AppHeader({
+  const AppHeader({
     super.key,
     required this.onProfileTap,
   });

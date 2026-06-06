@@ -13,7 +13,7 @@ import '../../../fitness_profile/presentation/screens/fitness_profile_screen.dar
 import '../../../settings/presentation/screens/settings_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
-  ProfileScreen({super.key});
+  const ProfileScreen({super.key});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();

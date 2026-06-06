@@ -8,7 +8,7 @@ import '../../data/models/exercise_catalog.dart';
 class ExerciseDetailScreen extends StatefulWidget {
   final CatalogExerciseModel exercise;
 
-  ExerciseDetailScreen({super.key, required this.exercise});
+  const ExerciseDetailScreen({super.key, required this.exercise});
 
   @override
   State<ExerciseDetailScreen> createState() => _ExerciseDetailScreenState();

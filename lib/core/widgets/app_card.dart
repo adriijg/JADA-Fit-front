@@ -83,7 +83,7 @@ class AppCard extends StatelessWidget {
       onTap: onTap,
       padding: padding,
       borderRadius: borderRadius,
-      borderColor: borderColor != null ? borderColor.withOpacity(borderOpacity) : null,
+      borderColor: borderColor?.withOpacity(borderOpacity),
       cardStyle: _CardStyle.elevated,
       child: child,
     );
@@ -181,7 +181,7 @@ class AppCard extends StatelessWidget {
 }
 
 class AppCardIcon extends StatelessWidget {
-  AppCardIcon({
+  const AppCardIcon({
     super.key,
     required this.icon,
     this.size = 46,
@@ -218,7 +218,7 @@ class AppCardIcon extends StatelessWidget {
 }
 
 class AppCardSectionTitle extends StatelessWidget {
-  AppCardSectionTitle(
+  const AppCardSectionTitle(
     this.text, {
     super.key,
     this.trailing,
@@ -250,7 +250,7 @@ class AppCardSectionTitle extends StatelessWidget {
 }
 
 class AppCardDivider extends StatelessWidget {
-  AppCardDivider({super.key, this.height = 18});
+  const AppCardDivider({super.key, this.height = 18});
 
   final double height;
 
@@ -267,7 +267,7 @@ class AppCardDivider extends StatelessWidget {
 }
 
 class AppCardRow extends StatelessWidget {
-  AppCardRow({
+  const AppCardRow({
     super.key,
     required this.icon,
     required this.label,
@@ -326,7 +326,7 @@ class AppCardRow extends StatelessWidget {
 }
 
 class AppMacroBadge extends StatelessWidget {
-  AppMacroBadge({
+  const AppMacroBadge({
     super.key,
     required this.label,
     required this.value,
@@ -385,7 +385,7 @@ class AppMacroBadge extends StatelessWidget {
 }
 
 class AppPill extends StatelessWidget {
-  AppPill({
+  const AppPill({
     super.key,
     required this.text,
     this.highlighted = false,
@@ -417,7 +417,7 @@ class AppPill extends StatelessWidget {
 }
 
 class AppCardButton extends StatelessWidget {
-  AppCardButton({
+  const AppCardButton({
     super.key,
     required this.label,
     required this.onTap,
@@ -475,7 +475,7 @@ class AppCardButton extends StatelessWidget {
 }
 
 class AppCardOutlinedButton extends StatelessWidget {
-  AppCardOutlinedButton({
+  const AppCardOutlinedButton({
     super.key,
     required this.label,
     required this.onTap,
@@ -530,7 +530,7 @@ class AppCardOutlinedButton extends StatelessWidget {
 }
 
 class AppBottomSheetHandle extends StatelessWidget {
-  AppBottomSheetHandle({super.key});
+  const AppBottomSheetHandle({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -548,7 +548,7 @@ class AppBottomSheetHandle extends StatelessWidget {
 }
 
 class AppBottomSheetTitle extends StatelessWidget {
-  AppBottomSheetTitle(this.text, {super.key});
+  const AppBottomSheetTitle(this.text, {super.key});
 
   final String text;
 
@@ -570,7 +570,7 @@ class AppBottomSheetTitle extends StatelessWidget {
 }
 
 class AppBottomSheetOption extends StatelessWidget {
-  AppBottomSheetOption({
+  const AppBottomSheetOption({
     super.key,
     required this.icon,
     required this.label,
@@ -643,7 +643,7 @@ class AppBottomSheetOption extends StatelessWidget {
 }
 
 class AppBottomSheetSimpleOption extends StatelessWidget {
-  AppBottomSheetSimpleOption({
+  const AppBottomSheetSimpleOption({
     super.key,
     required this.icon,
     required this.label,

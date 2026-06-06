@@ -18,7 +18,7 @@ import '../../data/services/social_service.dart';
 import '../../data/services/story_service.dart';
 
 class MySocialProfileScreen extends StatefulWidget {
-  MySocialProfileScreen({super.key, this.refreshVersion = 0});
+  const MySocialProfileScreen({super.key, this.refreshVersion = 0});
 
   final int refreshVersion;
 

@@ -11,7 +11,7 @@ import '../../data/services/recipe_service.dart';
 import 'food_search_screen.dart';
 
 class CreateRecipeScreen extends StatefulWidget {
-  CreateRecipeScreen({super.key, this.recipe});
+  const CreateRecipeScreen({super.key, this.recipe});
 
   final RecipeModel? recipe;
 

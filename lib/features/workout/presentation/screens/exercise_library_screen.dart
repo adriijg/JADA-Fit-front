@@ -6,7 +6,7 @@ import '../../data/models/exercise_catalog.dart';
 import 'exercise_detail_screen.dart' as detail;
 
 class ExerciseLibraryScreen extends StatefulWidget {
-  ExerciseLibraryScreen({super.key});
+  const ExerciseLibraryScreen({super.key});
 
   @override
   State<ExerciseLibraryScreen> createState() => _ExerciseLibraryScreenState();

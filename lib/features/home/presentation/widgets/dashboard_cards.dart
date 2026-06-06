@@ -8,7 +8,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../settings/presentation/providers/settings_provider.dart';
 
 class WorkoutSummaryCard extends StatelessWidget {
-  WorkoutSummaryCard({
+  const WorkoutSummaryCard({
     super.key,
     required this.onTap,
     this.workoutName,
@@ -35,7 +35,7 @@ class WorkoutSummaryCard extends StatelessWidget {
 }
 
 class PhysicalProgressCard extends StatelessWidget {
-  PhysicalProgressCard({
+  const PhysicalProgressCard({
     super.key,
     required this.onTap,
     this.currentWeight,
@@ -75,7 +75,7 @@ class PhysicalProgressCard extends StatelessWidget {
 }
 
 class SmallDashboardCard extends StatelessWidget {
-  SmallDashboardCard({
+  const SmallDashboardCard({
     super.key,
     required this.icon,
     required this.title,

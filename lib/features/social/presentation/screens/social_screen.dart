@@ -19,7 +19,7 @@ import 'my_social_profile_screen.dart';
 import 'story_viewer_screen.dart';
 
 class SocialScreen extends StatefulWidget {
-  SocialScreen({super.key});
+  const SocialScreen({super.key});
 
   @override
   State<SocialScreen> createState() => _SocialScreenState();

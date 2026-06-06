@@ -9,7 +9,7 @@ import '../../data/models/chat_message_model.dart';
 import '../providers/ai_provider.dart';
 
 class AiScreen extends StatefulWidget {
-  AiScreen({super.key});
+  const AiScreen({super.key});
 
   @override
   State<AiScreen> createState() => _AiScreenState();

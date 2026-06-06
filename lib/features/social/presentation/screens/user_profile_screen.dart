@@ -13,7 +13,7 @@ import '../../data/services/challenge_service.dart';
 class UserProfileScreen extends StatefulWidget {
   final String userId;
 
-  UserProfileScreen({super.key, required this.userId});
+  const UserProfileScreen({super.key, required this.userId});
 
   @override
   State<UserProfileScreen> createState() => _UserProfileScreenState();

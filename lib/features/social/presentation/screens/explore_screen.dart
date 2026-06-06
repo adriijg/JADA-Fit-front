@@ -10,7 +10,7 @@ import '../../data/services/social_service.dart';
 import 'user_profile_screen.dart';
 
 class ExploreScreen extends StatefulWidget {
-  ExploreScreen({super.key});
+  const ExploreScreen({super.key});
 
   @override
   State<ExploreScreen> createState() => _ExploreScreenState();

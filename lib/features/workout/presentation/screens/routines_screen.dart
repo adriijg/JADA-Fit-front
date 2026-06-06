@@ -12,7 +12,7 @@ import 'exercise_library_screen.dart';
 import '../widgets/routine_skeleton.dart';
 
 class RoutinesScreen extends StatefulWidget {
-  RoutinesScreen({super.key});
+  const RoutinesScreen({super.key});
 
   @override
   State<RoutinesScreen> createState() => _RoutinesScreenState();

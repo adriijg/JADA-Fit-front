@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 
 class AuthTextField extends StatelessWidget {
-  AuthTextField({
+  const AuthTextField({
     super.key,
     required this.controller,
     required this.hintText,

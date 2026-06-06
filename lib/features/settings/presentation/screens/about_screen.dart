@@ -5,7 +5,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_card.dart';
 
 class AboutScreen extends StatelessWidget {
-  AboutScreen({super.key});
+  const AboutScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

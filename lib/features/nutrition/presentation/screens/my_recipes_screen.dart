@@ -12,7 +12,7 @@ import 'create_recipe_screen.dart';
 import 'recipe_detail_screen.dart';
 
 class MyRecipesScreen extends StatefulWidget {
-  MyRecipesScreen({super.key});
+  const MyRecipesScreen({super.key});
 
   @override
   State<MyRecipesScreen> createState() => _MyRecipesScreenState();

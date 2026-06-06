@@ -12,7 +12,7 @@ import '../../data/services/fitness_profile_service.dart';
 import '../../../../l10n/app_localizations.dart';
 
 class EditFitnessProfileScreen extends StatefulWidget {
-  EditFitnessProfileScreen({
+  const EditFitnessProfileScreen({
     super.key,
     required this.currentProfile,
   });

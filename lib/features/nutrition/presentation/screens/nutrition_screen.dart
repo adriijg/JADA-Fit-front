@@ -23,7 +23,7 @@ import 'my_recipes_screen.dart';
 import 'my_foods_screen.dart';
 
 class NutritionScreen extends StatefulWidget {
-  NutritionScreen({super.key});
+  const NutritionScreen({super.key});
 
   @override
   State<NutritionScreen> createState() => _NutritionScreenState();
@@ -1546,8 +1546,8 @@ class _WaterTrackerCardBody extends StatefulWidget {
 }
 
 class _WaterTrackerCardBodyState extends State<_WaterTrackerCardBody> {
-  static int _glassCount = 10;
-  static double _glassMl = 200;
+  static final int _glassCount = 10;
+  static final double _glassMl = 200;
   double gap = 3.0;
 
   double get _totalMl => widget.summary?.totalMl ?? 0;
