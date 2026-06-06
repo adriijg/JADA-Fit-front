@@ -7,6 +7,7 @@ import '../../data/models/post.dart';
 import '../../data/models/user_summary.dart';
 import '../../data/services/post_service.dart';
 import '../../data/services/social_service.dart';
+import 'post_detail_screen.dart';
 import 'user_profile_screen.dart';
 
 class ExploreScreen extends StatefulWidget {
@@ -373,7 +374,12 @@ class _ExploreGridTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Could show post detail in the future
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => PostDetailScreen(post: post),
+          ),
+        );
       },
       child: Image.network(
         ImageUrlResolver.resolve(post.imageUrl),

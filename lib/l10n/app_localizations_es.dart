@@ -1209,10 +1209,42 @@ class AppLocalizationsEs extends AppLocalizations {
   String get socialChallengeAwaitingConfirmation => 'Pendiente de confirmación';
 
   @override
+  String get socialDeleteStory => 'Eliminar historia';
+
+  @override
+  String get socialDeleteStoryConfirm => '¿Eliminar esta historia?';
+
+  @override
+  String get socialDeletePost => 'Eliminar publicación';
+
+  @override
+  String get socialDeletePostConfirm => '¿Eliminar esta publicación?';
+
+  @override
+  String get socialDeletePostSuccess => 'Publicación eliminada';
+
+  @override
+  String socialDeletePostError(Object error) {
+    return 'Error al eliminar publicación: $error';
+  }
+
+  @override
   String get socialReject => 'Rechazar';
 
   @override
   String get socialAccept => 'Aceptar';
+
+  @override
+  String get socialPostDetail => 'Publicación';
+
+  @override
+  String get socialComments => 'Comentarios';
+
+  @override
+  String get socialNoCommentsYet => 'No hay comentarios todavía';
+
+  @override
+  String get socialAddCommentHint => 'Añadir un comentario...';
 
   @override
   String get socialChallengeStatusPending => 'PENDIENTE';

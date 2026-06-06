@@ -59,6 +59,17 @@ class StoryService {
     );
   }
 
+  Future<void> deleteStory(String storyId) async {
+    final response = await _client.delete(
+      Uri.parse(ApiEndpoints.storyDelete(storyId)),
+      headers: {},
+    );
+    if (response.statusCode != 200 && response.statusCode != 204) {
+      throw ApiException(_parseErrorMessage(response.body),
+          statusCode: response.statusCode);
+    }
+  }
+
   String _parseErrorMessage(String body) {
     try {
       final decoded = jsonDecode(body);

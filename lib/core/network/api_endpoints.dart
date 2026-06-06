@@ -55,11 +55,13 @@ class ApiEndpoints {
 
   static String postsByUser(String userId) => '$posts/user/$userId';
   static String postLike(String postId) => '$posts/$postId/like';
+  static String postDelete(String postId) => '$posts/$postId';
   static String postComments(String postId) => '$posts/$postId/comments';
 
   // Stories
   static String get stories => '$social/stories';
   static String get storiesFeed => '$stories/feed';
+  static String storyDelete(String storyId) => '$stories/$storyId';
 
   static String get routines => '${ApiConfig.baseUrl}/routines';
 

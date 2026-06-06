@@ -3,16 +3,20 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/image_url_resolver.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../data/models/story.dart';
+import '../../data/services/story_service.dart';
 
 class StoryViewerScreen extends StatefulWidget {
   final List<Story> stories;
   final String authorName;
+  final String? currentUserId;
 
   const StoryViewerScreen({
     super.key,
     required this.stories,
     required this.authorName,
+    this.currentUserId,
   });
 
   @override
@@ -21,6 +25,7 @@ class StoryViewerScreen extends StatefulWidget {
 
 class _StoryViewerScreenState extends State<StoryViewerScreen>
     with SingleTickerProviderStateMixin {
+  final StoryService _storyService = StoryService();
   int _currentIndex = 0;
   late AnimationController _progressController;
 
@@ -63,6 +68,55 @@ class _StoryViewerScreenState extends State<StoryViewerScreen>
       });
       _progressController.reset();
       _progressController.forward();
+    }
+  }
+
+  Future<void> _deleteCurrentStory() async {
+    final l10n = AppLocalizations.of(context);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: context.colors.surface,
+        title: Text(
+          l10n!.socialDeleteStory,
+          style: TextStyle(color: context.colors.textMain),
+        ),
+        content: Text(
+          l10n.socialDeleteStoryConfirm,
+          style: TextStyle(color: context.colors.textMain),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: Text(
+              'Cancelar',
+              style: TextStyle(color: context.colors.secondary),
+            ),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, true),
+            child: Text(
+              l10n.socialDeleteStory,
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true) return;
+
+    try {
+      await _storyService.deleteStory(widget.stories[_currentIndex].id);
+      if (mounted) {
+        Navigator.pop(context);
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error al eliminar historia: $e')),
+        );
+      }
     }
   }
 
@@ -249,7 +303,18 @@ class _StoryViewerScreenState extends State<StoryViewerScreen>
                           fontSize: 12,
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      if (story.author.id == widget.currentUserId) ...[
+                        const SizedBox(width: 8),
+                        GestureDetector(
+                          onTap: () => _showStoryMenu(context),
+                          child: const Icon(
+                            Icons.more_horiz,
+                            color: Colors.white,
+                            size: 24,
+                          ),
+                        ),
+                      ],
+                      const SizedBox(width: 8),
                       GestureDetector(
                         onTap: () => Navigator.pop(context),
                         child: const Icon(
@@ -266,6 +331,49 @@ class _StoryViewerScreenState extends State<StoryViewerScreen>
           ],
         ),
       ),
+    );
+  }
+
+  void _showStoryMenu(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: context.colors.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
+      ),
+      builder: (sheetContext) {
+        return SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 8),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 40,
+                  height: 4,
+                  margin: EdgeInsets.only(bottom: 12),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                ListTile(
+                  leading: Icon(Icons.delete_outline_rounded, color: Colors.red),
+                  title: Text(
+                    l10n.socialDeleteStory,
+                    style: TextStyle(color: Colors.red, fontWeight: FontWeight.w600),
+                  ),
+                  onTap: () {
+                    Navigator.pop(sheetContext);
+                    _deleteCurrentStory();
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 

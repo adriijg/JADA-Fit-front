@@ -1195,10 +1195,42 @@ class AppLocalizationsEn extends AppLocalizations {
   String get socialChallengeAwaitingConfirmation => 'Awaiting confirmation';
 
   @override
+  String get socialDeleteStory => 'Delete story';
+
+  @override
+  String get socialDeleteStoryConfirm => 'Delete this story?';
+
+  @override
+  String get socialDeletePost => 'Delete post';
+
+  @override
+  String get socialDeletePostConfirm => 'Delete this post?';
+
+  @override
+  String get socialDeletePostSuccess => 'Post deleted';
+
+  @override
+  String socialDeletePostError(Object error) {
+    return 'Error deleting post: $error';
+  }
+
+  @override
   String get socialReject => 'Reject';
 
   @override
   String get socialAccept => 'Accept';
+
+  @override
+  String get socialPostDetail => 'Post';
+
+  @override
+  String get socialComments => 'Comments';
+
+  @override
+  String get socialNoCommentsYet => 'No comments yet';
+
+  @override
+  String get socialAddCommentHint => 'Add a comment...';
 
   @override
   String get socialChallengeStatusPending => 'PENDING';

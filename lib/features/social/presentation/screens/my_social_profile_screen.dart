@@ -16,6 +16,7 @@ import '../../data/models/user_profile.dart';
 import '../../data/services/post_service.dart';
 import '../../data/services/social_service.dart';
 import '../../data/services/story_service.dart';
+import 'post_detail_screen.dart';
 
 class MySocialProfileScreen extends StatefulWidget {
   const MySocialProfileScreen({super.key, this.refreshVersion = 0});
@@ -1006,19 +1007,29 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                     }
 
                     final imageUrl = ImageUrlResolver.resolve(post.imageUrl);
-                    return imageUrl.startsWith('http')
-                        ? Image.network(
-                            imageUrl,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) =>
-                                errorPlaceholder(),
-                          )
-                        : Image.file(
-                            File(imageUrl),
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) =>
-                                errorPlaceholder(),
-                          );
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => PostDetailScreen(post: post),
+                          ),
+                        );
+                      },
+                      child: imageUrl.startsWith('http')
+                          ? Image.network(
+                              imageUrl,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  errorPlaceholder(),
+                            )
+                          : Image.file(
+                              File(imageUrl),
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  errorPlaceholder(),
+                            ),
+                    );
                   }, childCount: _myPosts.length),
                 ),
 

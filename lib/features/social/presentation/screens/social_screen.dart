@@ -16,6 +16,7 @@ import '../../data/services/story_service.dart';
 import '../../data/services/challenge_service.dart';
 import 'explore_screen.dart';
 import 'my_social_profile_screen.dart';
+import 'post_detail_screen.dart';
 import 'story_viewer_screen.dart';
 
 class SocialScreen extends StatefulWidget {
@@ -194,10 +195,21 @@ class _FeedTabState extends State<_FeedTab> {
   final Set<String> _likeRequests = {};
   bool _isLoading = true;
   String? _error;
+  String? _currentUserId;
 
   @override
   void initState() {
     super.initState();
+    _init();
+  }
+
+  Future<void> _init() async {
+    try {
+      final user = await _authService.getCurrentUser();
+      if (mounted) {
+        setState(() => _currentUserId = user.id);
+      }
+    } catch (_) {}
     _loadFeed();
   }
 
@@ -230,6 +242,56 @@ class _FeedTabState extends State<_FeedTab> {
         setState(() {
           _isLoading = false;
         });
+      }
+    }
+  }
+
+  Future<void> _deletePost(Post post) async {
+    final l10n = AppLocalizations.of(context);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: context.colors.surface,
+        title: Text(
+          l10n?.socialDeletePostConfirm ?? 'Delete this post?',
+          style: TextStyle(color: context.colors.textMain),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: Text(
+              'Cancelar',
+              style: TextStyle(color: context.colors.secondary),
+            ),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, true),
+            child: Text(
+              l10n?.socialDeletePost ?? 'Delete',
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true) return;
+
+    try {
+      await _postService.deletePost(post.id);
+      if (mounted) {
+        setState(() => _posts.removeWhere((p) => p.id == post.id));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n?.socialDeletePostSuccess ?? 'Post deleted')),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l10n?.socialDeletePostError(e.toString()) ?? 'Error deleting post'),
+          ),
+        );
       }
     }
   }
@@ -322,6 +384,7 @@ class _FeedTabState extends State<_FeedTab> {
                         .where((s) => s.author.id == story.author.id)
                         .toList(),
                     authorName: story.author.username,
+                    currentUserId: _currentUserId,
                   ),
                 ),
               );
@@ -335,9 +398,19 @@ class _FeedTabState extends State<_FeedTab> {
           padding: EdgeInsets.only(bottom: 16),
           child: _PostCard(
             post: post,
+            currentUserId: _currentUserId,
             isLikeBusy: _likeRequests.contains(post.id),
             onLike: () => _toggleLike(post),
+            onComment: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => PostDetailScreen(post: post),
+                ),
+              );
+            },
             onSend: () => _showSendSheet(post),
+            onDelete: () => _deletePost(post),
           ),
         );
       },
@@ -657,14 +730,20 @@ class _StoriesBar extends StatelessWidget {
 class _PostCard extends StatelessWidget {
   const _PostCard({
     required this.post,
+    required this.currentUserId,
     required this.onLike,
     required this.onSend,
+    required this.onComment,
+    required this.onDelete,
     required this.isLikeBusy,
   });
 
   final Post post;
+  final String? currentUserId;
   final VoidCallback onLike;
   final VoidCallback onSend;
+  final VoidCallback onComment;
+  final VoidCallback onDelete;
   final bool isLikeBusy;
 
   @override
@@ -727,11 +806,22 @@ class _PostCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                Icon(
-                  Icons.more_horiz,
-                  color: context.colors.secondary.withOpacity(0.5),
-                  size: 20,
-                ),
+                if (post.author.id == currentUserId)
+                  InkResponse(
+                    onTap: () => _showPostMenu(context),
+                    radius: 18,
+                    child: Icon(
+                      Icons.more_horiz,
+                      color: context.colors.secondary.withOpacity(0.5),
+                      size: 20,
+                    ),
+                  )
+                else
+                  Icon(
+                    Icons.more_horiz,
+                    color: context.colors.secondary.withOpacity(0.5),
+                    size: 20,
+                  ),
               ],
             ),
           ),
@@ -846,7 +936,21 @@ class _PostCard extends StatelessWidget {
                   ),
                 ],
                 SizedBox(width: 16),
-                _ActionIcon(icon: Icons.chat_bubble_outline_rounded),
+                _ActionIcon(
+                  icon: Icons.chat_bubble_outline_rounded,
+                  onTap: onComment,
+                ),
+                if (post.commentsCount > 0) ...[
+                  SizedBox(width: 6),
+                  Text(
+                    '${post.commentsCount}',
+                    style: TextStyle(
+                      color: context.colors.textMain.withOpacity(0.8),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
                 SizedBox(width: 16),
                 _ActionIcon(icon: Icons.send_outlined, onTap: onSend),
                 Spacer(),
@@ -856,6 +960,49 @@ class _PostCard extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void _showPostMenu(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: context.colors.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
+      ),
+      builder: (sheetContext) {
+        return SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 8),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 40,
+                  height: 4,
+                  margin: EdgeInsets.only(bottom: 12),
+                  decoration: BoxDecoration(
+                    color: context.colors.secondary.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                ListTile(
+                  leading: Icon(Icons.delete_outline_rounded, color: Colors.red),
+                  title: Text(
+                    l10n.socialDeletePost,
+                    style: TextStyle(color: Colors.red, fontWeight: FontWeight.w600),
+                  ),
+                  onTap: () {
+                    Navigator.pop(sheetContext);
+                    onDelete();
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 

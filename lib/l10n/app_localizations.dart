@@ -2354,6 +2354,42 @@ abstract class AppLocalizations {
   /// **'Awaiting confirmation'**
   String get socialChallengeAwaitingConfirmation;
 
+  /// No description provided for @socialDeleteStory.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete story'**
+  String get socialDeleteStory;
+
+  /// No description provided for @socialDeleteStoryConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this story?'**
+  String get socialDeleteStoryConfirm;
+
+  /// No description provided for @socialDeletePost.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete post'**
+  String get socialDeletePost;
+
+  /// No description provided for @socialDeletePostConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this post?'**
+  String get socialDeletePostConfirm;
+
+  /// No description provided for @socialDeletePostSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Post deleted'**
+  String get socialDeletePostSuccess;
+
+  /// No description provided for @socialDeletePostError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error deleting post: {error}'**
+  String socialDeletePostError(Object error);
+
   /// No description provided for @socialReject.
   ///
   /// In en, this message translates to:
@@ -2365,6 +2401,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Accept'**
   String get socialAccept;
+
+  /// No description provided for @socialPostDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Post'**
+  String get socialPostDetail;
+
+  /// No description provided for @socialComments.
+  ///
+  /// In en, this message translates to:
+  /// **'Comments'**
+  String get socialComments;
+
+  /// No description provided for @socialNoCommentsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No comments yet'**
+  String get socialNoCommentsYet;
+
+  /// No description provided for @socialAddCommentHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a comment...'**
+  String get socialAddCommentHint;
 
   /// No description provided for @socialChallengeStatusPending.
   ///

@@ -121,6 +121,19 @@ class PostService {
     }
   }
 
+  // ── Delete ────────────────────────────────────────────────────────────────
+
+  Future<void> deletePost(String postId) async {
+    final response = await _client.delete(
+      Uri.parse(ApiEndpoints.postDelete(postId)),
+      headers: {},
+    );
+    if (response.statusCode != 200 && response.statusCode != 204) {
+      throw ApiException(_parseErrorMessage(response.body),
+          statusCode: response.statusCode);
+    }
+  }
+
   // ── Comments ──────────────────────────────────────────────────────────────
 
   Future<List<PostComment>> getComments(String postId) async {
