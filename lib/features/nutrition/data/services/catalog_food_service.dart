@@ -2,24 +2,20 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
+import '../../../../core/network/auth_http_client.dart';
+
 import '../../../../core/network/api_endpoints.dart';
 import '../../../../core/network/api_exception.dart';
-import '../../../../core/storage/secure_storage_service.dart';
 import '../models/catalog_food_model.dart';
 
 class CatalogFoodService {
   CatalogFoodService({
     http.Client? client,
-    SecureStorageService? storageService,
-  })  : _client = client ?? http.Client(),
-        _storageService = storageService ?? SecureStorageService();
+  }) : _client = client ?? AuthHttpClient();
 
   final http.Client _client;
-  final SecureStorageService _storageService;
 
   Future<List<CatalogFoodModel>> searchFoods(String query) async {
-    final token = await _getTokenOrThrow();
-
     final uri = Uri.parse(ApiEndpoints.foodsSearch).replace(
       queryParameters: {
         'query': query,
@@ -30,7 +26,6 @@ class CatalogFoodService {
       uri,
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
       },
     );
 
@@ -57,13 +52,10 @@ class CatalogFoodService {
   }
 
   Future<CatalogFoodModel> getFoodByBarcode(String barcode) async {
-    final token = await _getTokenOrThrow();
-
     final response = await _client.get(
       Uri.parse('${ApiEndpoints.foodsBarcode}/$barcode'),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
       },
     );
 
@@ -87,13 +79,10 @@ class CatalogFoodService {
     required double carbsPer100g,
     required double fatsPer100g,
   }) async {
-    final token = await _getTokenOrThrow();
-
     final response = await _client.post(
       Uri.parse(ApiEndpoints.foodsCustom),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
       },
       body: jsonEncode({
         'name': name,
@@ -118,13 +107,10 @@ class CatalogFoodService {
   }
 
   Future<List<CatalogFoodModel>> getMyCustomFoods() async {
-    final token = await _getTokenOrThrow();
-
     final response = await _client.get(
       Uri.parse(ApiEndpoints.myCustomFoods),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
       },
     );
 
@@ -147,13 +133,9 @@ class CatalogFoodService {
   }
 
   Future<void> deleteCustomFood(String foodId) async {
-    final token = await _getTokenOrThrow();
-
     final response = await _client.delete(
       Uri.parse(ApiEndpoints.customFoodById(foodId)),
-      headers: {
-        'Authorization': 'Bearer $token',
-      },
+      headers: {},
     );
 
     if (response.statusCode != 204) {
@@ -162,16 +144,6 @@ class CatalogFoodService {
         statusCode: response.statusCode,
       );
     }
-  }
-
-  Future<String> _getTokenOrThrow() async {
-    final token = await _storageService.getToken();
-
-    if (token == null || token.isEmpty) {
-      throw ApiException('No hay sesión activa');
-    }
-
-    return token;
   }
 
   String _parseErrorMessage(String body) {

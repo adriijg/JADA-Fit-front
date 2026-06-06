@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
+import '../../../../core/network/auth_http_client.dart';
 import '../../../../core/network/api_endpoints.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/storage/secure_storage_service.dart';
@@ -12,8 +13,8 @@ class AuthService {
   AuthService({
     http.Client? client,
     SecureStorageService? storageService,
-  })  : _client = client ?? http.Client(),
-        _storageService = storageService ?? SecureStorageService();
+  })  : _storageService = storageService ?? SecureStorageService(),
+        _client = client ?? AuthHttpClient();
 
   final http.Client _client;
   final SecureStorageService _storageService;
@@ -81,13 +82,10 @@ class AuthService {
   }
 
   Future<UserAccountModel> getCurrentUser() async {
-    final token = await _getTokenOrThrow();
-
     final response = await _client.get(
       Uri.parse(ApiEndpoints.me),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
       },
     );
 
@@ -108,16 +106,12 @@ class AuthService {
 
   Future<void> logout() async {
     try {
-      final token = await _storageService.getToken();
-      if (token != null) {
-        await _client.post(
-          Uri.parse(ApiEndpoints.logout),
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer $token',
-          },
-        );
-      }
+      await _client.post(
+        Uri.parse(ApiEndpoints.logout),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
     } catch (_) {
     }
     await _storageService.deleteToken();
@@ -156,16 +150,6 @@ class AuthService {
       _parseErrorMessage(response.body),
       statusCode: response.statusCode,
     );
-  }
-
-  Future<String> _getTokenOrThrow() async {
-    final token = await _storageService.getToken();
-
-    if (token == null || token.isEmpty) {
-      throw ApiException('No hay sesión activa');
-    }
-
-    return token;
   }
 
   String _parseErrorMessage(String body) {

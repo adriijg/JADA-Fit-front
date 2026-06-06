@@ -1,29 +1,24 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+import '../../../../core/network/auth_http_client.dart';
 import '../../../../core/network/api_endpoints.dart';
 import '../../../../core/network/api_exception.dart';
-import '../../../../core/storage/secure_storage_service.dart';
 import '../models/challenge.dart';
 import '../models/user_exercise_record.dart';
 
 class ChallengeService {
   ChallengeService({
     http.Client? client,
-    SecureStorageService? storageService,
-  })  : _client = client ?? http.Client(),
-        _storageService = storageService ?? SecureStorageService();
+  }) : _client = client ?? AuthHttpClient();
 
   final http.Client _client;
-  final SecureStorageService _storageService;
 
   Future<Challenge> createChallenge(String challengedId, String exerciseName) async {
-    final token = await _getTokenOrThrow();
     final response = await _client.post(
       Uri.parse(ApiEndpoints.challenges),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
       },
       body: jsonEncode({
         'challengedId': challengedId,
@@ -42,12 +37,10 @@ class ChallengeService {
   }
 
   Future<Challenge> acceptChallenge(String challengeId) async {
-    final token = await _getTokenOrThrow();
     final response = await _client.post(
       Uri.parse('${ApiEndpoints.challenges}/$challengeId/accept'),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
       },
     );
 
@@ -62,12 +55,10 @@ class ChallengeService {
   }
 
   Future<Challenge> rejectChallenge(String challengeId) async {
-    final token = await _getTokenOrThrow();
     final response = await _client.post(
       Uri.parse('${ApiEndpoints.challenges}/$challengeId/reject'),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
       },
     );
 
@@ -82,12 +73,10 @@ class ChallengeService {
   }
 
   Future<List<Challenge>> getMyChallenges() async {
-    final token = await _getTokenOrThrow();
     final response = await _client.get(
       Uri.parse(ApiEndpoints.myChallenges),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
       },
     );
 
@@ -103,12 +92,10 @@ class ChallengeService {
   }
 
   Future<void> updateRecord(String exerciseName, double maxWeight) async {
-    final token = await _getTokenOrThrow();
     final response = await _client.post(
       Uri.parse(ApiEndpoints.exerciseRecords),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
       },
       body: jsonEncode({
         'exerciseName': exerciseName,
@@ -125,12 +112,10 @@ class ChallengeService {
   }
 
   Future<List<UserExerciseRecord>> getMyRecords() async {
-    final token = await _getTokenOrThrow();
     final response = await _client.get(
       Uri.parse(ApiEndpoints.myExerciseRecords),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
       },
     );
 
@@ -143,14 +128,6 @@ class ChallengeService {
       _parseErrorMessage(response.body),
       statusCode: response.statusCode,
     );
-  }
-
-  Future<String> _getTokenOrThrow() async {
-    final token = await _storageService.getToken();
-    if (token == null || token.isEmpty) {
-      throw ApiException('No hay sesión activa');
-    }
-    return token;
   }
 
   String _parseErrorMessage(String body) {

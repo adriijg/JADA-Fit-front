@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
+import '../../../../core/network/auth_http_client.dart';
 import '../../../../core/network/api_endpoints.dart';
 import '../../../../core/network/api_exception.dart';
-import '../../../../core/storage/secure_storage_service.dart';
 import '../models/meal_type.dart';
 import '../models/nutrition_day_summary_model.dart';
 import '../models/nutrition_meal_model.dart';
@@ -14,12 +14,9 @@ import '../models/recipe_model.dart';
 class NutritionMealService {
   NutritionMealService({
     http.Client? client,
-    SecureStorageService? storageService,
-  })  : _client = client ?? http.Client(),
-        _storageService = storageService ?? SecureStorageService();
+  }) : _client = client ?? AuthHttpClient();
 
   final http.Client _client;
-  final SecureStorageService _storageService;
 
   Future<NutritionMealModel> createMeal({
     required String foodName,
@@ -33,13 +30,13 @@ class NutritionMealService {
     String? externalFoodId,
     String? foodSource,
   }) async {
-    final token = await _getTokenOrThrow();
+
 
     final response = await _client.post(
       Uri.parse(ApiEndpoints.nutritionMeals),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
+
       },
       body: jsonEncode({
         'externalFoodId': externalFoodId,
@@ -73,7 +70,7 @@ class NutritionMealService {
   Future<NutritionDaySummaryModel> getDaySummary({
     required DateTime date,
   }) async {
-    final token = await _getTokenOrThrow();
+
 
     final uri = Uri.parse(ApiEndpoints.nutritionDay).replace(
       queryParameters: {
@@ -85,7 +82,7 @@ class NutritionMealService {
       uri,
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
+
       },
     );
 
@@ -107,13 +104,13 @@ class NutritionMealService {
   Future<void> deleteMeal({
     required String mealId,
   }) async {
-    final token = await _getTokenOrThrow();
+
 
     final response = await _client.delete(
       Uri.parse('${ApiEndpoints.nutritionMeals}/$mealId'),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
+
       },
     );
 
@@ -132,13 +129,13 @@ class NutritionMealService {
   }
 
   Future<List<RecentFoodModel>> getRecentFoods() async {
-    final token = await _getTokenOrThrow();
+
 
     final response = await _client.get(
       Uri.parse(ApiEndpoints.nutritionMealsRecent),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
+
       },
     );
 
@@ -164,13 +161,13 @@ class NutritionMealService {
     required MealType mealType,
     required DateTime loggedAt,
   }) async {
-    final token = await _getTokenOrThrow();
+
 
     final response = await _client.post(
       Uri.parse(ApiEndpoints.nutritionMealsFromRecipe),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
+
       },
       body: jsonEncode({
         'recipeId': recipe.id,
@@ -194,16 +191,6 @@ class NutritionMealService {
       ),
       statusCode: response.statusCode,
     );
-  }
-
-  Future<String> _getTokenOrThrow() async {
-    final token = await _storageService.getToken();
-
-    if (token == null || token.isEmpty) {
-      throw ApiException('No hay sesión activa');
-    }
-
-    return token;
   }
 
   String _formatDateForApi(DateTime date) {

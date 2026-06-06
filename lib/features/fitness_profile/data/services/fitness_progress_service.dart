@@ -2,29 +2,23 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
+import '../../../../core/network/auth_http_client.dart';
 import '../../../../core/network/api_endpoints.dart';
 import '../../../../core/network/api_exception.dart';
-import '../../../../core/storage/secure_storage_service.dart';
 import '../models/fitness_progress_model.dart';
 
 class FitnessProgressService {
   FitnessProgressService({
     http.Client? client,
-    SecureStorageService? storageService,
-  }) : _client = client ?? http.Client(),
-       _storageService = storageService ?? SecureStorageService();
+  }) : _client = client ?? AuthHttpClient();
 
   final http.Client _client;
-  final SecureStorageService _storageService;
 
   Future<List<FitnessProgressModel>> getMyFitnessProgress() async {
-    final token = await _getTokenOrThrow();
-
     final response = await _client.get(
       Uri.parse(ApiEndpoints.myFitnessProgress),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
       },
     );
 
@@ -51,13 +45,10 @@ class FitnessProgressService {
     double? muscleMass,
     required DateTime loggedAt,
   }) async {
-    final token = await _getTokenOrThrow();
-
     final response = await _client.post(
       Uri.parse(ApiEndpoints.myFitnessProgress),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
       },
       body: jsonEncode({
         'weight': weight,
@@ -80,16 +71,6 @@ class FitnessProgressService {
 
   String _formatDateTimeForApi(DateTime dateTime) {
     return dateTime.toIso8601String().split('.').first;
-  }
-
-  Future<String> _getTokenOrThrow() async {
-    final token = await _storageService.getToken();
-
-    if (token == null || token.isEmpty) {
-      throw ApiException('No hay sesión activa');
-    }
-
-    return token;
   }
 
   String _parseErrorMessage(String body) {

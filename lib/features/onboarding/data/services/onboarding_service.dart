@@ -2,20 +2,17 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
+import '../../../../core/network/auth_http_client.dart';
 import '../../../../core/network/api_endpoints.dart';
 import '../../../../core/network/api_exception.dart';
-import '../../../../core/storage/secure_storage_service.dart';
 import '../models/onboarding_response_model.dart';
 
 class OnboardingService {
   OnboardingService({
     http.Client? client,
-    SecureStorageService? storageService,
-  })  : _client = client ?? http.Client(),
-        _storageService = storageService ?? SecureStorageService();
+  }) : _client = client ?? AuthHttpClient();
 
   final http.Client _client;
-  final SecureStorageService _storageService;
 
   Future<OnboardingResponseModel> completeOnboarding({
     required double weight,
@@ -26,13 +23,10 @@ class OnboardingService {
     double? bodyFat,
     double? muscleMass,
   }) async {
-    final token = await _getTokenOrThrow();
-
     final response = await _client.post(
       Uri.parse(ApiEndpoints.completeOnboarding),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
       },
       body: jsonEncode({
         'weight': weight,
@@ -55,17 +49,6 @@ class OnboardingService {
       statusCode: response.statusCode,
     );
   }
-
-  Future<String> _getTokenOrThrow() async {
-    final token = await _storageService.getToken();
-
-    if (token == null || token.isEmpty) {
-      throw ApiException('No hay sesión activa');
-    }
-
-    return token;
-  }
-
   String _parseErrorMessage(String body) {
     try {
       final decoded = jsonDecode(body);

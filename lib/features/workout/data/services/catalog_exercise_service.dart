@@ -1,36 +1,23 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../../../../core/network/auth_http_client.dart';
 import '../../../../core/network/api_endpoints.dart';
 import '../../../../core/network/api_exception.dart';
-import '../../../../core/storage/secure_storage_service.dart';
 import '../models/catalog_exercise_model.dart';
 
 class CatalogExerciseService {
   CatalogExerciseService({
     http.Client? client,
-    SecureStorageService? storageService,
-  })  : _client = client ?? http.Client(),
-        _storageService = storageService ?? SecureStorageService();
+  }) : _client = client ?? AuthHttpClient();
 
   final http.Client _client;
-  final SecureStorageService _storageService;
-
-  Future<String> _getTokenOrThrow() async {
-    final token = await _storageService.getToken();
-    if (token == null || token.isEmpty) {
-      throw ApiException('No hay sesión activa');
-    }
-    return token;
-  }
 
   Future<List<CatalogExerciseModel>> getAllExercises() async {
     try {
-      final token = await _getTokenOrThrow();
       final response = await _client.get(
         Uri.parse(ApiEndpoints.catalogExercises),
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token',
         },
       );
 
@@ -48,7 +35,6 @@ class CatalogExerciseService {
 
   Future<List<CatalogExerciseModel>> searchExercises(String query) async {
     try {
-      final token = await _getTokenOrThrow();
       final uri = Uri.parse('${ApiEndpoints.catalogExercises}/search').replace(
         queryParameters: {'q': query},
       );
@@ -57,7 +43,6 @@ class CatalogExerciseService {
         uri, 
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token',
         },
       );
 

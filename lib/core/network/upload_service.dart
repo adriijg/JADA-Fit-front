@@ -3,23 +3,18 @@ import 'dart:io' show File;
 import 'dart:typed_data';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:http/http.dart' as http;
+import 'auth_http_client.dart';
 import 'api_endpoints.dart';
 import 'api_exception.dart';
-import '../storage/secure_storage_service.dart';
 
 class UploadService {
   UploadService({
     http.Client? client,
-    SecureStorageService? storageService,
-  })  : _client = client ?? http.Client(),
-        _storageService = storageService ?? SecureStorageService();
+  }) : _client = client ?? AuthHttpClient();
 
   final http.Client _client;
-  final SecureStorageService _storageService;
 
   Future<String> uploadImage(String filePath) async {
-    final token = await _getTokenOrThrow();
-
     final request = http.MultipartRequest(
       'POST',
       Uri.parse(ApiEndpoints.uploadImage),
@@ -35,7 +30,6 @@ class UploadService {
       bytes = await File(filePath).readAsBytes();
     }
 
-    request.headers['Authorization'] = 'Bearer $token';
     request.files.add(http.MultipartFile.fromBytes('file', bytes, filename: filename));
 
     final streamedResponse = await _client.send(request);
@@ -50,14 +44,6 @@ class UploadService {
       _parseErrorMessage(response.body),
       statusCode: response.statusCode,
     );
-  }
-
-  Future<String> _getTokenOrThrow() async {
-    final token = await _storageService.getToken();
-    if (token == null || token.isEmpty) {
-      throw ApiException('No hay sesión activa');
-    }
-    return token;
   }
 
   String _parseErrorMessage(String body) {

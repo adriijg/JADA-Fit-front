@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'core/navigation/app_navigator.dart';
 import 'core/theme/app_colors.dart';
 import 'core/theme/app_theme.dart';
 import 'features/auth/presentation/screens/auth_gate.dart';
@@ -16,6 +17,7 @@ class JadaFitApp extends StatelessWidget {
         return MaterialApp(
           title: 'JADA FIT',
           debugShowCheckedModeBanner: false,
+          navigatorKey: AppNavigator.navigatorKey,
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
           themeMode: settings.themeMode,

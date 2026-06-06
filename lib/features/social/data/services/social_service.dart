@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+import '../../../../core/network/auth_http_client.dart';
 import '../../../../core/network/api_endpoints.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/network/upload_service.dart';
-import '../../../../core/storage/secure_storage_service.dart';
 import '../../../../core/utils/image_url_resolver.dart';
 import '../models/user_profile.dart';
 import '../models/user_summary.dart';
@@ -12,20 +12,15 @@ import '../models/user_summary.dart';
 class SocialService {
   SocialService({
     http.Client? client,
-    SecureStorageService? storageService,
-  })  : _client = client ?? http.Client(),
-        _storageService = storageService ?? SecureStorageService();
+  }) : _client = client ?? AuthHttpClient();
 
   final http.Client _client;
-  final SecureStorageService _storageService;
 
   Future<void> followUser(String userId) async {
-    final token = await _getTokenOrThrow();
     final response = await _client.post(
       Uri.parse('${ApiEndpoints.follow}/$userId'),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
       },
     );
 
@@ -38,12 +33,10 @@ class SocialService {
   }
 
   Future<void> unfollowUser(String userId) async {
-    final token = await _getTokenOrThrow();
     final response = await _client.delete(
       Uri.parse('${ApiEndpoints.unfollow}/$userId'),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
       },
     );
 
@@ -56,12 +49,10 @@ class SocialService {
   }
 
   Future<List<UserSummary>> getFollowers(String userId) async {
-    final token = await _getTokenOrThrow();
     final response = await _client.get(
       Uri.parse('${ApiEndpoints.social}/$userId/followers'),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
       },
     );
 
@@ -77,12 +68,10 @@ class SocialService {
   }
 
   Future<List<UserSummary>> getFollowing(String userId) async {
-    final token = await _getTokenOrThrow();
     final response = await _client.get(
       Uri.parse('${ApiEndpoints.social}/$userId/following'),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
       },
     );
 
@@ -98,12 +87,10 @@ class SocialService {
   }
 
   Future<List<UserSummary>> searchUsers(String query) async {
-    final token = await _getTokenOrThrow();
     final response = await _client.get(
       Uri.parse('${ApiEndpoints.social}/users/search?q=$query'),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
       },
     );
 
@@ -119,12 +106,10 @@ class SocialService {
   }
 
   Future<UserProfile> getUserProfile(String userId) async {
-    final token = await _getTokenOrThrow();
     final response = await _client.get(
       Uri.parse('${ApiEndpoints.social}/profile/$userId'),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
       },
     );
 
@@ -140,12 +125,10 @@ class SocialService {
   }
 
   Future<void> updatePrivacy(bool shareProgress) async {
-    final token = await _getTokenOrThrow();
     final response = await _client.put(
       Uri.parse(ApiEndpoints.mePrivacy),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
       },
       body: jsonEncode({
         'shareProgress': shareProgress,
@@ -161,7 +144,6 @@ class SocialService {
   }
 
   Future<void> updateProfile({String? bio, String? profilePictureUrl}) async {
-    final token = await _getTokenOrThrow();
     final serverProfilePictureUrl = profilePictureUrl != null &&
             profilePictureUrl.isNotEmpty &&
             !ImageUrlResolver.isServerImageUrl(profilePictureUrl)
@@ -172,7 +154,6 @@ class SocialService {
       Uri.parse(ApiEndpoints.meProfile),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
       },
       body: jsonEncode({
         'bio': bio,
@@ -186,14 +167,6 @@ class SocialService {
         statusCode: response.statusCode,
       );
     }
-  }
-
-  Future<String> _getTokenOrThrow() async {
-    final token = await _storageService.getToken();
-    if (token == null || token.isEmpty) {
-      throw ApiException('No hay sesión activa');
-    }
-    return token;
   }
 
   String _parseErrorMessage(String body) {

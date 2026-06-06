@@ -3,9 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'app.dart';
+import 'core/navigation/app_navigator.dart';
+import 'core/network/auth_http_client.dart';
 import 'core/services/preferences_service.dart';
 import 'core/services/notification_service.dart';
 import 'features/ai/presentation/providers/ai_provider.dart';
+import 'features/auth/presentation/screens/login_screen.dart';
 import 'features/settings/presentation/providers/settings_provider.dart';
 
 void main() async {
@@ -27,6 +30,13 @@ void main() async {
     debugPrint('NotificationService init failed: $error');
     debugPrint('$stack');
   }
+
+  AuthHttpClient.onUnauthorized = () {
+    AppNavigator.navigatorKey.currentState?.pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => LoginScreen()),
+      (route) => false,
+    );
+  };
 
   runZonedGuarded(() {
     runApp(

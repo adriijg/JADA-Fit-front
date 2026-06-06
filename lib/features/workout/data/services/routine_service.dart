@@ -2,32 +2,26 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+import '../../../../core/network/auth_http_client.dart';
 import '../../../../core/network/api_endpoints.dart';
 import '../../../../core/network/api_exception.dart';
-import '../../../../core/storage/secure_storage_service.dart';
 import '../models/routine_model.dart';
 
 class RoutineService {
   RoutineService({
     http.Client? client,
-    SecureStorageService? storageService,
-  })  : _client = client ?? http.Client(),
-        _storageService = storageService ?? SecureStorageService();
+  }) : _client = client ?? AuthHttpClient();
 
   final http.Client _client;
-  final SecureStorageService _storageService;
 
   static const Duration _timeout = Duration(seconds: 15);
 
   Future<List<RoutineModel>> getRoutines() async {
-    final token = await _getTokenOrThrow();
-
     final response = await _client
         .get(
           Uri.parse(ApiEndpoints.routines),
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer $token',
           },
         )
         .timeout(_timeout);
@@ -50,14 +44,11 @@ class RoutineService {
   }
 
   Future<RoutineModel> createRoutine(RoutineModel routine) async {
-    final token = await _getTokenOrThrow();
-
     final response = await _client
         .post(
           Uri.parse(ApiEndpoints.routines),
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer $token',
           },
           body: jsonEncode(routine.toJson()),
         )
@@ -81,14 +72,11 @@ class RoutineService {
   Future<RoutineModel> updateRoutine(RoutineModel routine) async {
     if (routine.id == null) throw ApiException('La rutina no tiene ID');
 
-    final token = await _getTokenOrThrow();
-
     final response = await _client
         .put(
           Uri.parse(ApiEndpoints.routineById(routine.id!)),
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer $token',
           },
           body: jsonEncode(routine.toUpdateJson()),
         )
@@ -110,14 +98,11 @@ class RoutineService {
   }
 
   Future<void> deleteRoutine(int id) async {
-    final token = await _getTokenOrThrow();
-
     final response = await _client
         .delete(
           Uri.parse(ApiEndpoints.routineById(id)),
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer $token',
           },
         )
         .timeout(_timeout);
@@ -137,55 +122,36 @@ class RoutineService {
   }
 
   Future<void> markRoutineCompleted(int routineId) async {
-    final token = await _getTokenOrThrow();
-
     await _client
         .post(
           Uri.parse('${ApiEndpoints.routines}/$routineId/complete'),
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer $token',
           },
         )
         .timeout(_timeout);
   }
 
   Future<void> markExerciseCompleted(int routineId, int exerciseId) async {
-    final token = await _getTokenOrThrow();
-
     await _client
         .post(
           Uri.parse('${ApiEndpoints.routines}/$routineId/exercises/$exerciseId/complete'),
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer $token',
           },
         )
         .timeout(_timeout);
   }
 
   Future<void> unmarkExerciseCompleted(int routineId, int exerciseId) async {
-    final token = await _getTokenOrThrow();
-
     await _client
         .delete(
           Uri.parse('${ApiEndpoints.routines}/$routineId/exercises/$exerciseId/complete'),
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer $token',
           },
         )
         .timeout(_timeout);
-  }
-
-  Future<String> _getTokenOrThrow() async {
-    final token = await _storageService.getToken();
-
-    if (token == null || token.isEmpty) {
-      throw ApiException('No hay sesión activa');
-    }
-
-    return token;
   }
 
   String _parseErrorMessage(
