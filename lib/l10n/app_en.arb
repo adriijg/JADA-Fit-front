@@ -472,6 +472,7 @@
   "socialUpdateMyRecords": "Update my records",
   "socialYourChallenges": "Your Challenges",
   "socialMyRecords": "My Records",
+  "socialChallengeAwaitingConfirmation": "Awaiting confirmation",
   "socialReject": "Reject",
   "socialAccept": "Accept",
   "socialChallengeStatusPending": "PENDING",

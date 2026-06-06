@@ -2348,6 +2348,12 @@ abstract class AppLocalizations {
   /// **'My Records'**
   String get socialMyRecords;
 
+  /// No description provided for @socialChallengeAwaitingConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Awaiting confirmation'**
+  String get socialChallengeAwaitingConfirmation;
+
   /// No description provided for @socialReject.
   ///
   /// In en, this message translates to:

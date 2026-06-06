@@ -1192,6 +1192,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get socialMyRecords => 'My Records';
 
   @override
+  String get socialChallengeAwaitingConfirmation => 'Awaiting confirmation';
+
+  @override
   String get socialReject => 'Reject';
 
   @override

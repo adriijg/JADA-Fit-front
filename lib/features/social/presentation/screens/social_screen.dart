@@ -945,12 +945,26 @@ class _PiquesTab extends StatefulWidget {
 
 class _PiquesTabState extends State<_PiquesTab> {
   final ChallengeService _challengeService = ChallengeService();
+  final AuthService _authService = AuthService();
   List<Challenge> _myChallenges = [];
   bool _isLoadingChallenges = false;
+  String? _currentUserId;
 
   @override
   void initState() {
     super.initState();
+    _init();
+  }
+
+  Future<void> _init() async {
+    try {
+      final user = await _authService.getCurrentUser();
+      if (mounted) {
+        setState(() {
+          _currentUserId = user.id;
+        });
+      }
+    } catch (_) {}
     _loadChallenges();
   }
 
@@ -1072,14 +1086,16 @@ class _PiquesTabState extends State<_PiquesTab> {
           }
 
           final challenge = _myChallenges[index - 1];
-          return _buildChallengeCard(challenge);
+          return _buildChallengeCard(challenge, _currentUserId);
         },
       ),
     );
   }
 
-  Widget _buildChallengeCard(Challenge challenge) {
+  Widget _buildChallengeCard(Challenge challenge, String? currentUserId) {
     final l10n = AppLocalizations.of(context)!;
+    final bool isChallenger = challenge.challenger.id == currentUserId;
+    final bool isChallenged = challenge.challenged.id == currentUserId;
     return Card(
       color: context.colors.surface,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -1148,7 +1164,7 @@ class _PiquesTabState extends State<_PiquesTab> {
                 ),
               ],
             ),
-            if (challenge.status == ChallengeStatus.PENDING) ...[
+            if (challenge.status == ChallengeStatus.PENDING && isChallenged) ...[
               SizedBox(height: 16),
               Row(
                 children: [
@@ -1181,6 +1197,34 @@ class _PiquesTabState extends State<_PiquesTab> {
                     ),
                   ),
                 ],
+              ),
+            ],
+            if (challenge.status == ChallengeStatus.PENDING && isChallenger) ...[
+              SizedBox(height: 16),
+              Center(
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: Colors.orange.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.orange.withOpacity(0.5)),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.hourglass_empty, color: Colors.orange, size: 16),
+                      SizedBox(width: 8),
+                      Text(
+                        l10n.socialChallengeAwaitingConfirmation,
+                        style: TextStyle(
+                          color: Colors.orange,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ],
           ],

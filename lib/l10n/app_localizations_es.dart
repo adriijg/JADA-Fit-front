@@ -1206,6 +1206,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get socialMyRecords => 'Mis Marcas';
 
   @override
+  String get socialChallengeAwaitingConfirmation => 'Pendiente de confirmación';
+
+  @override
   String get socialReject => 'Rechazar';
 
   @override

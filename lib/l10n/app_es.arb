@@ -472,6 +472,7 @@
   "socialUpdateMyRecords": "Actualizar mis marcas",
   "socialYourChallenges": "Tus Piques",
   "socialMyRecords": "Mis Marcas",
+  "socialChallengeAwaitingConfirmation": "Pendiente de confirmación",
   "socialReject": "Rechazar",
   "socialAccept": "Aceptar",
   "socialChallengeStatusPending": "PENDIENTE",
