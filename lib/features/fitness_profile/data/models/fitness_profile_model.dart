@@ -5,6 +5,7 @@ class FitnessProfileModel {
     required this.email,
     this.weight,
     this.height,
+    this.dateOfBirth,
     this.age,
     this.gender,
     this.goal,
@@ -18,6 +19,7 @@ class FitnessProfileModel {
   final String email;
   final double? weight;
   final int? height;
+  final String? dateOfBirth;
   final int? age;
   final String? gender;
   final String? goal;
@@ -32,6 +34,7 @@ class FitnessProfileModel {
       email: json['email'] as String,
       weight: _toDoubleOrNull(json['weight']),
       height: _toIntOrNull(json['height']),
+      dateOfBirth: json['dateOfBirth'] as String?,
       age: _toIntOrNull(json['age']),
       gender: json['gender'] as String?,
       goal: json['goal'] as String?,

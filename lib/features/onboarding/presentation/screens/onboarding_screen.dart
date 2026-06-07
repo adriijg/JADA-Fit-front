@@ -22,10 +22,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   final TextEditingController weightController = TextEditingController();
   final TextEditingController heightController = TextEditingController();
-  final TextEditingController ageController = TextEditingController();
   final TextEditingController bodyFatController = TextEditingController();
   final TextEditingController muscleMassController = TextEditingController();
 
+  DateTime? selectedDateOfBirth;
   String? selectedGender;
   String? selectedGoal;
 
@@ -36,7 +36,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void dispose() {
     weightController.dispose();
     heightController.dispose();
-    ageController.dispose();
     bodyFatController.dispose();
     muscleMassController.dispose();
     super.dispose();
@@ -48,7 +47,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
     var weight = _parseDouble(weightController.text);
     var height = _parseInt(heightController.text);
-    final age = _parseInt(ageController.text);
+    final dateOfBirth = selectedDateOfBirth;
     final bodyFat = _parseDouble(bodyFatController.text);
     var muscleMass = _parseDouble(muscleMassController.text);
 
@@ -68,8 +67,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       return;
     }
 
-    if (age == null) {
-      _setError('Introduce tu edad');
+    if (dateOfBirth == null) {
+      _setError('Introduce tu fecha de nacimiento');
       return;
     }
 
@@ -92,7 +91,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       await _onboardingService.completeOnboarding(
         weight: weight,
         height: height,
-        age: age,
+        dateOfBirth: _formatDate(dateOfBirth),
         gender: selectedGender!,
         goal: selectedGoal!,
         bodyFat: bodyFat,
@@ -151,6 +150,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     return int.tryParse(trimmed);
   }
 
+  String _formatDate(DateTime date) {
+    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -165,7 +168,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   _OnboardingCard(
                     weightController: weightController,
                     heightController: heightController,
-                    ageController: ageController,
+                    selectedDateOfBirth: selectedDateOfBirth,
                     bodyFatController: bodyFatController,
                     muscleMassController: muscleMassController,
                     selectedGender: selectedGender,
@@ -178,6 +181,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     onGoalChanged: (value) {
                       setState(() {
                         selectedGoal = value;
+                      });
+                    },
+                    onDateOfBirthChanged: (value) {
+                      setState(() {
+                        selectedDateOfBirth = value;
                       });
                     },
                   ),
@@ -284,24 +292,26 @@ class _OnboardingCard extends StatelessWidget {
   const _OnboardingCard({
     required this.weightController,
     required this.heightController,
-    required this.ageController,
+    required this.selectedDateOfBirth,
     required this.bodyFatController,
     required this.muscleMassController,
     required this.selectedGender,
     required this.selectedGoal,
     required this.onGenderChanged,
     required this.onGoalChanged,
+    required this.onDateOfBirthChanged,
   });
 
   final TextEditingController weightController;
   final TextEditingController heightController;
-  final TextEditingController ageController;
+  final DateTime? selectedDateOfBirth;
   final TextEditingController bodyFatController;
   final TextEditingController muscleMassController;
   final String? selectedGender;
   final String? selectedGoal;
   final ValueChanged<String?> onGenderChanged;
   final ValueChanged<String?> onGoalChanged;
+  final ValueChanged<DateTime?> onDateOfBirthChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -333,13 +343,9 @@ class _OnboardingCard extends StatelessWidget {
             keyboardType: TextInputType.number,
           ),
           SizedBox(height: 16),
-          _OnboardingTextField(
-            controller: ageController,
-            label: 'Edad',
-            hintText: 'Ej: 25',
-            suffix: 'años',
-            icon: Icons.cake_outlined,
-            keyboardType: TextInputType.number,
+          _DateOfBirthField(
+            selectedDate: selectedDateOfBirth,
+            onChanged: onDateOfBirthChanged,
           ),
           SizedBox(height: 16),
           _GenderDropdown(
@@ -457,6 +463,50 @@ class _GoalDropdown extends StatelessWidget {
         ),
       ],
       onChanged: onChanged,
+    );
+  }
+}
+
+class _DateOfBirthField extends StatelessWidget {
+  const _DateOfBirthField({
+    required this.selectedDate,
+    required this.onChanged,
+  });
+
+  final DateTime? selectedDate;
+  final ValueChanged<DateTime?> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final dateStr = selectedDate != null
+        ? '${selectedDate!.day.toString().padLeft(2, '0')}/${selectedDate!.month.toString().padLeft(2, '0')}/${selectedDate!.year}'
+        : '';
+
+    return InkWell(
+      onTap: () async {
+        final now = DateTime.now();
+        final picked = await showDatePicker(
+          context: context,
+          initialDate: selectedDate ?? DateTime(now.year - 25, now.month, now.day),
+          firstDate: DateTime(now.year - 120, 1, 1),
+          lastDate: now,
+          helpText: 'Selecciona tu fecha de nacimiento',
+        );
+        if (picked != null) {
+          onChanged(picked);
+        }
+      },
+      borderRadius: BorderRadius.circular(18),
+      child: TextField(
+        enabled: false,
+        controller: TextEditingController(text: dateStr),
+        decoration: _inputDecoration(
+          context,
+          label: 'Fecha de nacimiento',
+          hintText: 'Selecciona tu fecha de nacimiento',
+          icon: Icons.cake_outlined,
+        ),
+      ),
     );
   }
 }

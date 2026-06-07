@@ -28,8 +28,8 @@ class _EditFitnessProfileScreenState extends State<EditFitnessProfileScreen> {
   final FitnessProfileService _fitnessProfileService = FitnessProfileService();
 
   final TextEditingController heightController = TextEditingController();
-  final TextEditingController ageController = TextEditingController();
 
+  DateTime? selectedDateOfBirth;
   String? selectedGender;
   String? selectedGoal;
 
@@ -41,7 +41,10 @@ class _EditFitnessProfileScreenState extends State<EditFitnessProfileScreen> {
     super.initState();
 
     heightController.text = widget.currentProfile.height?.toString() ?? '';
-    ageController.text = widget.currentProfile.age?.toString() ?? '';
+
+    selectedDateOfBirth = widget.currentProfile.dateOfBirth != null
+        ? DateTime.tryParse(widget.currentProfile.dateOfBirth!)
+        : null;
 
     selectedGender = _normalizeGender(widget.currentProfile.gender);
     selectedGoal = _normalizeGoal(widget.currentProfile.goal);
@@ -50,7 +53,6 @@ class _EditFitnessProfileScreenState extends State<EditFitnessProfileScreen> {
   @override
   void dispose() {
     heightController.dispose();
-    ageController.dispose();
     super.dispose();
   }
 
@@ -87,9 +89,13 @@ class _EditFitnessProfileScreenState extends State<EditFitnessProfileScreen> {
     return int.tryParse(trimmed);
   }
 
+  String _formatDate(DateTime date) {
+    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+  }
+
   Future<void> _saveProfile() async {
     final height = _parseInt(heightController.text);
-    final age = _parseInt(ageController.text);
+    final dateOfBirth = selectedDateOfBirth;
 
     setState(() {
       errorMessage = null;
@@ -109,16 +115,9 @@ class _EditFitnessProfileScreenState extends State<EditFitnessProfileScreen> {
       return;
     }
 
-    if (age == null) {
+    if (dateOfBirth == null) {
       setState(() {
-        errorMessage = 'Introduce tu edad';
-      });
-      return;
-    }
-
-    if (age <= 0) {
-      setState(() {
-        errorMessage = 'La edad debe ser mayor que 0';
+        errorMessage = 'Introduce tu fecha de nacimiento';
       });
       return;
     }
@@ -145,7 +144,7 @@ class _EditFitnessProfileScreenState extends State<EditFitnessProfileScreen> {
       await _fitnessProfileService.updateMyFitnessProfile(
         weight: widget.currentProfile.weight,
         height: height,
-        age: age,
+        dateOfBirth: _formatDate(dateOfBirth),
         gender: selectedGender,
         goal: selectedGoal,
         bodyFat: widget.currentProfile.bodyFat,
@@ -260,7 +259,12 @@ class _EditFitnessProfileScreenState extends State<EditFitnessProfileScreen> {
               SizedBox(height: 24),
               _FormCard(
                 heightController: heightController,
-                ageController: ageController,
+                selectedDateOfBirth: selectedDateOfBirth,
+                onDateOfBirthChanged: (value) {
+                  setState(() {
+                    selectedDateOfBirth = value;
+                  });
+                },
               ),
               SizedBox(height: 18),
               _SelectorCard(
@@ -401,11 +405,13 @@ class _IntroCard extends StatelessWidget {
 class _FormCard extends StatelessWidget {
   const _FormCard({
     required this.heightController,
-    required this.ageController,
+    required this.selectedDateOfBirth,
+    required this.onDateOfBirthChanged,
   });
 
   final TextEditingController heightController;
-  final TextEditingController ageController;
+  final DateTime? selectedDateOfBirth;
+  final ValueChanged<DateTime?> onDateOfBirthChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -423,13 +429,9 @@ class _FormCard extends StatelessWidget {
             keyboardType: TextInputType.number,
           ),
           SizedBox(height: 16),
-          _FitnessTextField(
-            controller: ageController,
-            label: AppLocalizations.of(context)!.fitnessAge,
-            hintText: 'Ej: 25',
-            suffix: AppLocalizations.of(context)!.fitnessYears,
-            icon: Icons.cake_outlined,
-            keyboardType: TextInputType.number,
+          _DateOfBirthField(
+            selectedDate: selectedDateOfBirth,
+            onChanged: onDateOfBirthChanged,
           ),
         ],
       ),
@@ -495,6 +497,74 @@ class _FitnessTextField extends StatelessWidget {
           borderSide: BorderSide(
             color: context.colors.primary,
             width: 1.4,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DateOfBirthField extends StatelessWidget {
+  const _DateOfBirthField({
+    required this.selectedDate,
+    required this.onChanged,
+  });
+
+  final DateTime? selectedDate;
+  final ValueChanged<DateTime?> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final dateStr = selectedDate != null
+        ? '${selectedDate!.day.toString().padLeft(2, '0')}/${selectedDate!.month.toString().padLeft(2, '0')}/${selectedDate!.year}'
+        : '';
+
+    return InkWell(
+      onTap: () async {
+        final now = DateTime.now();
+        final picked = await showDatePicker(
+          context: context,
+          initialDate: selectedDate ?? DateTime(now.year - 25, now.month, now.day),
+          firstDate: DateTime(now.year - 120, 1, 1),
+          lastDate: now,
+          helpText: 'Selecciona tu fecha de nacimiento',
+        );
+        if (picked != null) {
+          onChanged(picked);
+        }
+      },
+      borderRadius: BorderRadius.circular(18),
+      child: TextField(
+        enabled: false,
+        controller: TextEditingController(text: dateStr),
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: context.colors.inputBackground,
+          labelText: 'Fecha de nacimiento',
+          labelStyle: TextStyle(
+            color: context.colors.secondary,
+            fontWeight: FontWeight.w600,
+          ),
+          hintText: 'Selecciona tu fecha de nacimiento',
+          hintStyle: TextStyle(
+            color: context.colors.textMain.withOpacity(0.45),
+          ),
+          prefixIcon: Icon(
+            Icons.cake_outlined,
+            color: context.colors.primary,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(18),
+            borderSide: BorderSide(
+              color: context.colors.inputBorder,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(18),
+            borderSide: BorderSide(
+              color: context.colors.primary,
+              width: 1.4,
+            ),
           ),
         ),
       ),

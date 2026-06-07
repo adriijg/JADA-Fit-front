@@ -36,7 +36,7 @@ class ProfileService {
   Future<ProfileModel> updateMyProfile({
     double? weight,
     int? height,
-    int? age,
+    String? dateOfBirth,
     String? gender,
     String? goal,
     double? bodyFat,
@@ -50,7 +50,7 @@ class ProfileService {
       body: jsonEncode({
         'weight': weight,
         'height': height,
-        'age': age,
+        'dateOfBirth': dateOfBirth,
         'gender': gender,
         'goal': _emptyToNull(goal),
         'bodyFat': bodyFat,

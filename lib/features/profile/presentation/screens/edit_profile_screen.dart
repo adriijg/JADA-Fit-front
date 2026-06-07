@@ -23,10 +23,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   late final TextEditingController weightController;
   late final TextEditingController heightController;
-  late final TextEditingController ageController;
   late final TextEditingController goalController;
   late final TextEditingController bodyFatController;
   late final TextEditingController muscleMassController;
+
+  DateTime? selectedDateOfBirth;
 
   String? selectedGender;
   bool isLoading = false;
@@ -44,9 +45,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       text: widget.profile.height?.toString() ?? '',
     );
 
-    ageController = TextEditingController(
-      text: widget.profile.age?.toString() ?? '',
-    );
+    selectedDateOfBirth = widget.profile.dateOfBirth != null
+        ? DateTime.tryParse(widget.profile.dateOfBirth!)
+        : null;
 
     selectedGender = _normalizeGender(widget.profile.gender);
 
@@ -67,7 +68,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   void dispose() {
     weightController.dispose();
     heightController.dispose();
-    ageController.dispose();
     goalController.dispose();
     bodyFatController.dispose();
     muscleMassController.dispose();
@@ -77,7 +77,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Future<void> _saveProfile() async {
     final weight = _parseDouble(weightController.text);
     final height = _parseInt(heightController.text);
-    final age = _parseInt(ageController.text);
+    final dateOfBirth = selectedDateOfBirth;
     final bodyFat = _parseDouble(bodyFatController.text);
     final muscleMass = _parseDouble(muscleMassController.text);
 
@@ -90,7 +90,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       final updatedProfile = await _profileService.updateMyProfile(
         weight: weight,
         height: height,
-        age: age,
+        dateOfBirth: dateOfBirth != null ? _formatDate(dateOfBirth) : null,
         gender: selectedGender,
         goal: goalController.text,
         bodyFat: bodyFat,
@@ -148,6 +148,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return int.tryParse(trimmed);
   }
 
+  String _formatDate(DateTime date) {
+    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+  }
+
   String _formatNullableDouble(double? value) {
     if (value == null) return '';
 
@@ -193,7 +197,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               _EditFormCard(
                 weightController: weightController,
                 heightController: heightController,
-                ageController: ageController,
+                selectedDateOfBirth: selectedDateOfBirth,
                 goalController: goalController,
                 bodyFatController: bodyFatController,
                 muscleMassController: muscleMassController,
@@ -204,6 +208,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   });
                 },
                 onClearGender: _clearGender,
+                onDateOfBirthChanged: (value) {
+                  setState(() {
+                    selectedDateOfBirth = value;
+                  });
+                },
               ),
               SizedBox(height: 20),
               if (errorMessage != null)
@@ -332,24 +341,26 @@ class _EditFormCard extends StatelessWidget {
   const _EditFormCard({
     required this.weightController,
     required this.heightController,
-    required this.ageController,
+    required this.selectedDateOfBirth,
     required this.goalController,
     required this.bodyFatController,
     required this.muscleMassController,
     required this.selectedGender,
     required this.onGenderChanged,
     required this.onClearGender,
+    required this.onDateOfBirthChanged,
   });
 
   final TextEditingController weightController;
   final TextEditingController heightController;
-  final TextEditingController ageController;
+  final DateTime? selectedDateOfBirth;
   final TextEditingController goalController;
   final TextEditingController bodyFatController;
   final TextEditingController muscleMassController;
   final String? selectedGender;
   final ValueChanged<String?> onGenderChanged;
   final VoidCallback onClearGender;
+  final ValueChanged<DateTime?> onDateOfBirthChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -386,13 +397,9 @@ class _EditFormCard extends StatelessWidget {
             keyboardType: TextInputType.number,
           ),
           SizedBox(height: 16),
-          _EditProfileField(
-            controller: ageController,
-            label: 'Edad',
-            hintText: 'Ej: 25',
-            suffix: 'años',
-            icon: Icons.cake_outlined,
-            keyboardType: TextInputType.number,
+          _DateOfBirthField(
+            selectedDate: selectedDateOfBirth,
+            onChanged: onDateOfBirthChanged,
           ),
           SizedBox(height: 16),
           _GenderDropdownField(
@@ -430,6 +437,74 @@ class _EditFormCard extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _DateOfBirthField extends StatelessWidget {
+  const _DateOfBirthField({
+    required this.selectedDate,
+    required this.onChanged,
+  });
+
+  final DateTime? selectedDate;
+  final ValueChanged<DateTime?> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final dateStr = selectedDate != null
+        ? '${selectedDate!.day.toString().padLeft(2, '0')}/${selectedDate!.month.toString().padLeft(2, '0')}/${selectedDate!.year}'
+        : '';
+
+    return InkWell(
+      onTap: () async {
+        final now = DateTime.now();
+        final picked = await showDatePicker(
+          context: context,
+          initialDate: selectedDate ?? DateTime(now.year - 25, now.month, now.day),
+          firstDate: DateTime(now.year - 120, 1, 1),
+          lastDate: now,
+          helpText: 'Selecciona tu fecha de nacimiento',
+        );
+        if (picked != null) {
+          onChanged(picked);
+        }
+      },
+      borderRadius: BorderRadius.circular(18),
+      child: TextField(
+        enabled: false,
+        controller: TextEditingController(text: dateStr),
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: context.colors.inputBackground,
+          labelText: 'Fecha de nacimiento',
+          labelStyle: TextStyle(
+            color: context.colors.secondary,
+            fontWeight: FontWeight.w600,
+          ),
+          hintText: 'Selecciona tu fecha de nacimiento',
+          hintStyle: TextStyle(
+            color: context.colors.textMain.withOpacity(0.45),
+          ),
+          prefixIcon: Icon(
+            Icons.cake_outlined,
+            color: context.colors.primary,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(18),
+            borderSide: BorderSide(
+              color: context.colors.inputBorder,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(18),
+            borderSide: BorderSide(
+              color: context.colors.primary,
+              width: 1.4,
+            ),
+          ),
+        ),
       ),
     );
   }
