@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'dart:io' show File;
 import 'dart:typed_data';
+import 'package:cross_file/cross_file.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:http/http.dart' as http;
 import 'auth_http_client.dart';
@@ -27,7 +27,7 @@ class UploadService {
       final fileResponse = await _client.get(Uri.parse(filePath));
       bytes = fileResponse.bodyBytes;
     } else {
-      bytes = await File(filePath).readAsBytes();
+      bytes = await XFile(filePath).readAsBytes();
     }
 
     request.files.add(http.MultipartFile.fromBytes('file', bytes, filename: filename));

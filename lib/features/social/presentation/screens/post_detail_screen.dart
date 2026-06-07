@@ -10,8 +10,13 @@ import '../../data/services/post_service.dart';
 
 class PostDetailScreen extends StatefulWidget {
   final Post post;
+  final String currentUserId;
 
-  const PostDetailScreen({super.key, required this.post});
+  const PostDetailScreen({
+    super.key,
+    required this.post,
+    required this.currentUserId,
+  });
 
   @override
   State<PostDetailScreen> createState() => _PostDetailScreenState();
@@ -26,6 +31,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
   List<PostComment> _comments = [];
   bool _isLoadingComments = true;
   bool _isSending = false;
+  bool _isDeleting = false;
 
   @override
   void initState() {
@@ -94,6 +100,46 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
     }
   }
 
+  Future<void> _deletePost() async {
+    final l10n = AppLocalizations.of(context)!;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: context.colors.surface,
+        title: Text(l10n.socialDeletePost),
+        content: Text(l10n.socialDeletePostConfirm),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: Text(
+              l10n.socialDeletePost,
+              style: TextStyle(color: Colors.redAccent),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true) return;
+
+    setState(() => _isDeleting = true);
+    try {
+      await _postService.deletePost(widget.post.id);
+      if (mounted) Navigator.pop(context);
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isDeleting = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('$e')),
+        );
+      }
+    }
+  }
+
   String _timeAgo(DateTime dateTime) {
     final now = DateTime.now();
     final diff = now.difference(dateTime);
@@ -126,6 +172,41 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
             fontSize: 16,
           ),
         ),
+        actions: [
+          if (post.author.id == widget.currentUserId && !_isDeleting)
+            PopupMenuButton<String>(
+              icon: Icon(Icons.more_vert_rounded, color: context.colors.textMain),
+              onSelected: (value) {
+                if (value == 'delete') _deletePost();
+              },
+              itemBuilder: (_) => [
+                PopupMenuItem(
+                  value: 'delete',
+                  child: Row(
+                    children: [
+                      Icon(Icons.delete_outline_rounded, color: Colors.redAccent, size: 20),
+                      SizedBox(width: 8),
+                      Text(l10n.socialDeletePost, style: TextStyle(color: Colors.redAccent)),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          if (_isDeleting)
+            Padding(
+              padding: EdgeInsets.only(right: 16),
+              child: Center(
+                child: SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: context.colors.primary,
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
       body: Column(
         children: [

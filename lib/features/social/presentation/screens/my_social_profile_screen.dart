@@ -1,15 +1,15 @@
 import 'dart:convert';
-import 'dart:io' show File, Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:universal_io/io.dart' show File;
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/network/api_endpoints.dart';
 import '../../../../core/storage/secure_storage_service.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/utils/file_picker.dart' as file_picker;
 import '../../../../core/utils/image_url_resolver.dart';
 import '../../data/models/post.dart';
 import '../../data/models/user_profile.dart';
@@ -117,15 +117,14 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
   }
 
   Future<String?> _pickImageFromGallery() async {
-    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+    if (kIsWeb) {
       try {
-        var status = await Permission.photos.status;
-        if (!status.isGranted) {
-          status = await Permission.photos.request();
-        }
-      } catch (_) {}
+        return await file_picker.pickImage();
+      } catch (e) {
+        debugPrint('Web file picker error: $e');
+        return null;
+      }
     }
-
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     return pickedFile?.path;
@@ -178,12 +177,14 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                   SizedBox(height: 20),
                   GestureDetector(
                     onTap: () async {
-                      final path = await _pickImageFromGallery();
-                      if (path != null) {
-                        setModalState(() {
-                          selectedImagePath = path;
-                        });
-                      }
+                      try {
+                        final path = await _pickImageFromGallery();
+                        if (path != null) {
+                          setModalState(() {
+                            selectedImagePath = path;
+                          });
+                        }
+                      } catch (_) {}
                     },
                     child: Container(
                       width: double.infinity,
@@ -199,11 +200,17 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                       child: selectedImagePath != null
                           ? ClipRRect(
                               borderRadius: BorderRadius.circular(14),
-                              child: Image.file(
-                                File(selectedImagePath!),
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                              ),
+                              child: kIsWeb
+                                  ? Image.network(
+                                      selectedImagePath!,
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                    )
+                                  : Image.file(
+                                      File(selectedImagePath!),
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                    ),
                             )
                           : Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -355,12 +362,14 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                   SizedBox(height: 20),
                   GestureDetector(
                     onTap: () async {
-                      final path = await _pickImageFromGallery();
-                      if (path != null) {
-                        setModalState(() {
-                          selectedImagePath = path;
-                        });
-                      }
+                      try {
+                        final path = await _pickImageFromGallery();
+                        if (path != null) {
+                          setModalState(() {
+                            selectedImagePath = path;
+                          });
+                        }
+                      } catch (_) {}
                     },
                     child: Container(
                       width: double.infinity,
@@ -376,11 +385,17 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                       child: selectedImagePath != null
                           ? ClipRRect(
                               borderRadius: BorderRadius.circular(14),
-                              child: Image.file(
-                                File(selectedImagePath!),
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                              ),
+                              child: kIsWeb
+                                  ? Image.network(
+                                      selectedImagePath!,
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                    )
+                                  : Image.file(
+                                      File(selectedImagePath!),
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                    ),
                             )
                           : Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -520,13 +535,15 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                   SizedBox(height: 20),
                   GestureDetector(
                     onTap: () async {
-                      final path = await _pickImageFromGallery();
-                      if (path != null) {
-                        setModalState(() {
-                          selectedImagePath = path;
-                          isNewImage = true;
-                        });
-                      }
+                      try {
+                        final path = await _pickImageFromGallery();
+                        if (path != null) {
+                          setModalState(() {
+                            selectedImagePath = path;
+                            isNewImage = true;
+                          });
+                        }
+                      } catch (_) {}
                     },
                     child: Center(
                       child: Stack(
@@ -550,16 +567,27 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                                   selectedImagePath != null &&
                                       selectedImagePath!.isNotEmpty
                                   ? (isNewImage
-                                        ? Image.file(
-                                            File(selectedImagePath!),
-                                            fit: BoxFit.cover,
-                                            errorBuilder: (_, _, _) =>
-                                                Icon(
-                                                  Icons.person,
-                                                  size: 50,
-                                                  color: context.colors.secondary,
-                                                ),
-                                          )
+                                        ? (kIsWeb
+                                              ? Image.network(
+                                                  selectedImagePath!,
+                                                  fit: BoxFit.cover,
+                                                  errorBuilder: (_, _, _) =>
+                                                      Icon(
+                                                        Icons.person,
+                                                        size: 50,
+                                                        color: context.colors.secondary,
+                                                      ),
+                                                )
+                                              : Image.file(
+                                                  File(selectedImagePath!),
+                                                  fit: BoxFit.cover,
+                                                  errorBuilder: (_, _, _) =>
+                                                      Icon(
+                                                        Icons.person,
+                                                        size: 50,
+                                                        color: context.colors.secondary,
+                                                      ),
+                                                ))
                                         : Image.network(
                                             ImageUrlResolver.resolve(
                                               selectedImagePath!,
@@ -1012,7 +1040,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => PostDetailScreen(post: post),
+                            builder: (_) => PostDetailScreen(post: post, currentUserId: _currentUser!['id']),
                           ),
                         );
                       },

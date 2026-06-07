@@ -405,7 +405,7 @@ class _FeedTabState extends State<_FeedTab> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => PostDetailScreen(post: post),
+                  builder: (_) => PostDetailScreen(post: post, currentUserId: _currentUserId!),
                 ),
               );
             },

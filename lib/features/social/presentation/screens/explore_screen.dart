@@ -1,5 +1,9 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
+import '../../../../core/config/api_config.dart';
+import '../../../../core/storage/secure_storage_service.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/image_url_resolver.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -21,18 +25,36 @@ class _ExploreScreenState extends State<ExploreScreen> {
   final PostService _postService = PostService();
   final SocialService _socialService = SocialService();
   final TextEditingController _searchController = TextEditingController();
+  final SecureStorageService _storageService = SecureStorageService();
 
   List<Post> _explorePosts = [];
   List<UserSummary> _searchResults = [];
   bool _isLoadingPosts = true;
   bool _isSearching = false;
   bool _showSearchResults = false;
+  String? _currentUserId;
   String? _error;
 
   @override
   void initState() {
     super.initState();
+    _loadCurrentUser();
     _loadExplore();
+  }
+
+  Future<void> _loadCurrentUser() async {
+    try {
+      final token = await _storageService.getToken();
+      if (token == null) return;
+      final response = await http.get(
+        Uri.parse('${ApiConfig.baseUrl}/me'),
+        headers: {'Authorization': 'Bearer $token'},
+      );
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body) as Map<String, dynamic>;
+        if (mounted) setState(() => _currentUserId = data['id']);
+      }
+    } catch (_) {}
   }
 
   @override
@@ -308,7 +330,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
         itemCount: _explorePosts.length,
         itemBuilder: (context, index) {
           final post = _explorePosts[index];
-          return _ExploreGridTile(post: post);
+          return _ExploreGridTile(post: post, currentUserId: _currentUserId);
         },
       ),
     );
@@ -366,9 +388,10 @@ class _UserSearchTile extends StatelessWidget {
 // ─── Explore Grid Tile ───────────────────────────────────────────────────────
 
 class _ExploreGridTile extends StatelessWidget {
-  const _ExploreGridTile({required this.post});
+  const _ExploreGridTile({required this.post, required this.currentUserId});
 
   final Post post;
+  final String? currentUserId;
 
   @override
   Widget build(BuildContext context) {
@@ -377,7 +400,7 @@ class _ExploreGridTile extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => PostDetailScreen(post: post),
+            builder: (_) => PostDetailScreen(post: post, currentUserId: currentUserId ?? ''),
           ),
         );
       },
