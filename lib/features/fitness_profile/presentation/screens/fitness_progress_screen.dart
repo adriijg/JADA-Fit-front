@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/network/api_exception.dart';
@@ -12,21 +13,6 @@ import '../../../settings/presentation/providers/settings_provider.dart';
 import '../screens/add_physical_log_screen.dart';
 import 'fitness_monthly_calendar_screen.dart';
 import '../../../../l10n/app_localizations.dart';
-
-const _months = [
-  'Enero',
-  'Febrero',
-  'Marzo',
-  'Abril',
-  'Mayo',
-  'Junio',
-  'Julio',
-  'Agosto',
-  'Septiembre',
-  'Octubre',
-  'Noviembre',
-  'Diciembre',
-];
 
 class FitnessProgressScreen extends StatefulWidget {
   const FitnessProgressScreen({super.key});
@@ -271,7 +257,8 @@ class _FitnessProgressScreenState extends State<FitnessProgressScreen> {
   }
 
   String _monthTitle(DateTime date) {
-    return '${_months[date.month - 1]} ${date.year}';
+    final locale = Localizations.localeOf(context).toLanguageTag();
+    return DateFormat.yMMMM(locale).format(date);
   }
 
   String _formatDate(DateTime date) {
@@ -430,7 +417,7 @@ class _FitnessProgressScreenState extends State<FitnessProgressScreen> {
             ),
             icon: Icon(Icons.calendar_month),
             label: Text(
-              'VER CALENDARIO MENSUAL',
+              AppLocalizations.of(context)!.fitnessViewMonthlyCalendar.toUpperCase(),
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 letterSpacing: 0.8,
@@ -464,9 +451,9 @@ extension _ProgressMetricExtension on _ProgressMetric {
   String title(BuildContext context) {
     switch (this) {
       case _ProgressMetric.weight:
-        return 'Peso';
+        return AppLocalizations.of(context)!.fitnessWeightLabel;
       case _ProgressMetric.bodyFat:
-        return 'Grasa';
+        return AppLocalizations.of(context)!.fitnessFatLabel;
       case _ProgressMetric.muscleMass:
         return AppLocalizations.of(context)!.fitnessMuscle;
     }
@@ -483,14 +470,15 @@ extension _ProgressMetricExtension on _ProgressMetric {
     }
   }
 
-  String get subtitle {
+  String subtitle(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     switch (this) {
       case _ProgressMetric.weight:
-        return 'Peso registrado durante el mes seleccionado';
+        return l10n.fitnessWeightSubtitle;
       case _ProgressMetric.bodyFat:
-        return 'Porcentaje de grasa durante el mes seleccionado';
+        return l10n.fitnessFatSubtitle;
       case _ProgressMetric.muscleMass:
-        return 'Masa muscular durante el mes seleccionado';
+        return l10n.fitnessMuscleSubtitle;
     }
   }
 
@@ -580,7 +568,7 @@ class _ProgressHeroCard extends StatelessWidget {
                     ),
                     SizedBox(height: 6),
                     Text(
-                      'Cambio total: $weightChange',
+                      AppLocalizations.of(context)!.fitnessTotalChange(weightChange),
                       style: TextStyle(
                         color: context.colors.secondary,
                         fontSize: 13,
@@ -589,7 +577,7 @@ class _ProgressHeroCard extends StatelessWidget {
                     ),
                     SizedBox(height: 4),
                     Text(
-                      '$totalRecords registros guardados',
+                      AppLocalizations.of(context)!.fitnessRecordsSaved(totalRecords),
                       style: TextStyle(
                         color: context.colors.textMain.withOpacity(0.55),
                         fontSize: 12,
@@ -873,7 +861,7 @@ class _SingleProgressChartCard extends StatelessWidget {
           ),
           SizedBox(height: 6),
           Text(
-            '$monthTitle · ${metric.subtitle}',
+            '$monthTitle · ${metric.subtitle(context)}',
             style: TextStyle(
               color: context.colors.secondary,
               fontSize: 12,
@@ -884,12 +872,12 @@ class _SingleProgressChartCard extends StatelessWidget {
           Row(
             children: [
               _ChartMiniValue(
-                label: 'Actual',
+                label: AppLocalizations.of(context)!.fitnessCurrentLabel,
                 value: _formatDouble(_latestValue, metric.unit, imperial: imperial),
               ),
               SizedBox(width: 12),
               _ChartMiniValue(
-                label: 'Cambio',
+                label: AppLocalizations.of(context)!.fitnessChangeLabel,
                 value: _formatChange(_changeValue, metric.unit, imperial: imperial),
               ),
             ],
@@ -1185,22 +1173,23 @@ class _WeeklyCalendarCard extends StatelessWidget {
       ..sort((a, b) => b.loggedAt.compareTo(a.loggedAt));
   }
 
-  String _weekdayLabel(int weekday) {
+  String _weekdayLabel(int weekday, BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     switch (weekday) {
       case DateTime.monday:
-        return 'L';
+        return l10n.weekdayMon;
       case DateTime.tuesday:
-        return 'M';
+        return l10n.weekdayTue;
       case DateTime.wednesday:
-        return 'X';
+        return l10n.weekdayWed;
       case DateTime.thursday:
-        return 'J';
+        return l10n.weekdayThu;
       case DateTime.friday:
-        return 'V';
+        return l10n.weekdayFri;
       case DateTime.saturday:
-        return 'S';
+        return l10n.weekdaySat;
       case DateTime.sunday:
-        return 'D';
+        return l10n.weekdaySun;
       default:
         return '';
     }
@@ -1236,7 +1225,7 @@ class _WeeklyCalendarCard extends StatelessWidget {
               SizedBox(width: 10),
               Expanded(
                 child: Text(
-                  'Calendario semanal',
+                  AppLocalizations.of(context)!.fitnessCalendarWeekly,
                   style: TextStyle(
                     color: context.colors.textMain,
                     fontSize: 18,
@@ -1248,7 +1237,7 @@ class _WeeklyCalendarCard extends StatelessWidget {
           ),
           SizedBox(height: 6),
           Text(
-            'Semana del ${formatDate(days.first)} al ${formatDate(days.last)}',
+            AppLocalizations.of(context)!.fitnessWeekOfRange(formatDate(days.first), formatDate(days.last)),
             style: TextStyle(
               color: context.colors.secondary,
               fontSize: 12,
@@ -1337,7 +1326,7 @@ class _WeeklyCalendarCard extends StatelessWidget {
                       child: Column(
                         children: [
                           Text(
-                            _weekdayLabel(day.weekday),
+                            _weekdayLabel(day.weekday, context),
                             style: TextStyle(
                               color: hasRecords
                                   ? context.colors.background

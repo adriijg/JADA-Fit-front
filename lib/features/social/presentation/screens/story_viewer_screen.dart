@@ -72,13 +72,13 @@ class _StoryViewerScreenState extends State<StoryViewerScreen>
   }
 
   Future<void> _deleteCurrentStory() async {
-    final l10n = AppLocalizations.of(context);
+    final l10n = AppLocalizations.of(context)!;
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
         backgroundColor: context.colors.surface,
         title: Text(
-          l10n!.socialDeleteStory,
+          l10n.socialDeleteStory,
           style: TextStyle(color: context.colors.textMain),
         ),
         content: Text(
@@ -89,7 +89,7 @@ class _StoryViewerScreenState extends State<StoryViewerScreen>
           TextButton(
             onPressed: () => Navigator.pop(dialogContext, false),
             child: Text(
-              'Cancelar',
+              l10n.socialCancel,
               style: TextStyle(color: context.colors.secondary),
             ),
           ),
@@ -114,7 +114,7 @@ class _StoryViewerScreenState extends State<StoryViewerScreen>
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error al eliminar historia: $e')),
+          SnackBar(content: Text(l10n.socialDeleteStoryError(e.toString()))),
         );
       }
     }
@@ -122,6 +122,7 @@ class _StoryViewerScreenState extends State<StoryViewerScreen>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final story = widget.stories[_currentIndex];
 
     return Scaffold(
@@ -155,7 +156,7 @@ class _StoryViewerScreenState extends State<StoryViewerScreen>
                           ),
                           SizedBox(height: 12),
                           Text(
-                            'No se pudo cargar la historia',
+                            l10n.socialStoryLoadError,
                             style: TextStyle(
                               color: context.colors.secondary,
                               fontSize: 14,
@@ -297,7 +298,7 @@ class _StoryViewerScreenState extends State<StoryViewerScreen>
                         ),
                       ),
                       Text(
-                        _timeAgo(story.createdAt),
+                        _timeAgo(story.createdAt, l10n),
                         style: TextStyle(
                           color: Colors.white.withValues(alpha: 0.7),
                           fontSize: 12,
@@ -377,13 +378,13 @@ class _StoryViewerScreenState extends State<StoryViewerScreen>
     );
   }
 
-  String _timeAgo(DateTime dateTime) {
+  String _timeAgo(DateTime dateTime, AppLocalizations l10n) {
     final now = DateTime.now();
     final diff = now.difference(dateTime);
 
-    if (diff.inMinutes < 1) return 'ahora';
-    if (diff.inMinutes < 60) return 'hace ${diff.inMinutes} min';
-    if (diff.inHours < 24) return 'hace ${diff.inHours}h';
-    return 'hace ${diff.inDays}d';
+    if (diff.inMinutes < 1) return l10n.socialTimeAgoNow;
+    if (diff.inMinutes < 60) return l10n.socialTimeAgoMinutes(diff.inMinutes);
+    if (diff.inHours < 24) return l10n.socialTimeAgoHours(diff.inHours);
+    return l10n.socialTimeAgoDays(diff.inDays);
   }
 }

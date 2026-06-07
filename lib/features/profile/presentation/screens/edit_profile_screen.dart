@@ -110,7 +110,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       if (!mounted) return;
 
       setState(() {
-        errorMessage = 'No se pudo actualizar el perfil';
+        errorMessage = AppLocalizations.of(context)!.profileUpdateError;
       });
     } finally {
       if (mounted) {
@@ -364,6 +364,7 @@ class _EditFormCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(22),
@@ -379,9 +380,9 @@ class _EditFormCard extends StatelessWidget {
         children: [
           _EditProfileField(
             controller: weightController,
-            label: 'Peso',
-            hintText: 'Ej: 78.5',
-            suffix: 'kg',
+            label: l10n.nutritionWeightLabel,
+            hintText: l10n.profileWeightHint,
+            suffix: l10n.profileWeightSuffix,
             icon: Icons.monitor_weight_outlined,
             keyboardType: TextInputType.numberWithOptions(
               decimal: true,
@@ -390,9 +391,9 @@ class _EditFormCard extends StatelessWidget {
           SizedBox(height: 16),
           _EditProfileField(
             controller: heightController,
-            label: 'Altura',
-            hintText: 'Ej: 180',
-            suffix: 'cm',
+            label: l10n.fitnessHeight,
+            hintText: l10n.profileHeightHint,
+            suffix: l10n.profileHeightSuffix,
             icon: Icons.height,
             keyboardType: TextInputType.number,
           ),
@@ -410,16 +411,16 @@ class _EditFormCard extends StatelessWidget {
           SizedBox(height: 16),
           _EditProfileField(
             controller: goalController,
-            label: 'Objetivo',
-            hintText: 'Ej: ganar masa muscular',
+            label: l10n.fitnessGoal,
+            hintText: l10n.profileGoalHint,
             icon: Icons.flag_outlined,
           ),
           SizedBox(height: 16),
           _EditProfileField(
             controller: bodyFatController,
-            label: 'Grasa corporal',
-            hintText: 'Ej: 15.2',
-            suffix: '%',
+            label: l10n.fitnessBodyFat,
+            hintText: l10n.profileBodyFatHint,
+            suffix: l10n.profileBodyFatSuffix,
             icon: Icons.percent,
             keyboardType: TextInputType.numberWithOptions(
               decimal: true,
@@ -428,9 +429,9 @@ class _EditFormCard extends StatelessWidget {
           SizedBox(height: 16),
           _EditProfileField(
             controller: muscleMassController,
-            label: 'Masa muscular',
-            hintText: 'Ej: 62',
-            suffix: 'kg',
+            label: l10n.fitnessMuscleMass,
+            hintText: l10n.profileMuscleMassHint,
+            suffix: l10n.profileWeightSuffix,
             icon: Icons.fitness_center,
             keyboardType: TextInputType.numberWithOptions(
               decimal: true,
@@ -453,6 +454,7 @@ class _DateOfBirthField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final dateStr = selectedDate != null
         ? '${selectedDate!.day.toString().padLeft(2, '0')}/${selectedDate!.month.toString().padLeft(2, '0')}/${selectedDate!.year}'
         : '';
@@ -465,7 +467,7 @@ class _DateOfBirthField extends StatelessWidget {
           initialDate: selectedDate ?? DateTime(now.year - 25, now.month, now.day),
           firstDate: DateTime(now.year - 120, 1, 1),
           lastDate: now,
-          helpText: 'Selecciona tu fecha de nacimiento',
+          helpText: l10n.profileSelectDateOfBirth,
         );
         if (picked != null) {
           onChanged(picked);
@@ -478,12 +480,12 @@ class _DateOfBirthField extends StatelessWidget {
         decoration: InputDecoration(
           filled: true,
           fillColor: context.colors.inputBackground,
-          labelText: 'Fecha de nacimiento',
+          labelText: l10n.profileDateOfBirth,
           labelStyle: TextStyle(
             color: context.colors.secondary,
             fontWeight: FontWeight.w600,
           ),
-          hintText: 'Selecciona tu fecha de nacimiento',
+          hintText: l10n.profileSelectDateOfBirth,
           hintStyle: TextStyle(
             color: context.colors.textMain.withOpacity(0.45),
           ),

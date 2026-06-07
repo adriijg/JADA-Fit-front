@@ -10,6 +10,7 @@ import '../../data/models/routine_goal.dart';
 import '../../data/models/routine_model.dart';
 import '../../data/models/routine_split.dart';
 import '../../data/services/routine_service.dart';
+import '../utils/workout_localizations.dart';
 
 class CreateRoutineScreen extends StatefulWidget {
   final RoutineModel? existingRoutine;
@@ -83,7 +84,7 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
 
   void _addSuggestedExercise(ExerciseSuggestion suggestion) {
     final entry = _ExerciseEntry();
-    entry.nameController.text = suggestion.name;
+    entry.nameController.text = localizedSuggestionName(suggestion, context);
     entry.setsController.text = suggestion.suggestedSets.toString();
     entry.repsController.text = suggestion.suggestedReps.toString();
     entry.durationController.text = (suggestion.durationSeconds ?? 0).toString();
@@ -107,13 +108,14 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
   }
 
   Future<void> _save() async {
+    final l10n = AppLocalizations.of(context)!;
     if (!(_formKey.currentState?.validate() ?? false)) return;
     if (_selectedGoal == null) {
-      _showError('Selecciona un objetivo para la rutina');
+      _showError(l10n.workoutSelectObjectiveError);
       return;
     }
     if (_selectedSplit == null) {
-      _showError('Selecciona el tipo de rutina');
+      _showError(l10n.workoutSelectRoutineType);
       return;
     }
 
@@ -160,7 +162,7 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
       _showError(e.message);
     } catch (_) {
       if (!mounted) return;
-      _showError(widget.isEditing ? 'No se pudo actualizar la rutina' : 'No se pudo crear la rutina');
+      _showError(widget.isEditing ? l10n.workoutUpdateRoutineError : l10n.workoutCreateRoutineError);
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -179,6 +181,7 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -213,7 +216,7 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
                       controller: _nameController,
                       label: AppLocalizations.of(context)!.workoutName,
                       hint: AppLocalizations.of(context)!.workoutNameHint,
-                      validator: (v) => (v == null || v.trim().isEmpty) ? 'Requerido' : null,
+                      validator: (v) => (v == null || v.trim().isEmpty) ? l10n.workoutRequired : null,
                     ),
                     SizedBox(height: 16),
                     _GoalSelector(
@@ -243,14 +246,14 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
                     _PremiumTextField(
                       controller: _descriptionController,
                       label: AppLocalizations.of(context)!.workoutDescription,
-                      hint: 'Notas adicionales...',
+                      hint: l10n.workoutAdditionalNotes,
                       maxLines: 2,
                     ),
                     SizedBox(height: 32),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const _SectionHeader(title: 'Ejercicios', icon: Icons.fitness_center_rounded),
+                        _SectionHeader(title: l10n.workoutExercises, icon: Icons.fitness_center_rounded),
                         Row(
                           children: [
                             if (_selectedGoal != null)
@@ -331,6 +334,7 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
   }
 
   Widget _buildSuggestions() {
+    final l10n = AppLocalizations.of(context)!;
     final suggestions = ExerciseCatalog.suggestionsForGoalAndSplit(
       _selectedGoal!,
       _selectedSplit,
@@ -353,8 +357,8 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
               SizedBox(width: 8),
               Text(
                 _selectedSplit != null
-                    ? 'Ejercicios sugeridos para ${_selectedGoal!.displayName} - ${_selectedSplit!.displayName}'
-                    : 'Ejercicios sugeridos para ${_selectedGoal!.displayName}',
+                    ? l10n.workoutSuggestedExercises('${_selectedGoal!.localizedDisplayName(l10n)} - ${_selectedSplit!.localizedDisplayName(l10n)}')
+                    : l10n.workoutSuggestedExercises(_selectedGoal!.localizedDisplayName(l10n)),
                 style: TextStyle(
                   color: context.colors.tertiary,
                   fontSize: 14,
@@ -395,8 +399,8 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
                         ),
                         SizedBox(width: 12),
                         Expanded(
-                          child: Text(
-                            s.name,
+                        child: Text(
+                              localizedSuggestionName(s, context),
                             style: TextStyle(
                               color: context.colors.textMain,
                               fontSize: 14,
@@ -423,6 +427,7 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
   }
 
   Widget _buildEmptyState() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(40),
@@ -448,7 +453,7 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
             GestureDetector(
               onTap: () => setState(() => _showSuggestions = true),
               child: Text(
-                'o prueba ejercicios sugeridos para tu objetivo',
+                l10n.workoutTrySuggested,
                 style: TextStyle(
                   color: context.colors.tertiary.withOpacity(0.7),
                   fontSize: 12,
@@ -464,6 +469,7 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
   }
 
   Widget _buildBottomBar() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: EdgeInsets.fromLTRB(24, 16, 24, 16 + MediaQuery.of(context).padding.bottom),
       decoration: BoxDecoration(color: context.colors.background),
@@ -485,7 +491,7 @@ class _CreateRoutineScreenState extends State<CreateRoutineScreen> {
                   child: CircularProgressIndicator(color: Colors.white, strokeWidth: 3),
                 )
               : Text(
-                  widget.isEditing ? 'GUARDAR CAMBIOS' : 'GUARDAR RUTINA',
+                  widget.isEditing ? l10n.workoutSaveChanges : l10n.workoutSaveRoutine,
                   style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 1.0),
                 ),
         ),
@@ -502,13 +508,14 @@ class _GoalSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: EdgeInsets.only(left: 4, bottom: 8),
           child: Text(
-            'Objetivo',
+            l10n.workoutObjective,
             style: TextStyle(
               color: context.colors.textMain.withOpacity(0.5),
               fontSize: 13,
@@ -525,7 +532,7 @@ class _GoalSelector extends StatelessWidget {
           child: DropdownButtonFormField<RoutineGoal>(
             initialValue: selectedGoal,
             hint: Text(
-              'Selecciona un objetivo',
+              l10n.workoutSelectObjective,
               style: TextStyle(
                 color: context.colors.textMain.withOpacity(0.2),
                 fontSize: 16,
@@ -549,7 +556,7 @@ class _GoalSelector extends StatelessWidget {
                       size: 20,
                     ),
                     SizedBox(width: 12),
-                    Text(goal.displayName),
+                    Text(goal.localizedDisplayName(l10n)),
                   ],
                 ),
               );
@@ -584,6 +591,7 @@ class _GoalInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -598,7 +606,7 @@ class _GoalInfoCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  goal.description,
+                  goal.localizedDescription(l10n),
                   style: TextStyle(
                     color: context.colors.textMain.withOpacity(0.7),
                     fontSize: 12,
@@ -613,7 +621,7 @@ class _GoalInfoCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                'Series: ${goal.suggestedSets}',
+                '${l10n.workoutSets}: ${goal.suggestedSets}',
                 style: TextStyle(
                   color: context.colors.primary,
                   fontSize: 12,
@@ -622,7 +630,7 @@ class _GoalInfoCard extends StatelessWidget {
               ),
               SizedBox(height: 2),
               Text(
-                'Reps: ${goal.repRange}',
+                '${l10n.workoutReps}: ${goal.repRange}',
                 style: TextStyle(
                   color: context.colors.primary,
                   fontSize: 12,
@@ -645,13 +653,14 @@ class _SplitSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: EdgeInsets.only(left: 4, bottom: 8),
           child: Text(
-            'Tipo de rutina',
+            l10n.workoutRoutineType,
             style: TextStyle(
               color: context.colors.textMain.withOpacity(0.5),
               fontSize: 13,
@@ -668,7 +677,7 @@ class _SplitSelector extends StatelessWidget {
           child: DropdownButtonFormField<RoutineSplit>(
             initialValue: selectedSplit,
             hint: Text(
-              'Ej. Empuje, Piernas, Full Body...',
+              l10n.workoutRoutineNameHint,
               style: TextStyle(
                 color: context.colors.textMain.withOpacity(0.2),
                 fontSize: 16,
@@ -692,10 +701,10 @@ class _SplitSelector extends StatelessWidget {
                       size: 20,
                     ),
                     SizedBox(width: 12),
-                    Text(split.displayName),
+                    Text(split.localizedDisplayName(l10n)),
                     SizedBox(width: 8),
                     Text(
-                      split.description,
+                      split.localizedDescription(l10n),
                       style: TextStyle(
                         color: context.colors.textMain.withOpacity(0.3),
                         fontSize: 12,
@@ -862,6 +871,7 @@ class _PremiumExerciseForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
         color: context.colors.surface,
@@ -892,7 +902,7 @@ class _PremiumExerciseForm extends StatelessWidget {
                 ),
                 SizedBox(width: 12),
                 Text(
-                  'Ejercicio',
+                  l10n.workoutExercise,
                   style: TextStyle(
                     color: context.colors.primary,
                     fontWeight: FontWeight.w900,
@@ -914,8 +924,8 @@ class _PremiumExerciseForm extends StatelessWidget {
                 _PremiumTextField(
                   controller: entry.nameController,
                   label: AppLocalizations.of(context)!.workoutName,
-                  hint: 'Ej. Press de Banca',
-                  validator: (v) => (v == null || v.trim().isEmpty) ? 'Requerido' : null,
+                  hint: l10n.workoutExerciseNameHint,
+                  validator: (v) => (v == null || v.trim().isEmpty) ? l10n.workoutRequired : null,
                 ),
                 SizedBox(height: 16),
                 Row(
@@ -923,7 +933,7 @@ class _PremiumExerciseForm extends StatelessWidget {
                     Expanded(
                       child: _PremiumTextField(
                         controller: entry.setsController,
-                        label: 'Series',
+                        label: l10n.workoutSets,
                         hint: '3',
                         keyboardType: TextInputType.number,
                         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -943,7 +953,7 @@ class _PremiumExerciseForm extends StatelessWidget {
                     Expanded(
                       child: _PremiumTextField(
                         controller: entry.durationController,
-                        label: 'Segundos',
+                        label: l10n.workoutSeconds,
                         hint: '0',
                         keyboardType: TextInputType.number,
                         inputFormatters: [FilteringTextInputFormatter.digitsOnly],

@@ -138,6 +138,6 @@ class ChallengeService {
         if (decoded['error'] is String) return decoded['error'] as String;
       }
     } catch (_) {}
-    return body.isNotEmpty ? body : 'Ocurrió un error inesperado';
+    return body.isNotEmpty ? body : 'An unexpected error occurred';
   }
 }

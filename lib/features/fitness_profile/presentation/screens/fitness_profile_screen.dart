@@ -153,7 +153,7 @@ class _FitnessProfileScreenState extends State<FitnessProfileScreen> {
   }
 
   String _formatUpdatedAt(DateTime? date) {
-    if (date == null) return 'No disponible';
+    if (date == null) return AppLocalizations.of(context)!.profileNotAvailable;
 
     final day = date.day.toString().padLeft(2, '0');
     final month = date.month.toString().padLeft(2, '0');
@@ -358,7 +358,7 @@ class _FitnessHeaderCard extends StatelessWidget {
           ),
           SizedBox(height: 14),
           Text(
-            'Actualizado: $updatedAt',
+            AppLocalizations.of(context)!.fitnessProfileUpdatedAt(updatedAt),
             style: TextStyle(
               color: context.colors.textMain.withOpacity(0.55),
               fontSize: 12,
@@ -392,7 +392,7 @@ class _MainStatsCard extends StatelessWidget {
           Expanded(
             child: _StatItem(
               icon: Icons.monitor_weight_outlined,
-              label: 'Peso',
+              label: AppLocalizations.of(context)!.fitnessWeightLabel,
               value: weight,
             ),
           ),
@@ -514,7 +514,7 @@ class _BodyCompositionCard extends StatelessWidget {
               Expanded(
                 child: _DetailBox(
                   icon: Icons.percent,
-                  label: 'Grasa',
+                  label: AppLocalizations.of(context)!.fitnessFatLabel,
                   value: bodyFat,
                 ),
               ),
@@ -631,7 +631,7 @@ class _FitnessActionsCard extends StatelessWidget {
           _ActionTile(
             icon: Icons.add_chart,
             title: AppLocalizations.of(context)!.fitnessAddPhysicalRecordTitle,
-            subtitle: 'Registra peso, grasa corporal y masa muscular',
+            subtitle: AppLocalizations.of(context)!.fitnessAddPhysicalRecordSubtitle,
             onTap: onAddPhysicalLog,
           ),
           SizedBox(height: 10),

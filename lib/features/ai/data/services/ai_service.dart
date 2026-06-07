@@ -16,17 +16,22 @@ class AiService {
 
   Future<String> chat(
     String message,
-    List<ChatMessageModel> history,
-  ) async {
+    List<ChatMessageModel> history, {
+    String? locale,
+  }) async {
+    final body = <String, dynamic>{
+      'message': message,
+      'history': history.map((m) => m.toJson()).toList(),
+    };
+    if (locale != null) {
+      body['locale'] = locale;
+    }
     final response = await _client.post(
       Uri.parse(ApiEndpoints.aiChat),
       headers: {
         'Content-Type': 'application/json',
       },
-      body: jsonEncode({
-        'message': message,
-        'history': history.map((m) => m.toJson()).toList(),
-      }),
+      body: jsonEncode(body),
     );
 
     if (response.statusCode == 200) {

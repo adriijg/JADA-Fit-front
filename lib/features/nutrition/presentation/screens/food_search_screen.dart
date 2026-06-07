@@ -309,7 +309,7 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
   String _sourceLabel(String source) {
     switch (source) {
       case 'USER':
-        return 'Personalizado';
+        return AppLocalizations.of(context)!.nutritionCustom;
       case 'OPEN_FOOD_FACTS':
         return 'Open Food Facts';
       default:
@@ -811,7 +811,7 @@ class _SearchCard extends StatelessWidget {
             decoration: InputDecoration(
               filled: true,
               fillColor: context.colors.inputBackground,
-              hintText: 'Buscar alimento, ej: Nutella',
+              hintText: AppLocalizations.of(context)!.nutritionSearchFoodHint,
               hintStyle: TextStyle(
                 color: context.colors.textMain.withOpacity(0.45),
               ),

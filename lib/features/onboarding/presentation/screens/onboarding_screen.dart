@@ -57,28 +57,30 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       if (muscleMass != null) muscleMass = UnitConverter.lbsToKg(muscleMass);
     }
 
+    final l10n = AppLocalizations.of(context)!;
+
     if (weight == null) {
-      _setError('Introduce tu peso');
+      _setError(l10n.fitnessEnterWeightOnboarding);
       return;
     }
 
     if (height == null) {
-      _setError('Introduce tu altura');
+      _setError(l10n.fitnessEnterHeight);
       return;
     }
 
     if (dateOfBirth == null) {
-      _setError('Introduce tu fecha de nacimiento');
+      _setError(l10n.fitnessEnterBirthDate);
       return;
     }
 
     if (selectedGender == null) {
-      _setError(AppLocalizations.of(context)!.onboardingSelectGender);
+      _setError(l10n.onboardingSelectGender);
       return;
     }
 
     if (selectedGoal == null) {
-      _setError(AppLocalizations.of(context)!.onboardingSelectGoal);
+      _setError(l10n.onboardingSelectGoal);
       return;
     }
 
@@ -276,7 +278,7 @@ class _OnboardingHeader extends StatelessWidget {
         ),
         SizedBox(height: 10),
         Text(
-          'Usaremos estos datos para personalizar tus recomendaciones, objetivos y progreso.',
+          AppLocalizations.of(context)!.fitnessOnboardingDescription,
           style: TextStyle(
             color: context.colors.secondary,
             fontSize: 14,
@@ -360,7 +362,7 @@ class _OnboardingCard extends StatelessWidget {
           SizedBox(height: 16),
           _OnboardingTextField(
             controller: bodyFatController,
-            label: 'Grasa corporal',
+            label: AppLocalizations.of(context)!.onboardingBodyFat,
             hintText: 'Opcional · Ej: 15',
             suffix: '%',
             icon: Icons.percent,
@@ -371,7 +373,7 @@ class _OnboardingCard extends StatelessWidget {
           SizedBox(height: 16),
           _OnboardingTextField(
             controller: muscleMassController,
-            label: 'Masa muscular',
+            label: AppLocalizations.of(context)!.onboardingMuscleMass,
             hintText: 'Opcional · Ej: 58',
             suffix: 'kg',
             icon: Icons.fitness_center,
@@ -490,7 +492,7 @@ class _DateOfBirthField extends StatelessWidget {
           initialDate: selectedDate ?? DateTime(now.year - 25, now.month, now.day),
           firstDate: DateTime(now.year - 120, 1, 1),
           lastDate: now,
-          helpText: 'Selecciona tu fecha de nacimiento',
+          helpText: AppLocalizations.of(context)!.profileSelectDateOfBirth,
         );
         if (picked != null) {
           onChanged(picked);
@@ -502,8 +504,8 @@ class _DateOfBirthField extends StatelessWidget {
         controller: TextEditingController(text: dateStr),
         decoration: _inputDecoration(
           context,
-          label: 'Fecha de nacimiento',
-          hintText: 'Selecciona tu fecha de nacimiento',
+          label: AppLocalizations.of(context)!.profileDateOfBirth,
+          hintText: AppLocalizations.of(context)!.profileSelectDateOfBirth,
           icon: Icons.cake_outlined,
         ),
       ),

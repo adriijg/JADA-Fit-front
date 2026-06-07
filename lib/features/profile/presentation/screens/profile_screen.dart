@@ -84,8 +84,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  String _formatCreatedAt(DateTime? date) {
-    if (date == null) return 'No disponible';
+  String _formatCreatedAt(DateTime? date, AppLocalizations l10n) {
+    if (date == null) return l10n.profileNotAvailable;
 
     final day = date.day.toString().padLeft(2, '0');
     final month = date.month.toString().padLeft(2, '0');
@@ -159,7 +159,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (currentUser == null) {
       return Center(
         child: _ErrorCard(
-          message: 'No se pudo cargar tu cuenta.',
+          message: AppLocalizations.of(context)!.profileError,
           onRetry: _loadUserAccount,
         ),
       );
@@ -173,7 +173,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _AccountInfoCard(
             username: currentUser.username,
             email: currentUser.email,
-            createdAt: _formatCreatedAt(currentUser.createdAt),
+            createdAt: _formatCreatedAt(currentUser.createdAt, AppLocalizations.of(context)!),
           ),
           SizedBox(height: 24),
           _AccountOptionsCard(
@@ -282,7 +282,7 @@ class _AccountInfoCard extends StatelessWidget {
         children: [
           _AccountInfoRow(
             icon: Icons.badge_outlined,
-            label: 'Usuario',
+            label: AppLocalizations.of(context)!.profileUserLabel,
             value: username,
           ),
           const _AccountDivider(),
@@ -294,7 +294,7 @@ class _AccountInfoCard extends StatelessWidget {
           const _AccountDivider(),
           _AccountInfoRow(
             icon: Icons.calendar_month_outlined,
-            label: 'Cuenta creada',
+            label: AppLocalizations.of(context)!.profileAccountCreated,
             value: createdAt,
           ),
         ],
@@ -452,7 +452,7 @@ class _AccountOptionsCardState extends State<_AccountOptionsCard> {
           _PrivacyToggleTile(
             icon: Icons.lock_outline,
             title: AppLocalizations.of(context)!.settingsShareProgress,
-            subtitle: 'Permitir a otros ver tu actividad',
+            subtitle: AppLocalizations.of(context)!.profileShareActivityDescription,
             value: _shareProgress,
             isLoading: _isUpdatingPrivacy,
             onChanged: _togglePrivacy,
@@ -475,7 +475,7 @@ class _AccountOptionsCardState extends State<_AccountOptionsCard> {
           _AccountOptionTile(
             icon: Icons.logout,
             title: AppLocalizations.of(context)!.settingsLogout,
-            subtitle: 'Salir de tu cuenta',
+            subtitle: AppLocalizations.of(context)!.profileLogoutDescription,
             isDestructive: true,
             onTap: widget.onLogout,
           ),

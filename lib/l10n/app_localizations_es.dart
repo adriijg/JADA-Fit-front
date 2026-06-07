@@ -337,6 +337,39 @@ class AppLocalizationsEs extends AppLocalizations {
   String get nutritionErrorAddingRecipe => 'Error al añadir la receta';
 
   @override
+  String get nutritionSave => 'Guardar';
+
+  @override
+  String get nutritionRecipeNameRequired => 'El nombre es obligatorio';
+
+  @override
+  String get nutritionRequired => 'Obligatorio';
+
+  @override
+  String get nutritionQuantityGrams => 'Cantidad (g)';
+
+  @override
+  String get nutritionServings => 'Porciones';
+
+  @override
+  String get nutritionTotalRecipe => 'TOTAL RECETA';
+
+  @override
+  String get nutritionQuantity => 'Cantidad';
+
+  @override
+  String get nutritionCustom => 'Personalizado';
+
+  @override
+  String get nutritionCustomFood => 'Alimento personalizado';
+
+  @override
+  String get nutritionSearchFoodHint => 'Buscar alimento, ej: Nutella';
+
+  @override
+  String get nutritionFoodNameShort => 'Nombre';
+
+  @override
   String get workoutRoutineUpdated => '¡Rutina actualizada!';
 
   @override
@@ -903,6 +936,55 @@ class AppLocalizationsEs extends AppLocalizations {
   String get profileGender => 'Género';
 
   @override
+  String get profileUserLabel => 'Usuario';
+
+  @override
+  String get profileAccountCreated => 'Cuenta creada';
+
+  @override
+  String get profileNotAvailable => 'No disponible';
+
+  @override
+  String get profileShareActivityDescription =>
+      'Permitir a otros ver tu actividad';
+
+  @override
+  String get profileLogoutDescription => 'Salir de tu cuenta';
+
+  @override
+  String get profileUpdateError => 'No se pudo actualizar el perfil';
+
+  @override
+  String get profileWeightHint => 'Ej: 78.5';
+
+  @override
+  String get profileWeightSuffix => 'kg';
+
+  @override
+  String get profileHeightHint => 'Ej: 180';
+
+  @override
+  String get profileHeightSuffix => 'cm';
+
+  @override
+  String get profileGoalHint => 'Ej: ganar masa muscular';
+
+  @override
+  String get profileBodyFatHint => 'Ej: 15.2';
+
+  @override
+  String get profileBodyFatSuffix => '%';
+
+  @override
+  String get profileMuscleMassHint => 'Ej: 62';
+
+  @override
+  String get profileSelectDateOfBirth => 'Selecciona tu fecha de nacimiento';
+
+  @override
+  String get profileDateOfBirth => 'Fecha de nacimiento';
+
+  @override
   String get loginTitle => 'INICIAR SESIÓN';
 
   @override
@@ -1407,7 +1489,110 @@ class AppLocalizationsEs extends AppLocalizations {
   String get fitnessAddPhysicalRecordTitle => 'Añadir registro físico';
 
   @override
+  String get fitnessAddPhysicalRecordSubtitle =>
+      'Registra peso, grasa corporal y masa muscular';
+
+  @override
   String get fitnessHistorySubtitle => 'Histórico y progreso físico';
+
+  @override
+  String fitnessProfileUpdatedAt(String dateTime) {
+    return 'Actualizado: $dateTime';
+  }
+
+  @override
+  String get fitnessWeightLabel => 'Peso';
+
+  @override
+  String get fitnessFatLabel => 'Grasa';
+
+  @override
+  String get fitnessEnterWeight => 'Introduce tu peso actual';
+
+  @override
+  String get fitnessWeightPositiveError => 'El peso debe ser mayor que 0';
+
+  @override
+  String get fitnessFatNegativeError =>
+      'La grasa corporal no puede ser negativa';
+
+  @override
+  String get fitnessMuscleNegativeError =>
+      'La masa muscular no puede ser negativa';
+
+  @override
+  String get fitnessFutureDateError =>
+      'No puedes registrar datos en una fecha futura';
+
+  @override
+  String get fitnessEnterHeight => 'Introduce tu altura';
+
+  @override
+  String get fitnessHeightPositiveError => 'La altura debe ser mayor que 0';
+
+  @override
+  String get fitnessEnterBirthDate => 'Introduce tu fecha de nacimiento';
+
+  @override
+  String get fitnessSelectGoalPrompt => 'Selecciona tu objetivo';
+
+  @override
+  String get fitnessImprovePerformance => 'Mejorar rendimiento';
+
+  @override
+  String get fitnessViewMonthlyCalendar => 'Ver calendario mensual';
+
+  @override
+  String get fitnessCalendarWeekly => 'Calendario semanal';
+
+  @override
+  String get fitnessCalendarMonthly => 'Calendario mensual';
+
+  @override
+  String get fitnessWeightSubtitle =>
+      'Peso registrado durante el mes seleccionado';
+
+  @override
+  String get fitnessFatSubtitle =>
+      'Porcentaje de grasa durante el mes seleccionado';
+
+  @override
+  String get fitnessMuscleSubtitle =>
+      'Masa muscular durante el mes seleccionado';
+
+  @override
+  String fitnessTotalChange(String value) {
+    return 'Cambio total: $value';
+  }
+
+  @override
+  String fitnessRecordsSaved(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count registros guardados',
+      one: '1 registro guardado',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get fitnessCurrentLabel => 'Actual';
+
+  @override
+  String get fitnessChangeLabel => 'Cambio';
+
+  @override
+  String fitnessWeekOfRange(String start, String end) {
+    return 'Semana del $start al $end';
+  }
+
+  @override
+  String get fitnessOnboardingDescription =>
+      'Usaremos estos datos para personalizar tus recomendaciones, objetivos y progreso.';
+
+  @override
+  String get fitnessEnterWeightOnboarding => 'Introduce tu peso';
 
   @override
   String profilePrivacyUpdateError(String error) {
@@ -1456,4 +1641,226 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get socialShareProgressCommunity =>
       'Comparte tu progreso con la comunidad';
+
+  @override
+  String socialLikeSuccess(String username) {
+    return 'Le has dado me gusta a $username';
+  }
+
+  @override
+  String socialLikeError(String error) {
+    return 'No se pudo actualizar el me gusta: $error';
+  }
+
+  @override
+  String get socialSendTo => 'Enviar a';
+
+  @override
+  String get socialNoFollowing => 'Todavía no sigues a ningún usuario';
+
+  @override
+  String socialPostSent(String username) {
+    return 'Publicación enviada a $username';
+  }
+
+  @override
+  String get socialLoadFollowingError => 'No se pudieron cargar tus seguidos';
+
+  @override
+  String get socialFollowers => 'Seguidores';
+
+  @override
+  String get socialFollowing => 'Siguiendo';
+
+  @override
+  String get socialFollow => 'Seguir';
+
+  @override
+  String get socialUnfollow => 'Dejar de seguir';
+
+  @override
+  String get socialProgressShared => 'Este usuario comparte su progreso';
+
+  @override
+  String get socialProgressPrivate => 'Progreso privado';
+
+  @override
+  String get socialPosts => 'Publicaciones';
+
+  @override
+  String get socialChallengeExpired => 'Expirado';
+
+  @override
+  String socialChallengeExpiresIn(String time) {
+    return 'Expira en $time';
+  }
+
+  @override
+  String get socialChallengeDeleteExpired => 'Eliminar expirados';
+
+  @override
+  String get socialChallengeConfirmDeleteExpired =>
+      '¿Eliminar todos los piques expirados?';
+
+  @override
+  String get socialChallengeNoExpired => 'No hay piques expirados';
+
+  @override
+  String get workoutMyPlans => 'Tus planes de entrenamiento';
+
+  @override
+  String get workoutRoutines => 'RUTINAS';
+
+  @override
+  String get workoutCompleted => 'COMPLETADAS';
+
+  @override
+  String get workoutAll => 'TODOS';
+
+  @override
+  String get workoutInProgress => 'En progreso';
+
+  @override
+  String workoutExercisesCount(int count) {
+    return '$count ejercicios';
+  }
+
+  @override
+  String get workoutCompleteRoutine => 'Completar rutina';
+
+  @override
+  String get workoutNoExercises => 'Esta rutina no tiene ejercicios';
+
+  @override
+  String get workoutObjective => 'Objetivo';
+
+  @override
+  String get workoutRoutineType => 'Tipo de rutina';
+
+  @override
+  String get workoutSelectObjective => 'Selecciona un objetivo';
+
+  @override
+  String get workoutSelectRoutineType => 'Selecciona el tipo de rutina';
+
+  @override
+  String get workoutAdditionalNotes => 'Notas adicionales...';
+
+  @override
+  String get workoutExercises => 'Ejercicios';
+
+  @override
+  String workoutSuggestedExercises(String goal) {
+    return 'Ejercicios sugeridos para $goal';
+  }
+
+  @override
+  String get workoutTrySuggested =>
+      'o prueba ejercicios sugeridos para tu objetivo';
+
+  @override
+  String get workoutSets => 'Series';
+
+  @override
+  String get workoutSeconds => 'Segundos';
+
+  @override
+  String get workoutSaveChanges => 'GUARDAR CAMBIOS';
+
+  @override
+  String get workoutSaveRoutine => 'GUARDAR RUTINA';
+
+  @override
+  String get workoutRoutineNameHint => 'Ej. Empuje, Piernas, Full Body...';
+
+  @override
+  String get workoutExerciseNameHint => 'Ej. Press de Banca';
+
+  @override
+  String get workoutRequired => 'Requerido';
+
+  @override
+  String get workoutSearchRoutines => 'Buscar rutinas...';
+
+  @override
+  String get workoutCompletedSection => 'Completadas';
+
+  @override
+  String get workoutDeleteRoutineError => 'No se pudo eliminar la rutina';
+
+  @override
+  String get workoutCompleteRoutineError => 'No se pudo completar la rutina';
+
+  @override
+  String get workoutRoutinesLoadError => 'No se pudieron cargar las rutinas';
+
+  @override
+  String get workoutSelectObjectiveError =>
+      'Selecciona un objetivo para la rutina';
+
+  @override
+  String get workoutCreateRoutineError => 'No se pudo crear la rutina';
+
+  @override
+  String get workoutUpdateRoutineError => 'No se pudo actualizar la rutina';
+
+  @override
+  String get workoutRoutineCompletedLabel => 'Completada';
+
+  @override
+  String get workoutExercise => 'Ejercicio';
+
+  @override
+  String get socialSearchUsers => 'Buscar usuarios...';
+
+  @override
+  String get socialNoUsersFound => 'No se encontraron usuarios';
+
+  @override
+  String get socialCancel => 'Cancelar';
+
+  @override
+  String socialLoadCommentsError(String error) {
+    return 'Error al cargar comentarios: $error';
+  }
+
+  @override
+  String socialSendCommentError(String error) {
+    return 'Error al enviar comentario: $error';
+  }
+
+  @override
+  String socialDeleteStoryError(String error) {
+    return 'Error al eliminar historia: $error';
+  }
+
+  @override
+  String get socialStoryLoadError => 'No se pudo cargar la historia';
+
+  @override
+  String get socialUserFallback => 'Usuario';
+
+  @override
+  String get socialMyPosts => 'Mis publicaciones';
+
+  @override
+  String get weekdayMon => 'L';
+
+  @override
+  String get weekdayTue => 'M';
+
+  @override
+  String get weekdayWed => 'X';
+
+  @override
+  String get weekdayThu => 'J';
+
+  @override
+  String get weekdayFri => 'V';
+
+  @override
+  String get weekdaySat => 'S';
+
+  @override
+  String get weekdaySun => 'D';
 }

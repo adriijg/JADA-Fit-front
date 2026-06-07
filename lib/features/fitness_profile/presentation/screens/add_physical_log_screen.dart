@@ -145,37 +145,39 @@ class _AddPhysicalLogScreenState extends State<AddPhysicalLogScreen> {
       errorMessage = null;
     });
 
+    final l10n = AppLocalizations.of(context)!;
+
     if (weight == null) {
       setState(() {
-        errorMessage = 'Introduce tu peso actual';
+        errorMessage = l10n.fitnessEnterWeight;
       });
       return;
     }
 
     if (weight <= 0) {
       setState(() {
-        errorMessage = 'El peso debe ser mayor que 0';
+        errorMessage = l10n.fitnessWeightPositiveError;
       });
       return;
     }
 
     if (bodyFat != null && bodyFat < 0) {
       setState(() {
-        errorMessage = 'La grasa corporal no puede ser negativa';
+        errorMessage = l10n.fitnessFatNegativeError;
       });
       return;
     }
 
     if (muscleMass != null && muscleMass < 0) {
       setState(() {
-        errorMessage = 'La masa muscular no puede ser negativa';
+        errorMessage = l10n.fitnessMuscleNegativeError;
       });
       return;
     }
 
     if (loggedAt.isAfter(DateTime.now())) {
       setState(() {
-        errorMessage = 'No puedes registrar datos en una fecha futura';
+        errorMessage = l10n.fitnessFutureDateError;
       });
       return;
     }
@@ -407,7 +409,7 @@ class _IntroCard extends StatelessWidget {
                 ),
                 SizedBox(width: 8),
                 Text(
-                  hasGoal ? goal : 'Sin objetivo configurado',
+                  hasGoal ? goal : AppLocalizations.of(context)!.fitnessNotConfigured,
                   style: TextStyle(
                     color: hasGoal
                         ? context.colors.textMain

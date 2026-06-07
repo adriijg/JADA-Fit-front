@@ -10,6 +10,7 @@ import 'create_routine_screen.dart';
 import 'routine_detail_screen.dart';
 import 'exercise_library_screen.dart';
 import '../widgets/routine_skeleton.dart';
+import '../utils/workout_localizations.dart';
 
 class RoutinesScreen extends StatefulWidget {
   const RoutinesScreen({super.key});
@@ -79,7 +80,8 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
       setState(() => _errorMessage = e.message);
     } catch (_) {
       if (!mounted) return;
-      setState(() => _errorMessage = 'No se pudieron cargar las rutinas');
+      final l10n = AppLocalizations.of(context)!;
+      setState(() => _errorMessage = l10n.workoutRoutinesLoadError);
     } finally {
       if (mounted) {
         setState(() => _isLoading = false);
@@ -113,6 +115,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return RefreshIndicator(
       onRefresh: _loadRoutines,
       color: context.colors.primary,
@@ -138,7 +141,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
                     ),
                     SizedBox(height: 6),
                     Text(
-                      'Tus planes de entrenamiento',
+                      l10n.workoutMyPlans,
                       style: TextStyle(
                         color: context.colors.secondary,
                         fontSize: 14,
@@ -194,6 +197,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
   }
 
   Widget _buildStats() {
+    final l10n = AppLocalizations.of(context)!;
     final totalRoutines = _routines.length;
     final completedCount = _routines.where((r) => r.isCompleted).length;
 
@@ -201,9 +205,9 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
       padding: EdgeInsets.all(16),
       child: Row(
         children: [
-          _buildStatItem('RUTINAS', totalRoutines.toString(), Icons.fitness_center_rounded),
+          _buildStatItem(l10n.workoutRoutines, totalRoutines.toString(), Icons.fitness_center_rounded),
           SizedBox(width: 16),
-          _buildStatItem('COMPLETADAS', completedCount.toString(), Icons.check_circle_rounded),
+          _buildStatItem(l10n.workoutCompleted, completedCount.toString(), Icons.check_circle_rounded),
         ],
       ),
     );
@@ -243,6 +247,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
   }
 
   Widget _buildSearchBar() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
         color: context.colors.inputBackground,
@@ -256,7 +261,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
         controller: _searchController,
         style: TextStyle(color: context.colors.textMain, fontWeight: FontWeight.w500),
         decoration: InputDecoration(
-          hintText: 'Buscar rutinas...',
+          hintText: l10n.workoutSearchRoutines,
           hintStyle: TextStyle(color: context.colors.textMain.withOpacity(0.3)),
           prefixIcon: Icon(Icons.search_rounded, color: context.colors.secondary),
           border: InputBorder.none,
@@ -273,13 +278,14 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
   }
 
   Widget _buildFilters() {
+    final l10n = AppLocalizations.of(context)!;
     final allGoals = [null, ...RoutineGoal.values];
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       padding: EdgeInsets.symmetric(vertical: 16),
       child: Row(
         children: allGoals.map((goal) {
-          final label = goal == null ? 'TODOS' : goal.displayName;
+          final label = goal == null ? l10n.workoutAll : goal.localizedDisplayName(l10n);
           final isSelected = _selectedGoal == goal;
           return Padding(
             padding: EdgeInsets.only(right: 10),
@@ -312,6 +318,8 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
   }
 
   Widget _buildBody() {
+    final l10n = AppLocalizations.of(context)!;
+
     if (_isLoading && _routines.isEmpty) {
       return Column(
         children: List.generate(3, (index) => RoutineSkeleton()),
@@ -348,7 +356,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
                   padding: EdgeInsets.symmetric(horizontal: 32, vertical: 14),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                 ),
-                child: Text(AppLocalizations.of(context)!.nutritionRetry, style: TextStyle(fontWeight: FontWeight.w800)),
+                child: Text(l10n.nutritionRetry, style: TextStyle(fontWeight: FontWeight.w800)),
               ),
             ],
           ),
@@ -384,8 +392,8 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
             SizedBox(height: 24),
             Text(
               _searchQuery.isNotEmpty || _selectedGoal != null
-                  ? AppLocalizations.of(context)!.workoutNoResults
-                  : AppLocalizations.of(context)!.workoutRoutinesEmpty,
+                  ? l10n.workoutNoResults
+                  : l10n.workoutRoutinesEmpty,
               style: TextStyle(
                 color: context.colors.textMain,
                 fontSize: 22,
@@ -395,8 +403,8 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
             SizedBox(height: 12),
             Text(
               _searchQuery.isNotEmpty || _selectedGoal != null
-                  ? AppLocalizations.of(context)!.workoutNoRoutinesFound
-                  : AppLocalizations.of(context)!.workoutDesignFirstRoutine,
+                  ? l10n.workoutNoRoutinesFound
+                  : l10n.workoutDesignFirstRoutine,
               style: TextStyle(
                 color: context.colors.textMain.withOpacity(0.5),
                 fontSize: 15,
@@ -427,7 +435,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
                 ),
                 SizedBox(width: 10),
                 Text(
-                  'En progreso',
+                  l10n.workoutInProgress,
                   style: TextStyle(
                     color: context.colors.textMain,
                     fontSize: 16,
@@ -476,7 +484,7 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
                   ),
                   SizedBox(width: 10),
                   Text(
-                    'Completadas',
+                    l10n.workoutCompletedSection,
                     style: TextStyle(
                       color: AppColors.success.withOpacity(0.9),
                       fontSize: 16,
@@ -518,6 +526,7 @@ class _PremiumRoutineCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: EdgeInsets.only(bottom: 20),
       child: AppCard(
@@ -569,7 +578,7 @@ class _PremiumRoutineCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
-                          routine.targetGoal.toUpperCase(),
+                          RoutineGoal.fromString(routine.targetGoal)?.localizedDisplayName(l10n) ?? routine.targetGoal.toUpperCase(),
                           style: TextStyle(
                             color: context.colors.primary,
                             fontSize: 10,
@@ -612,7 +621,7 @@ class _PremiumRoutineCard extends StatelessWidget {
                 ),
                 SizedBox(width: 4),
                 Text(
-                  '${routine.exercises.length} ejercicios',
+                  l10n.workoutExercisesCount(routine.exercises.length),
                   style: TextStyle(
                     color: context.colors.textMain.withOpacity(0.5),
                     fontSize: 12,

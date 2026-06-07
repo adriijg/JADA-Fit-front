@@ -165,7 +165,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
             child: TextField(
               controller: _searchController,
               decoration: InputDecoration(
-                hintText: 'Buscar usuarios...',
+                hintText: AppLocalizations.of(context)!.socialSearchUsers,
                 hintStyle: TextStyle(
                   color: context.colors.secondary.withValues(alpha: 0.6),
                   fontSize: 14,
@@ -229,7 +229,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
             ),
             SizedBox(height: 12),
             Text(
-              'No se encontraron usuarios',
+              AppLocalizations.of(context)!.socialNoUsersFound,
               style: TextStyle(color: context.colors.secondary, fontSize: 14),
             ),
           ],

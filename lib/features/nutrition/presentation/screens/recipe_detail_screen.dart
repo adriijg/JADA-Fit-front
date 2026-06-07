@@ -212,12 +212,12 @@ class _MacroTotalCard extends StatelessWidget {
               ),
               SizedBox(width: 8),
               _MacroBlock(
-                label: 'Hidratos',
+                label: AppLocalizations.of(context)!.nutritionCarbs,
                 value: '${_f(recipe.totalCarbs)} g',
               ),
               SizedBox(width: 8),
               _MacroBlock(
-                label: 'Grasas',
+                label: AppLocalizations.of(context)!.nutritionFat,
                 value: '${_f(recipe.totalFats)} g',
               ),
             ],

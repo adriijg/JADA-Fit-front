@@ -61,7 +61,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
       if (mounted) {
         setState(() => _isLoadingComments = false);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error al cargar comentarios: $e')),
+          SnackBar(content: Text(AppLocalizations.of(context)!.socialLoadCommentsError(e.toString()))),
         );
       }
     }
@@ -94,7 +94,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
       if (mounted) {
         setState(() => _isSending = false);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error al enviar comentario: $e')),
+          SnackBar(content: Text(AppLocalizations.of(context)!.socialSendCommentError(e.toString()))),
         );
       }
     }
@@ -111,7 +111,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: Text('Cancelar'),
+            child: Text(l10n.socialCancel),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
@@ -140,13 +140,13 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
     }
   }
 
-  String _timeAgo(DateTime dateTime) {
+  String _timeAgo(DateTime dateTime, AppLocalizations l10n) {
     final now = DateTime.now();
     final diff = now.difference(dateTime);
-    if (diff.inMinutes < 1) return 'ahora';
-    if (diff.inMinutes < 60) return 'hace ${diff.inMinutes}m';
-    if (diff.inHours < 24) return 'hace ${diff.inHours}h';
-    if (diff.inDays < 7) return 'hace ${diff.inDays}d';
+    if (diff.inMinutes < 1) return l10n.socialTimeAgoNow;
+    if (diff.inMinutes < 60) return l10n.socialTimeAgoMinutes(diff.inMinutes);
+    if (diff.inHours < 24) return l10n.socialTimeAgoHours(diff.inHours);
+    if (diff.inDays < 7) return l10n.socialTimeAgoDays(diff.inDays);
     return '${dateTime.day}/${dateTime.month}/${dateTime.year}';
   }
 
@@ -311,7 +311,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                           ),
                           Spacer(),
                           Text(
-                            _timeAgo(post.createdAt),
+                            _timeAgo(post.createdAt, l10n),
                             style: TextStyle(
                               color: context.colors.secondary,
                               fontSize: 11,
@@ -410,7 +410,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                     ),
                   )
                 else
-                  ..._comments.map((comment) => _buildCommentTile(comment)),
+                   ..._comments.map((comment) => _buildCommentTile(comment, l10n)),
               ],
             ),
           ),
@@ -493,7 +493,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
     );
   }
 
-  Widget _buildCommentTile(PostComment comment) {
+  Widget _buildCommentTile(PostComment comment, AppLocalizations l10n) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       child: Row(
@@ -535,7 +535,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                     ),
                     SizedBox(width: 8),
                     Text(
-                      _timeAgo(comment.createdAt),
+                      _timeAgo(comment.createdAt, l10n),
                       style: TextStyle(
                         color: context.colors.secondary,
                         fontSize: 10,

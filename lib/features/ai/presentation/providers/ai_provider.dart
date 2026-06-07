@@ -206,7 +206,7 @@ class AiProvider extends ChangeNotifier {
       final history = session.messages
           .where((m) => m != session.messages.last)
           .toList();
-      final response = await _aiService.chat(text, history);
+      final response = await _aiService.chat(text, history, locale: _localeCode);
       session.messages.add(ChatMessageModel(
         role: ChatMessageRole.ai,
         text: response,

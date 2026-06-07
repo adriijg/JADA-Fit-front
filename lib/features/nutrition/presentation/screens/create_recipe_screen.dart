@@ -288,7 +288,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                     ),
                   )
                 : Text(
-                    'Guardar',
+                    AppLocalizations.of(context)!.nutritionSave,
                     style: TextStyle(
                       color: context.colors.primary,
                       fontWeight: FontWeight.w800,
@@ -410,7 +410,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
             ),
             validator: (value) {
               if (value == null || value.trim().isEmpty) {
-                return 'El nombre es obligatorio';
+                return AppLocalizations.of(context)!.nutritionRecipeNameRequired;
               }
               return null;
             },
@@ -428,7 +428,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'PORCIONES',
+            AppLocalizations.of(context)!.nutritionServings.toUpperCase(),
             style: TextStyle(
               color: context.colors.secondary,
               fontSize: 11,
@@ -474,7 +474,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
               Icon(Icons.bar_chart, color: context.colors.primary, size: 20),
               SizedBox(width: 8),
               Text(
-                'TOTAL RECETA',
+                AppLocalizations.of(context)!.nutritionTotalRecipe,
                 style: TextStyle(
                   color: context.colors.secondary,
                   fontSize: 11,
@@ -498,12 +498,12 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
               ),
               SizedBox(width: 8),
               _MacroBadge(
-                label: 'Hidratos',
+                label: AppLocalizations.of(context)!.nutritionCarbs,
                 value: '${_totalCarbs.toStringAsFixed(1)} g',
               ),
               SizedBox(width: 8),
               _MacroBadge(
-                label: 'Grasas',
+                label: AppLocalizations.of(context)!.nutritionFat,
                 value: '${_totalFats.toStringAsFixed(1)} g',
               ),
             ],
@@ -582,7 +582,7 @@ class _IngredientCard extends StatelessWidget {
               fontWeight: FontWeight.w700,
             ),
             decoration: InputDecoration(
-              labelText: 'Nombre del alimento',
+              labelText: AppLocalizations.of(context)!.nutritionFoodName,
               labelStyle: TextStyle(
                 color: context.colors.secondary,
                 fontSize: 12,
@@ -609,7 +609,7 @@ class _IngredientCard extends StatelessWidget {
             onChanged: (value) => ingredient.foodName = value,
             validator: (value) {
               if (value == null || value.trim().isEmpty) {
-                return 'Obligatorio';
+                return AppLocalizations.of(context)!.nutritionRequired;
               }
               return null;
             },
@@ -619,7 +619,7 @@ class _IngredientCard extends StatelessWidget {
             children: [
               Expanded(
                 child: _MacroField(
-                  label: 'Cantidad (g)',
+                  label: AppLocalizations.of(context)!.nutritionQuantityGrams,
                   initialValue: ingredient.quantityGrams.toString(),
                   onChanged: (v) => ingredient.quantityGrams = v,
                 ),
@@ -627,7 +627,7 @@ class _IngredientCard extends StatelessWidget {
               SizedBox(width: 8),
               Expanded(
                 child: _MacroField(
-                  label: 'Kcal/100g',
+                  label: AppLocalizations.of(context)!.nutritionKcalPer100g,
                   initialValue: ingredient.caloriesPer100g.toString(),
                   onChanged: (v) => ingredient.caloriesPer100g = v,
                 ),
@@ -639,7 +639,7 @@ class _IngredientCard extends StatelessWidget {
             children: [
               Expanded(
                 child: _MacroField(
-                  label: 'Prot/100g',
+                  label: AppLocalizations.of(context)!.nutritionProteinPer100g,
                   initialValue: ingredient.proteinPer100g.toString(),
                   onChanged: (v) => ingredient.proteinPer100g = v,
                 ),
@@ -647,7 +647,7 @@ class _IngredientCard extends StatelessWidget {
               SizedBox(width: 8),
               Expanded(
                 child: _MacroField(
-                  label: 'Carb/100g',
+                  label: AppLocalizations.of(context)!.nutritionCarbsPer100g,
                   initialValue: ingredient.carbsPer100g.toString(),
                   onChanged: (v) => ingredient.carbsPer100g = v,
                 ),
@@ -655,7 +655,7 @@ class _IngredientCard extends StatelessWidget {
               SizedBox(width: 8),
               Expanded(
                 child: _MacroField(
-                  label: 'Gras/100g',
+                  label: AppLocalizations.of(context)!.nutritionFatPer100g,
                   initialValue: ingredient.fatsPer100g.toString(),
                   onChanged: (v) => ingredient.fatsPer100g = v,
                 ),

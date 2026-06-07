@@ -101,37 +101,39 @@ class _EditFitnessProfileScreenState extends State<EditFitnessProfileScreen> {
       errorMessage = null;
     });
 
+    final l10n = AppLocalizations.of(context)!;
+
     if (height == null) {
       setState(() {
-        errorMessage = 'Introduce tu altura';
+        errorMessage = l10n.fitnessEnterHeight;
       });
       return;
     }
 
     if (height <= 0) {
       setState(() {
-        errorMessage = 'La altura debe ser mayor que 0';
+        errorMessage = l10n.fitnessHeightPositiveError;
       });
       return;
     }
 
     if (dateOfBirth == null) {
       setState(() {
-        errorMessage = 'Introduce tu fecha de nacimiento';
+        errorMessage = l10n.fitnessEnterBirthDate;
       });
       return;
     }
 
     if (selectedGender == null) {
       setState(() {
-        errorMessage = AppLocalizations.of(context)!.fitnessSelectGenderError;
+        errorMessage = l10n.fitnessSelectGenderError;
       });
       return;
     }
 
     if (selectedGoal == null) {
       setState(() {
-        errorMessage = 'Selecciona tu objetivo';
+        errorMessage = l10n.fitnessSelectGoalPrompt;
       });
       return;
     }
@@ -221,7 +223,7 @@ class _EditFitnessProfileScreenState extends State<EditFitnessProfileScreen> {
       case 'MANTENERSE_ATLETICO':
         return AppLocalizations.of(context)!.fitnessStayAthletic;
       case 'MEJORAR_RENDIMIENTO':
-        return 'Mejorar rendimiento';
+        return AppLocalizations.of(context)!.fitnessImprovePerformance;
       case 'RECOMPOSICION_CORPORAL':
         return AppLocalizations.of(context)!.fitnessRecomposition;
       default:
@@ -423,7 +425,7 @@ class _FormCard extends StatelessWidget {
           _FitnessTextField(
             controller: heightController,
             label: AppLocalizations.of(context)!.fitnessHeight,
-            hintText: 'Ej: 180',
+            hintText: AppLocalizations.of(context)!.profileHeightHint,
             suffix: 'cm',
             icon: Icons.height,
             keyboardType: TextInputType.number,
@@ -527,7 +529,7 @@ class _DateOfBirthField extends StatelessWidget {
           initialDate: selectedDate ?? DateTime(now.year - 25, now.month, now.day),
           firstDate: DateTime(now.year - 120, 1, 1),
           lastDate: now,
-          helpText: 'Selecciona tu fecha de nacimiento',
+          helpText: AppLocalizations.of(context)!.profileSelectDateOfBirth,
         );
         if (picked != null) {
           onChanged(picked);
@@ -540,12 +542,12 @@ class _DateOfBirthField extends StatelessWidget {
         decoration: InputDecoration(
           filled: true,
           fillColor: context.colors.inputBackground,
-          labelText: 'Fecha de nacimiento',
+          labelText: AppLocalizations.of(context)!.profileDateOfBirth,
           labelStyle: TextStyle(
             color: context.colors.secondary,
             fontWeight: FontWeight.w600,
           ),
-          hintText: 'Selecciona tu fecha de nacimiento',
+          hintText: AppLocalizations.of(context)!.profileSelectDateOfBirth,
           hintStyle: TextStyle(
             color: context.colors.textMain.withOpacity(0.45),
           ),

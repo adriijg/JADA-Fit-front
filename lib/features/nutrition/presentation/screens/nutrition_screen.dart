@@ -515,22 +515,23 @@ class _WeekCalendar extends StatelessWidget {
     );
   }
 
-  String _weekdayLabel(int weekday) {
+  String _weekdayLabel(int weekday, BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     switch (weekday) {
       case DateTime.monday:
-        return 'L';
+        return l10n.weekdayMon;
       case DateTime.tuesday:
-        return 'M';
+        return l10n.weekdayTue;
       case DateTime.wednesday:
-        return 'X';
+        return l10n.weekdayWed;
       case DateTime.thursday:
-        return 'J';
+        return l10n.weekdayThu;
       case DateTime.friday:
-        return 'V';
+        return l10n.weekdayFri;
       case DateTime.saturday:
-        return 'S';
+        return l10n.weekdaySat;
       case DateTime.sunday:
-        return 'D';
+        return l10n.weekdaySun;
       default:
         return '';
     }
@@ -592,7 +593,7 @@ class _WeekCalendar extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      _weekdayLabel(day.weekday),
+                      _weekdayLabel(day.weekday, context),
                       style: TextStyle(
                         color: selected
                             ? context.colors.background

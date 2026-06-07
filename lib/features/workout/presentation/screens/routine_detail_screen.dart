@@ -7,6 +7,8 @@ import '../../../../core/widgets/app_card.dart';
 import '../../data/models/routine_model.dart';
 import '../../data/services/routine_service.dart';
 import '../../data/services/completed_storage_service.dart';
+import '../../data/models/routine_goal.dart';
+import '../utils/workout_localizations.dart';
 import 'create_routine_screen.dart';
 
 class RoutineDetailScreen extends StatefulWidget {
@@ -112,7 +114,7 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
       _showError(e.message);
     } catch (_) {
       if (!mounted) return;
-      _showError('No se pudo eliminar la rutina');
+      _showError(AppLocalizations.of(context)!.workoutDeleteRoutineError);
     } finally {
       if (mounted) setState(() => _deleting = false);
     }
@@ -166,7 +168,7 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
       _showError(e.message);
     } catch (_) {
       if (!mounted) return;
-      _showError('No se pudo completar la rutina');
+      _showError(AppLocalizations.of(context)!.workoutCompleteRoutineError);
     } finally {
       if (mounted) setState(() => _completing = false);
     }
@@ -240,7 +242,7 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
                       Icon(Icons.check_circle, color: AppColors.success, size: 16),
                       SizedBox(width: 4),
                       Text(
-                        'Completada',
+                        AppLocalizations.of(context)!.workoutRoutineCompletedLabel,
                         style: TextStyle(
                           color: AppColors.success,
                           fontSize: 12,
@@ -276,7 +278,7 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
                       ),
                       child: Icon(Icons.edit_outlined, color: context.colors.primary, size: 20),
                     ),
-                    tooltip: 'Editar rutina',
+                    tooltip: AppLocalizations.of(context)!.workoutEditRoutine,
                   ),
                 SizedBox(width: 8),
                 IconButton(
@@ -289,7 +291,7 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
                     ),
                     child: Icon(Icons.delete_outline, color: AppColors.error, size: 20),
                   ),
-                  tooltip: 'Eliminar rutina',
+                  tooltip: AppLocalizations.of(context)!.workoutDeleteRoutine,
                 ),
             ],
             flexibleSpace: FlexibleSpaceBar(
@@ -319,7 +321,7 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
                             border: Border.all(color: context.colors.tertiary.withOpacity(0.3)),
                           ),
                           child: Text(
-                            routine.targetGoal.toUpperCase(),
+                            RoutineGoal.fromString(routine.targetGoal)?.localizedDisplayName(AppLocalizations.of(context)!) ?? routine.targetGoal.toUpperCase(),
                             style: TextStyle(
                               color: context.colors.tertiary,
                               fontSize: 11,
@@ -368,7 +370,7 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
                       Icon(Icons.fitness_center_rounded, color: context.colors.secondary, size: 20),
                       SizedBox(width: 8),
                       Text(
-                        'Ejercicios (${routine.exercises.length})',
+                        '${AppLocalizations.of(context)!.workoutExercises} (${routine.exercises.length})',
                         style: TextStyle(
                           color: context.colors.textMain,
                           fontSize: 20,
@@ -396,7 +398,7 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
                           ),
                           SizedBox(height: 16),
                           Text(
-                            'Esta rutina no tiene ejercicios',
+                            AppLocalizations.of(context)!.workoutNoExercises,
                             style: TextStyle(
                               color: context.colors.textMain.withOpacity(0.5),
                               fontSize: 15,
@@ -456,7 +458,7 @@ class _RoutineDetailScreenState extends State<RoutineDetailScreen> {
                         onPressed: _markRoutineCompleted,
                         icon: Icon(Icons.check_circle_outline, size: 22),
                         label: Text(
-                          'Completar rutina',
+                          AppLocalizations.of(context)!.workoutCompleteRoutine,
                           style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
                         ),
                         style: ElevatedButton.styleFrom(
@@ -497,6 +499,7 @@ class _PremiumExerciseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return GestureDetector(
       onTap: onToggleComplete,
       child: AppCard(
@@ -585,13 +588,13 @@ class _PremiumExerciseCard extends StatelessWidget {
                         children: [
                           _StatPill(
                             icon: Icons.repeat_rounded,
-                            value: '${exercise.sets} series',
+                            value: '${exercise.sets} ${l10n.workoutSets}',
                             color: context.colors.secondary,
                           ),
                           SizedBox(width: 8),
                           _StatPill(
                             icon: Icons.unfold_more_rounded,
-                            value: '${exercise.reps} reps',
+                            value: '${exercise.reps} ${l10n.workoutReps}',
                             color: context.colors.secondary,
                           ),
                           if (exercise.durationSeconds > 0) ...[

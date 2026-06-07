@@ -270,7 +270,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       children: [
                         _StatColumn(
                           value: '${_posts.length}',
-                          label: 'Posts',
+                          label: AppLocalizations.of(context)!.socialPosts,
                         ),
                         Container(
                           width: 0.5,
@@ -279,7 +279,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         ),
                         _StatColumn(
                           value: _profile!.followersCount.toString(),
-                          label: 'Seguidores',
+                          label: AppLocalizations.of(context)!.socialFollowers,
                         ),
                         Container(
                           width: 0.5,
@@ -288,7 +288,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         ),
                         _StatColumn(
                           value: _profile!.followingCount.toString(),
-                          label: 'Siguiendo',
+                          label: AppLocalizations.of(context)!.socialFollowing,
                         ),
                       ],
                     ),
@@ -341,8 +341,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                 SizedBox(width: 8),
                                 Text(
                                   _profile!.isFollowing
-                                      ? 'Dejar de seguir'
-                                      : 'Seguir',
+                                      ? AppLocalizations.of(context)!.socialUnfollow
+                                      : AppLocalizations.of(context)!.socialFollow,
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w700,
@@ -401,10 +401,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         ),
                         SizedBox(width: 12),
                         Expanded(
-                          child: Text(
+                          child:                           Text(
                             _profile!.shareProgress
-                                ? 'Este usuario comparte su progreso'
-                                : 'Progreso privado',
+                                ? AppLocalizations.of(context)!.socialProgressShared
+                                : AppLocalizations.of(context)!.socialProgressPrivate,
                             style: TextStyle(
                               color: _profile!.shareProgress
                                   ? context.colors.textMain
@@ -442,7 +442,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               ),
                               SizedBox(width: 6),
                               Text(
-                                'Publicaciones',
+                                AppLocalizations.of(context)!.socialPosts,
                                 style: TextStyle(
                                   color: context.colors.primary,
                                   fontSize: 12,
@@ -569,7 +569,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               controller: exerciseController,
               autofocus: true,
               decoration: InputDecoration(
-                hintText: 'Ej: Press Banca, Sentadilla...',
+                hintText: AppLocalizations.of(context)!.socialExerciseHint,
                 hintStyle: TextStyle(color: context.colors.secondary),
                 enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: context.colors.divider)),
                 focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: context.colors.primary)),

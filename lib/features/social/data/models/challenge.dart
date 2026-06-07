@@ -16,6 +16,7 @@ class Challenge {
   final double challengerWeight;
   final double challengedWeight;
   final DateTime createdAt;
+  final DateTime expiresAt;
 
   Challenge({
     required this.id,
@@ -26,7 +27,15 @@ class Challenge {
     required this.challengerWeight,
     required this.challengedWeight,
     required this.createdAt,
+    required this.expiresAt,
   });
+
+  bool get isExpired => DateTime.now().isAfter(expiresAt);
+
+  Duration? get timeRemaining {
+    if (isExpired) return null;
+    return expiresAt.difference(DateTime.now());
+  }
 
   factory Challenge.fromJson(Map<String, dynamic> json) {
     return Challenge(
@@ -38,6 +47,7 @@ class Challenge {
       challengerWeight: (json['challengerWeight'] ?? 0.0).toDouble(),
       challengedWeight: (json['challengedWeight'] ?? 0.0).toDouble(),
       createdAt: DateTime.parse(json['createdAt']),
+      expiresAt: DateTime.parse(json['expiresAt']),
     );
   }
 

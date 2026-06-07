@@ -1,25 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../data/models/fitness_progress_model.dart';
 import 'add_physical_log_screen.dart';
 import '../../../../l10n/app_localizations.dart';
-
-const _months = [
-  'Enero',
-  'Febrero',
-  'Marzo',
-  'Abril',
-  'Mayo',
-  'Junio',
-  'Julio',
-  'Agosto',
-  'Septiembre',
-  'Octubre',
-  'Noviembre',
-  'Diciembre',
-];
 
 class FitnessMonthlyCalendarScreen extends StatefulWidget {
   const FitnessMonthlyCalendarScreen({
@@ -128,7 +114,8 @@ class _FitnessMonthlyCalendarScreenState
   }
 
   String _monthTitle() {
-    return '${_months[visibleMonth.month - 1]} ${visibleMonth.year}';
+    final locale = Localizations.localeOf(context).toLanguageTag();
+    return DateFormat.yMMMM(locale).format(visibleMonth);
   }
 
   String _formatDouble(double? value, String unit) {
@@ -162,7 +149,7 @@ class _FitnessMonthlyCalendarScreenState
           color: context.colors.textMain,
         ),
         title: Text(
-          'Calendario mensual',
+          AppLocalizations.of(context)!.fitnessCalendarMonthly,
           style: TextStyle(
             color: context.colors.textMain,
             fontWeight: FontWeight.w700,
@@ -286,13 +273,13 @@ class _MonthlyCalendarCard extends StatelessWidget {
           SizedBox(height: 18),
           Row(
             children: [
-              _WeekdayHeader(label: 'L'),
-              _WeekdayHeader(label: 'M'),
-              _WeekdayHeader(label: 'X'),
-              _WeekdayHeader(label: 'J'),
-              _WeekdayHeader(label: 'V'),
-              _WeekdayHeader(label: 'S'),
-              _WeekdayHeader(label: 'D'),
+          _WeekdayHeader(label: AppLocalizations.of(context)!.weekdayMon),
+          _WeekdayHeader(label: AppLocalizations.of(context)!.weekdayTue),
+          _WeekdayHeader(label: AppLocalizations.of(context)!.weekdayWed),
+          _WeekdayHeader(label: AppLocalizations.of(context)!.weekdayThu),
+          _WeekdayHeader(label: AppLocalizations.of(context)!.weekdayFri),
+          _WeekdayHeader(label: AppLocalizations.of(context)!.weekdaySat),
+          _WeekdayHeader(label: AppLocalizations.of(context)!.weekdaySun),
             ],
           ),
           SizedBox(height: 10),
@@ -460,7 +447,7 @@ class _MonthlySelectedDayCard extends StatelessWidget {
                     Text(
                       records.isEmpty
                           ? AppLocalizations.of(context)!.fitnessNoPhysicalRecords
-                          : '${records.length} registro${records.length == 1 ? '' : 's'} guardado${records.length == 1 ? '' : 's'}',
+                          : AppLocalizations.of(context)!.fitnessRecordsSaved(records.length),
                       style: TextStyle(
                         color: context.colors.secondary,
                         fontSize: 12,
@@ -592,7 +579,7 @@ class _MonthlyRecordCard extends StatelessWidget {
               Expanded(
                 child: _MonthlyMetricBox(
                   icon: Icons.monitor_weight_outlined,
-                  label: 'Peso',
+                  label: AppLocalizations.of(context)!.fitnessWeightLabel,
                   value: formatDouble(record.weight, 'kg'),
                 ),
               ),
@@ -600,7 +587,7 @@ class _MonthlyRecordCard extends StatelessWidget {
               Expanded(
                 child: _MonthlyMetricBox(
                   icon: Icons.percent,
-                  label: 'Grasa',
+                  label: AppLocalizations.of(context)!.fitnessFatLabel,
                   value: formatDouble(record.bodyFat, '%'),
                 ),
               ),

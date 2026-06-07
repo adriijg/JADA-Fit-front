@@ -304,7 +304,7 @@ class _CreateFoodSheetState extends State<_CreateFoodSheet> {
             ),
           ),
           SizedBox(height: 16),
-          _SheetField(ctrl: nameCtrl, label: 'Nombre', hint: 'Ej: Pan integral'),
+          _SheetField(ctrl: nameCtrl, label: AppLocalizations.of(context)!.nutritionFoodNameShort, hint: 'Ej: Pan integral'),
           SizedBox(height: 12),
           Row(
             children: [

@@ -125,6 +125,17 @@
   "nutritionDinners": "Cenas",
   "nutritionSnacks": "Snacks",
   "nutritionErrorAddingRecipe": "Error al añadir la receta",
+  "nutritionSave": "Guardar",
+  "nutritionRecipeNameRequired": "El nombre es obligatorio",
+  "nutritionRequired": "Obligatorio",
+  "nutritionQuantityGrams": "Cantidad (g)",
+  "nutritionServings": "Porciones",
+  "nutritionTotalRecipe": "TOTAL RECETA",
+  "nutritionQuantity": "Cantidad",
+  "nutritionCustom": "Personalizado",
+  "nutritionCustomFood": "Alimento personalizado",
+  "nutritionSearchFoodHint": "Buscar alimento, ej: Nutella",
+  "nutritionFoodNameShort": "Nombre",
 
   "@_Workout": {},
   "workoutRoutineUpdated": "¡Rutina actualizada!",
@@ -337,6 +348,22 @@
   "profileEditPhysicalData": "Editar datos físicos",
   "profileYears": "años",
   "profileGender": "Género",
+  "profileUserLabel": "Usuario",
+  "profileAccountCreated": "Cuenta creada",
+  "profileNotAvailable": "No disponible",
+  "profileShareActivityDescription": "Permitir a otros ver tu actividad",
+  "profileLogoutDescription": "Salir de tu cuenta",
+  "profileUpdateError": "No se pudo actualizar el perfil",
+  "profileWeightHint": "Ej: 78.5",
+  "profileWeightSuffix": "kg",
+  "profileHeightHint": "Ej: 180",
+  "profileHeightSuffix": "cm",
+  "profileGoalHint": "Ej: ganar masa muscular",
+  "profileBodyFatHint": "Ej: 15.2",
+  "profileBodyFatSuffix": "%",
+  "profileMuscleMassHint": "Ej: 62",
+  "profileSelectDateOfBirth": "Selecciona tu fecha de nacimiento",
+  "profileDateOfBirth": "Fecha de nacimiento",
 
   "@_Login": {},
   "loginTitle": "INICIAR SESIÓN",
@@ -574,7 +601,56 @@
   },
   "fitnessProfileDataSubtitle": "Altura, edad, género y objetivo",
   "fitnessAddPhysicalRecordTitle": "Añadir registro físico",
+  "fitnessAddPhysicalRecordSubtitle": "Registra peso, grasa corporal y masa muscular",
   "fitnessHistorySubtitle": "Histórico y progreso físico",
+
+  "fitnessProfileUpdatedAt": "Actualizado: {dateTime}",
+  "@fitnessProfileUpdatedAt": {
+    "placeholders": {
+      "dateTime": { "type": "String" }
+    }
+  },
+  "fitnessWeightLabel": "Peso",
+  "fitnessFatLabel": "Grasa",
+  "fitnessEnterWeight": "Introduce tu peso actual",
+  "fitnessWeightPositiveError": "El peso debe ser mayor que 0",
+  "fitnessFatNegativeError": "La grasa corporal no puede ser negativa",
+  "fitnessMuscleNegativeError": "La masa muscular no puede ser negativa",
+  "fitnessFutureDateError": "No puedes registrar datos en una fecha futura",
+  "fitnessEnterHeight": "Introduce tu altura",
+  "fitnessHeightPositiveError": "La altura debe ser mayor que 0",
+  "fitnessEnterBirthDate": "Introduce tu fecha de nacimiento",
+  "fitnessSelectGoalPrompt": "Selecciona tu objetivo",
+  "fitnessImprovePerformance": "Mejorar rendimiento",
+  "fitnessViewMonthlyCalendar": "Ver calendario mensual",
+  "fitnessCalendarWeekly": "Calendario semanal",
+  "fitnessCalendarMonthly": "Calendario mensual",
+  "fitnessWeightSubtitle": "Peso registrado durante el mes seleccionado",
+  "fitnessFatSubtitle": "Porcentaje de grasa durante el mes seleccionado",
+  "fitnessMuscleSubtitle": "Masa muscular durante el mes seleccionado",
+  "fitnessTotalChange": "Cambio total: {value}",
+  "@fitnessTotalChange": {
+    "placeholders": {
+      "value": { "type": "String" }
+    }
+  },
+  "fitnessRecordsSaved": "{count, plural, =1{1 registro guardado} other{{count} registros guardados}}",
+  "@fitnessRecordsSaved": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "fitnessCurrentLabel": "Actual",
+  "fitnessChangeLabel": "Cambio",
+  "fitnessWeekOfRange": "Semana del {start} al {end}",
+  "@fitnessWeekOfRange": {
+    "placeholders": {
+      "start": { "type": "String" },
+      "end": { "type": "String" }
+    }
+  },
+  "fitnessOnboardingDescription": "Usaremos estos datos para personalizar tus recomendaciones, objetivos y progreso.",
+  "fitnessEnterWeightOnboarding": "Introduce tu peso",
 
   "profilePrivacyUpdateError": "Error al actualizar privacidad: {error}",
   "@profilePrivacyUpdateError": {
@@ -602,5 +678,120 @@
   "socialPublish": "Publicar",
   "socialUploadStory": "Subir historia",
   "socialEditProfile": "Editar perfil",
-  "socialShareProgressCommunity": "Comparte tu progreso con la comunidad"
+  "socialShareProgressCommunity": "Comparte tu progreso con la comunidad",
+  "socialLikeSuccess": "Le has dado me gusta a {username}",
+  "@socialLikeSuccess": {
+    "placeholders": {
+      "username": { "type": "String" }
+    }
+  },
+  "socialLikeError": "No se pudo actualizar el me gusta: {error}",
+  "@socialLikeError": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "socialSendTo": "Enviar a",
+  "socialNoFollowing": "Todavía no sigues a ningún usuario",
+  "socialPostSent": "Publicación enviada a {username}",
+  "@socialPostSent": {
+    "placeholders": {
+      "username": { "type": "String" }
+    }
+  },
+  "socialLoadFollowingError": "No se pudieron cargar tus seguidos",
+  "socialFollowers": "Seguidores",
+  "socialFollowing": "Siguiendo",
+  "socialFollow": "Seguir",
+  "socialUnfollow": "Dejar de seguir",
+  "socialProgressShared": "Este usuario comparte su progreso",
+  "socialProgressPrivate": "Progreso privado",
+  "socialPosts": "Publicaciones",
+  "socialChallengeExpired": "Expirado",
+  "socialChallengeExpiresIn": "Expira en {time}",
+  "@socialChallengeExpiresIn": {
+    "placeholders": {
+      "time": { "type": "String" }
+    }
+  },
+  "socialChallengeDeleteExpired": "Eliminar expirados",
+  "socialChallengeConfirmDeleteExpired": "¿Eliminar todos los piques expirados?",
+  "socialChallengeNoExpired": "No hay piques expirados",
+
+  "workoutMyPlans": "Tus planes de entrenamiento",
+  "workoutRoutines": "RUTINAS",
+  "workoutCompleted": "COMPLETADAS",
+  "workoutAll": "TODOS",
+  "workoutInProgress": "En progreso",
+  "workoutExercisesCount": "{count} ejercicios",
+  "@workoutExercisesCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "workoutCompleteRoutine": "Completar rutina",
+  "workoutNoExercises": "Esta rutina no tiene ejercicios",
+  "workoutObjective": "Objetivo",
+  "workoutRoutineType": "Tipo de rutina",
+  "workoutSelectObjective": "Selecciona un objetivo",
+  "workoutSelectRoutineType": "Selecciona el tipo de rutina",
+  "workoutAdditionalNotes": "Notas adicionales...",
+  "workoutExercises": "Ejercicios",
+  "workoutSuggestedExercises": "Ejercicios sugeridos para {goal}",
+  "@workoutSuggestedExercises": {
+    "placeholders": {
+      "goal": { "type": "String" }
+    }
+  },
+  "workoutTrySuggested": "o prueba ejercicios sugeridos para tu objetivo",
+  "workoutSets": "Series",
+  "workoutSeconds": "Segundos",
+  "workoutSaveChanges": "GUARDAR CAMBIOS",
+  "workoutSaveRoutine": "GUARDAR RUTINA",
+  "workoutRoutineNameHint": "Ej. Empuje, Piernas, Full Body...",
+  "workoutExerciseNameHint": "Ej. Press de Banca",
+  "workoutRequired": "Requerido",
+  "workoutSearchRoutines": "Buscar rutinas...",
+  "workoutCompletedSection": "Completadas",
+  "workoutDeleteRoutineError": "No se pudo eliminar la rutina",
+  "workoutCompleteRoutineError": "No se pudo completar la rutina",
+  "workoutRoutinesLoadError": "No se pudieron cargar las rutinas",
+  "workoutSelectObjectiveError": "Selecciona un objetivo para la rutina",
+  "workoutCreateRoutineError": "No se pudo crear la rutina",
+  "workoutUpdateRoutineError": "No se pudo actualizar la rutina",
+  "workoutRoutineCompletedLabel": "Completada",
+  "workoutExercise": "Ejercicio",
+
+  "socialSearchUsers": "Buscar usuarios...",
+  "socialNoUsersFound": "No se encontraron usuarios",
+  "socialCancel": "Cancelar",
+  "socialLoadCommentsError": "Error al cargar comentarios: {error}",
+  "@socialLoadCommentsError": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "socialSendCommentError": "Error al enviar comentario: {error}",
+  "@socialSendCommentError": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "socialDeleteStoryError": "Error al eliminar historia: {error}",
+  "@socialDeleteStoryError": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "socialStoryLoadError": "No se pudo cargar la historia",
+  "socialUserFallback": "Usuario",
+  "socialMyPosts": "Mis publicaciones",
+
+  "weekdayMon": "L",
+  "weekdayTue": "M",
+  "weekdayWed": "X",
+  "weekdayThu": "J",
+  "weekdayFri": "V",
+  "weekdaySat": "S",
+  "weekdaySun": "D"
 }

@@ -600,10 +600,11 @@ class _FoodHeaderCard extends StatelessWidget {
 
   final CatalogFoodModel food;
 
-  String _sourceLabel(String source) {
+  String _sourceLabel(String source, BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     switch (source) {
       case 'USER':
-        return 'Alimento personalizado';
+        return l10n.nutritionCustomFood;
       case 'OPEN_FOOD_FACTS':
         return 'Open Food Facts';
       default:
@@ -614,7 +615,7 @@ class _FoodHeaderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final brand = food.brand == null || food.brand!.trim().isEmpty
-        ? 'Sin marca'
+        ? AppLocalizations.of(context)!.nutritionNoBrand
         : food.brand!;
 
     return Container(
@@ -648,7 +649,7 @@ class _FoodHeaderCard extends StatelessWidget {
           ),
           SizedBox(height: 8),
           Text(
-            '$brand · ${_sourceLabel(food.source)}',
+            '$brand · ${_sourceLabel(food.source, context)}',
             style: TextStyle(
               color: context.colors.secondary,
               fontSize: 13,
@@ -683,7 +684,7 @@ class _QuantityCard extends StatelessWidget {
         decoration: InputDecoration(
           filled: true,
           fillColor: context.colors.inputBackground,
-          labelText: 'Cantidad',
+          labelText: AppLocalizations.of(context)!.nutritionQuantity,
           labelStyle: TextStyle(
             color: context.colors.secondary,
             fontWeight: FontWeight.w600,

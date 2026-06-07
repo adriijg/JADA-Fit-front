@@ -704,6 +704,72 @@ abstract class AppLocalizations {
   /// **'Error adding recipe'**
   String get nutritionErrorAddingRecipe;
 
+  /// No description provided for @nutritionSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get nutritionSave;
+
+  /// No description provided for @nutritionRecipeNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Recipe name is required'**
+  String get nutritionRecipeNameRequired;
+
+  /// No description provided for @nutritionRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get nutritionRequired;
+
+  /// No description provided for @nutritionQuantityGrams.
+  ///
+  /// In en, this message translates to:
+  /// **'Quantity (g)'**
+  String get nutritionQuantityGrams;
+
+  /// No description provided for @nutritionServings.
+  ///
+  /// In en, this message translates to:
+  /// **'Servings'**
+  String get nutritionServings;
+
+  /// No description provided for @nutritionTotalRecipe.
+  ///
+  /// In en, this message translates to:
+  /// **'TOTAL RECIPE'**
+  String get nutritionTotalRecipe;
+
+  /// No description provided for @nutritionQuantity.
+  ///
+  /// In en, this message translates to:
+  /// **'Quantity'**
+  String get nutritionQuantity;
+
+  /// No description provided for @nutritionCustom.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom'**
+  String get nutritionCustom;
+
+  /// No description provided for @nutritionCustomFood.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom food'**
+  String get nutritionCustomFood;
+
+  /// No description provided for @nutritionSearchFoodHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search for a food, e.g. Nutella'**
+  String get nutritionSearchFoodHint;
+
+  /// No description provided for @nutritionFoodNameShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get nutritionFoodNameShort;
+
   /// No description provided for @workoutRoutineUpdated.
   ///
   /// In en, this message translates to:
@@ -1790,6 +1856,102 @@ abstract class AppLocalizations {
   /// **'Gender'**
   String get profileGender;
 
+  /// No description provided for @profileUserLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'User'**
+  String get profileUserLabel;
+
+  /// No description provided for @profileAccountCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Account created'**
+  String get profileAccountCreated;
+
+  /// No description provided for @profileNotAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Not available'**
+  String get profileNotAvailable;
+
+  /// No description provided for @profileShareActivityDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow others to see your activity'**
+  String get profileShareActivityDescription;
+
+  /// No description provided for @profileLogoutDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out of your account'**
+  String get profileLogoutDescription;
+
+  /// No description provided for @profileUpdateError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not update profile'**
+  String get profileUpdateError;
+
+  /// No description provided for @profileWeightHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. 78.5'**
+  String get profileWeightHint;
+
+  /// No description provided for @profileWeightSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **'kg'**
+  String get profileWeightSuffix;
+
+  /// No description provided for @profileHeightHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. 180'**
+  String get profileHeightHint;
+
+  /// No description provided for @profileHeightSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **'cm'**
+  String get profileHeightSuffix;
+
+  /// No description provided for @profileGoalHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. gain muscle mass'**
+  String get profileGoalHint;
+
+  /// No description provided for @profileBodyFatHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. 15.2'**
+  String get profileBodyFatHint;
+
+  /// No description provided for @profileBodyFatSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **'%'**
+  String get profileBodyFatSuffix;
+
+  /// No description provided for @profileMuscleMassHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. 62'**
+  String get profileMuscleMassHint;
+
+  /// No description provided for @profileSelectDateOfBirth.
+  ///
+  /// In en, this message translates to:
+  /// **'Select your date of birth'**
+  String get profileSelectDateOfBirth;
+
+  /// No description provided for @profileDateOfBirth.
+  ///
+  /// In en, this message translates to:
+  /// **'Date of birth'**
+  String get profileDateOfBirth;
+
   /// No description provided for @loginTitle.
   ///
   /// In en, this message translates to:
@@ -2695,11 +2857,173 @@ abstract class AppLocalizations {
   /// **'Add physical record'**
   String get fitnessAddPhysicalRecordTitle;
 
+  /// No description provided for @fitnessAddPhysicalRecordSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Log weight, body fat and muscle mass'**
+  String get fitnessAddPhysicalRecordSubtitle;
+
   /// No description provided for @fitnessHistorySubtitle.
   ///
   /// In en, this message translates to:
   /// **'History and physical progress'**
   String get fitnessHistorySubtitle;
+
+  /// No description provided for @fitnessProfileUpdatedAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Updated: {dateTime}'**
+  String fitnessProfileUpdatedAt(String dateTime);
+
+  /// No description provided for @fitnessWeightLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight'**
+  String get fitnessWeightLabel;
+
+  /// No description provided for @fitnessFatLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fat'**
+  String get fitnessFatLabel;
+
+  /// No description provided for @fitnessEnterWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your current weight'**
+  String get fitnessEnterWeight;
+
+  /// No description provided for @fitnessWeightPositiveError.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight must be greater than 0'**
+  String get fitnessWeightPositiveError;
+
+  /// No description provided for @fitnessFatNegativeError.
+  ///
+  /// In en, this message translates to:
+  /// **'Body fat cannot be negative'**
+  String get fitnessFatNegativeError;
+
+  /// No description provided for @fitnessMuscleNegativeError.
+  ///
+  /// In en, this message translates to:
+  /// **'Muscle mass cannot be negative'**
+  String get fitnessMuscleNegativeError;
+
+  /// No description provided for @fitnessFutureDateError.
+  ///
+  /// In en, this message translates to:
+  /// **'You cannot record data for a future date'**
+  String get fitnessFutureDateError;
+
+  /// No description provided for @fitnessEnterHeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your height'**
+  String get fitnessEnterHeight;
+
+  /// No description provided for @fitnessHeightPositiveError.
+  ///
+  /// In en, this message translates to:
+  /// **'Height must be greater than 0'**
+  String get fitnessHeightPositiveError;
+
+  /// No description provided for @fitnessEnterBirthDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your date of birth'**
+  String get fitnessEnterBirthDate;
+
+  /// No description provided for @fitnessSelectGoalPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Select your goal'**
+  String get fitnessSelectGoalPrompt;
+
+  /// No description provided for @fitnessImprovePerformance.
+  ///
+  /// In en, this message translates to:
+  /// **'Improve performance'**
+  String get fitnessImprovePerformance;
+
+  /// No description provided for @fitnessViewMonthlyCalendar.
+  ///
+  /// In en, this message translates to:
+  /// **'View monthly calendar'**
+  String get fitnessViewMonthlyCalendar;
+
+  /// No description provided for @fitnessCalendarWeekly.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly calendar'**
+  String get fitnessCalendarWeekly;
+
+  /// No description provided for @fitnessCalendarMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly calendar'**
+  String get fitnessCalendarMonthly;
+
+  /// No description provided for @fitnessWeightSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight recorded during the selected month'**
+  String get fitnessWeightSubtitle;
+
+  /// No description provided for @fitnessFatSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Fat percentage during the selected month'**
+  String get fitnessFatSubtitle;
+
+  /// No description provided for @fitnessMuscleSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Muscle mass during the selected month'**
+  String get fitnessMuscleSubtitle;
+
+  /// No description provided for @fitnessTotalChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Total change: {value}'**
+  String fitnessTotalChange(String value);
+
+  /// No description provided for @fitnessRecordsSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 record saved} other{{count} records saved}}'**
+  String fitnessRecordsSaved(int count);
+
+  /// No description provided for @fitnessCurrentLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Current'**
+  String get fitnessCurrentLabel;
+
+  /// No description provided for @fitnessChangeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Change'**
+  String get fitnessChangeLabel;
+
+  /// No description provided for @fitnessWeekOfRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Week of {start} to {end}'**
+  String fitnessWeekOfRange(String start, String end);
+
+  /// No description provided for @fitnessOnboardingDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'We will use this data to personalize your recommendations, goals, and progress.'**
+  String get fitnessOnboardingDescription;
+
+  /// No description provided for @fitnessEnterWeightOnboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your weight'**
+  String get fitnessEnterWeightOnboarding;
 
   /// No description provided for @profilePrivacyUpdateError.
   ///
@@ -2784,6 +3108,408 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Share your progress with the community'**
   String get socialShareProgressCommunity;
+
+  /// No description provided for @socialLikeSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'You liked {username}\'s post'**
+  String socialLikeSuccess(String username);
+
+  /// No description provided for @socialLikeError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not update like: {error}'**
+  String socialLikeError(String error);
+
+  /// No description provided for @socialSendTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Send to'**
+  String get socialSendTo;
+
+  /// No description provided for @socialNoFollowing.
+  ///
+  /// In en, this message translates to:
+  /// **'You are not following any users yet'**
+  String get socialNoFollowing;
+
+  /// No description provided for @socialPostSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Post sent to {username}'**
+  String socialPostSent(String username);
+
+  /// No description provided for @socialLoadFollowingError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load your following'**
+  String get socialLoadFollowingError;
+
+  /// No description provided for @socialFollowers.
+  ///
+  /// In en, this message translates to:
+  /// **'Followers'**
+  String get socialFollowers;
+
+  /// No description provided for @socialFollowing.
+  ///
+  /// In en, this message translates to:
+  /// **'Following'**
+  String get socialFollowing;
+
+  /// No description provided for @socialFollow.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow'**
+  String get socialFollow;
+
+  /// No description provided for @socialUnfollow.
+  ///
+  /// In en, this message translates to:
+  /// **'Unfollow'**
+  String get socialUnfollow;
+
+  /// No description provided for @socialProgressShared.
+  ///
+  /// In en, this message translates to:
+  /// **'This user shares their progress'**
+  String get socialProgressShared;
+
+  /// No description provided for @socialProgressPrivate.
+  ///
+  /// In en, this message translates to:
+  /// **'Private progress'**
+  String get socialProgressPrivate;
+
+  /// No description provided for @socialPosts.
+  ///
+  /// In en, this message translates to:
+  /// **'Posts'**
+  String get socialPosts;
+
+  /// No description provided for @socialChallengeExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired'**
+  String get socialChallengeExpired;
+
+  /// No description provided for @socialChallengeExpiresIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Expires in {time}'**
+  String socialChallengeExpiresIn(String time);
+
+  /// No description provided for @socialChallengeDeleteExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete expired'**
+  String get socialChallengeDeleteExpired;
+
+  /// No description provided for @socialChallengeConfirmDeleteExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete all expired challenges?'**
+  String get socialChallengeConfirmDeleteExpired;
+
+  /// No description provided for @socialChallengeNoExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'No expired challenges'**
+  String get socialChallengeNoExpired;
+
+  /// No description provided for @workoutMyPlans.
+  ///
+  /// In en, this message translates to:
+  /// **'Your workout plans'**
+  String get workoutMyPlans;
+
+  /// No description provided for @workoutRoutines.
+  ///
+  /// In en, this message translates to:
+  /// **'ROUTINES'**
+  String get workoutRoutines;
+
+  /// No description provided for @workoutCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'COMPLETED'**
+  String get workoutCompleted;
+
+  /// No description provided for @workoutAll.
+  ///
+  /// In en, this message translates to:
+  /// **'ALL'**
+  String get workoutAll;
+
+  /// No description provided for @workoutInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'In progress'**
+  String get workoutInProgress;
+
+  /// No description provided for @workoutExercisesCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} exercises'**
+  String workoutExercisesCount(int count);
+
+  /// No description provided for @workoutCompleteRoutine.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete routine'**
+  String get workoutCompleteRoutine;
+
+  /// No description provided for @workoutNoExercises.
+  ///
+  /// In en, this message translates to:
+  /// **'This routine has no exercises'**
+  String get workoutNoExercises;
+
+  /// No description provided for @workoutObjective.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal'**
+  String get workoutObjective;
+
+  /// No description provided for @workoutRoutineType.
+  ///
+  /// In en, this message translates to:
+  /// **'Routine type'**
+  String get workoutRoutineType;
+
+  /// No description provided for @workoutSelectObjective.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a goal'**
+  String get workoutSelectObjective;
+
+  /// No description provided for @workoutSelectRoutineType.
+  ///
+  /// In en, this message translates to:
+  /// **'Select routine type'**
+  String get workoutSelectRoutineType;
+
+  /// No description provided for @workoutAdditionalNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Additional notes...'**
+  String get workoutAdditionalNotes;
+
+  /// No description provided for @workoutExercises.
+  ///
+  /// In en, this message translates to:
+  /// **'Exercises'**
+  String get workoutExercises;
+
+  /// No description provided for @workoutSuggestedExercises.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested exercises for {goal}'**
+  String workoutSuggestedExercises(String goal);
+
+  /// No description provided for @workoutTrySuggested.
+  ///
+  /// In en, this message translates to:
+  /// **'or try suggested exercises for your goal'**
+  String get workoutTrySuggested;
+
+  /// No description provided for @workoutSets.
+  ///
+  /// In en, this message translates to:
+  /// **'Sets'**
+  String get workoutSets;
+
+  /// No description provided for @workoutSeconds.
+  ///
+  /// In en, this message translates to:
+  /// **'Seconds'**
+  String get workoutSeconds;
+
+  /// No description provided for @workoutSaveChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'SAVE CHANGES'**
+  String get workoutSaveChanges;
+
+  /// No description provided for @workoutSaveRoutine.
+  ///
+  /// In en, this message translates to:
+  /// **'SAVE ROUTINE'**
+  String get workoutSaveRoutine;
+
+  /// No description provided for @workoutRoutineNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Push, Legs, Full Body...'**
+  String get workoutRoutineNameHint;
+
+  /// No description provided for @workoutExerciseNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Bench Press'**
+  String get workoutExerciseNameHint;
+
+  /// No description provided for @workoutRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get workoutRequired;
+
+  /// No description provided for @workoutSearchRoutines.
+  ///
+  /// In en, this message translates to:
+  /// **'Search routines...'**
+  String get workoutSearchRoutines;
+
+  /// No description provided for @workoutCompletedSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get workoutCompletedSection;
+
+  /// No description provided for @workoutDeleteRoutineError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not delete routine'**
+  String get workoutDeleteRoutineError;
+
+  /// No description provided for @workoutCompleteRoutineError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not complete routine'**
+  String get workoutCompleteRoutineError;
+
+  /// No description provided for @workoutRoutinesLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load routines'**
+  String get workoutRoutinesLoadError;
+
+  /// No description provided for @workoutSelectObjectiveError.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a goal for the routine'**
+  String get workoutSelectObjectiveError;
+
+  /// No description provided for @workoutCreateRoutineError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not create routine'**
+  String get workoutCreateRoutineError;
+
+  /// No description provided for @workoutUpdateRoutineError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not update routine'**
+  String get workoutUpdateRoutineError;
+
+  /// No description provided for @workoutRoutineCompletedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get workoutRoutineCompletedLabel;
+
+  /// No description provided for @workoutExercise.
+  ///
+  /// In en, this message translates to:
+  /// **'Exercise'**
+  String get workoutExercise;
+
+  /// No description provided for @socialSearchUsers.
+  ///
+  /// In en, this message translates to:
+  /// **'Search users...'**
+  String get socialSearchUsers;
+
+  /// No description provided for @socialNoUsersFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No users found'**
+  String get socialNoUsersFound;
+
+  /// No description provided for @socialCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get socialCancel;
+
+  /// No description provided for @socialLoadCommentsError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading comments: {error}'**
+  String socialLoadCommentsError(String error);
+
+  /// No description provided for @socialSendCommentError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error sending comment: {error}'**
+  String socialSendCommentError(String error);
+
+  /// No description provided for @socialDeleteStoryError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error deleting story: {error}'**
+  String socialDeleteStoryError(String error);
+
+  /// No description provided for @socialStoryLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load story'**
+  String get socialStoryLoadError;
+
+  /// No description provided for @socialUserFallback.
+  ///
+  /// In en, this message translates to:
+  /// **'User'**
+  String get socialUserFallback;
+
+  /// No description provided for @socialMyPosts.
+  ///
+  /// In en, this message translates to:
+  /// **'My posts'**
+  String get socialMyPosts;
+
+  /// No description provided for @weekdayMon.
+  ///
+  /// In en, this message translates to:
+  /// **'M'**
+  String get weekdayMon;
+
+  /// No description provided for @weekdayTue.
+  ///
+  /// In en, this message translates to:
+  /// **'T'**
+  String get weekdayTue;
+
+  /// No description provided for @weekdayWed.
+  ///
+  /// In en, this message translates to:
+  /// **'W'**
+  String get weekdayWed;
+
+  /// No description provided for @weekdayThu.
+  ///
+  /// In en, this message translates to:
+  /// **'T'**
+  String get weekdayThu;
+
+  /// No description provided for @weekdayFri.
+  ///
+  /// In en, this message translates to:
+  /// **'F'**
+  String get weekdayFri;
+
+  /// No description provided for @weekdaySat.
+  ///
+  /// In en, this message translates to:
+  /// **'S'**
+  String get weekdaySat;
+
+  /// No description provided for @weekdaySun.
+  ///
+  /// In en, this message translates to:
+  /// **'S'**
+  String get weekdaySun;
 }
 
 class _AppLocalizationsDelegate

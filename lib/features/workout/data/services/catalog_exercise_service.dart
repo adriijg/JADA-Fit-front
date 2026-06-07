@@ -25,11 +25,11 @@ class CatalogExerciseService {
         final List<dynamic> data = json.decode(utf8.decode(response.bodyBytes));
         return data.map((json) => CatalogExerciseModel.fromJson(json)).toList();
       } else {
-        throw ApiException('Error al cargar ejercicios: ${response.statusCode}');
+        throw ApiException('Failed to load exercises: ${response.statusCode}');
       }
     } catch (e) {
       if (e is ApiException) rethrow;
-      throw ApiException('Error de conexión al cargar ejercicios: $e');
+      throw ApiException('Connection error loading exercises: $e');
     }
   }
 
@@ -50,11 +50,11 @@ class CatalogExerciseService {
         final List<dynamic> data = json.decode(utf8.decode(response.bodyBytes));
         return data.map((json) => CatalogExerciseModel.fromJson(json)).toList();
       } else {
-        throw ApiException('Error al buscar ejercicios: ${response.statusCode}');
+        throw ApiException('Failed to search exercises: ${response.statusCode}');
       }
     } catch (e) {
       if (e is ApiException) rethrow;
-      throw ApiException('Error de conexión al buscar ejercicios: $e');
+      throw ApiException('Connection error searching exercises: $e');
     }
   }
 }

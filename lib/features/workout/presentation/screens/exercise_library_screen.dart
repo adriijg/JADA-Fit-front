@@ -3,6 +3,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../data/models/exercise_catalog.dart';
+import '../utils/workout_localizations.dart';
 import 'exercise_detail_screen.dart' as detail;
 
 class ExerciseLibraryScreen extends StatefulWidget {
@@ -23,10 +24,18 @@ class _ExerciseLibraryScreenState extends State<ExerciseLibraryScreen> {
   List<CatalogExercise> get _filtered {
     var list = ExerciseCatalog.all;
     if (_searchQuery.isNotEmpty) {
-      list = list.where((e) =>
-          e.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-          e.description.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-          e.muscleGroup.toLowerCase().contains(_searchQuery.toLowerCase())).toList();
+      final q = _searchQuery.toLowerCase();
+      list = list.where((e) {
+        final nameEn = localizedEnglishExerciseName(e.name);
+        final muscleEn = localizedMuscleGroupEn(e.muscleGroup) ?? '';
+        final descEn = localizedEnglishExerciseDescription(e.description) ?? '';
+        return e.name.toLowerCase().contains(q) ||
+            e.description.toLowerCase().contains(q) ||
+            e.muscleGroup.toLowerCase().contains(q) ||
+            nameEn.toLowerCase().contains(q) ||
+            muscleEn.toLowerCase().contains(q) ||
+            descEn.toLowerCase().contains(q);
+      }).toList();
     }
     if (_selectedMuscleGroup != null) {
       list = list.where((e) => e.muscleGroup == _selectedMuscleGroup).toList();
@@ -114,7 +123,7 @@ class _ExerciseLibraryScreenState extends State<ExerciseLibraryScreen> {
               () => setState(() { _showBodyweightOnly = true; _selectedMuscleGroup = null; }),
               icon: Icons.accessibility_new_rounded),
           ..._muscleGroups.map((group) => _filterChip(
-                group,
+                localizedMuscleGroupName(group, context) ?? group,
                 group,
                 _selectedMuscleGroup == group && !_showBodyweightOnly,
                 () => setState(() { _selectedMuscleGroup = group; _showBodyweightOnly = false; }),
@@ -194,8 +203,8 @@ class _ExerciseLibraryScreenState extends State<ExerciseLibraryScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => detail.ExerciseDetailScreen(
-                    exercise: detail.toCatalogModel(exercise, AppLocalizations.of(context)!),
+                    builder: (_) => detail.ExerciseDetailScreen(
+                    exercise: detail.toCatalogModel(exercise, context),
                   ),
                 ),
               );
@@ -224,7 +233,7 @@ class _ExerciseLibraryScreenState extends State<ExerciseLibraryScreen> {
                         children: [
                           Expanded(
                             child: Text(
-                              exercise.name,
+                              localizedCatalogExerciseName(exercise, context),
                               style: TextStyle(
                                 color: context.colors.textMain,
                                 fontSize: 15,
@@ -239,7 +248,7 @@ class _ExerciseLibraryScreenState extends State<ExerciseLibraryScreen> {
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(
-                              exercise.muscleGroup,
+                              localizedCatalogExerciseMuscleGroup(exercise, context),
                               style: TextStyle(
                                 color: context.colors.tertiary,
                                 fontSize: 9,
@@ -251,7 +260,7 @@ class _ExerciseLibraryScreenState extends State<ExerciseLibraryScreen> {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        exercise.description,
+                        localizedCatalogExerciseDescription(exercise, context),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(

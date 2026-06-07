@@ -11,9 +11,9 @@ class SettingsProvider extends ChangeNotifier {
   bool get aiNotificationsEnabled => _prefs.aiNotificationsEnabled;
   bool get workoutRemindersEnabled => _prefs.workoutRemindersEnabled;
 
-  Locale? get locale {
+  Locale get locale {
     final code = _prefs.languageCode;
-    return code != null ? Locale(code) : null;
+    return code != null ? Locale(code) : const Locale('es');
   }
 
   void setLocale(Locale? newLocale) {

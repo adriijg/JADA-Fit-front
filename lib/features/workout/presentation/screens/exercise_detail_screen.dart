@@ -4,6 +4,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../data/models/catalog_exercise_model.dart';
 import '../../data/models/exercise_catalog.dart';
+import '../utils/workout_localizations.dart';
 
 class ExerciseDetailScreen extends StatefulWidget {
   final CatalogExerciseModel exercise;
@@ -49,7 +50,7 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
         });
       }
     } catch (e) {
-      debugPrint("Error al inicializar video: $e");
+      debugPrint("Error initializing video: $e");
       if (mounted) {
         setState(() {
           _isVideoError = true;
@@ -245,12 +246,15 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
   }
 }
 
-CatalogExerciseModel toCatalogModel(CatalogExercise ex, AppLocalizations l10n) {
+CatalogExerciseModel toCatalogModel(CatalogExercise ex, BuildContext context) {
+  final l10n = AppLocalizations.of(context)!;
   return CatalogExerciseModel(
     id: 0,
-    name: ex.name,
-    description: ex.description,
-    benefits: l10n.workoutExerciseBenefitsTemplate(ex.muscleGroup.toLowerCase()),
+    name: localizedCatalogExerciseName(ex, context),
+    description: localizedCatalogExerciseDescription(ex, context),
+    benefits: l10n.workoutExerciseBenefitsTemplate(
+      localizedCatalogExerciseMuscleGroup(ex, context).toLowerCase(),
+    ),
     videoUrl: ex.videoAsset,
   );
 }

@@ -729,6 +729,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     if (_isLoading) {
       return Center(
         child: CircularProgressIndicator(color: context.colors.primary),
@@ -756,7 +757,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
               onPressed: _loadProfile,
               icon: Icon(Icons.refresh, color: context.colors.primary),
               label: Text(
-                'Reintentar',
+                l10n.nutritionRetry,
                 style: TextStyle(color: context.colors.primary),
               ),
             ),
@@ -767,7 +768,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
 
     if (_currentUser == null) return SizedBox.shrink();
 
-    final username = _currentUser!['username'] ?? 'Usuario';
+    final username = _currentUser!['username'] ?? l10n.socialUserFallback;
     final bio = _currentUser!['bio'] as String?;
     final profilePicUrl = _currentUser!['profilePictureUrl'] as String?;
     final followersCount = _socialProfile?.followersCount ?? 0;
@@ -887,19 +888,19 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      _StatItem(value: '${_myPosts.length}', label: 'Posts'),
+                      _StatItem(value: '${_myPosts.length}', label: l10n.socialPosts),
                       Container(
                         width: 0.5,
                         height: 30,
                         color: context.colors.divider.withValues(alpha: 0.4),
                       ),
-                      _StatItem(value: '$followersCount', label: 'Seguidores'),
+                      _StatItem(value: '$followersCount', label: l10n.socialFollowers),
                       Container(
                         width: 0.5,
                         height: 30,
                         color: context.colors.divider.withValues(alpha: 0.4),
                       ),
-                      _StatItem(value: '$followingCount', label: 'Siguiendo'),
+                      _StatItem(value: '$followingCount', label: l10n.socialFollowing),
                     ],
                   ),
                 ),
@@ -911,7 +912,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                   children: [
                     Expanded(
                       child: _ActionButton(
-                        label: 'Editar perfil',
+                        label: l10n.socialEditProfile,
                         icon: Icons.edit_outlined,
                         color: context.colors.primary,
                         onTap: _showEditProfileDialog,
@@ -920,7 +921,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                     SizedBox(width: 10),
                     Expanded(
                       child: _ActionButton(
-                        label: 'Nuevo post',
+                        label: l10n.socialNewPost,
                         icon: Icons.add_photo_alternate_outlined,
                         color: context.colors.secondary,
                         onTap: _showCreatePostDialog,
@@ -929,7 +930,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                     SizedBox(width: 10),
                     Expanded(
                       child: _ActionButton(
-                        label: 'Historia',
+                        label: l10n.socialNewStory,
                         icon: Icons.auto_awesome,
                         color: context.colors.tertiary,
                         onTap: _showCreateStoryDialog,
@@ -962,7 +963,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                           ),
                           SizedBox(width: 6),
                           Text(
-                            'Mis publicaciones',
+                            l10n.socialMyPosts,
                             style: TextStyle(
                               color: context.colors.primary,
                               fontSize: 12,
