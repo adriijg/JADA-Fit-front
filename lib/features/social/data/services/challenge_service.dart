@@ -14,7 +14,11 @@ class ChallengeService {
 
   final http.Client _client;
 
-  Future<Challenge> createChallenge(String challengedId, String exerciseName) async {
+  Future<Challenge> createChallenge(
+    String challengedId,
+    String exerciseName,
+    double targetWeightKg,
+  ) async {
     final response = await _client.post(
       Uri.parse(ApiEndpoints.challenges),
       headers: {
@@ -23,6 +27,7 @@ class ChallengeService {
       body: jsonEncode({
         'challengedId': challengedId,
         'exerciseName': exerciseName,
+        'targetWeightKg': targetWeightKg,
       }),
     );
 

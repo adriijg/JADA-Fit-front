@@ -551,6 +551,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   void _showChallengeDialog() {
     final TextEditingController exerciseController = TextEditingController();
+    final TextEditingController targetWeightController = TextEditingController();
 
     showDialog(
       context: context,
@@ -576,6 +577,18 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               ),
               style: TextStyle(color: context.colors.textMain),
             ),
+            SizedBox(height: 16),
+            TextField(
+              controller: targetWeightController,
+              decoration: InputDecoration(
+                hintText: 'Peso objetivo para ganar (kg)',
+                hintStyle: TextStyle(color: context.colors.secondary),
+                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: context.colors.divider)),
+                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: context.colors.primary)),
+              ),
+              keyboardType: TextInputType.number,
+              style: TextStyle(color: context.colors.textMain),
+            ),
           ],
         ),
         actions: [
@@ -586,9 +599,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           ElevatedButton(
             onPressed: () async {
               final exercise = exerciseController.text;
-              if (exercise.isNotEmpty) {
+              final targetWeight = double.tryParse(
+                targetWeightController.text.replaceAll(',', '.'),
+              );
+              if (exercise.isNotEmpty && targetWeight != null && targetWeight > 0) {
                 try {
-                  await _challengeService.createChallenge(widget.userId, exercise);
+                  await _challengeService.createChallenge(widget.userId, exercise, targetWeight);
                   if (mounted) {
                     Navigator.pop(context);
                     ScaffoldMessenger.of(context).showSnackBar(

@@ -43,6 +43,7 @@ class Challenge {
   final double challengerWeight;
   final double challengedWeight;
   final double targetIncreaseKg;
+  final double targetWeightKg;
   final double challengerProgressPercent;
   final double challengedProgressPercent;
   final UserSummary? winner;
@@ -60,6 +61,7 @@ class Challenge {
     required this.challengerWeight,
     required this.challengedWeight,
     required this.targetIncreaseKg,
+    required this.targetWeightKg,
     required this.challengerProgressPercent,
     required this.challengedProgressPercent,
     this.winner,
@@ -87,6 +89,7 @@ class Challenge {
       challengerWeight: (json['challengerWeight'] ?? 0.0).toDouble(),
       challengedWeight: (json['challengedWeight'] ?? 0.0).toDouble(),
       targetIncreaseKg: (json['targetIncreaseKg'] ?? 10.0).toDouble(),
+      targetWeightKg: (json['targetWeightKg'] ?? 0.0).toDouble(),
       challengerProgressPercent:
           (json['challengerProgressPercent'] ?? 0.0).toDouble(),
       challengedProgressPercent:

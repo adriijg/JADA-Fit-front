@@ -17,7 +17,9 @@ class NotificationService {
 
   Future<void> init() async {
     if (kIsWeb || _initialized) return;
-    const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const androidSettings = AndroidInitializationSettings(
+      '@mipmap/ic_launcher',
+    );
     const iosSettings = DarwinInitializationSettings(
       requestAlertPermission: true,
       requestBadgePermission: true,
@@ -33,8 +35,10 @@ class NotificationService {
 
   Future<void> requestPermission() async {
     if (kIsWeb) return;
-    final android = _plugin.resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>();
+    final android = _plugin
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >();
     if (android != null) {
       await android.requestNotificationsPermission();
     }
@@ -54,15 +58,36 @@ class NotificationService {
     );
     const details = NotificationDetails(
       android: androidDetails,
-      iOS: DarwinNotificationDetails(
-        presentSound: true,
-        presentAlert: true,
-      ),
+      iOS: DarwinNotificationDetails(presentSound: true, presentAlert: true),
     );
     await _plugin.show(
       0,
       'JADA Fit IA',
       'Respuesta lista de tu asistente',
+      details,
+    );
+  }
+
+  Future<void> showChallengeWon(String exerciseName) async {
+    if (kIsWeb) return;
+
+    const androidDetails = AndroidNotificationDetails(
+      'challenge_wins',
+      'Victorias de piques',
+      channelDescription: 'Notificaciones cuando ganas un pique',
+      importance: Importance.high,
+      priority: Priority.high,
+      playSound: true,
+      enableVibration: true,
+    );
+    const details = NotificationDetails(
+      android: androidDetails,
+      iOS: DarwinNotificationDetails(presentSound: true, presentAlert: true),
+    );
+    await _plugin.show(
+      2001,
+      'Has ganado el pique',
+      'Llegaste antes al objetivo de $exerciseName.',
       details,
     );
   }
@@ -78,10 +103,7 @@ class NotificationService {
     );
     const details = NotificationDetails(
       android: androidDetails,
-      iOS: DarwinNotificationDetails(
-        presentSound: true,
-        presentAlert: true,
-      ),
+      iOS: DarwinNotificationDetails(presentSound: true, presentAlert: true),
     );
     await _plugin.periodicallyShow(
       _workoutNotificationId,

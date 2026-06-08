@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import '../../../../core/network/api_exception.dart';
+import '../../../../core/services/notification_service.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/image_url_resolver.dart';
 import '../../../../core/widgets/app_card.dart';
@@ -283,14 +284,19 @@ class _FeedTabState extends State<_FeedTab> {
       if (mounted) {
         setState(() => _posts.removeWhere((p) => p.id == post.id));
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n?.socialDeletePostSuccess ?? 'Post deleted')),
+          SnackBar(
+            content: Text(l10n?.socialDeletePostSuccess ?? 'Post deleted'),
+          ),
         );
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(l10n?.socialDeletePostError(e.toString()) ?? 'Error deleting post'),
+            content: Text(
+              l10n?.socialDeletePostError(e.toString()) ??
+                  'Error deleting post',
+            ),
           ),
         );
       }
@@ -406,7 +412,10 @@ class _FeedTabState extends State<_FeedTab> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => PostDetailScreen(post: post, currentUserId: _currentUserId!),
+                  builder: (_) => PostDetailScreen(
+                    post: post,
+                    currentUserId: _currentUserId!,
+                  ),
                 ),
               );
             },
@@ -442,7 +451,11 @@ class _FeedTabState extends State<_FeedTab> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(AppLocalizations.of(context)!.socialLikeSuccess(post.author.username)),
+              content: Text(
+                AppLocalizations.of(
+                  context,
+                )!.socialLikeSuccess(post.author.username),
+              ),
             ),
           );
         }
@@ -451,7 +464,11 @@ class _FeedTabState extends State<_FeedTab> {
       if (mounted) {
         setState(() => _replacePost(post));
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context)!.socialLikeError(e.toString()))),
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(context)!.socialLikeError(e.toString()),
+            ),
+          ),
         );
       }
     } finally {
@@ -534,7 +551,7 @@ class _FeedTabState extends State<_FeedTab> {
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 24),
                         child: Center(
-                          child:                           Text(
+                          child: Text(
                             AppLocalizations.of(context)!.socialNoFollowing,
                             style: TextStyle(color: context.colors.secondary),
                           ),
@@ -595,7 +612,9 @@ class _FeedTabState extends State<_FeedTab> {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text(
-                                        AppLocalizations.of(context)!.socialPostSent(user.username),
+                                        AppLocalizations.of(
+                                          context,
+                                        )!.socialPostSent(user.username),
                                       ),
                                     ),
                                   );
@@ -989,10 +1008,16 @@ class _PostCard extends StatelessWidget {
                   ),
                 ),
                 ListTile(
-                  leading: Icon(Icons.delete_outline_rounded, color: Colors.red),
+                  leading: Icon(
+                    Icons.delete_outline_rounded,
+                    color: Colors.red,
+                  ),
                   title: Text(
                     l10n.socialDeletePost,
-                    style: TextStyle(color: Colors.red, fontWeight: FontWeight.w600),
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   onTap: () {
                     Navigator.pop(sheetContext);
@@ -1094,6 +1119,7 @@ class _PiquesTab extends StatefulWidget {
 class _PiquesTabState extends State<_PiquesTab> {
   final ChallengeService _challengeService = ChallengeService();
   final AuthService _authService = AuthService();
+  final NotificationService _notificationService = NotificationService.instance;
   List<Challenge> _myChallenges = [];
   bool _isLoadingChallenges = false;
   String? _currentUserId;
@@ -1123,10 +1149,16 @@ class _PiquesTabState extends State<_PiquesTab> {
 
     try {
       final challenges = await _challengeService.getMyChallenges();
+      final newlyWonChallenge = _findNewlyWonChallenge(challenges);
       if (mounted) {
         setState(() {
           _myChallenges = challenges;
         });
+        if (newlyWonChallenge != null) {
+          await _notificationService.showChallengeWon(
+            newlyWonChallenge.exerciseName,
+          );
+        }
       }
     } catch (e) {
       if (mounted) {
@@ -1148,6 +1180,24 @@ class _PiquesTabState extends State<_PiquesTab> {
         });
       }
     }
+  }
+
+  Challenge? _findNewlyWonChallenge(List<Challenge> challenges) {
+    if (_currentUserId == null) return null;
+
+    for (final challenge in challenges) {
+      final previousIndex = _myChallenges.indexWhere(
+        (item) => item.id == challenge.id,
+      );
+      if (previousIndex == -1) continue;
+
+      final previous = _myChallenges[previousIndex];
+      if (previous.winner == null && challenge.winner?.id == _currentUserId) {
+        return challenge;
+      }
+    }
+
+    return null;
   }
 
   List<Challenge> get _activeChallenges =>
@@ -1214,7 +1264,8 @@ class _PiquesTabState extends State<_PiquesTab> {
       color: context.colors.primary,
       child: ListView.builder(
         padding: EdgeInsets.all(16),
-        itemCount: 1 + active.length + (expired.isNotEmpty ? 1 + expired.length : 0),
+        itemCount:
+            1 + active.length + (expired.isNotEmpty ? 1 + expired.length : 0),
         itemBuilder: (context, index) {
           // Header
           if (index == 0) {
@@ -1236,7 +1287,11 @@ class _PiquesTabState extends State<_PiquesTab> {
                       if (expired.isNotEmpty)
                         TextButton.icon(
                           onPressed: _confirmDeleteExpired,
-                          icon: Icon(Icons.delete_sweep_outlined, color: Colors.red, size: 18),
+                          icon: Icon(
+                            Icons.delete_sweep_outlined,
+                            color: Colors.red,
+                            size: 18,
+                          ),
                           label: Text(
                             l10n.socialChallengeDeleteExpired,
                             style: TextStyle(color: Colors.red, fontSize: 12),
@@ -1270,7 +1325,9 @@ class _PiquesTabState extends State<_PiquesTab> {
             if (index == offset) {
               return Padding(
                 padding: EdgeInsets.only(top: 8, bottom: 12),
-                child: _buildSectionHeader('${l10n.socialChallengeExpired} (${expired.length})'),
+                child: _buildSectionHeader(
+                  '${l10n.socialChallengeExpired} (${expired.length})',
+                ),
               );
             }
             offset++;
@@ -1303,7 +1360,9 @@ class _PiquesTabState extends State<_PiquesTab> {
           ),
         ),
         SizedBox(width: 12),
-        Expanded(child: Divider(color: context.colors.divider.withOpacity(0.3))),
+        Expanded(
+          child: Divider(color: context.colors.divider.withOpacity(0.3)),
+        ),
       ],
     );
   }
@@ -1334,7 +1393,14 @@ class _PiquesTabState extends State<_PiquesTab> {
                 children: [
                   _buildAvatar(challenge.challenger.username),
                   SizedBox(width: 8),
-                  Text('vs', style: TextStyle(color: context.colors.secondary, fontStyle: FontStyle.italic, fontSize: 12)),
+                  Text(
+                    'vs',
+                    style: TextStyle(
+                      color: context.colors.secondary,
+                      fontStyle: FontStyle.italic,
+                      fontSize: 12,
+                    ),
+                  ),
                   SizedBox(width: 8),
                   _buildAvatar(challenge.challenged.username),
                   Spacer(),
@@ -1357,7 +1423,11 @@ class _PiquesTabState extends State<_PiquesTab> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.fitness_center, color: context.colors.primary, size: 18),
+                      Icon(
+                        Icons.fitness_center,
+                        color: context.colors.primary,
+                        size: 18,
+                      ),
                       SizedBox(width: 8),
                       Text(
                         challenge.exerciseName,
@@ -1375,7 +1445,10 @@ class _PiquesTabState extends State<_PiquesTab> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _buildWeightInfo(challenge.challenger.username, challenge.challengerWeight),
+                  _buildWeightInfo(
+                    challenge.challenger.username,
+                    challenge.challengerWeight,
+                  ),
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
@@ -1387,13 +1460,24 @@ class _PiquesTabState extends State<_PiquesTab> {
                       children: [
                         Icon(Icons.bolt, color: Colors.orange, size: 14),
                         SizedBox(width: 4),
-                        Text('VS', style: TextStyle(color: Colors.orange, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 1)),
+                        Text(
+                          'VS',
+                          style: TextStyle(
+                            color: Colors.orange,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 1,
+                          ),
+                        ),
                         SizedBox(width: 4),
                         Icon(Icons.bolt, color: Colors.orange, size: 14),
                       ],
                     ),
                   ),
-                  _buildWeightInfo(challenge.challenged.username, challenge.challengedWeight),
+                  _buildWeightInfo(
+                    challenge.challenged.username,
+                    challenge.challengedWeight,
+                  ),
                 ],
               ),
               SizedBox(height: 14),
@@ -1424,7 +1508,9 @@ class _PiquesTabState extends State<_PiquesTab> {
                   ),
                 ),
               ],
-              if (!expired && challenge.status != ChallengeStatus.FINISHED && challenge.status != ChallengeStatus.REJECTED) ...[
+              if (!expired &&
+                  challenge.status != ChallengeStatus.FINISHED &&
+                  challenge.status != ChallengeStatus.REJECTED) ...[
                 SizedBox(height: 10),
                 _buildExpirationInfo(challenge, l10n),
               ],
@@ -1440,18 +1526,28 @@ class _PiquesTabState extends State<_PiquesTab> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.timer_off_outlined, color: context.colors.secondary, size: 14),
+                        Icon(
+                          Icons.timer_off_outlined,
+                          color: context.colors.secondary,
+                          size: 14,
+                        ),
                         SizedBox(width: 4),
                         Text(
                           l10n.socialChallengeExpired,
-                          style: TextStyle(color: context.colors.secondary, fontSize: 11, fontWeight: FontWeight.w600),
+                          style: TextStyle(
+                            color: context.colors.secondary,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ],
                     ),
                   ),
                 ),
               ],
-              if (challenge.status == ChallengeStatus.PENDING && isChallenged && !expired) ...[
+              if (challenge.status == ChallengeStatus.PENDING &&
+                  isChallenged &&
+                  !expired) ...[
                 SizedBox(height: 14),
                 Row(
                   children: [
@@ -1460,10 +1556,18 @@ class _PiquesTabState extends State<_PiquesTab> {
                         onPressed: () => _rejectChallenge(challenge.id),
                         style: OutlinedButton.styleFrom(
                           side: BorderSide(color: Colors.red),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                           padding: EdgeInsets.symmetric(vertical: 12),
                         ),
-                        child: Text(l10n.socialReject, style: TextStyle(color: Colors.red, fontWeight: FontWeight.w700)),
+                        child: Text(
+                          l10n.socialReject,
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
                       ),
                     ),
                     SizedBox(width: 12),
@@ -1472,16 +1576,23 @@ class _PiquesTabState extends State<_PiquesTab> {
                         onPressed: () => _acceptChallenge(challenge.id),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: context.colors.primary,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                           padding: EdgeInsets.symmetric(vertical: 12),
                         ),
-                        child: Text(l10n.socialAccept, style: TextStyle(fontWeight: FontWeight.w700)),
+                        child: Text(
+                          l10n.socialAccept,
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ),
                       ),
                     ),
                   ],
                 ),
               ],
-              if (challenge.status == ChallengeStatus.PENDING && isChallenger && !expired) ...[
+              if (challenge.status == ChallengeStatus.PENDING &&
+                  isChallenger &&
+                  !expired) ...[
                 SizedBox(height: 12),
                 Center(
                   child: Container(
@@ -1494,11 +1605,19 @@ class _PiquesTabState extends State<_PiquesTab> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.hourglass_empty, color: Colors.orange, size: 16),
+                        Icon(
+                          Icons.hourglass_empty,
+                          color: Colors.orange,
+                          size: 16,
+                        ),
                         SizedBox(width: 8),
                         Text(
                           l10n.socialChallengeAwaitingConfirmation,
-                          style: TextStyle(color: Colors.orange, fontWeight: FontWeight.w700, fontSize: 13),
+                          style: TextStyle(
+                            color: Colors.orange,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 13,
+                          ),
                         ),
                       ],
                     ),
@@ -1518,7 +1637,11 @@ class _PiquesTabState extends State<_PiquesTab> {
       backgroundColor: context.colors.primary.withOpacity(0.1),
       child: Text(
         username[0].toUpperCase(),
-        style: TextStyle(color: context.colors.primary, fontWeight: FontWeight.bold, fontSize: 14),
+        style: TextStyle(
+          color: context.colors.primary,
+          fontWeight: FontWeight.bold,
+          fontSize: 14,
+        ),
       ),
     );
   }
@@ -1558,7 +1681,11 @@ class _PiquesTabState extends State<_PiquesTab> {
             SizedBox(width: 4),
             Text(
               l10n.socialChallengeExpiresIn(timeText),
-              style: TextStyle(color: timerColor, fontSize: 11, fontWeight: FontWeight.w600),
+              style: TextStyle(
+                color: timerColor,
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ],
         ),
@@ -1578,7 +1705,11 @@ class _PiquesTabState extends State<_PiquesTab> {
         SizedBox(height: 2),
         Text(
           '${weight.toStringAsFixed(1)} kg',
-          style: TextStyle(color: context.colors.textMain, fontSize: 16, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            color: context.colors.textMain,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ],
     );
@@ -1594,7 +1725,7 @@ class _PiquesTabState extends State<_PiquesTab> {
             SizedBox(width: 6),
             Expanded(
               child: Text(
-                'Objetivo: mejorar ${challenge.targetIncreaseKg.toStringAsFixed(0)} kg',
+                'Objetivo: alcanzar ${challenge.targetWeightKg.toStringAsFixed(1)} kg',
                 style: TextStyle(
                   color: context.colors.secondary,
                   fontSize: 12,
@@ -1658,10 +1789,7 @@ class _PiquesTabState extends State<_PiquesTab> {
           borderRadius: BorderRadius.circular(999),
           child: Stack(
             children: [
-              Container(
-                height: 10,
-                color: context.colors.inputBackground,
-              ),
+              Container(height: 10, color: context.colors.inputBackground),
               FractionallySizedBox(
                 widthFactor: normalized,
                 alignment: Alignment.centerLeft,
@@ -1690,28 +1818,30 @@ class _PiquesTabState extends State<_PiquesTab> {
   Widget _buildWinnerBadge(Challenge challenge) {
     final winner = challenge.winner!;
     final bool wonByMe = winner.id == _currentUserId;
+    const gold = Color(0xFFFFC107);
+    const deepGold = Color(0xFFB8860B);
 
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: Colors.greenAccent.withOpacity(0.12),
+        color: gold.withOpacity(0.14),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.greenAccent.withOpacity(0.45)),
+        border: Border.all(color: gold.withOpacity(0.75)),
       ),
       child: Row(
         children: [
-          Icon(Icons.workspace_premium_rounded, color: Colors.greenAccent, size: 22),
+          Icon(Icons.workspace_premium_rounded, color: deepGold, size: 22),
           SizedBox(width: 10),
           Expanded(
             child: Text(
               wonByMe
-                  ? 'Insignia conseguida: ganaste este pique'
-                  : '${winner.username} ganó este pique',
+                  ? 'Ganador: ${winner.username} (tú)'
+                  : 'Ganador: ${winner.username}',
               style: TextStyle(
-                color: context.colors.textMain,
+                color: deepGold,
                 fontSize: 13,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w900,
               ),
             ),
           ),
@@ -1817,7 +1947,11 @@ class _PiquesTabState extends State<_PiquesTab> {
       ),
       child: Text(
         text,
-        style: TextStyle(color: color, fontSize: 10, fontWeight: FontWeight.bold),
+        style: TextStyle(
+          color: color,
+          fontSize: 10,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }
@@ -1828,7 +1962,11 @@ class _PiquesTabState extends State<_PiquesTab> {
       _loadChallenges();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context)!.socialErrorDetails(e.toString()))),
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)!.socialErrorDetails(e.toString()),
+          ),
+        ),
       );
     }
   }
@@ -1839,7 +1977,11 @@ class _PiquesTabState extends State<_PiquesTab> {
       _loadChallenges();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context)!.socialErrorDetails(e.toString()))),
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)!.socialErrorDetails(e.toString()),
+          ),
+        ),
       );
     }
   }
@@ -1902,6 +2044,9 @@ class _PiquesTabState extends State<_PiquesTab> {
                   challenge.id,
                   weight,
                 );
+                final wonNow =
+                    challenge.winner == null &&
+                    updated.winner?.id == _currentUserId;
                 if (mounted) {
                   setState(() {
                     final index = _myChallenges.indexWhere(
@@ -1911,7 +2056,14 @@ class _PiquesTabState extends State<_PiquesTab> {
                       _myChallenges[index] = updated;
                     }
                   });
+                  if (!dialogContext.mounted) return;
                   Navigator.pop(dialogContext);
+                  if (wonNow) {
+                    await _notificationService.showChallengeWon(
+                      updated.exerciseName,
+                    );
+                    if (!mounted) return;
+                  }
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(
@@ -1927,9 +2079,9 @@ class _PiquesTabState extends State<_PiquesTab> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(
-                        AppLocalizations.of(context)!.socialErrorDetails(
-                          e.toString(),
-                        ),
+                        AppLocalizations.of(
+                          context,
+                        )!.socialErrorDetails(e.toString()),
                       ),
                     ),
                   );
@@ -1952,15 +2104,24 @@ class _PiquesTabState extends State<_PiquesTab> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: context.colors.surface,
-        title: Text(l10n.socialChallengeConfirmDeleteExpired, style: TextStyle(color: context.colors.textMain)),
+        title: Text(
+          l10n.socialChallengeConfirmDeleteExpired,
+          style: TextStyle(color: context.colors.textMain),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: Text(l10n.nutritionCancel, style: TextStyle(color: context.colors.secondary)),
+            child: Text(
+              l10n.nutritionCancel,
+              style: TextStyle(color: context.colors.secondary),
+            ),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: Text(l10n.socialChallengeDeleteExpired, style: TextStyle(color: Colors.red)),
+            child: Text(
+              l10n.socialChallengeDeleteExpired,
+              style: TextStyle(color: Colors.red),
+            ),
           ),
         ],
       ),
@@ -1981,7 +2142,10 @@ class _PiquesTabState extends State<_PiquesTab> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(l10n.socialUpdatePersonalRecord, style: TextStyle(color: context.colors.textMain)),
+        title: Text(
+          l10n.socialUpdatePersonalRecord,
+          style: TextStyle(color: context.colors.textMain),
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -2008,7 +2172,10 @@ class _PiquesTabState extends State<_PiquesTab> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text(l10n.nutritionCancel, style: TextStyle(color: context.colors.secondary)),
+            child: Text(
+              l10n.nutritionCancel,
+              style: TextStyle(color: context.colors.secondary),
+            ),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -2026,12 +2193,16 @@ class _PiquesTabState extends State<_PiquesTab> {
                   }
                 } catch (e) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(l10n.socialErrorDetails(e.toString()))),
+                    SnackBar(
+                      content: Text(l10n.socialErrorDetails(e.toString())),
+                    ),
                   );
                 }
               }
             },
-            style: ElevatedButton.styleFrom(backgroundColor: context.colors.primary),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: context.colors.primary,
+            ),
             child: Text(l10n.socialSave),
           ),
         ],
