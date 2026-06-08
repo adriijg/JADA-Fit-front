@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/image_url_resolver.dart';
 import '../../../../core/widgets/app_card.dart';
@@ -267,7 +268,7 @@ class _FeedTabState extends State<_FeedTab> {
           TextButton(
             onPressed: () => Navigator.pop(dialogContext, true),
             child: Text(
-              l10n?.socialDeletePost ?? 'Delete',
+              l10n.socialDeletePost,
               style: TextStyle(color: Colors.red),
             ),
           ),
@@ -1129,12 +1130,13 @@ class _PiquesTabState extends State<_PiquesTab> {
       }
     } catch (e) {
       if (mounted) {
+        final errorMessage = e is ApiException ? e.message : e.toString();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
               AppLocalizations.of(
                 context,
-              )!.socialChallengeLoadError(e.toString()),
+              )!.socialChallengeLoadError(errorMessage),
             ),
           ),
         );
@@ -1394,6 +1396,34 @@ class _PiquesTabState extends State<_PiquesTab> {
                   _buildWeightInfo(challenge.challenged.username, challenge.challengedWeight),
                 ],
               ),
+              SizedBox(height: 14),
+              _buildProgressRace(challenge),
+              if (challenge.winner != null) ...[
+                SizedBox(height: 12),
+                _buildWinnerBadge(challenge),
+              ],
+              if (challenge.progressEntries.isNotEmpty) ...[
+                SizedBox(height: 12),
+                _buildProgressHistory(challenge),
+              ],
+              if (challenge.status == ChallengeStatus.ACCEPTED && !expired) ...[
+                SizedBox(height: 14),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    onPressed: () => _showChallengeProgressDialog(challenge),
+                    icon: Icon(Icons.trending_up_rounded, size: 18),
+                    label: Text('Añadir avance de hoy'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: context.colors.primary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      padding: EdgeInsets.symmetric(vertical: 12),
+                    ),
+                  ),
+                ),
+              ],
               if (!expired && challenge.status != ChallengeStatus.FINISHED && challenge.status != ChallengeStatus.REJECTED) ...[
                 SizedBox(height: 10),
                 _buildExpirationInfo(challenge, l10n),
@@ -1554,6 +1584,197 @@ class _PiquesTabState extends State<_PiquesTab> {
     );
   }
 
+  Widget _buildProgressRace(Challenge challenge) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(Icons.flag_rounded, color: context.colors.primary, size: 16),
+            SizedBox(width: 6),
+            Expanded(
+              child: Text(
+                'Objetivo: mejorar ${challenge.targetIncreaseKg.toStringAsFixed(0)} kg',
+                style: TextStyle(
+                  color: context.colors.secondary,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 10),
+        _buildProgressBar(
+          challenge.challenger.username,
+          challenge.challengerProgressPercent,
+        ),
+        SizedBox(height: 8),
+        _buildProgressBar(
+          challenge.challenged.username,
+          challenge.challengedProgressPercent,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildProgressBar(String username, double percent) {
+    final normalized = (percent.clamp(0, 100) / 100).toDouble();
+    final fillColor = Color.lerp(
+      Colors.green.withOpacity(0.15),
+      Colors.greenAccent,
+      normalized,
+    )!;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                username,
+                style: TextStyle(
+                  color: context.colors.textMain,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            Text(
+              '${percent.clamp(0, 100).toStringAsFixed(0)}%',
+              style: TextStyle(
+                color: fillColor,
+                fontSize: 12,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 5),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(999),
+          child: Stack(
+            children: [
+              Container(
+                height: 10,
+                color: context.colors.inputBackground,
+              ),
+              FractionallySizedBox(
+                widthFactor: normalized,
+                alignment: Alignment.centerLeft,
+                child: Container(
+                  height: 10,
+                  decoration: BoxDecoration(
+                    color: fillColor,
+                    boxShadow: normalized > 0
+                        ? [
+                            BoxShadow(
+                              color: fillColor.withOpacity(0.35),
+                              blurRadius: 8,
+                            ),
+                          ]
+                        : null,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildWinnerBadge(Challenge challenge) {
+    final winner = challenge.winner!;
+    final bool wonByMe = winner.id == _currentUserId;
+
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: Colors.greenAccent.withOpacity(0.12),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.greenAccent.withOpacity(0.45)),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.workspace_premium_rounded, color: Colors.greenAccent, size: 22),
+          SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              wonByMe
+                  ? 'Insignia conseguida: ganaste este pique'
+                  : '${winner.username} ganó este pique',
+              style: TextStyle(
+                color: context.colors.textMain,
+                fontSize: 13,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProgressHistory(Challenge challenge) {
+    final latest = challenge.progressEntries.reversed.take(4).toList();
+
+    return Container(
+      padding: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: context.colors.inputBackground.withOpacity(0.65),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Últimos avances sincronizados',
+            style: TextStyle(
+              color: context.colors.secondary,
+              fontSize: 11,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          SizedBox(height: 8),
+          ...latest.map((entry) {
+            final date = '${entry.entryDate.day}/${entry.entryDate.month}';
+            return Padding(
+              padding: EdgeInsets.only(bottom: 5),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      '${entry.user.username} · $date',
+                      style: TextStyle(
+                        color: context.colors.textMain,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  Text(
+                    '${entry.weight.toStringAsFixed(1)} kg',
+                    style: TextStyle(
+                      color: context.colors.primary,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }),
+        ],
+      ),
+    );
+  }
+
   Widget _buildStatusBadge(ChallengeStatus status, bool expired) {
     final l10n = AppLocalizations.of(context)!;
     Color color;
@@ -1579,6 +1800,10 @@ class _PiquesTabState extends State<_PiquesTab> {
         case ChallengeStatus.FINISHED:
           color = context.colors.primary;
           text = l10n.socialChallengeStatusFinished;
+          break;
+        case ChallengeStatus.EXPIRED:
+          color = context.colors.secondary;
+          text = l10n.socialChallengeExpired;
           break;
       }
     }
@@ -1617,6 +1842,108 @@ class _PiquesTabState extends State<_PiquesTab> {
         SnackBar(content: Text(AppLocalizations.of(context)!.socialErrorDetails(e.toString()))),
       );
     }
+  }
+
+  void _showChallengeProgressDialog(Challenge challenge) {
+    final TextEditingController weightController = TextEditingController(
+      text: _currentUserId == challenge.challenger.id
+          ? challenge.challengerWeight.toStringAsFixed(1)
+          : challenge.challengedWeight.toStringAsFixed(1),
+    );
+
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: context.colors.surface,
+        title: Text(
+          'Avance de hoy',
+          style: TextStyle(color: context.colors.textMain),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              challenge.exerciseName,
+              style: TextStyle(
+                color: context.colors.secondary,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            SizedBox(height: 16),
+            TextField(
+              controller: weightController,
+              decoration: InputDecoration(
+                labelText: 'Peso conseguido hoy (kg)',
+                labelStyle: TextStyle(color: context.colors.secondary),
+              ),
+              keyboardType: TextInputType.number,
+              style: TextStyle(color: context.colors.textMain),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: Text(
+              AppLocalizations.of(context)!.nutritionCancel,
+              style: TextStyle(color: context.colors.secondary),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              final weight = double.tryParse(
+                weightController.text.replaceAll(',', '.'),
+              );
+              if (weight == null || weight <= 0) return;
+
+              try {
+                final updated = await _challengeService.addProgress(
+                  challenge.id,
+                  weight,
+                );
+                if (mounted) {
+                  setState(() {
+                    final index = _myChallenges.indexWhere(
+                      (item) => item.id == updated.id,
+                    );
+                    if (index != -1) {
+                      _myChallenges[index] = updated;
+                    }
+                  });
+                  Navigator.pop(dialogContext);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        updated.winner?.id == _currentUserId
+                            ? 'Avance guardado. Has ganado el pique.'
+                            : 'Avance guardado y sincronizado.',
+                      ),
+                    ),
+                  );
+                }
+              } catch (e) {
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        AppLocalizations.of(context)!.socialErrorDetails(
+                          e.toString(),
+                        ),
+                      ),
+                    ),
+                  );
+                }
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: context.colors.primary,
+            ),
+            child: Text('Guardar avance'),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> _confirmDeleteExpired() async {

@@ -91,6 +91,28 @@ class ChallengeService {
     );
   }
 
+  Future<Challenge> addProgress(String challengeId, double weight) async {
+    final response = await _client.post(
+      Uri.parse(ApiEndpoints.challengeProgress(challengeId)),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        'weight': weight,
+        'entryDate': DateTime.now().toIso8601String().split('T').first,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      return Challenge.fromJson(jsonDecode(response.body));
+    }
+
+    throw ApiException(
+      _parseErrorMessage(response.body),
+      statusCode: response.statusCode,
+    );
+  }
+
   Future<void> updateRecord(String exerciseName, double maxWeight) async {
     final response = await _client.post(
       Uri.parse(ApiEndpoints.exerciseRecords),

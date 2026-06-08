@@ -47,6 +47,8 @@ class ApiEndpoints {
   static String get myChallenges => '$challenges/my';
   static String get exerciseRecords => '$challenges/records';
   static String get myExerciseRecords => '$exerciseRecords/my';
+  static String challengeProgress(String challengeId) =>
+      '$challenges/$challengeId/progress';
 
   // Posts
   static String get posts => '$social/posts';
