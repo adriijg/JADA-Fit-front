@@ -708,6 +708,31 @@
   "socialProgressPrivate": "Private progress",
   "socialPosts": "Posts",
   "socialChallengeExpired": "Expired",
+  "socialAddProgressToday": "Add today's progress",
+  "socialProgressToday": "Today's progress",
+  "socialWeightTodayHint": "Weight achieved today (kg)",
+  "socialGoalReach": "Goal: reach {weight} kg",
+  "@socialGoalReach": {
+    "placeholders": {
+      "weight": { "type": "String" }
+    }
+  },
+  "socialWinnerLabel": "Winner: {username}",
+  "@socialWinnerLabel": {
+    "placeholders": {
+      "username": { "type": "String" }
+    }
+  },
+  "socialWinnerYouLabel": "Winner: {username} (you)",
+  "@socialWinnerYouLabel": {
+    "placeholders": {
+      "username": { "type": "String" }
+    }
+  },
+  "socialLastProgressSync": "Latest synced progress",
+  "socialProgressSavedWon": "Progress saved. You won the challenge!",
+  "socialProgressSaved": "Progress saved and synced.",
+  "socialSaveProgress": "Save progress",
   "socialChallengeExpiresIn": "Expires in {time}",
   "@socialChallengeExpiresIn": {
     "placeholders": {

@@ -1691,6 +1691,42 @@ class AppLocalizationsEs extends AppLocalizations {
   String get socialChallengeExpired => 'Expirado';
 
   @override
+  String get socialAddProgressToday => 'Añadir avance de hoy';
+
+  @override
+  String get socialProgressToday => 'Avance de hoy';
+
+  @override
+  String get socialWeightTodayHint => 'Peso conseguido hoy (kg)';
+
+  @override
+  String socialGoalReach(String weight) {
+    return 'Objetivo: alcanzar $weight kg';
+  }
+
+  @override
+  String socialWinnerLabel(String username) {
+    return 'Ganador: $username';
+  }
+
+  @override
+  String socialWinnerYouLabel(String username) {
+    return 'Ganador: $username (tú)';
+  }
+
+  @override
+  String get socialLastProgressSync => 'Últimos avances sincronizados';
+
+  @override
+  String get socialProgressSavedWon => 'Avance guardado. Has ganado el pique.';
+
+  @override
+  String get socialProgressSaved => 'Avance guardado y sincronizado.';
+
+  @override
+  String get socialSaveProgress => 'Guardar avance';
+
+  @override
   String socialChallengeExpiresIn(String time) {
     return 'Expira en $time';
   }

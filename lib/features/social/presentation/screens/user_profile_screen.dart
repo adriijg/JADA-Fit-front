@@ -161,7 +161,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 onPressed: _loadProfile,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: context.colors.primary,
-                  foregroundColor: context.colors.background,
+                  foregroundColor: Colors.black,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -308,7 +308,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             : context.colors.primary,
                         foregroundColor: _profile!.isFollowing
                             ? context.colors.textMain
-                            : context.colors.background,
+                            : Colors.black,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(14),
                           side: _profile!.isFollowing
@@ -362,7 +362,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         icon: Icon(Icons.emoji_events_outlined, color: context.colors.primary, size: 18),
                         label: Text(
                           AppLocalizations.of(context)!.socialChallengeUser,
-                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+                          style: TextStyle(
+                            color: context.colors.textMain,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: context.colors.primary,
@@ -620,7 +624,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 }
               }
             },
-            style: ElevatedButton.styleFrom(backgroundColor: context.colors.primary),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: context.colors.primary,
+              foregroundColor: Colors.black,
+            ),
             child: Text(AppLocalizations.of(context)!.socialSendChallenge),
           ),
         ],

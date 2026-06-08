@@ -1248,6 +1248,7 @@ class _PiquesTabState extends State<_PiquesTab> {
               onPressed: _showUpdateRecordDialog,
               style: ElevatedButton.styleFrom(
                 backgroundColor: context.colors.primary,
+                foregroundColor: Colors.black,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -1299,10 +1300,10 @@ class _PiquesTabState extends State<_PiquesTab> {
                         ),
                       TextButton.icon(
                         onPressed: _showUpdateRecordDialog,
-                        icon: Icon(Icons.add, color: context.colors.primary),
+                        icon: Icon(Icons.add, color: context.colors.textMain),
                         label: Text(
                           l10n.socialMyRecords,
-                          style: TextStyle(color: context.colors.primary),
+                          style: TextStyle(color: context.colors.textMain),
                         ),
                       ),
                     ],
@@ -1497,9 +1498,10 @@ class _PiquesTabState extends State<_PiquesTab> {
                   child: ElevatedButton.icon(
                     onPressed: () => _showChallengeProgressDialog(challenge),
                     icon: Icon(Icons.trending_up_rounded, size: 18),
-                    label: Text('Añadir avance de hoy'),
+                    label: Text(l10n.socialAddProgressToday),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: context.colors.primary,
+                      foregroundColor: Colors.black,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -1576,6 +1578,7 @@ class _PiquesTabState extends State<_PiquesTab> {
                         onPressed: () => _acceptChallenge(challenge.id),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: context.colors.primary,
+                          foregroundColor: Colors.black,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -1716,6 +1719,7 @@ class _PiquesTabState extends State<_PiquesTab> {
   }
 
   Widget _buildProgressRace(Challenge challenge) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1725,7 +1729,7 @@ class _PiquesTabState extends State<_PiquesTab> {
             SizedBox(width: 6),
             Expanded(
               child: Text(
-                'Objetivo: alcanzar ${challenge.targetWeightKg.toStringAsFixed(1)} kg',
+                l10n.socialGoalReach(challenge.targetWeightKg.toStringAsFixed(1)),
                 style: TextStyle(
                   color: context.colors.secondary,
                   fontSize: 12,
@@ -1816,6 +1820,7 @@ class _PiquesTabState extends State<_PiquesTab> {
   }
 
   Widget _buildWinnerBadge(Challenge challenge) {
+    final l10n = AppLocalizations.of(context)!;
     final winner = challenge.winner!;
     final bool wonByMe = winner.id == _currentUserId;
     const gold = Color(0xFFFFC107);
@@ -1836,8 +1841,8 @@ class _PiquesTabState extends State<_PiquesTab> {
           Expanded(
             child: Text(
               wonByMe
-                  ? 'Ganador: ${winner.username} (tú)'
-                  : 'Ganador: ${winner.username}',
+                  ? l10n.socialWinnerYouLabel(winner.username)
+                  : l10n.socialWinnerLabel(winner.username),
               style: TextStyle(
                 color: deepGold,
                 fontSize: 13,
@@ -1851,6 +1856,7 @@ class _PiquesTabState extends State<_PiquesTab> {
   }
 
   Widget _buildProgressHistory(Challenge challenge) {
+    final l10n = AppLocalizations.of(context)!;
     final latest = challenge.progressEntries.reversed.take(4).toList();
 
     return Container(
@@ -1863,7 +1869,7 @@ class _PiquesTabState extends State<_PiquesTab> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Últimos avances sincronizados',
+            l10n.socialLastProgressSync,
             style: TextStyle(
               color: context.colors.secondary,
               fontSize: 11,
@@ -1987,6 +1993,7 @@ class _PiquesTabState extends State<_PiquesTab> {
   }
 
   void _showChallengeProgressDialog(Challenge challenge) {
+    final l10n = AppLocalizations.of(context)!;
     final TextEditingController weightController = TextEditingController(
       text: _currentUserId == challenge.challenger.id
           ? challenge.challengerWeight.toStringAsFixed(1)
@@ -1998,7 +2005,7 @@ class _PiquesTabState extends State<_PiquesTab> {
       builder: (dialogContext) => AlertDialog(
         backgroundColor: context.colors.surface,
         title: Text(
-          'Avance de hoy',
+          l10n.socialProgressToday,
           style: TextStyle(color: context.colors.textMain),
         ),
         content: Column(
@@ -2016,7 +2023,7 @@ class _PiquesTabState extends State<_PiquesTab> {
             TextField(
               controller: weightController,
               decoration: InputDecoration(
-                labelText: 'Peso conseguido hoy (kg)',
+                labelText: l10n.socialWeightTodayHint,
                 labelStyle: TextStyle(color: context.colors.secondary),
               ),
               keyboardType: TextInputType.number,
@@ -2068,8 +2075,8 @@ class _PiquesTabState extends State<_PiquesTab> {
                     SnackBar(
                       content: Text(
                         updated.winner?.id == _currentUserId
-                            ? 'Avance guardado. Has ganado el pique.'
-                            : 'Avance guardado y sincronizado.',
+                            ? l10n.socialProgressSavedWon
+                            : l10n.socialProgressSaved,
                       ),
                     ),
                   );
@@ -2090,8 +2097,9 @@ class _PiquesTabState extends State<_PiquesTab> {
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: context.colors.primary,
+              foregroundColor: Colors.black,
             ),
-            child: Text('Guardar avance'),
+            child: Text(l10n.socialSaveProgress),
           ),
         ],
       ),
@@ -2202,6 +2210,7 @@ class _PiquesTabState extends State<_PiquesTab> {
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: context.colors.primary,
+              foregroundColor: Colors.black,
             ),
             child: Text(l10n.socialSave),
           ),

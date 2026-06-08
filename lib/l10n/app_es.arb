@@ -708,6 +708,31 @@
   "socialProgressPrivate": "Progreso privado",
   "socialPosts": "Publicaciones",
   "socialChallengeExpired": "Expirado",
+  "socialAddProgressToday": "Añadir avance de hoy",
+  "socialProgressToday": "Avance de hoy",
+  "socialWeightTodayHint": "Peso conseguido hoy (kg)",
+  "socialGoalReach": "Objetivo: alcanzar {weight} kg",
+  "@socialGoalReach": {
+    "placeholders": {
+      "weight": { "type": "String" }
+    }
+  },
+  "socialWinnerLabel": "Ganador: {username}",
+  "@socialWinnerLabel": {
+    "placeholders": {
+      "username": { "type": "String" }
+    }
+  },
+  "socialWinnerYouLabel": "Ganador: {username} (tú)",
+  "@socialWinnerYouLabel": {
+    "placeholders": {
+      "username": { "type": "String" }
+    }
+  },
+  "socialLastProgressSync": "Últimos avances sincronizados",
+  "socialProgressSavedWon": "Avance guardado. Has ganado el pique.",
+  "socialProgressSaved": "Avance guardado y sincronizado.",
+  "socialSaveProgress": "Guardar avance",
   "socialChallengeExpiresIn": "Expira en {time}",
   "@socialChallengeExpiresIn": {
     "placeholders": {

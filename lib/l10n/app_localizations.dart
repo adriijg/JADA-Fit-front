@@ -3193,6 +3193,66 @@ abstract class AppLocalizations {
   /// **'Expired'**
   String get socialChallengeExpired;
 
+  /// No description provided for @socialAddProgressToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Add today\'s progress'**
+  String get socialAddProgressToday;
+
+  /// No description provided for @socialProgressToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s progress'**
+  String get socialProgressToday;
+
+  /// No description provided for @socialWeightTodayHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight achieved today (kg)'**
+  String get socialWeightTodayHint;
+
+  /// No description provided for @socialGoalReach.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal: reach {weight} kg'**
+  String socialGoalReach(String weight);
+
+  /// No description provided for @socialWinnerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Winner: {username}'**
+  String socialWinnerLabel(String username);
+
+  /// No description provided for @socialWinnerYouLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Winner: {username} (you)'**
+  String socialWinnerYouLabel(String username);
+
+  /// No description provided for @socialLastProgressSync.
+  ///
+  /// In en, this message translates to:
+  /// **'Latest synced progress'**
+  String get socialLastProgressSync;
+
+  /// No description provided for @socialProgressSavedWon.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress saved. You won the challenge!'**
+  String get socialProgressSavedWon;
+
+  /// No description provided for @socialProgressSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress saved and synced.'**
+  String get socialProgressSaved;
+
+  /// No description provided for @socialSaveProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Save progress'**
+  String get socialSaveProgress;
+
   /// No description provided for @socialChallengeExpiresIn.
   ///
   /// In en, this message translates to:

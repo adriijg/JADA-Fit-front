@@ -285,7 +285,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: context.colors.primary,
-                        foregroundColor: context.colors.background,
+                        foregroundColor: Colors.black,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(14),
                         ),
@@ -668,7 +668,7 @@ class _MySocialProfileScreenState extends State<MySocialProfileScreen> {
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: context.colors.primary,
-                        foregroundColor: context.colors.background,
+                        foregroundColor: Colors.black,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(14),
                         ),
